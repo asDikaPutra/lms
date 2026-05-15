@@ -210,42 +210,42 @@ Skill yang dipakai sebagai guardrail implementasi:
 ## Phase 5 — Instructor Panel
 
 ### 1. Instructor Dashboard
-- [ ] Course cards for owned courses.
-- [ ] Pending enrollment count.
-- [ ] Submissions/quiz attempts needing grading.
+- [x] Course cards for owned courses.
+- [x] Pending enrollment count.
+- [x] Submissions/quiz attempts needing grading.
 - [ ] Student progress highlights.
 
 ### 2. Course Management
-- [ ] Create course.
-- [ ] Edit course.
-- [ ] Generate enroll code.
-- [ ] Toggle enrollment mode: auto/manual.
-- [ ] Toggle leaderboard.
-- [ ] Set certificate criteria.
+- [x] Create course.
+- [x] Edit course.
+- [x] Generate enroll code.
+- [x] Toggle enrollment mode: auto/manual.
+- [x] Toggle leaderboard.
+- [x] Set certificate criteria.
 
 ### 3. Enrollment Approval
-- [ ] Pending enrollment list.
-- [ ] Approve enrollment.
-- [ ] Reject enrollment.
+- [x] Pending enrollment list.
+- [x] Approve enrollment.
+- [x] Reject enrollment.
 - [ ] Notify student.
 - [ ] Allow rejected student to request again.
 
 ### 4. Module, Material, Content Builder
-- [ ] Create/edit/delete module.
-- [ ] Publish/unpublish module.
-- [ ] Create/edit/delete material.
-- [ ] Publish/unpublish material.
-- [ ] Create article content.
-- [ ] Add YouTube video content.
-- [ ] Upload audio/pdf/file content.
-- [ ] Reorder modules/materials/contents.
+- [~] Create/edit/delete module.
+- [x] Publish/unpublish module.
+- [~] Create/edit/delete material.
+- [x] Publish/unpublish material.
+- [x] Create article content.
+- [x] Add YouTube video content.
+- [x] Upload audio/pdf/file content.
+- [~] Reorder modules/materials/contents.
 - [ ] Preview learning sequence as student.
 
 **Quality Gate**
-- [ ] Instructor can only manage owned courses.
+- [x] Instructor can only manage owned courses.
 - [ ] Published student view only shows published modules/materials/content.
 - [ ] Content builder preserves required sequence: contents, quiz, assignment, discussion.
-- [ ] File upload limit and MIME checks enforced.
+- [x] File upload limit and MIME checks enforced.
 
 ---
 
@@ -513,7 +513,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 | Phase 2 — Database | `[x]` | Core LMS schema, models, factories, seeders, and domain test ready |
 | Phase 3 — Auth/Security | `[x]` | Login/logout, role middleware, policies, security headers, and access tests ready |
 | Phase 4 — Admin | `[x]` | Admin dashboard, user management, CSV import, course administration, and course CSV export ready |
-| Phase 5 — Instructor | `[ ]` | |
+| Phase 5 — Instructor | `[~]` | Instructor dashboard, course management, enrollment approval, and content-builder foundation ready; notification/student-resubmit/full learning preview deferred to linked phases |
 | Phase 6 — Student | `[ ]` | |
 | Phase 7 — Quiz | `[ ]` | |
 | Phase 8 — Assignment | `[ ]` | |
@@ -529,7 +529,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 
 ## Next Immediate Actions
 
-1. Start Phase 5 Instructor Panel.
-2. Build instructor dashboard for owned courses and pending activity.
-3. Implement course create/edit, enrollment mode, leaderboard toggle, and certificate criteria.
-4. Add enrollment approval flow with authorization tests.
+1. Finish remaining Phase 5 polish: student progress highlights and edit/reorder UI controls.
+2. Start Phase 6 Student Panel and enrollment resubmit flow.
+3. Add student published-content view to verify publication boundaries.
+4. Keep notification work for Phase 10 queue/notification implementation.
