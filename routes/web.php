@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\CourseController as AdminCourseController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,7 +25,17 @@ Route::middleware('auth')->group(function (): void {
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function (): void {
-    Route::get('/dashboard', fn () => Inertia::render('Admin/Dashboard'))->name('dashboard');
+    Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+    Route::post('/users/import-students', [AdminUserController::class, 'importStudents'])->name('users.import-students');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::patch('/users/{user}/toggle', [AdminUserController::class, 'toggle'])->name('users.toggle');
+
+    Route::get('/courses', [AdminCourseController::class, 'index'])->name('courses.index');
+    Route::put('/courses/{course}', [AdminCourseController::class, 'update'])->name('courses.update');
+    Route::patch('/courses/{course}/toggle', [AdminCourseController::class, 'toggle'])->name('courses.toggle');
+    Route::get('/reports/courses.csv', [AdminCourseController::class, 'export'])->name('reports.courses');
 });
 
 Route::middleware(['auth', 'role:instructor'])->prefix('instructor')->name('instructor.')->group(function (): void {

@@ -139,3 +139,9 @@
     @apply font-sans;
     }
 }
+
+@layer components {
+    .field {
+        @apply h-10 w-full rounded-lg border border-slate-300 px-3 text-sm outline-none transition focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15;
+    }
+}

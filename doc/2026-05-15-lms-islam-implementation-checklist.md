@@ -181,29 +181,29 @@ Skill yang dipakai sebagai guardrail implementasi:
 ## Phase 4 — Admin Panel
 
 ### 1. Admin Layout & Dashboard
-- [ ] Admin layout with sidebar navigation.
-- [ ] Dashboard stats: total users, instructors, students, courses, active enrollments, pending enrollments.
-- [ ] Admin route group.
-- [ ] Responsive dashboard UI.
+- [x] Admin layout with sidebar navigation.
+- [x] Dashboard stats: total users, instructors, students, courses, active enrollments, pending enrollments.
+- [x] Admin route group.
+- [x] Responsive dashboard UI.
 
 ### 2. User Management
-- [ ] User index with search/filter by role/status.
-- [ ] Create user.
-- [ ] Edit user.
-- [ ] Activate/deactivate user.
-- [ ] Import students via CSV.
-- [ ] Validation and import error reporting.
+- [x] User index with search/filter by role/status.
+- [x] Create user.
+- [x] Edit user.
+- [x] Activate/deactivate user.
+- [x] Import students via CSV.
+- [x] Validation and import error reporting.
 
 ### 3. Course Administration
-- [ ] List all courses.
-- [ ] Assign instructor to course.
-- [ ] Archive/deactivate course.
-- [ ] Export global report.
+- [x] List all courses.
+- [x] Assign instructor to course.
+- [x] Archive/deactivate course.
+- [x] Export global report.
 
 **Quality Gate**
-- [ ] Admin actions are policy/middleware protected.
-- [ ] Import handles invalid rows gracefully.
-- [ ] Listing uses pagination.
+- [x] Admin actions are policy/middleware protected.
+- [x] Import handles invalid rows gracefully.
+- [x] Listing uses pagination.
 
 ---
 
@@ -512,7 +512,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 | Phase 1 — Setup | `[x]` | Inertia React, Tailwind v4, and Shadcn baseline ready |
 | Phase 2 — Database | `[x]` | Core LMS schema, models, factories, seeders, and domain test ready |
 | Phase 3 — Auth/Security | `[x]` | Login/logout, role middleware, policies, security headers, and access tests ready |
-| Phase 4 — Admin | `[ ]` | |
+| Phase 4 — Admin | `[x]` | Admin dashboard, user management, CSV import, course administration, and course CSV export ready |
 | Phase 5 — Instructor | `[ ]` | |
 | Phase 6 — Student | `[ ]` | |
 | Phase 7 — Quiz | `[ ]` | |
@@ -529,7 +529,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 
 ## Next Immediate Actions
 
-1. Start Phase 4 Admin Panel.
-2. Build admin layout and dashboard stats.
-3. Implement user management list/create/edit/deactivate.
-4. Add admin authorization and feature tests.
+1. Start Phase 5 Instructor Panel.
+2. Build instructor dashboard for owned courses and pending activity.
+3. Implement course create/edit, enrollment mode, leaderboard toggle, and certificate criteria.
+4. Add enrollment approval flow with authorization tests.
