@@ -10,8 +10,11 @@ use App\Http\Controllers\Instructor\DashboardController as InstructorDashboardCo
 use App\Http\Controllers\Instructor\EnrollmentController as InstructorEnrollmentController;
 use App\Http\Controllers\Instructor\MaterialController as InstructorMaterialController;
 use App\Http\Controllers\Instructor\ModuleController as InstructorModuleController;
+use App\Http\Controllers\Student\ContentProgressController as StudentContentProgressController;
+use App\Http\Controllers\Student\CourseController as StudentCourseController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use App\Http\Controllers\Student\EnrollmentController as StudentEnrollmentController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -75,5 +78,8 @@ Route::middleware(['auth', 'role:instructor'])->prefix('instructor')->name('inst
 });
 
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function (): void {
-    Route::get('/dashboard', fn () => Inertia::render('Student/Dashboard'))->name('dashboard');
+    Route::get('/dashboard', StudentDashboardController::class)->name('dashboard');
+    Route::post('/enrollments', [StudentEnrollmentController::class, 'store'])->name('enrollments.store');
+    Route::get('/courses/{course}', [StudentCourseController::class, 'show'])->name('courses.show');
+    Route::patch('/contents/{content}/complete', [StudentContentProgressController::class, 'complete'])->name('contents.complete');
 });

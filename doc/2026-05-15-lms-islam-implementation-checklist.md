@@ -252,34 +252,34 @@ Skill yang dipakai sebagai guardrail implementasi:
 ## Phase 6 — Student Panel
 
 ### 1. Student Dashboard
-- [ ] Dashboard follows mockup direction.
-- [ ] Greeting and profile summary.
-- [ ] Search courses/materials.
-- [ ] Stats: courses, progress, assignments due, certificates.
-- [ ] Course cards with progress.
-- [ ] Upcoming assignments.
-- [ ] Mobile responsive layout.
+- [x] Dashboard follows mockup direction.
+- [x] Greeting and profile summary.
+- [x] Search courses/materials.
+- [x] Stats: courses, progress, assignments due, certificates.
+- [x] Course cards with progress.
+- [x] Upcoming assignments.
+- [x] Mobile responsive layout.
 
 ### 2. Enrollment
-- [ ] Join course by enroll code.
-- [ ] Auto enrollment activates immediately.
-- [ ] Manual enrollment becomes pending.
-- [ ] Rejected enrollment can be resubmitted.
-- [ ] Student sees pending/rejected state clearly.
+- [x] Join course by enroll code.
+- [x] Auto enrollment activates immediately.
+- [x] Manual enrollment becomes pending.
+- [x] Rejected enrollment can be resubmitted.
+- [x] Student sees pending/rejected state clearly.
 
 ### 3. Learning Experience
-- [ ] Course detail page.
-- [ ] Module/material navigation.
-- [ ] Render article/video/audio/pdf/file content.
-- [ ] Mark content complete.
-- [ ] Track `content_progress`.
+- [x] Course detail page.
+- [x] Module/material navigation.
+- [x] Render article/video/audio/pdf/file content.
+- [x] Mark content complete.
+- [x] Track `content_progress`.
 - [ ] Show material discussion.
 - [ ] Show module/material quiz and assignment in correct order.
 
 **Quality Gate**
-- [ ] Student cannot access inactive or non-enrolled courses.
-- [ ] Progress calculation matches `completed_contents / total_published_contents`.
-- [ ] UI remains usable on mobile.
+- [x] Student cannot access inactive or non-enrolled courses.
+- [x] Progress calculation matches `completed_contents / total_published_contents`.
+- [x] UI remains usable on mobile.
 
 ---
 
@@ -514,7 +514,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 | Phase 3 — Auth/Security | `[x]` | Login/logout, role middleware, policies, security headers, and access tests ready |
 | Phase 4 — Admin | `[x]` | Admin dashboard, user management, CSV import, course administration, and course CSV export ready |
 | Phase 5 — Instructor | `[~]` | Instructor dashboard, course management, enrollment approval, and content-builder foundation ready; notification/student-resubmit/full learning preview deferred to linked phases |
-| Phase 6 — Student | `[ ]` | |
+| Phase 6 — Student | `[~]` | Student dashboard, enrollment, published course view, content rendering, and progress tracking ready; discussion and activity sequence continue in Phase 7-9 |
 | Phase 7 — Quiz | `[ ]` | |
 | Phase 8 — Assignment | `[ ]` | |
 | Phase 9 — Discussion | `[ ]` | |
@@ -529,7 +529,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 
 ## Next Immediate Actions
 
-1. Finish remaining Phase 5 polish: student progress highlights and edit/reorder UI controls.
-2. Start Phase 6 Student Panel and enrollment resubmit flow.
-3. Add student published-content view to verify publication boundaries.
-4. Keep notification work for Phase 10 queue/notification implementation.
+1. Start Phase 7 Quiz System.
+2. Add instructor quiz builder for module/material scope.
+3. Add student quiz attempt flow and auto grading.
+4. Preserve discussion and assignment sequence work for Phase 8-9 integration.

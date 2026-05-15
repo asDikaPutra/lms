@@ -13,7 +13,7 @@ class CoursePolicy
             return true;
         }
 
-        return $course->enrollments()
+        return $course->is_active && $course->enrollments()
             ->where('user_id', $user->id)
             ->where('status', 'active')
             ->exists();
