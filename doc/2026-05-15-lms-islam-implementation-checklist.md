@@ -146,35 +146,35 @@ Skill yang dipakai sebagai guardrail implementasi:
 ## Phase 3 — Authentication, Authorization, and Security Base
 
 ### 1. Auth
-- [ ] Login page.
-- [ ] Logout action.
-- [ ] Session regeneration after login.
-- [ ] Inactive user blocked.
-- [ ] Redirect by role.
-- [ ] Login throttling/rate limiting.
+- [x] Login page.
+- [x] Logout action.
+- [x] Session regeneration after login.
+- [x] Inactive user blocked.
+- [x] Redirect by role.
+- [x] Login throttling/rate limiting.
 
 ### 2. Middleware & Policies
-- [ ] Role middleware.
-- [ ] CoursePolicy.
-- [ ] ModulePolicy.
-- [ ] MaterialPolicy.
-- [ ] QuizPolicy.
-- [ ] AssignmentPolicy.
-- [ ] DiscussionPolicy.
-- [ ] CertificatePolicy if needed.
+- [x] Role middleware.
+- [x] CoursePolicy.
+- [x] ModulePolicy.
+- [x] MaterialPolicy.
+- [x] QuizPolicy.
+- [x] AssignmentPolicy.
+- [x] DiscussionPolicy.
+- [x] CertificatePolicy not required yet; certificate routes will authorize through course ownership when implemented.
 
 ### 3. Security Baseline
-- [ ] `.env` excluded from source control.
-- [ ] File upload validation rules defined.
-- [ ] Inertia shared props reviewed for sensitive data.
-- [ ] No route relies on frontend-only role checks.
-- [ ] Security headers strategy documented.
+- [x] `.env` excluded from source control.
+- [x] File upload validation rules defined.
+- [x] Inertia shared props reviewed for sensitive data.
+- [x] No route relies on frontend-only role checks.
+- [x] Security headers strategy documented.
 
 **Quality Gate**
-- [ ] Admin cannot access instructor/student-only mutation incorrectly.
-- [ ] Instructor cannot edit another instructor's course.
-- [ ] Student cannot access non-enrolled course content.
-- [ ] Guest cannot access dashboards.
+- [x] Admin cannot access instructor/student-only mutation incorrectly.
+- [x] Instructor cannot edit another instructor's course.
+- [x] Student cannot access non-enrolled course content.
+- [x] Guest cannot access dashboards.
 
 ---
 
@@ -511,7 +511,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 | Phase 0 — Baseline | `[x]` | Laravel 13 project created and baseline verified |
 | Phase 1 — Setup | `[x]` | Inertia React, Tailwind v4, and Shadcn baseline ready |
 | Phase 2 — Database | `[x]` | Core LMS schema, models, factories, seeders, and domain test ready |
-| Phase 3 — Auth/Security | `[ ]` | |
+| Phase 3 — Auth/Security | `[x]` | Login/logout, role middleware, policies, security headers, and access tests ready |
 | Phase 4 — Admin | `[ ]` | |
 | Phase 5 — Instructor | `[ ]` | |
 | Phase 6 — Student | `[ ]` | |
@@ -529,7 +529,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 
 ## Next Immediate Actions
 
-1. Start Phase 3 authentication, authorization, and security base.
-2. Build login/logout flow with role redirects.
-3. Add role middleware and core policies.
-4. Add access-control tests for admin, instructor, student, and guest flows.
+1. Start Phase 4 Admin Panel.
+2. Build admin layout and dashboard stats.
+3. Implement user management list/create/edit/deactivate.
+4. Add admin authorization and feature tests.
