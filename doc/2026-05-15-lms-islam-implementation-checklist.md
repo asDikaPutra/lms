@@ -99,47 +99,47 @@ Skill yang dipakai sebagai guardrail implementasi:
 ## Phase 2 — Database, Models, and Domain Foundation
 
 ### 1. Users & Auth Fields
-- [ ] Update users migration: role, nim, nidn, avatar, is_active.
-- [ ] Update User model fillable/casts/helpers.
-- [ ] Add user factory states: admin, instructor, student.
-- [ ] Add initial admin seeder.
+- [x] Update users migration: role, nim, nidn, avatar, is_active.
+- [x] Update User model fillable/casts/helpers.
+- [x] Add user factory states: admin, instructor, student.
+- [x] Add initial admin seeder.
 
 ### 2. Courses & Enrollments
-- [ ] Create courses migration.
-- [ ] Include `leaderboard_enabled`.
-- [ ] Include `certificate_criteria`.
-- [ ] Create enrollments migration.
-- [ ] Add unique constraint `user_id + course_id`.
-- [ ] Add indexes for active/pending enrollment queries.
-- [ ] Create Course and Enrollment models.
-- [ ] Add relationships and query scopes.
+- [x] Create courses migration.
+- [x] Include `leaderboard_enabled`.
+- [x] Include `certificate_criteria`.
+- [x] Create enrollments migration.
+- [x] Add unique constraint `user_id + course_id`.
+- [x] Add indexes for active/pending enrollment queries.
+- [x] Create Course and Enrollment models.
+- [x] Add relationships and query scopes.
 
 ### 3. Learning Content
-- [ ] Create modules migration.
-- [ ] Create materials migration.
-- [ ] Create contents migration.
-- [ ] Add order indexes per parent.
-- [ ] Create Module, Material, Content models.
-- [ ] Add published scopes.
+- [x] Create modules migration.
+- [x] Create materials migration.
+- [x] Create contents migration.
+- [x] Add order indexes per parent.
+- [x] Create Module, Material, Content models.
+- [x] Add published scopes.
 
 ### 4. Activities
-- [ ] Create quizzes migration with morph fields.
-- [ ] Create quiz_questions migration.
-- [ ] Create quiz_attempts migration with `status`.
-- [ ] Create assignments migration with morph fields.
-- [ ] Create submissions migration with `status`.
-- [ ] Create discussions migration with `parent_id`.
-- [ ] Create certificates migration.
-- [ ] Create content_progress migration.
-- [ ] Create all related models and relationships.
-- [ ] Register morph map for `module` and `material`.
+- [x] Create quizzes migration with morph fields.
+- [x] Create quiz_questions migration.
+- [x] Create quiz_attempts migration with `status`.
+- [x] Create assignments migration with morph fields.
+- [x] Create submissions migration with `status`.
+- [x] Create discussions migration with `parent_id`.
+- [x] Create certificates migration.
+- [x] Create content_progress migration.
+- [x] Create all related models and relationships.
+- [x] Register morph map for `module` and `material`.
 
 **Quality Gate**
-- [ ] `php artisan migrate:fresh --seed` works.
-- [ ] Foreign keys and cascade behavior verified.
-- [ ] Composite indexes exist for frequent queries.
-- [ ] Models use explicit `$fillable` and `$casts`.
-- [ ] Development prevents lazy loading where appropriate.
+- [x] `php artisan migrate:fresh --seed` works.
+- [x] Foreign keys and cascade behavior verified.
+- [x] Composite indexes exist for frequent queries.
+- [x] Models use explicit `$fillable` and `$casts`.
+- [x] Development prevents lazy loading where appropriate.
 
 ---
 
@@ -510,7 +510,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 |-------|--------|-------|
 | Phase 0 — Baseline | `[x]` | Laravel 13 project created and baseline verified |
 | Phase 1 — Setup | `[x]` | Inertia React, Tailwind v4, and Shadcn baseline ready |
-| Phase 2 — Database | `[ ]` | |
+| Phase 2 — Database | `[x]` | Core LMS schema, models, factories, seeders, and domain test ready |
 | Phase 3 — Auth/Security | `[ ]` | |
 | Phase 4 — Admin | `[ ]` | |
 | Phase 5 — Instructor | `[ ]` | |
@@ -529,7 +529,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 
 ## Next Immediate Actions
 
-1. Start Phase 2 database and model foundation.
-2. Update users migration and User model for LMS roles.
-3. Create course/enrollment/content/activity migrations.
-4. Add factories and seeders for manual testing.
+1. Start Phase 3 authentication, authorization, and security base.
+2. Build login/logout flow with role redirects.
+3. Add role middleware and core policies.
+4. Add access-control tests for admin, instructor, student, and guest flows.
