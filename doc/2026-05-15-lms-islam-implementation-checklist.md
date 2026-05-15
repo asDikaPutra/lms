@@ -70,29 +70,29 @@ Skill yang dipakai sebagai guardrail implementasi:
 ## Phase 1 — Project Setup & Foundation
 
 ### 1. Laravel + Inertia + React Setup
-- [ ] Install Laravel 13 project.
-- [ ] Install Inertia Laravel adapter.
-- [ ] Install React, React DOM, Inertia React.
-- [ ] Configure Vite React.
-- [ ] Configure root Blade template for Inertia.
-- [ ] Install Tailwind CSS.
-- [ ] Install Shadcn/UI.
-- [ ] Configure path aliases for React components.
-- [ ] Run local dev server successfully.
-- [ ] Confirm first Inertia page renders.
+- [x] Install Laravel 13 project.
+- [x] Install Inertia Laravel adapter.
+- [x] Install React, React DOM, Inertia React.
+- [x] Configure Vite React.
+- [x] Configure root Blade template for Inertia.
+- [x] Install Tailwind CSS.
+- [x] Install Shadcn/UI.
+- [x] Configure path aliases for React components.
+- [x] Run local dev server successfully.
+- [x] Confirm first Inertia page renders.
 
 ### 2. Base App Structure
-- [ ] Create controller folders: `Admin`, `Instructor`, `Student`, `Auth`.
-- [ ] Create React page folders: `Admin`, `Instructor`, `Student`, `Auth`.
-- [ ] Create shared layout/components folders.
-- [ ] Create base flash message handling.
-- [ ] Create shared Inertia auth props.
+- [x] Create controller folders: `Admin`, `Instructor`, `Student`, `Auth`.
+- [x] Create React page folders: `Admin`, `Instructor`, `Student`, `Auth`.
+- [x] Create shared layout/components folders.
+- [x] Create base flash message handling.
+- [x] Create shared Inertia auth props.
 
 **Quality Gate**
-- [ ] `npm run build` works.
-- [ ] Laravel app boots without error.
-- [ ] Tailwind version detected and setup matches version.
-- [ ] No landing page as primary authenticated experience.
+- [x] `npm run build` works.
+- [x] Laravel app boots without error.
+- [x] Tailwind version detected and setup matches version.
+- [x] No landing page as primary authenticated experience.
 
 ---
 
@@ -509,7 +509,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 | Phase | Status | Notes |
 |-------|--------|-------|
 | Phase 0 — Baseline | `[x]` | Laravel 13 project created and baseline verified |
-| Phase 1 — Setup | `[ ]` | |
+| Phase 1 — Setup | `[x]` | Inertia React, Tailwind v4, and Shadcn baseline ready |
 | Phase 2 — Database | `[ ]` | |
 | Phase 3 — Auth/Security | `[ ]` | |
 | Phase 4 — Admin | `[ ]` | |
@@ -529,7 +529,7 @@ Skill yang dipakai sebagai guardrail implementasi:
 
 ## Next Immediate Actions
 
-1. Install Inertia React and configure Inertia middleware.
-2. Confirm Tailwind v4 setup and install Shadcn/UI.
-3. Create baseline dashboard route to verify stack.
-4. Update this checklist after each completed task.
+1. Start Phase 2 database and model foundation.
+2. Update users migration and User model for LMS roles.
+3. Create course/enrollment/content/activity migrations.
+4. Add factories and seeders for manual testing.
