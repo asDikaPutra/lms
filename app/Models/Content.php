@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['material_id', 'type', 'title', 'body', 'url', 'file_path', 'order'])]
+#[Fillable(['material_id', 'type', 'title', 'body', 'url', 'video_id', 'file_path', 'order'])]
 class Content extends Model
 {
     public function material(): BelongsTo

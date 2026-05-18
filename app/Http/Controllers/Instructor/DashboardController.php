@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Instructor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Discussion;
 use App\Models\Enrollment;
 use App\Models\Material;
 use App\Models\Module;
@@ -52,6 +53,23 @@ class DashboardController extends Controller
                 ->latest()
                 ->limit(6)
                 ->get(),
+            'recentDiscussions' => Discussion::query()
+                ->with(['user:id,name', 'material.module.course:id,code,name,instructor_id'])
+                ->whereHas('material.module.course', fn ($query) => $query->where('instructor_id', $instructorId))
+                ->latest()
+                ->limit(10)
+                ->get()
+                ->map(fn ($discussion) => [
+                    'id' => $discussion->id,
+                    'body' => $discussion->body,
+                    'created_at' => $discussion->created_at,
+                    'user' => $discussion->user,
+                    'material_id' => $discussion->material_id,
+                    'material_title' => $discussion->material->title ?? null,
+                    'course_id' => $discussion->material->module->course->id ?? null,
+                    'course_code' => $discussion->material->module->course->code ?? null,
+                    'course_name' => $discussion->material->module->course->name ?? null,
+                ]),
         ]);
     }
 

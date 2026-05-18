@@ -3,6 +3,7 @@
 use App\Http\Middleware\AddSecurityHeaders;
 use App\Http\Middleware\EnsureRole;
 use App\Http\Middleware\HandleInertiaRequests;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -22,6 +23,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => EnsureRole::class,
         ]);
+    })
+    ->withSchedule(function (Schedule $schedule): void {
+        // Send assignment deadline reminders daily at 8 AM
+        $schedule->command('assignment:send-deadline-reminders')->dailyAt('08:00');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

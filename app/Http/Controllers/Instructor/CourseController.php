@@ -60,6 +60,11 @@ class CourseController extends Controller
         return Inertia::render('Instructor/Courses/Show', [
             'course' => $course->load([
                 'modules.materials.contents',
+                'modules.materials.discussions' => fn ($query) => $query->whereNull('parent_id')->with(['user:id,name', 'replies.user:id,name'])->oldest(),
+                'modules.quizzes.questions',
+                'modules.materials.quizzes.questions',
+                'modules.assignments',
+                'modules.materials.assignments',
                 'enrollments' => fn ($query) => $query->with('user:id,name,email,nim')->latest(),
             ])->loadCount([
                 'enrollments as active_enrollments_count' => fn ($query) => $query->where('status', 'active'),

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Notifications\EnrollmentRequestedNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,11 @@ class EnrollmentController extends Controller
             'enrolled_at' => $status === 'active' ? now() : null,
             'completed_at' => null,
         ])->save();
+
+        // Notify instructor if manual enrollment
+        if ($status === 'pending') {
+            $course->instructor->notify(new EnrollmentRequestedNotification($enrollment));
+        }
 
         return back()->with('success', $status === 'active'
             ? 'Anda berhasil masuk ke kursus.'

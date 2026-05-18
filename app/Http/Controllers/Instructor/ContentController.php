@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Instructor\StoreContentRequest;
 use App\Models\Content;
 use App\Models\Material;
+use App\Services\VideoService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class ContentController extends Controller
 {
+    public function __construct(private VideoService $videoService) {}
+
     public function store(StoreContentRequest $request, Material $material): RedirectResponse
     {
         Gate::authorize('update', $material);
@@ -19,11 +22,15 @@ class ContentController extends Controller
         $validated = $request->validated();
         $filePath = $request->hasFile('file') ? $request->file('file')->store('contents', 'public') : null;
 
+        $url = $validated['type'] === 'video' ? ($validated['url'] ?? null) : null;
+        $videoId = ($url !== null) ? $this->videoService->extractVideoId($url) : null;
+
         $material->contents()->create([
             'type' => $validated['type'],
             'title' => $validated['title'],
             'body' => $validated['type'] === 'artikel' ? $validated['body'] ?? null : null,
-            'url' => $validated['type'] === 'video' ? $validated['url'] ?? null : null,
+            'url' => $url,
+            'video_id' => $videoId,
             'file_path' => $filePath,
             'order' => (int) $material->contents()->max('order') + 1,
         ]);
@@ -36,11 +43,16 @@ class ContentController extends Controller
         Gate::authorize('update', $content->material);
 
         $validated = $request->validated();
+
+        $url = $validated['type'] === 'video' ? ($validated['url'] ?? null) : null;
+        $videoId = ($url !== null) ? $this->videoService->extractVideoId($url) : null;
+
         $payload = [
             'type' => $validated['type'],
             'title' => $validated['title'],
             'body' => $validated['type'] === 'artikel' ? $validated['body'] ?? null : null,
-            'url' => $validated['type'] === 'video' ? $validated['url'] ?? null : null,
+            'url' => $url,
+            'video_id' => $videoId,
         ];
 
         if ($request->hasFile('file')) {

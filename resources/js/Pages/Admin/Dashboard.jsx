@@ -13,12 +13,12 @@ const statConfig = [
 ];
 
 const toneClasses = {
-    blue: 'border-blue-100 bg-blue-50 text-blue-600',
-    emerald: 'border-emerald-100 bg-emerald-50 text-emerald-600',
-    teal: 'border-teal-100 bg-teal-50 text-teal-600',
-    orange: 'border-orange-100 bg-orange-50 text-orange-600',
-    sky: 'border-sky-100 bg-sky-50 text-sky-600',
-    violet: 'border-violet-100 bg-violet-50 text-violet-600',
+    blue: 'bg-[#f4f7fa] text-[#0051c3]',
+    emerald: 'bg-sb-light text-sb-green',
+    teal: 'bg-[#eef8f6] text-[#007b6a]',
+    orange: 'bg-[#fff6e5] text-[#b35200]',
+    sky: 'bg-[#f0f8ff] text-[#006bd6]',
+    violet: 'bg-[#f6f2fb] text-[#5e2b97]',
 };
 
 export default function Dashboard({ stats, recentUsers, recentCourses }) {
@@ -26,22 +26,22 @@ export default function Dashboard({ stats, recentUsers, recentCourses }) {
         <AdminLayout title="Dashboard">
             <Head title="Admin Dashboard" />
 
-            <section aria-labelledby="stats-title">
+            <section aria-labelledby="stats-title" className="tracking-[-0.01em]">
                 <h2 id="stats-title" className="sr-only">
                     Statistik LMS
                 </h2>
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <div className="grid gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-3">
                     {statConfig.map((item) => {
                         const Icon = item.icon;
                         return (
-                            <article key={item.key} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                                <div className="flex items-center gap-4">
-                                    <div className={`flex size-14 items-center justify-center rounded-2xl border ${toneClasses[item.tone]}`}>
-                                        <Icon className="size-7" aria-hidden="true" />
+                            <article key={item.key} className="rounded-[10px] bg-white p-4 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)] transition-all hover:shadow-[0_1px_3px_rgba(0,0,0,0.1),_0_2px_2px_rgba(0,0,0,0.06),_0_0_2px_rgba(0,0,0,0.07)]">
+                                <div className="flex items-center gap-3">
+                                    <div className={`flex size-10 shrink-0 items-center justify-center rounded-[8px] ${toneClasses[item.tone]}`}>
+                                        <Icon className="size-5" aria-hidden="true" />
                                     </div>
                                     <div>
-                                        <p className="text-3xl font-semibold text-slate-950">{stats[item.key]}</p>
-                                        <p className="mt-1 text-sm font-medium text-slate-600">{item.label}</p>
+                                        <p className="text-[20px] font-semibold text-sb-text-black tracking-[-0.16px] leading-tight">{stats[item.key]}</p>
+                                        <p className="text-[12px] text-sb-text-soft">{item.label}</p>
                                     </div>
                                 </div>
                             </article>
@@ -50,24 +50,24 @@ export default function Dashboard({ stats, recentUsers, recentCourses }) {
                 </div>
             </section>
 
-            <div className="mt-6 grid gap-6 xl:grid-cols-[1.3fr_1fr]">
-                <section aria-labelledby="recent-users-title" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="mt-5 grid gap-5 xl:grid-cols-[1.3fr_1fr] tracking-[-0.01em]">
+                <section aria-labelledby="recent-users-title" className="rounded-[10px] bg-white p-4 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)]">
                     <div className="flex items-center justify-between gap-4">
-                        <h2 id="recent-users-title" className="text-lg font-semibold text-slate-950">
+                        <h2 id="recent-users-title" className="text-[16px] font-semibold text-sb-text-black tracking-[-0.16px]">
                             User Terbaru
                         </h2>
-                        <Link href="/admin/users" className="text-sm font-semibold text-blue-700 hover:text-blue-900">
+                        <Link href="/admin/users" className="text-[13px] font-semibold text-sb-accent hover:text-sb-green transition-colors">
                             Kelola user
                         </Link>
                     </div>
-                    <div className="mt-4 divide-y divide-slate-100">
+                    <div className="mt-4 divide-y divide-[#edebe9]">
                         {recentUsers.map((user) => (
-                            <div key={user.id} className="flex items-center justify-between gap-4 py-3">
+                            <div key={user.id} className="flex items-center justify-between gap-3 py-2.5 first:pt-0 last:pb-0">
                                 <div>
-                                    <p className="font-medium text-slate-950">{user.name}</p>
-                                    <p className="text-sm text-slate-500">{user.email}</p>
+                                    <p className="text-[14px] font-semibold text-sb-text-black">{user.name}</p>
+                                    <p className="text-[12px] text-sb-text-soft">{user.email}</p>
                                 </div>
-                                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+                                <span className="rounded-pill bg-[#f9f9f9] px-2 py-0.5 text-[11px] font-medium text-sb-text-black border border-[#edebe9]">
                                     {user.role}
                                 </span>
                             </div>
@@ -75,20 +75,20 @@ export default function Dashboard({ stats, recentUsers, recentCourses }) {
                     </div>
                 </section>
 
-                <section aria-labelledby="recent-courses-title" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <h2 id="recent-courses-title" className="text-lg font-semibold text-slate-950">
+                <section aria-labelledby="recent-courses-title" className="rounded-[10px] bg-white p-4 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)]">
+                    <h2 id="recent-courses-title" className="text-[16px] font-semibold text-sb-text-black tracking-[-0.16px]">
                         Kursus Terbaru
                     </h2>
                     <div className="mt-4 space-y-3">
                         {recentCourses.map((course) => (
-                            <article key={course.id} className="rounded-xl border border-slate-100 p-4">
+                            <article key={course.id} className="rounded-[8px] border border-[#edebe9] bg-[#f9f9f9] p-3 transition-all hover:border-[#d6dbde] hover:bg-white">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
-                                        <p className="text-sm font-semibold text-blue-700">{course.code}</p>
-                                        <h3 className="mt-1 font-semibold text-slate-950">{course.name}</h3>
-                                        <p className="mt-1 text-sm text-slate-500">{course.instructor?.name}</p>
+                                        <p className="text-[11px] font-semibold text-sb-green tracking-[0.05em] uppercase">{course.code}</p>
+                                        <h3 className="text-[14px] font-semibold text-sb-text-black leading-snug">{course.name}</h3>
+                                        <p className="mt-0.5 text-[12px] text-sb-text-soft">{course.instructor?.name}</p>
                                     </div>
-                                    <span className={`rounded-full px-3 py-1 text-xs font-medium ${course.is_active ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
+                                    <span className={`rounded-pill px-2 py-0.5 text-[11px] font-medium border ${course.is_active ? 'bg-sb-light border-sb-light text-sb-green' : 'bg-white border-[#edebe9] text-sb-text-soft'}`}>
                                         {course.is_active ? 'Aktif' : 'Arsip'}
                                     </span>
                                 </div>

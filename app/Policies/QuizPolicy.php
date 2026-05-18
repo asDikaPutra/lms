@@ -43,12 +43,13 @@ class QuizPolicy
         $parent = $quiz->quizzable;
         $courseId = match (true) {
             $parent instanceof Module => $parent->course_id,
-            $parent instanceof Material => $parent->module?->course_id,
+            $parent instanceof Material => $parent->module()->value('course_id'),
             default => null,
         };
 
         return $courseId !== null && $user->enrollments()
             ->where('course_id', $courseId)
+            ->whereHas('course', fn ($query) => $query->where('is_active', true))
             ->where('status', 'active')
             ->exists();
     }

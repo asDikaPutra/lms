@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Instructor;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Notifications\EnrollmentApprovedNotification;
+use App\Notifications\EnrollmentRejectedNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
 
@@ -19,6 +21,9 @@ class EnrollmentController extends Controller
             'enrolled_at' => now(),
         ]);
 
+        // Notify student
+        $enrollment->user->notify(new EnrollmentApprovedNotification($enrollment));
+
         return back()->with('success', 'Mahasiswa berhasil disetujui.');
     }
 
@@ -30,6 +35,9 @@ class EnrollmentController extends Controller
             'status' => 'rejected',
             'enrolled_at' => null,
         ]);
+
+        // Notify student
+        $enrollment->user->notify(new EnrollmentRejectedNotification($enrollment));
 
         return back()->with('success', 'Pengajuan mahasiswa ditolak.');
     }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-#[Fillable(['title', 'duration', 'result_mode', 'passing_score', 'is_published'])]
+#[Fillable(['title', 'duration', 'result_mode', 'passing_score', 'max_attempts', 'is_published'])]
 class Quiz extends Model
 {
     protected function casts(): array
