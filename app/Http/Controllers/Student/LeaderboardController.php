@@ -1,54 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-use App\Models\Course;
-use App\Services\LeaderboardService;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class LeaderboardController extends Controller
+final class LeaderboardController extends Controller
 {
-    public function __construct(
-        private LeaderboardService $leaderboardService
-    ) {}
-
-    /**
-     * Show leaderboard for a course
-     */
-    public function show(Course $course): Response
+    public function index(): Response
     {
-        // Check if student is enrolled
-        $enrollment = $course->enrollments()
-            ->where('user_id', auth()->id())
-            ->where('status', 'active')
-            ->first();
+        $leaderboard = DB::table('users')
+            ->select('users.id', 'users.name', 'users.nim', 'users.avatar', DB::raw('COALESCE(SUM(quiz_attempts.score), 0) as total_score'))
+            ->leftJoin('quiz_attempts', function ($join): void {
+                $join->on('users.id', '=', 'quiz_attempts.user_id')
+                    ->where('quiz_attempts.status', '=', 'completed');
+            })
+            ->where('users.role', 'student')
+            ->where('users.is_active', true)
+            ->groupBy('users.id', 'users.name', 'users.nim', 'users.avatar')
+            ->orderByDesc('total_score')
+            ->orderBy('users.name')
+            ->limit(10)
+            ->get();
 
-        abort_unless($enrollment, 403, 'Anda belum terdaftar di kursus ini.');
-
-        // Check if leaderboard is enabled
-        if (!$course->leaderboard_enabled) {
-            return Inertia::render('Student/Leaderboard/Disabled', [
-                'course' => [
-                    'id' => $course->id,
-                    'name' => $course->name,
-                    'code' => $course->code,
-                ],
-            ]);
-        }
-
-        $leaderboard = $this->leaderboardService->getLeaderboard($course);
-        $studentRank = $this->leaderboardService->getStudentRank(auth()->user(), $course);
-
-        return Inertia::render('Student/Leaderboard/Show', [
-            'course' => [
-                'id' => $course->id,
-                'name' => $course->name,
-                'code' => $course->code,
-            ],
+        return Inertia::render('Student/Leaderboard', [
             'leaderboard' => $leaderboard,
-            'student_rank' => $studentRank,
         ]);
     }
 }

@@ -165,6 +165,7 @@ class QuizSystemTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('Student/Courses/Show')
                 ->where('course.modules.0.quizzes.0.title', 'Quiz Published')
+                ->where('course.modules.0.quizzes.0.max_attempts', 1)
                 ->where('course.modules.0.quizzes.0.questions.0.question', 'Pilih jawaban benar')
                 ->missing('course.modules.0.quizzes.0.questions.0.correct_answer'));
     }
@@ -259,6 +260,53 @@ class QuizSystemTest extends TestCase
             'quiz_id' => $quiz->id,
             'user_id' => $student->id,
             'score' => 50,
+            'status' => 'graded',
+        ]);
+    }
+
+    public function test_student_quiz_attempt_is_recorded_when_timer_auto_submits_after_duration(): void
+    {
+        $student = User::factory()->student()->create();
+        $course = Course::factory()->create();
+        $module = Module::query()->create([
+            'course_id' => $course->id,
+            'title' => 'Modul',
+            'order' => 1,
+            'is_published' => true,
+        ]);
+        $quiz = $module->quizzes()->create([
+            'title' => 'Quiz Timer',
+            'duration' => 1,
+            'result_mode' => 'immediate',
+            'passing_score' => 70,
+            'is_published' => true,
+        ]);
+        $question = $quiz->questions()->create([
+            'question' => 'Benar?',
+            'type' => 'true_false',
+            'options' => ['true', 'false'],
+            'correct_answer' => 'true',
+            'points' => 10,
+            'order' => 1,
+        ]);
+        Enrollment::factory()->active()->create([
+            'user_id' => $student->id,
+            'course_id' => $course->id,
+        ]);
+
+        $this->actingAs($student)
+            ->post("/student/quizzes/{$quiz->id}/attempts", [
+                'answers' => [
+                    $question->id => 'true',
+                ],
+                'started_at' => now()->subMinutes(2)->toISOString(),
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('quiz_attempts', [
+            'quiz_id' => $quiz->id,
+            'user_id' => $student->id,
+            'score' => 100,
             'status' => 'graded',
         ]);
     }

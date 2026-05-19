@@ -28,24 +28,18 @@ class QuizAttemptController extends Controller
         }
 
         $validated = $request->validate([
-            'answers' => ['required', 'array'],
-            'started_at' => ['required', 'date'],
+            'answers' => ['nullable', 'array'],
+            'started_at' => ['nullable', 'date'],
         ]);
 
-        // Validate time limit if quiz has duration
-        if ($quiz->duration) {
-            $startedAt = \Carbon\Carbon::parse($validated['started_at']);
-            $elapsedMinutes = $startedAt->diffInMinutes(now());
-            
-            if ($elapsedMinutes > $quiz->duration) {
-                return back()->with('error', 'Waktu quiz telah habis. Jawaban tidak dapat dikirim.');
-            }
-        }
+        $startedAt = isset($validated['started_at'])
+            ? \Carbon\Carbon::parse($validated['started_at'])
+            : now();
 
         $hasEssay = false;
         $earned = 0;
         $total = 0;
-        $answers = $validated['answers'];
+        $answers = $validated['answers'] ?? [];
 
         foreach ($quiz->questions as $question) {
             $total += (int) $question->points;
@@ -68,7 +62,7 @@ class QuizAttemptController extends Controller
             'answers' => $answers,
             'score' => $total > 0 ? round(($earned / $total) * 100, 2) : 0,
             'status' => $hasEssay ? 'submitted' : 'graded',
-            'started_at' => $validated['started_at'],
+            'started_at' => $startedAt,
             'finished_at' => now(),
         ]);
 

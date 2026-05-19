@@ -27,4 +27,23 @@ class QuizAttempt extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function recordAnswer(int $questionId, mixed $answer, int $timeTaken, bool $isCorrect, int $points): void
+    {
+        $answers = $this->answers ?? [];
+        $answers[$questionId] = [
+            'answer' => $answer,
+            'time_taken' => $timeTaken,
+            'is_correct' => $isCorrect,
+            'points' => $points,
+            'answered_at' => now()->toISOString(),
+        ];
+        $this->answers = $answers;
+        $this->save();
+    }
+
+    public function calculateScore(): int
+    {
+        return collect($this->answers ?? [])->sum('points');
+    }
 }

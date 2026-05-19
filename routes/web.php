@@ -21,7 +21,9 @@ use App\Http\Controllers\Student\ContentProgressController as StudentContentProg
 use App\Http\Controllers\Student\CourseController as StudentCourseController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Student\EnrollmentController as StudentEnrollmentController;
+use App\Http\Controllers\Student\LeaderboardController as StudentLeaderboardController;
 use App\Http\Controllers\Student\QuizAttemptController as StudentQuizAttemptController;
+use App\Http\Controllers\Student\QuizController as StudentQuizController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -34,7 +36,7 @@ Route::get('/', function () {
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-    Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('throttle:10,1')->name('login.store');
 });
 
 Route::middleware('auth')->group(function (): void {
@@ -113,6 +115,15 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/courses', [StudentCourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/{course}', [StudentCourseController::class, 'show'])->name('courses.show');
     Route::patch('/contents/{content}/complete', [StudentContentProgressController::class, 'complete'])->name('contents.complete');
+    
+    // Quiz play flow (Quizizz-style)
+    Route::get('/quizzes/{quiz}', [StudentQuizController::class, 'show'])->name('quizzes.show');
+    Route::post('/quizzes/{quiz}/start', [StudentQuizController::class, 'start'])->name('quizzes.start');
+    Route::get('/quiz-attempts/{attempt}/questions/{questionNumber}', [StudentQuizController::class, 'getQuestion'])->name('quizzes.get-question');
+    Route::post('/quiz-attempts/{attempt}/questions/{questionNumber}/submit', [StudentQuizController::class, 'submitAnswer'])->name('quizzes.submit-answer');
+    Route::post('/quiz-attempts/{attempt}/finish', [StudentQuizController::class, 'finish'])->name('quizzes.finish');
+    Route::get('/quiz-attempts/{attempt}/result', [StudentQuizController::class, 'result'])->name('quizzes.result');
+    
     Route::post('/quizzes/{quiz}/attempts', [StudentQuizAttemptController::class, 'store'])->name('quiz-attempts.store');
     Route::post('/assignments/{assignment}/submit', [StudentAssignmentController::class, 'store'])->name('assignments.submit');
     
@@ -122,6 +133,7 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::post('/courses/{course}/certificates/request', [\App\Http\Controllers\Student\CertificateController::class, 'request'])->name('certificates.request');
     
     // Leaderboard
+    Route::get('/leaderboard', [StudentLeaderboardController::class, 'index'])->name('leaderboard');
     Route::get('/courses/{course}/leaderboard', [\App\Http\Controllers\Student\LeaderboardController::class, 'show'])->name('leaderboard.show');
 });
 

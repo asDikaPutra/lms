@@ -38,7 +38,7 @@ class QuizAttemptController extends Controller
             'essay_scores.*' => ['nullable', 'numeric', 'min:0'],
         ]);
 
-        $attempt->load('quiz.questions');
+        $attempt->load(['quiz.questions', 'quiz.quizzable', 'user']);
 
         $responses = $this->responses($attempt->answers);
         $essayScores = collect($validated['essay_scores'])

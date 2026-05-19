@@ -34,6 +34,28 @@ class AuthAccessControlTest extends TestCase
         $this->assertAuthenticatedAs($admin);
     }
 
+    public function test_inertia_login_forces_browser_visit_to_role_dashboard(): void
+    {
+        $this->withoutVite();
+
+        $admin = User::factory()->admin()->create([
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+
+        $response = $this
+            ->withHeader('X-Inertia', 'true')
+            ->post('/login', [
+                'email' => 'admin@example.com',
+                'password' => 'password',
+            ]);
+
+        $response
+            ->assertStatus(409)
+            ->assertHeader('X-Inertia-Location', '/admin/dashboard');
+        $this->assertAuthenticatedAs($admin);
+    }
+
     public function test_inactive_user_cannot_login(): void
     {
         $this->withoutVite();

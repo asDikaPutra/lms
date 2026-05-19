@@ -1,0 +1,145 @@
+# LMS Islam Fakultas — Project Rules
+
+You are working on **LMS Islam Fakultas**, a Learning Management System built with Laravel 13 + React/Inertia.
+
+## Architecture
+
+### Tech Stack
+- **Backend:** Laravel 13 (PHP 8.3+)
+- **Frontend:** React 19 + Inertia.js 3 + Tailwind CSS 4 + shadcn/ui (Radix UI)
+- **Build:** Vite 7 + `@vitejs/plugin-react` + `@tailwindcss/vite`
+- **Database:** MySQL
+- **Auth:** Laravel built-in session auth (not Sanctum/Sanctum API)
+- **Icons:** lucide-react
+- **Animation:** framer-motion
+
+### Directory Structure
+```
+app/
+├── Http/
+│   └── Controllers/
+│       ├── Admin/        # Admin role controllers
+│       ├── Instructor/   # Instructor role controllers
+│       ├── Student/      # Student role controllers
+│       ├── Auth/         # Auth controllers
+│       └── *.php         # Shared controllers (DiscussionController, etc.)
+├── Models/               # Eloquent models
+├── Providers/
+├── Livewire/             # (if any Livewire components)
+resources/
+├── js/
+│   ├── Components/       # Shared React components
+│   ├── Pages/            # Inertia page components
+│   │   ├── Admin/
+│   │   ├── Instructor/
+│   │   ├── Student/
+│   │   └── Auth/
+│   └── Layouts/          # Layout components
+├── css/app.css           # Tailwind entry
+routes/
+├── web.php               # Main web routes
+└── console.php           # Artisan commands
+```
+
+### Role-Based Structure
+The app has **3 roles**: `admin`, `instructor`, `student`
+- Each role has separate controllers under `App\Http\Controllers\{Role}\`
+- Each role has separate Inertia pages under `resources/js/Pages/{Role}/`
+- Role-based dashboard route: `{role}.dashboard`
+- Middleware checks `auth()->user()->role` to determine routing
+
+### Models (app/Models/)
+- **User** — extends Authenticatable, has role enum (admin/instructor/student)
+- **Course** — belongs to User (instructor)
+- **Module** — belongs to Course
+- **Material** — belongs to Module
+- **Content** — belongs to Material
+- **ContentProgress** — belongs to User + Content (tracks student progress)
+- **Assignment** — belongs to Module
+- **Submission** — belongs to Student + Assignment
+- **Quiz** — belongs to Module
+- **QuizQuestion** — belongs to Quiz
+- **QuizAttempt** — belongs to Student + Quiz
+- **Discussion** — morphTo userable, belongsTo course
+- **Enrollment** — belongs to User (student) + Course
+- **Certificate** — belongs to User (student) + Course
+
+## Naming Conventions
+
+### PHP / Laravel
+- **Controllers:** PascalCase, suffix with `Controller`, group by role directory
+- **Models:** Singular PascalCase (Course, Module, ContentProgress)
+- **Migrations:** snake_case with timestamp prefix
+- **Routes:** kebab-case URLs, dot-notation route names (e.g., `admin.courses.index`)
+- **Validation:** Form Request classes in `app/Http/Requests/`
+
+### React / Inertia
+- **Components:** PascalCase, one component per file
+- **Pages:** PascalCase, match route structure (e.g., `Admin/Courses/Index.jsx`)
+- **Hooks:** camelCase with `use` prefix
+- **Props:** camelCase in JavaScript, snake_case in PHP (Inertia auto-converts)
+- Use `class-variance-authority` (cva) + `clsx` + `tailwind-merge` for class management
+- Import shadcn components from `@/Components/ui/`
+
+### Inertia Patterns
+- Server-side: `Inertia::render('Role/PageName', [...])` from controllers
+- Client-side: `router.get/post/put/delete()` for navigation
+- Shared data via `HandleInertiaRequests` middleware
+- Flash messages: `session('success')` / `session('error')`
+
+## Commands
+
+### Development
+```bash
+# Run dev servers (Vite + Artisan serve + queue + logs)
+npm run dev          # Uses concurrently
+
+# Run tests
+php artisan test
+
+# Clear cache
+php artisan optimize:clear
+
+### Queue Worker
+```bash
+php artisan queue:listen --tries=1 --timeout=0
+```
+
+### Database
+```bash
+php artisan migrate
+php artisan migrate:fresh --seed
+php artisan db:seed
+```
+
+## Coding Standards
+
+### PHP
+- Strict types: `declare(strict_types=1)` on all new files
+- Use constructor property promotion where possible
+- Type hint everything (return types, parameter types)
+- Use Laravel facades sparingly; prefer dependency injection
+- Use Form Requests for validation in any significant endpoint
+- Eloquent: use `with()` for eager loading, avoid N+1 queries
+
+### React
+- Functional components with hooks (no class components)
+- Inertia form handling: use `useForm` or `useFormWithFileUpload` helper
+- State management: local state + Inertia shared data (avoid Redux/Zustand)
+- Use shadcn/ui components (Dialog, Sheet, Form, Table, Button, etc.)
+- Tailwind CSS 4 syntax (no @apply for one-off styles)
+
+### Database
+- Migrations should be reversible (use `down()` method)
+- Foreign keys with cascade on delete where appropriate
+- Use enums for fixed-value columns (role, status, type)
+- Index frequently queried columns
+
+## Important Gotchas
+- **Cloudflare Tunnel:** App behind Cloudflare — must use [`URL::forceScheme('https')` and `trustProxies(at: '*')`] for assets
+- **Vite should run:** Frontend assets served via Vite; after changes run `npm run build`
+- **Queue needed:** Some features use queue (notifications, certificate generation)
+- No API routes yet — all routes are web-based (Inertia)
+- User passwords are hashed with Bcrypt (Laravel default)
+- Session storage in MySQL (not file/database)
+- Environment file at `/var/www/laravel/.env`, production mode

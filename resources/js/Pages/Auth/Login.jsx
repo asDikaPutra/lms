@@ -108,16 +108,6 @@ export default function Login() {
                             </span>
                         </motion.h1>
 
-                        {/* Description */}
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.5, duration: 0.6 }}
-                            className="mt-5 max-w-xl text-base leading-relaxed text-neutral-600"
-                        >
-                            Masuk untuk mengelola kelas, materi, tugas, dan pembelajaran sesuai peran Anda.
-                        </motion.p>
-
                         {/* Decorative elements */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0 }}

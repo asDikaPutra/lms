@@ -148,11 +148,14 @@ export default function CoursesIndex({ courses }) {
 }
 
 function CourseCard({ course, delay }) {
-    const enrollForm = useForm({ course_id: course.id });
+    const enrollForm = useForm({ enroll_code: '' });
 
-    const handleEnroll = () => {
+    const handleEnroll = (event) => {
+        event.preventDefault();
+
         enrollForm.post('/student/enrollments', {
             preserveScroll: true,
+            onSuccess: () => enrollForm.reset(),
         });
     };
 
@@ -162,7 +165,7 @@ function CourseCard({ course, delay }) {
             // Not enrolled - show enroll button
             return {
                 type: 'enroll',
-                label: course.enrollment_mode === 'auto' ? 'Gabung Sekarang' : 'Minta Akses',
+                label: course.enrollment_type === 'auto' ? 'Gabung Sekarang' : 'Minta Akses',
                 action: handleEnroll,
                 disabled: enrollForm.processing,
             };
@@ -419,34 +422,54 @@ function CourseCard({ course, delay }) {
                     )}
 
                     {cardAction.type === 'enroll' && (
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={cardAction.action}
-                            disabled={cardAction.disabled}
-                            className="relative w-full h-11 rounded-xl overflow-hidden group/btn shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {/* Glass gradient background */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-cyan-600/95 to-blue-600/95 backdrop-blur-sm group-hover/btn:from-blue-700/95 group-hover/btn:via-cyan-700/95 group-hover/btn:to-blue-700/95 transition-all duration-300" />
-                            
-                            {/* Shine effect on hover */}
-                            <motion.div
-                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover/btn:opacity-100"
-                                animate={{
-                                    x: ['-100%', '200%'],
-                                }}
-                                transition={{
-                                    duration: 1.5,
-                                    repeat: Infinity,
-                                    repeatDelay: 0.5,
-                                }}
-                            />
-                            
-                            {/* Button text */}
-                            <span className="relative flex items-center justify-center gap-2 text-sm font-bold text-white tracking-wide drop-shadow-lg">
-                                {cardAction.disabled ? 'Memproses...' : cardAction.label}
-                            </span>
-                        </motion.button>
+                        <form onSubmit={cardAction.action} className="space-y-2.5">
+                            <div>
+                                <label htmlFor={`enroll-code-${course.id}`} className="sr-only">
+                                    Kode Enroll
+                                </label>
+                                <motion.input
+                                    whileFocus={{ scale: 1.01 }}
+                                    id={`enroll-code-${course.id}`}
+                                    value={enrollForm.data.enroll_code}
+                                    onChange={(event) => enrollForm.setData('enroll_code', event.target.value)}
+                                    placeholder="Masukkan kode enroll"
+                                    className="h-10 w-full rounded-xl border-2 border-neutral-200 bg-white/80 px-3 text-xs font-semibold uppercase tracking-wider text-neutral-900 outline-none transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                                />
+                                {enrollForm.errors.enroll_code && (
+                                    <p className="mt-1.5 text-xs font-medium text-red-600">
+                                        {enrollForm.errors.enroll_code}
+                                    </p>
+                                )}
+                            </div>
+                            <motion.button
+                                type="submit"
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                disabled={cardAction.disabled}
+                                className="relative w-full h-11 rounded-xl overflow-hidden group/btn shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {/* Glass gradient background */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-cyan-600/95 to-blue-600/95 backdrop-blur-sm group-hover/btn:from-blue-700/95 group-hover/btn:via-cyan-700/95 group-hover/btn:to-blue-700/95 transition-all duration-300" />
+
+                                {/* Shine effect on hover */}
+                                <motion.div
+                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover/btn:opacity-100"
+                                    animate={{
+                                        x: ['-100%', '200%'],
+                                    }}
+                                    transition={{
+                                        duration: 1.5,
+                                        repeat: Infinity,
+                                        repeatDelay: 0.5,
+                                    }}
+                                />
+
+                                {/* Button text */}
+                                <span className="relative flex items-center justify-center gap-2 text-sm font-bold text-white tracking-wide drop-shadow-lg">
+                                    {cardAction.disabled ? 'Memproses...' : cardAction.label}
+                                </span>
+                            </motion.button>
+                        </form>
                     )}
 
                     {cardAction.type === 'status' && (

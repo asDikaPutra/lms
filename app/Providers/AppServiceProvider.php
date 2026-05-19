@@ -8,6 +8,7 @@ use App\Models\Discussion;
 use App\Models\Material;
 use App\Models\Module;
 use App\Models\Quiz;
+use App\Models\User;
 use App\Policies\AssignmentPolicy;
 use App\Policies\CoursePolicy;
 use App\Policies\DiscussionPolicy;
@@ -17,6 +18,7 @@ use App\Policies\QuizPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        URL::forceScheme('https');
+
         Model::preventLazyLoading(! app()->isProduction());
 
         Gate::policy(Course::class, CoursePolicy::class);
@@ -46,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'module' => Module::class,
             'material' => Material::class,
+            'user' => User::class,
         ]);
     }
 }

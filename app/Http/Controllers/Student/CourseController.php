@@ -64,7 +64,7 @@ class CourseController extends Controller
                 'description' => $course->description,
                 'instructor' => $course->instructor,
                 'enrollment_status' => $enrollment ? $enrollment->status : null,
-                'enrollment_mode' => $course->enrollment_mode,
+                'enrollment_type' => $course->enrollment_type,
                 'enrolled_at' => $enrollment?->created_at?->toISOString(),
                 'progress' => $progress,
             ];
@@ -183,6 +183,7 @@ class CourseController extends Controller
             'duration' => $quiz->duration,
             'result_mode' => $quiz->result_mode,
             'passing_score' => $quiz->passing_score,
+            'max_attempts' => $quiz->max_attempts,
             'questions' => $quiz->questions->map(fn ($question) => [
                 'id' => $question->id,
                 'question' => $question->question,

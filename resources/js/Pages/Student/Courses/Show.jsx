@@ -1,6 +1,6 @@
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
-import { CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ClipboardList, Clock, Download, FileText, HelpCircle, List, MessageSquare, PlayCircle, Send, Trash2, Upload, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { AlertTriangle, Ban, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ClipboardList, Clock, Download, FileText, HelpCircle, List, MessageSquare, PlayCircle, Send, Trash2, Upload, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import StudentLayout from '@/Layouts/StudentLayout';
@@ -935,13 +935,38 @@ function QuizView({ quiz, attempt }) {
     const [startTime, setStartTime] = useState(null);
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [timeExpired, setTimeExpired] = useState(false);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const form = useForm({ answers: {}, started_at: null });
+    const latestFormData = useRef(form.data);
+    const hasSubmitted = useRef(false);
     const canShowScore = attempt && quiz.result_mode === 'immediate' && attempt.status === 'graded' && attempt.score !== null;
     
     // Check if user can still attempt
     const attemptCount = attempt?.attempt_count || 0;
     const canAttempt = attemptCount < quiz.max_attempts;
     const hasAttempted = attemptCount > 0;
+    const remainingAttempts = Math.max((quiz.max_attempts ?? 0) - attemptCount, 0);
+
+    useEffect(() => {
+        latestFormData.current = form.data;
+    }, [form.data]);
+
+    const postQuiz = () => {
+        if (hasSubmitted.current || form.processing) return;
+
+        hasSubmitted.current = true;
+        form
+            .transform(() => ({
+                answers: latestFormData.current.answers ?? {},
+                started_at: latestFormData.current.started_at,
+            }))
+            .post(`/student/quizzes/${quiz.id}/attempts`, {
+                preserveScroll: true,
+                onError: () => {
+                    hasSubmitted.current = false;
+                },
+            });
+    };
 
     // Timer effect
     useEffect(() => {
@@ -949,12 +974,14 @@ function QuizView({ quiz, attempt }) {
 
         const interval = setInterval(() => {
             const elapsed = Math.floor((Date.now() - startTime) / 1000);
-            setElapsedSeconds(elapsed);
+            const durationSeconds = quiz.duration ? quiz.duration * 60 : null;
+            setElapsedSeconds(durationSeconds ? Math.min(elapsed, durationSeconds) : elapsed);
 
             // Check if time expired
-            if (quiz.duration && elapsed >= quiz.duration * 60) {
+            if (durationSeconds && elapsed >= durationSeconds) {
                 setTimeExpired(true);
                 clearInterval(interval);
+                postQuiz();
             }
         }, 1000);
 
@@ -970,20 +997,13 @@ function QuizView({ quiz, attempt }) {
 
     const submitQuiz = (event) => {
         event.preventDefault();
-        
-        if (timeExpired) {
-            alert('Waktu quiz telah habis!');
-            return;
-        }
 
         if (!form.data.started_at) {
             alert('Error: Waktu mulai tidak tercatat. Silakan refresh halaman.');
             return;
         }
 
-        form.post(`/student/quizzes/${quiz.id}/attempts`, {
-            preserveScroll: true,
-        });
+        postQuiz();
     };
 
     // Format time display
@@ -1002,85 +1022,128 @@ function QuizView({ quiz, attempt }) {
 
     const remainingSeconds = getRemainingTime();
     const isWarningTime = remainingSeconds !== null && remainingSeconds <= 60; // Last minute warning
+    const activeQuestion = quiz.questions[currentQuestionIndex];
+    const totalQuestions = quiz.questions.length;
+    const activeAnswer = activeQuestion ? form.data.answers[activeQuestion.id] : null;
+    const answeredCount = quiz.questions.filter((question) => {
+        const answer = form.data.answers[question.id];
+
+        return answer !== undefined && String(answer).trim() !== '';
+    }).length;
+    const progressPercent = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
+    const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
+    const answerTones = [
+        'border-blue-200 bg-blue-50 text-blue-950 hover:border-blue-400 hover:bg-blue-100',
+        'border-emerald-200 bg-emerald-50 text-emerald-950 hover:border-emerald-400 hover:bg-emerald-100',
+        'border-amber-200 bg-amber-50 text-amber-950 hover:border-amber-400 hover:bg-amber-100',
+        'border-rose-200 bg-rose-50 text-rose-950 hover:border-rose-400 hover:bg-rose-100',
+    ];
+
+    const setAnswer = (questionId, value) => {
+        const nextAnswers = {
+            ...(latestFormData.current.answers ?? {}),
+            [questionId]: value,
+        };
+
+        latestFormData.current = {
+            ...latestFormData.current,
+            answers: nextAnswers,
+        };
+        form.setData('answers', nextAnswers);
+    };
+
+    const goToQuestion = (index) => {
+        setCurrentQuestionIndex(Math.min(Math.max(index, 0), Math.max(totalQuestions - 1, 0)));
+    };
+
+    const goToNextQuestion = () => {
+        if (isLastQuestion) {
+            postQuiz();
+            return;
+        }
+
+        goToQuestion(currentQuestionIndex + 1);
+    };
 
     // Quiz Start Screen (before starting)
     if (!quizStarted && canAttempt) {
         return (
-            <div className="space-y-6">
-                <div className="flex items-start gap-3">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg">
-                        <HelpCircle className="size-5" />
+            <div className="space-y-4 sm:space-y-6">
+                <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg sm:size-10">
+                        <HelpCircle className="size-4 sm:size-5" />
                     </div>
-                    <div className="flex-1">
-                        <h2 className="text-xl font-bold text-neutral-900">{quiz.title}</h2>
-                        <p className="mt-1 text-sm text-neutral-600">Baca instruksi dengan teliti sebelum memulai</p>
+                    <div className="min-w-0 flex-1">
+                        <h2 className="break-words text-lg font-bold leading-snug text-neutral-900 sm:text-xl">{quiz.title}</h2>
+                        <p className="mt-1 text-xs leading-relaxed text-neutral-600 sm:text-sm">Baca instruksi dengan teliti sebelum memulai</p>
                         {hasAttempted && (
-                            <p className="mt-1 text-xs font-semibold text-amber-600">
-                                ⚠️ Percobaan ke-{attemptCount + 1} dari {quiz.max_attempts}
+                            <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
+                                <AlertTriangle className="size-3.5" />
+                                Percobaan ke-{attemptCount + 1} dari {quiz.max_attempts}
                             </p>
                         )}
                     </div>
                 </div>
 
                 {/* Quiz Info Card */}
-                <div className="rounded-xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
-                    <h3 className="text-base font-bold text-neutral-900 mb-4 flex items-center gap-2">
-                        <span className="text-xl">📋</span>
+                <div className="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-4 sm:p-6">
+                    <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-neutral-900 sm:text-base">
+                        <ClipboardList className="size-4 text-blue-700 sm:size-5" />
                         Informasi Quiz
                     </h3>
                     
-                    <div className="space-y-3">
-                        <div className="flex items-center gap-3">
-                            <div className="flex size-8 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div className="flex min-w-0 items-center gap-3 rounded-lg bg-white/70 p-3">
+                            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
                                 <FileText className="size-4" />
                             </div>
-                            <div>
+                            <div className="min-w-0">
                                 <p className="text-xs text-neutral-600">Jumlah Soal</p>
-                                <p className="text-sm font-bold text-neutral-900">{quiz.questions.length} Soal</p>
+                                <p className="truncate text-sm font-bold text-neutral-900">{quiz.questions.length} Soal</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
-                            <div className="flex size-8 items-center justify-center rounded-lg bg-purple-100 text-purple-700">
+                        <div className="flex min-w-0 items-center gap-3 rounded-lg bg-white/70 p-3">
+                            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-purple-100 text-purple-700">
                                 <HelpCircle className="size-4" />
                             </div>
-                            <div>
+                            <div className="min-w-0">
                                 <p className="text-xs text-neutral-600">Maks. Percobaan</p>
-                                <p className="text-sm font-bold text-neutral-900">{quiz.max_attempts}x {hasAttempted && `(Sisa: ${quiz.max_attempts - attemptCount}x)`}</p>
+                                <p className="truncate text-sm font-bold text-neutral-900">{quiz.max_attempts}x {hasAttempted && `(Sisa: ${remainingAttempts}x)`}</p>
                             </div>
                         </div>
 
                         {quiz.duration && (
-                            <div className="flex items-center gap-3">
-                                <div className="flex size-8 items-center justify-center rounded-lg bg-amber-100 text-amber-700">
+                            <div className="flex min-w-0 items-center gap-3 rounded-lg bg-white/70 p-3">
+                                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700">
                                     <Clock className="size-4" />
                                 </div>
-                                <div>
+                                <div className="min-w-0">
                                     <p className="text-xs text-neutral-600">Durasi</p>
-                                    <p className="text-sm font-bold text-neutral-900">{quiz.duration} Menit</p>
+                                    <p className="truncate text-sm font-bold text-neutral-900">{quiz.duration} Menit</p>
                                 </div>
                             </div>
                         )}
 
-                        <div className="flex items-center gap-3">
-                            <div className="flex size-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
+                        <div className="flex min-w-0 items-center gap-3 rounded-lg bg-white/70 p-3">
+                            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
                                 <CheckCircle2 className="size-4" />
                             </div>
-                            <div>
+                            <div className="min-w-0">
                                 <p className="text-xs text-neutral-600">Passing Score</p>
-                                <p className="text-sm font-bold text-neutral-900">{quiz.passing_score}</p>
+                                <p className="truncate text-sm font-bold text-neutral-900">{quiz.passing_score}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Instructions */}
-                <div className="rounded-xl border-2 border-neutral-200 bg-white p-6">
-                    <h3 className="text-base font-bold text-neutral-900 mb-3 flex items-center gap-2">
-                        <span className="text-xl">⚠️</span>
+                <div className="rounded-xl border border-neutral-200 bg-white p-4 sm:p-6">
+                    <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-neutral-900 sm:text-base">
+                        <AlertTriangle className="size-4 text-amber-600 sm:size-5" />
                         Instruksi
                     </h3>
-                    <ul className="space-y-2 text-sm text-neutral-700">
+                    <ul className="space-y-2 text-xs leading-relaxed text-neutral-700 sm:text-sm">
                         <li className="flex items-start gap-2">
                             <span className="text-emerald-600 font-bold">•</span>
                             <span>Pastikan koneksi internet Anda stabil</span>
@@ -1123,13 +1186,13 @@ function QuizView({ quiz, attempt }) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
+                    className="sticky bottom-3 z-20 sm:static"
                 >
                     <AnimatedButton
                         type="button"
                         onClick={startQuiz}
-                        className="w-full h-12 text-base font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg"
+                        className="h-12 w-full text-sm font-bold shadow-xl sm:text-base bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
                     >
-                        <span className="mr-2">🚀</span>
                         Mulai Quiz
                     </AnimatedButton>
                 </motion.div>
@@ -1141,19 +1204,20 @@ function QuizView({ quiz, attempt }) {
     if (!canAttempt) {
         return (
             <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-red-600 text-white shadow-lg">
-                        <HelpCircle className="size-5" />
+                <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-red-600 text-white shadow-lg sm:size-10">
+                        <Ban className="size-4 sm:size-5" />
                     </div>
-                    <div className="flex-1">
-                        <h2 className="text-xl font-bold text-neutral-900">{quiz.title}</h2>
-                        <p className="mt-1 text-sm text-neutral-600">Batas percobaan telah tercapai</p>
+                    <div className="min-w-0 flex-1">
+                        <h2 className="break-words text-lg font-bold leading-snug text-neutral-900 sm:text-xl">{quiz.title}</h2>
+                        <p className="mt-1 text-xs text-neutral-600 sm:text-sm">Batas percobaan telah tercapai</p>
                     </div>
                 </div>
 
-                <div className="rounded-xl border-2 border-rose-200 bg-rose-50 p-6 text-center">
-                    <p className="text-lg font-bold text-rose-700 mb-2">🚫 Batas Percobaan Tercapai</p>
-                    <p className="text-sm text-rose-600">
+                <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-center sm:p-6">
+                    <Ban className="mx-auto mb-2 size-8 text-rose-700" />
+                    <p className="mb-2 text-base font-bold text-rose-700 sm:text-lg">Batas Percobaan Tercapai</p>
+                    <p className="text-xs leading-relaxed text-rose-600 sm:text-sm">
                         Anda telah menggunakan semua {quiz.max_attempts} percobaan untuk quiz ini.
                     </p>
                 </div>
@@ -1164,13 +1228,13 @@ function QuizView({ quiz, attempt }) {
                             ? 'bg-emerald-50 border-2 border-emerald-200'
                             : 'bg-rose-50 border-2 border-rose-200'
                     }`}>
-                        <p className="text-base font-bold text-neutral-900">
+                        <p className="text-sm font-bold text-neutral-900 sm:text-base">
                             Nilai Terakhir: <span className={Number(attempt.score) >= Number(quiz.passing_score) ? 'text-emerald-700' : 'text-rose-700'}>
                                 {attempt.score}
                             </span>
                         </p>
-                        <p className="mt-1.5 text-sm text-neutral-700">
-                            {Number(attempt.score) >= Number(quiz.passing_score) ? '🎉 Selamat! Anda lulus quiz ini.' : '📚 Belum lulus. Silakan pelajari kembali materinya.'}
+                        <p className="mt-1.5 text-xs leading-relaxed text-neutral-700 sm:text-sm">
+                            {Number(attempt.score) >= Number(quiz.passing_score) ? 'Selamat, Anda lulus quiz ini.' : 'Belum lulus. Silakan pelajari kembali materinya.'}
                         </p>
                     </div>
                 )}
@@ -1181,28 +1245,30 @@ function QuizView({ quiz, attempt }) {
     // Quiz Questions (after starting or if already attempted)
     return (
         <div className="space-y-4">
-            <div className="flex items-start gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg">
-                    <HelpCircle className="size-5" />
-                </div>
-                <div className="flex-1">
-                    <h2 className="text-xl font-bold text-neutral-900">{quiz.title}</h2>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                        <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
-                            {quiz.questions.length} Soal
-                        </span>
-                        <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">
-                            Passing Score: {quiz.passing_score}
-                        </span>
-                        {quiz.duration && (
-                            <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">
-                                {quiz.duration} Menit
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+                <div className="flex items-start gap-3 sm:flex-1">
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg sm:size-10">
+                        <HelpCircle className="size-4 sm:size-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <h2 className="break-words text-lg font-bold leading-snug text-neutral-900 sm:text-xl">{quiz.title}</h2>
+                        <div className="mt-2 flex flex-wrap gap-1.5 sm:gap-2">
+                            <span className="rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-semibold text-blue-700 sm:px-3 sm:text-xs">
+                                {quiz.questions.length} Soal
                             </span>
-                        )}
+                            <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-semibold text-emerald-700 sm:px-3 sm:text-xs">
+                                Passing: {quiz.passing_score}
+                            </span>
+                            {quiz.duration && (
+                                <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-semibold text-amber-700 sm:px-3 sm:text-xs">
+                                    {quiz.duration} Menit
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
                 {attempt && (
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    <span className={`w-fit rounded-full px-3 py-1 text-xs font-bold sm:ml-auto ${
                         attempt.status === 'graded' 
                             ? 'bg-emerald-100 text-emerald-700' 
                             : 'bg-amber-100 text-amber-700'
@@ -1217,7 +1283,7 @@ function QuizView({ quiz, attempt }) {
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`sticky top-4 z-10 rounded-xl p-4 shadow-lg border-2 ${
+                    className={`sticky top-2 z-10 rounded-xl border p-3 shadow-lg sm:top-4 sm:p-4 ${
                         timeExpired
                             ? 'bg-rose-50 border-rose-300'
                             : isWarningTime
@@ -1225,7 +1291,7 @@ function QuizView({ quiz, attempt }) {
                             : 'bg-blue-50 border-blue-300'
                     }`}
                 >
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-3">
                             <div className={`flex size-10 items-center justify-center rounded-lg ${
                                 timeExpired
@@ -1252,13 +1318,13 @@ function QuizView({ quiz, attempt }) {
                             </div>
                         </div>
                         {timeExpired && (
-                            <span className="px-3 py-1.5 rounded-full bg-rose-200 text-rose-800 text-xs font-bold">
-                                ⏰ Waktu Habis!
+                            <span className="w-fit rounded-full bg-rose-200 px-3 py-1.5 text-xs font-bold text-rose-800">
+                                Mengirim Otomatis
                             </span>
                         )}
                         {isWarningTime && !timeExpired && (
-                            <span className="px-3 py-1.5 rounded-full bg-amber-200 text-amber-800 text-xs font-bold animate-pulse">
-                                ⚠️ Segera Selesaikan!
+                            <span className="w-fit animate-pulse rounded-full bg-amber-200 px-3 py-1.5 text-xs font-bold text-amber-800">
+                                Segera Selesaikan
                             </span>
                         )}
                     </div>
@@ -1271,81 +1337,200 @@ function QuizView({ quiz, attempt }) {
                         ? 'bg-emerald-50 border-2 border-emerald-200'
                         : 'bg-rose-50 border-2 border-rose-200'
                 }`}>
-                    <p className="text-base font-bold text-neutral-900">
+                    <p className="text-sm font-bold text-neutral-900 sm:text-base">
                         Hasil Quiz: <span className={Number(attempt.score) >= Number(quiz.passing_score) ? 'text-emerald-700' : 'text-rose-700'}>
                             {attempt.score}
                         </span>
                     </p>
-                    <p className="mt-1.5 text-sm text-neutral-700">
-                        {Number(attempt.score) >= Number(quiz.passing_score) ? '🎉 Selamat! Anda lulus quiz ini.' : '📚 Belum lulus. Silakan pelajari kembali materinya.'}
+                    <p className="mt-1.5 text-xs leading-relaxed text-neutral-700 sm:text-sm">
+                        {Number(attempt.score) >= Number(quiz.passing_score) ? 'Selamat, Anda lulus quiz ini.' : 'Belum lulus. Silakan pelajari kembali materinya.'}
                     </p>
                 </div>
             )}
 
             {!attempt && (
                 <form onSubmit={submitQuiz} className="space-y-4">
-                    {quiz.questions.map((question, index) => (
-                        <div key={question.id} className="rounded-xl border-2 border-neutral-200 bg-white p-4">
-                            <p className="text-sm font-bold text-neutral-900 mb-3">
-                                {index + 1}. {question.question}
-                            </p>
-                            {question.type === 'multiple_choice' && (
-                                <div className="space-y-2">
-                                    {question.options?.map((option) => (
-                                        <label key={option} className="flex items-center gap-2.5 p-3 rounded-lg border-2 border-neutral-200 hover:border-emerald-300 hover:bg-emerald-50/50 cursor-pointer transition-all">
-                                            <input
-                                                type="radio"
-                                                name={`question-${question.id}`}
-                                                value={option}
-                                                onChange={(event) => form.setData('answers', { ...form.data.answers, [question.id]: event.target.value })}
-                                                disabled={timeExpired}
-                                                className="size-4 border-neutral-300 text-emerald-600 focus:ring-emerald-500"
-                                            />
-                                            <span className="text-sm text-neutral-700">{option}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            )}
-                            {question.type === 'true_false' && (
-                                <select
-                                    value={form.data.answers[question.id] ?? ''}
-                                    onChange={(event) => form.setData('answers', { ...form.data.answers, [question.id]: event.target.value })}
-                                    disabled={timeExpired}
-                                    className="w-full h-10 rounded-lg border-2 border-neutral-200 px-3 text-sm outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
-                                >
-                                    <option value="">Pilih jawaban</option>
-                                    <option value="true">Benar</option>
-                                    <option value="false">Salah</option>
-                                </select>
-                            )}
-                            {question.type === 'essay' && (
-                                <textarea
-                                    value={form.data.answers[question.id] ?? ''}
-                                    onChange={(event) => form.setData('answers', { ...form.data.answers, [question.id]: event.target.value })}
-                                    rows="5"
-                                    placeholder="Tulis jawaban Anda di sini..."
-                                    disabled={timeExpired}
-                                    className="w-full rounded-lg border-2 border-neutral-200 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                    <div className="rounded-2xl border border-neutral-200 bg-white p-3 shadow-sm sm:p-4">
+                        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-blue-700">
+                                    Soal {Math.min(currentQuestionIndex + 1, totalQuestions)} dari {totalQuestions}
+                                </p>
+                                <p className="mt-1 text-xs font-semibold text-neutral-500">
+                                    {answeredCount}/{totalQuestions} terjawab
+                                </p>
+                            </div>
+                            <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-100 sm:w-56">
+                                <motion.div
+                                    initial={false}
+                                    animate={{ width: `${progressPercent}%` }}
+                                    className="h-full rounded-full bg-gradient-to-r from-blue-500 to-emerald-500"
                                 />
-                            )}
+                            </div>
                         </div>
-                    ))}
+
+                        <div className="mb-5 flex flex-wrap gap-1.5">
+                            {quiz.questions.map((question, index) => {
+                                const hasAnswer = form.data.answers[question.id] !== undefined && String(form.data.answers[question.id]).trim() !== '';
+                                const isActive = index === currentQuestionIndex;
+
+                                return (
+                                    <button
+                                        key={question.id}
+                                        type="button"
+                                        onClick={() => goToQuestion(index)}
+                                        disabled={form.processing}
+                                        className={`flex size-9 items-center justify-center rounded-lg border text-xs font-black transition-all ${
+                                            isActive
+                                                ? 'border-blue-600 bg-blue-600 text-white shadow-md'
+                                                : hasAnswer
+                                                ? 'border-emerald-300 bg-emerald-50 text-emerald-700'
+                                                : 'border-neutral-200 bg-white text-neutral-500 hover:border-blue-200 hover:bg-blue-50'
+                                        }`}
+                                        aria-label={`Buka soal ${index + 1}`}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {activeQuestion ? (
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={activeQuestion.id}
+                                    initial={{ opacity: 0, x: 24 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -24 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="space-y-4"
+                                >
+                                    <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-emerald-50 p-4 sm:p-5">
+                                        <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-blue-700">
+                                            {activeQuestion.type === 'essay' ? 'Essay' : activeQuestion.type === 'true_false' ? 'Benar atau Salah' : 'Pilihan Ganda'}
+                                        </p>
+                                        <h3 className="break-words text-lg font-black leading-snug text-neutral-950 sm:text-2xl">
+                                            {activeQuestion.question}
+                                        </h3>
+                                    </div>
+
+                                    {activeQuestion.type === 'multiple_choice' && (
+                                        <div className="grid gap-3 sm:grid-cols-2">
+                                            {activeQuestion.options?.map((option, optionIndex) => {
+                                                const selected = activeAnswer === option;
+
+                                                return (
+                                                    <button
+                                                        key={option}
+                                                        type="button"
+                                                        onClick={() => setAnswer(activeQuestion.id, option)}
+                                                        disabled={form.processing}
+                                                        className={`min-h-24 rounded-2xl border-2 p-4 text-left text-sm font-bold leading-relaxed shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 sm:text-base ${
+                                                            selected
+                                                                ? 'border-blue-700 bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                                                                : answerTones[optionIndex % answerTones.length]
+                                                        }`}
+                                                    >
+                                                        <span className={`mb-3 flex size-7 items-center justify-center rounded-lg text-xs font-black ${
+                                                            selected ? 'bg-white text-blue-700' : 'bg-white/80 text-neutral-700'
+                                                        }`}>
+                                                            {String.fromCharCode(65 + optionIndex)}
+                                                        </span>
+                                                        <span className="break-words">{option}</span>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+
+                                    {activeQuestion.type === 'true_false' && (
+                                        <div className="grid gap-3 sm:grid-cols-2">
+                                            {[
+                                                ['true', 'Benar'],
+                                                ['false', 'Salah'],
+                                            ].map(([value, label], optionIndex) => {
+                                                const selected = activeAnswer === value;
+
+                                                return (
+                                                    <button
+                                                        key={value}
+                                                        type="button"
+                                                        onClick={() => setAnswer(activeQuestion.id, value)}
+                                                        disabled={form.processing}
+                                                        className={`min-h-24 rounded-2xl border-2 p-4 text-center text-base font-black shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+                                                            selected
+                                                                ? 'border-blue-700 bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                                                                : answerTones[optionIndex]
+                                                        }`}
+                                                    >
+                                                        {label}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+
+                                    {activeQuestion.type === 'essay' && (
+                                        <textarea
+                                            value={form.data.answers[activeQuestion.id] ?? ''}
+                                            onChange={(event) => setAnswer(activeQuestion.id, event.target.value)}
+                                            rows="7"
+                                            placeholder="Tulis jawaban Anda di sini..."
+                                            disabled={form.processing}
+                                            className="min-h-44 w-full rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-relaxed outline-none transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                                        />
+                                    )}
+                                </motion.div>
+                            </AnimatePresence>
+                        ) : (
+                            <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-amber-800">
+                                Quiz ini belum memiliki soal.
+                            </div>
+                        )}
+                    </div>
+
                     {form.errors.answers && <p role="alert" className="text-sm text-rose-600 font-semibold">{form.errors.answers}</p>}
                     
-                    {timeExpired ? (
-                        <div className="rounded-xl bg-rose-50 border-2 border-rose-200 p-4 text-center">
-                            <p className="text-base font-bold text-rose-700">⏰ Waktu Quiz Telah Habis</p>
-                            <p className="text-sm text-rose-600 mt-1">Anda tidak dapat mengirim jawaban lagi.</p>
+                    <div className="sticky bottom-3 z-20 rounded-2xl border border-neutral-200 bg-white/95 p-2 shadow-xl backdrop-blur sm:static sm:p-0 sm:shadow-none sm:border-0 sm:bg-transparent">
+                        <div className="grid grid-cols-[auto_1fr] gap-2 sm:grid-cols-[auto_auto_1fr]">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => goToQuestion(currentQuestionIndex - 1)}
+                                disabled={form.processing || currentQuestionIndex === 0}
+                                className="h-12 rounded-xl px-4 font-bold"
+                            >
+                                <ChevronLeft className="size-4" />
+                                <span className="hidden sm:inline">Sebelumnya</span>
+                            </Button>
+
+                            {!isLastQuestion && (
+                                <Button
+                                    type="button"
+                                    onClick={goToNextQuestion}
+                                    disabled={form.processing || totalQuestions === 0 || timeExpired}
+                                    className="h-12 rounded-xl bg-blue-600 px-4 font-bold text-white hover:bg-blue-700 sm:col-auto"
+                                >
+                                    <span>Lanjut</span>
+                                    <ChevronRight className="size-4" />
+                                </Button>
+                            )}
+
+                            <AnimatedButton
+                                type={isLastQuestion ? 'submit' : 'button'}
+                                onClick={isLastQuestion ? undefined : postQuiz}
+                                className={`h-12 w-full text-sm font-bold shadow-xl text-white ${
+                                    isLastQuestion
+                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700'
+                                        : 'bg-gradient-to-r from-neutral-700 to-neutral-900 hover:from-neutral-800 hover:to-black'
+                                }`}
+                                disabled={form.processing || totalQuestions === 0 || timeExpired}
+                            >
+                                {form.processing && timeExpired ? 'Mengirim Otomatis...' : isLastQuestion ? 'Kirim Jawaban' : 'Selesaikan Sekarang'}
+                                <Send className="size-4" />
+                            </AnimatedButton>
                         </div>
-                    ) : (
-                        <AnimatedButton
-                            type="submit"
-                            className="w-full h-11 text-sm font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
-                            disabled={form.processing || quiz.questions.length === 0}
-                        >
-                            Kirim Jawaban Quiz
-                        </AnimatedButton>
-                    )}
+                    </div>
                 </form>
             )}
         </div>

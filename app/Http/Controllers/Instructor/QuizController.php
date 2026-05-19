@@ -22,7 +22,7 @@ class QuizController extends Controller
             'duration' => ['nullable', 'integer', 'min:1', 'max:600'],
             'result_mode' => ['required', Rule::in(['immediate', 'delayed', 'custom'])],
             'passing_score' => ['required', 'integer', 'min:0', 'max:100'],
-            'max_attempts' => ['required', 'integer', 'min:1', 'max:10'],
+            'max_attempts' => ['nullable', 'integer', 'min:1', 'max:10'],
             'is_published' => ['boolean'],
         ]);
 
@@ -34,7 +34,7 @@ class QuizController extends Controller
             'duration' => $validated['duration'] ?? null,
             'result_mode' => $validated['result_mode'],
             'passing_score' => $validated['passing_score'],
-            'max_attempts' => $validated['max_attempts'],
+            'max_attempts' => $validated['max_attempts'] ?? 1,
             'is_published' => (bool) ($validated['is_published'] ?? false),
         ]);
 
