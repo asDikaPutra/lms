@@ -45,12 +45,8 @@ jobs:
         run: sudo -u www-data php artisan migrate --force
         working-directory: /var/www/laravel
       
-      - name: Clear and cache config
-        run: |
-          sudo -u www-data php artisan optimize:clear
-          sudo -u www-data php artisan config:cache
-          sudo -u www-data php artisan route:cache
-          sudo -u www-data php artisan view:cache
+      - name: Clear cache
+        run: sudo -u www-data php artisan optimize:clear
         working-directory: /var/www/laravel
       
       - name: Restart Apache
