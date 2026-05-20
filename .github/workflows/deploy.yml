@@ -35,8 +35,14 @@ jobs:
         run: npm run build
         working-directory: /var/www/laravel
       
+      - name: Set permissions
+        run: |
+          sudo chown -R www-data:www-data /var/www/laravel
+          sudo chmod -R 775 /var/www/laravel/storage
+          sudo chmod -R 775 /var/www/laravel/bootstrap/cache
+      
       - name: Run database migrations
-        run: php artisan migrate --force
+        run: sudo -u www-data php artisan migrate --force
         working-directory: /var/www/laravel
       
       - name: Clear and cache config
@@ -46,12 +52,6 @@ jobs:
           sudo -u www-data php artisan route:cache
           sudo -u www-data php artisan view:cache
         working-directory: /var/www/laravel
-      
-      - name: Set permissions
-        run: |
-          sudo chown -R www-data:www-data /var/www/laravel
-          sudo chmod -R 775 /var/www/laravel/storage
-          sudo chmod -R 775 /var/www/laravel/bootstrap/cache
       
       - name: Restart Apache
         run: sudo systemctl restart apache2
