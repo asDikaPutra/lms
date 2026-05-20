@@ -1,0 +1,63 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Sync code to production directory
+        run: |
+          rsync -av --delete \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='vendor' \
+            --exclude='storage' \
+            --exclude='.env' \
+            ./ /var/www/laravel/
+      
+      - name: Install Composer dependencies
+        run: composer install --optimize-autoloader --no-dev
+        working-directory: /var/www/laravel
+      
+      - name: Install NPM dependencies
+        run: npm install
+        working-directory: /var/www/laravel
+      
+      - name: Build frontend assets
+        run: npm run build
+        working-directory: /var/www/laravel
+      
+      - name: Run database migrations
+        run: php artisan migrate --force
+        working-directory: /var/www/laravel
+      
+      - name: Clear and cache config
+        run: |
+          php artisan optimize:clear
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+        working-directory: /var/www/laravel
+      
+      - name: Set permissions
+        run: |
+          sudo chown -R www-data:www-data /var/www/laravel
+          sudo chmod -R 775 /var/www/laravel/storage
+          sudo chmod -R 775 /var/www/laravel/bootstrap/cache
+      
+      - name: Restart Apache
+        run: sudo systemctl restart apache2
+      
+      - name: Verify deployment
+        run: |
+          sleep 3
+          curl -f http://localhost/ || exit 1
+          echo "✅ Deployment successful!"
