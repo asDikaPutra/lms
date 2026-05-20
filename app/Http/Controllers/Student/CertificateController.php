@@ -6,15 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Certificate;
 use App\Models\Course;
 use App\Services\CertificateService;
+use App\Services\CertificatePdfService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CertificateController extends Controller
 {
     public function __construct(
-        private CertificateService $certificateService
+        private CertificateService $certificateService,
+        private CertificatePdfService $pdfService,
     ) {}
 
     /**
@@ -40,10 +43,27 @@ class CertificateController extends Controller
     {
         abort_unless($certificate->user_id === auth()->id(), 403);
 
-        $certificate->load('course', 'user');
+        $certificate->load('course.instructor', 'user');
 
         return Inertia::render('Student/Certificates/Show', [
             'certificate' => $certificate,
+        ]);
+    }
+
+    /**
+     * Download certificate as PDF
+     */
+    public function download(Certificate $certificate): HttpResponse
+    {
+        abort_unless($certificate->user_id === auth()->id(), 403);
+
+        $pdf = $this->pdfService->generate($certificate);
+
+        $filename = 'sertifikat-' . str($certificate->course->name ?? 'kursus')->slug() . '.pdf';
+
+        return response($pdf, 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ]);
     }
 

@@ -130,8 +130,8 @@ export default function EditQuiz({ quiz, course_id }) {
 
             <div className="w-full tracking-[-0.01em]">
                 <div className="mb-6">
-                    <Link href={`/instructor/courses/${course_id}`} className="text-[13px] font-semibold text-sb-accent hover:text-sb-green transition-colors inline-flex items-center">
-                        <ArrowLeft className="mr-1.5 size-4" /> Kembali ke Builder Kursus
+                    <Link href={`/instructor/courses/${course_id}/quizzes`} className="text-[13px] font-semibold text-sb-accent hover:text-sb-green transition-colors inline-flex items-center">
+                        <ArrowLeft className="mr-1.5 size-4" /> Kembali ke Daftar Kuis
                     </Link>
                     <h2 className="mt-2 text-[24px] font-semibold text-sb-text-black leading-tight tracking-[-0.16px]">Builder Soal: {quiz.title}</h2>
                     <p className="mt-1 text-[13px] text-sb-text-soft">

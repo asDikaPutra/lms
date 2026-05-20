@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Certificate;
 use App\Models\ContentProgress;
 use App\Models\Course;
 use App\Models\QuizAttempt;
 use App\Models\Submission;
+use App\Services\CertificateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -14,6 +16,10 @@ use Inertia\Response;
 
 class CourseController extends Controller
 {
+    public function __construct(
+        private CertificateService $certificateService
+    ) {}
+
     public function index(Request $request): Response
     {
         $user = $request->user();
@@ -131,7 +137,7 @@ class CourseController extends Controller
         });
 
         return Inertia::render('Student/Courses/Show', [
-            'course' => $this->studentCoursePayload($course),
+            'course' => $this->studentCoursePayload($course, $request),
             'completedContentIds' => $completedContentIds,
             'attemptsByQuizId' => $attemptsByQuizId,
             'submissionsByAssignmentId' => $this->getSubmissions($request, $course),
@@ -139,8 +145,25 @@ class CourseController extends Controller
         ]);
     }
 
-    private function studentCoursePayload(Course $course): array
+    private function studentCoursePayload(Course $course, Request $request): array
     {
+        $user = $request->user();
+
+        $hasCertificate = Certificate::query()
+            ->where('user_id', $user->id)
+            ->where('course_id', $course->id)
+            ->first();
+
+        $eligibility = null;
+        if ($course->certificate_criteria) {
+            $eligibility = [
+                'eligible' => $this->certificateService->isEligible($user, $course),
+                'current_progress' => $this->certificateService->calculateProgress($user, $course),
+                'current_quiz_score' => $this->certificateService->calculateAverageQuizScore($user, $course),
+                'current_assignment_score' => $this->certificateService->calculateAverageAssignmentScore($user, $course),
+            ];
+        }
+
         return [
             'id' => $course->id,
             'code' => $course->code,
@@ -172,6 +195,10 @@ class CourseController extends Controller
                     'discussions' => $material->discussions,
                 ]),
             ]),
+            'certificate_criteria' => $course->certificate_criteria,
+            'certificate_eligibility' => $eligibility,
+            'has_certificate' => (bool) $hasCertificate,
+            'certificate_id' => $hasCertificate?->id,
         ];
     }
 

@@ -1,11 +1,13 @@
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
-import { AlertTriangle, Ban, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ClipboardList, Clock, Download, FileText, HelpCircle, List, MessageSquare, PlayCircle, Send, Trash2, Upload, X } from 'lucide-react';
+import { AlertTriangle, Award, Ban, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ClipboardList, Clock, Download, FileText, HelpCircle, List, MessageSquare, PlayCircle, Send, Trash2, Upload, X, XCircle } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import StudentLayout from '@/Layouts/StudentLayout';
 import { Button } from '@/components/ui/button';
 import { AnimatedButton } from '@/components/animated/AnimatedButton';
+import { FadeInWhenVisible } from '@/components/animated/AnimatedPage';
 import VideoPlayer from '@/components/shared/VideoPlayer';
 
 export default function Show({ course, completedContentIds, attemptsByQuizId, submissionsByAssignmentId, progress }) {
@@ -62,21 +64,6 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
         })
     };
 
-    // Count stats for each module
-    const getModuleStats = (module) => {
-        let contents = 0;
-        let quizzes = (module.quizzes?.length || 0);
-        let assignments = (module.assignments?.length || 0);
-        
-        module.materials?.forEach(material => {
-            contents += material.contents?.length || 0;
-            quizzes += material.quizzes?.length || 0;
-            assignments += material.assignments?.length || 0;
-        });
-
-        return { contents, quizzes, assignments };
-    };
-
     return (
         <StudentLayout title="Belajar">
             <Head title={`${course.name} - Belajar`} />
@@ -91,35 +78,61 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                 />
             </div>
 
-            {/* Course Header - Gradient Banner Style */}
+            {/* Course Header */}
             <motion.div
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className="mb-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 p-4 md:p-6 text-white shadow-xl relative overflow-hidden"
+                className="relative mb-6 overflow-hidden rounded-[16px] border border-emerald-300/30 bg-gradient-to-br from-emerald-500 to-teal-600 px-5 py-6 text-white shadow-xl shadow-emerald-900/10 md:px-8 md:py-7"
             >
-                {/* Decorative elements */}
-                <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-3xl" />
-                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-3xl" />
+                <div
+                    className="absolute inset-0 opacity-[0.06]"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='56' height='56' viewBox='0 0 56 56' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Cpath d='M14 0v56M42 0v56M0 14h56M0 42h56'/%3E%3Ccircle cx='28' cy='28' r='6'/%3E%3C/g%3E%3C/svg%3E")`,
+                    }}
+                />
                 
-                <div className="relative flex items-start justify-between gap-3">
+                <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
                     <div className="flex-1">
-                        <h1 className="text-xl md:text-2xl font-bold mb-1">{course.name}</h1>
-                        <p className="text-emerald-100 text-sm">{course.code} • {course.instructor?.name}</p>
+                        <h1 className="font-heading text-[26px] leading-tight">{course.name}</h1>
+                        <p className="mt-3 text-sm font-medium text-white/80">{course.code} - {course.instructor?.name}</p>
+
+                        {/* Certificate Button — shown below title on the left */}
+                        {course.certificate_criteria && (
+                            <div className="mt-4">
+                                {course.has_certificate ? (
+                                    <Link
+                                        href={`/student/certificates/${course.certificate_id}`}
+                                        className="inline-flex items-center gap-2 rounded-[10px] border border-white/30 bg-white/20 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                                    >
+                                        <Award className="size-3.5" />
+                                        Lihat Sertifikat
+                                    </Link>
+                                ) : course.certificate_eligibility?.eligible ? (
+                                    <button
+                                        onClick={() => router.post(`/student/courses/${course.id}/certificates/request`)}
+                                        className="inline-flex items-center gap-2 rounded-[10px] border border-white/30 bg-white/20 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                                    >
+                                        <Award className="size-3.5" />
+                                        Minta Sertifikat
+                                    </button>
+                                ) : null}
+                            </div>
+                        )}
                     </div>
 
-                    <div className="flex items-center gap-2 md:gap-3">
+                    <div className="flex w-full flex-col gap-2 sm:w-auto">
                         {/* Progress */}
-                        <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-xl px-3 py-2 border border-white/30">
+                        <div className="flex min-w-[220px] items-center gap-3 rounded-[16px] border border-white/20 bg-white/10 px-5 py-3">
                             <div className="text-right">
-                                <p className="text-[10px] font-semibold text-emerald-100">Progress</p>
-                                <p className="text-lg font-bold text-white">{progress}%</p>
+                                <p className="text-[10px] font-bold text-white/80">Progress</p>
+                                <p className="text-[28px] font-bold leading-none text-white">{progress}%</p>
                             </div>
-                            <div className="w-20 md:w-24 h-2 rounded-full bg-white/30 overflow-hidden">
+                            <div className="h-2 w-full min-w-24 overflow-hidden rounded-full bg-white/25">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${progress}%` }}
                                     transition={{ duration: 1, ease: 'easeOut' }}
-                                    className="h-2 rounded-full bg-white shadow-lg"
+                                    className="h-2 rounded-full bg-[#5DCAA5]"
                                 />
                             </div>
                         </div>
@@ -127,10 +140,9 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                         {/* Sidebar Toggle */}
                         <button
                             onClick={() => setShowSidebar(!showSidebar)}
-                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors font-semibold text-xs border border-white/30"
+                            className="inline-flex min-h-11 items-center justify-center rounded-[12px] border border-white/20 bg-white/10 px-4 text-xs font-semibold text-white transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
                         >
-                            <List className="size-3.5" />
-                            <span className="hidden sm:inline">Daftar Materi</span>
+                            Daftar Materi
                         </button>
                     </div>
                 </div>
@@ -155,7 +167,6 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                         {currentView === 'overview' ? (
                             <OverviewPage 
                                 course={course} 
-                                getModuleStats={getModuleStats}
                                 expandedModules={expandedModules}
                                 toggleModule={toggleModule}
                                 navigateTo={navigateTo}
@@ -215,16 +226,9 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                             : 'border-neutral-200 hover:border-emerald-200 hover:bg-emerald-50/50'
                                     }`}
                                 >
-                                    <div className="flex items-center gap-2">
-                                        <div className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${
-                                            currentView === 'overview' ? 'bg-emerald-500 text-white' : 'bg-neutral-100 text-neutral-600'
-                                        }`}>
-                                            <List className="size-4" />
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-bold text-neutral-900">Overview</p>
-                                            <p className="text-[10px] text-neutral-500">Lihat semua modul</p>
-                                        </div>
+                                    <div>
+                                        <p className="text-xs font-bold text-neutral-900">Overview</p>
+                                        <p className="text-[10px] text-neutral-500">Lihat semua modul</p>
                                     </div>
                                 </button>
 
@@ -237,10 +241,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                             className="w-full text-left p-2.5 rounded-lg bg-neutral-100 hover:bg-neutral-200 transition-colors"
                                         >
                                             <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-[10px] font-bold text-emerald-600 uppercase">Modul {module.order}</span>
-                                                    <span className="text-xs font-semibold text-neutral-900">{module.title}</span>
-                                                </div>
+                                                <span className="text-xs font-semibold text-neutral-900">{module.title}</span>
                                                 {expandedModules[module.id] ? (
                                                     <ChevronUp className="size-3.5 text-neutral-600" />
                                                 ) : (
@@ -263,10 +264,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                                 : 'border-neutral-200 hover:border-blue-200 hover:bg-blue-50/50'
                                                         }`}
                                                     >
-                                                        <div className="flex items-center gap-2">
-                                                            <HelpCircle className="size-3.5 text-blue-600" />
-                                                            <span className="text-xs font-medium text-neutral-900 truncate">{quiz.title}</span>
-                                                        </div>
+                                                        <span className="block truncate text-xs font-medium text-neutral-900">{quiz.title}</span>
                                                     </button>
                                                 ))}
 
@@ -281,10 +279,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                                 : 'border-neutral-200 hover:border-amber-200 hover:bg-amber-50/50'
                                                         }`}
                                                     >
-                                                        <div className="flex items-center gap-2">
-                                                            <ClipboardList className="size-3.5 text-amber-600" />
-                                                            <span className="text-xs font-medium text-neutral-900 truncate">{assignment.title}</span>
-                                                        </div>
+                                                        <span className="block truncate text-xs font-medium text-neutral-900">{assignment.title}</span>
                                                     </button>
                                                 ))}
 
@@ -299,10 +294,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                                 : 'border-neutral-200 hover:border-emerald-200 hover:bg-emerald-50/50'
                                                         }`}
                                                     >
-                                                        <div className="flex items-center gap-2">
-                                                            <FileText className="size-3.5 text-emerald-600" />
-                                                            <span className="text-xs font-medium text-neutral-900 truncate">{material.title}</span>
-                                                        </div>
+                                                        <span className="block truncate text-xs font-medium text-neutral-900">{material.title}</span>
                                                     </button>
                                                 ))}
                                             </div>
@@ -319,7 +311,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
 }
 
 // Overview Page Component
-function OverviewPage({ course, getModuleStats, expandedModules, toggleModule, navigateTo, completed, attemptsByQuizId, submissionsByAssignmentId }) {
+function OverviewPage({ course, expandedModules, toggleModule, navigateTo, completed, attemptsByQuizId, submissionsByAssignmentId }) {
     return (
         <div className="space-y-4">
             {/* Modules List */}
@@ -340,7 +332,6 @@ function OverviewPage({ course, getModuleStats, expandedModules, toggleModule, n
                 )}
 
                 {course.modules.map((module) => {
-                    const stats = getModuleStats(module);
                     const isExpanded = expandedModules[module.id];
 
                     return (
@@ -348,45 +339,27 @@ function OverviewPage({ course, getModuleStats, expandedModules, toggleModule, n
                             key={module.id}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="overflow-hidden rounded-[22px] border border-emerald-100/80 bg-white/95 shadow-[0_14px_44px_rgba(15,23,42,0.08)] backdrop-blur-xl"
+                            className="overflow-hidden rounded-[14px] border border-neutral-200 bg-white"
                         >
                             {/* Module Header */}
                             <button
                                 onClick={() => toggleModule(module.id)}
-                                className="w-full p-4 text-left transition-colors hover:bg-emerald-50/30 md:p-5"
+                                className="w-full border-b border-neutral-200 p-4 text-left transition-colors hover:bg-emerald-50/40 md:p-5"
                             >
-                                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                                <div className="flex items-start justify-between gap-4">
                                     <div className="min-w-0 flex-1">
-                                        <div className="mb-2 flex items-center gap-2">
-                                            <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-bold uppercase text-emerald-800">
-                                                Modul {module.order}
-                                            </span>
-                                            <span className="flex size-7 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 shadow-sm">
-                                                {isExpanded ? (
-                                                    <ChevronUp className="size-4" />
-                                                ) : (
-                                                    <ChevronDown className="size-4" />
-                                                )}
-                                            </span>
-                                        </div>
-                                        <h3 className="text-lg font-bold text-neutral-950">{module.title}</h3>
+                                        <h3 className="text-[15px] font-semibold text-neutral-950">{module.title}</h3>
                                         {module.description && (
-                                            <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">{module.description}</p>
+                                            <p className="mt-2 max-w-3xl text-[13px] leading-6 text-neutral-600">{module.description}</p>
                                         )}
                                     </div>
-                                    
-                                    {/* Stats */}
-                                    <div className="grid grid-cols-3 gap-2 sm:flex sm:shrink-0">
-                                        {stats.contents > 0 && (
-                                            <ModuleStat value={stats.contents} label="Konten" tone="sky" />
+                                    <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600">
+                                        {isExpanded ? (
+                                            <ChevronUp className="size-4" />
+                                        ) : (
+                                            <ChevronDown className="size-4" />
                                         )}
-                                        {stats.quizzes > 0 && (
-                                            <ModuleStat value={stats.quizzes} label="Quiz" tone="indigo" />
-                                        )}
-                                        {stats.assignments > 0 && (
-                                            <ModuleStat value={stats.assignments} label="Tugas" tone="amber" />
-                                        )}
-                                    </div>
+                                    </span>
                                 </div>
                             </button>
 
@@ -398,7 +371,7 @@ function OverviewPage({ course, getModuleStats, expandedModules, toggleModule, n
                                         animate={{ height: 'auto', opacity: 1 }}
                                         exit={{ height: 0, opacity: 0 }}
                                         transition={{ duration: 0.3 }}
-                                        className="border-t border-emerald-100 bg-gradient-to-b from-emerald-50/30 to-white"
+                                        className="bg-white"
                                     >
                                         <div className="space-y-3 p-4 md:p-5">
                                             {/* Module-level Quizzes */}
@@ -410,7 +383,6 @@ function OverviewPage({ course, getModuleStats, expandedModules, toggleModule, n
                                                             <LearningItemButton
                                                                 key={quiz.id}
                                                                 onClick={() => navigateTo(`quiz-${quiz.id}`)}
-                                                                icon={HelpCircle}
                                                                 tone="blue"
                                                                 title={quiz.title}
                                                                 eyebrow="Quiz"
@@ -431,7 +403,6 @@ function OverviewPage({ course, getModuleStats, expandedModules, toggleModule, n
                                                             <LearningItemButton
                                                                 key={assignment.id}
                                                                 onClick={() => navigateTo(`assignment-${assignment.id}`)}
-                                                                icon={ClipboardList}
                                                                 tone="amber"
                                                                 title={assignment.title}
                                                                 eyebrow="Tugas"
@@ -456,7 +427,6 @@ function OverviewPage({ course, getModuleStats, expandedModules, toggleModule, n
                                                             <LearningItemButton
                                                                 key={material.id}
                                                                 onClick={() => navigateTo(`material-${material.id}`)}
-                                                                icon={FileText}
                                                                 tone="emerald"
                                                                 title={material.title}
                                                                 eyebrow="Materi"
@@ -479,38 +449,220 @@ function OverviewPage({ course, getModuleStats, expandedModules, toggleModule, n
     );
 }
 
-function ModuleStat({ value, label, tone }) {
-    const tones = {
-        sky: 'border-sky-100 bg-sky-50 text-sky-700',
-        indigo: 'border-indigo-100 bg-indigo-50 text-indigo-700',
-        amber: 'border-amber-100 bg-amber-50 text-amber-700',
-    };
-
+// CriterionRow sub-component — single criterion display row
+function CriterionRow({ label, currentValue, threshold, met }) {
     return (
-        <div className={`min-w-[58px] rounded-[14px] border px-3 py-2 text-center ${tones[tone]}`}>
-            <p className="text-base font-black leading-none">{value}</p>
-            <p className="mt-1 text-[10px] font-semibold">{label}</p>
+        <div className="flex items-center gap-3 rounded-[10px] border border-neutral-100 bg-neutral-50 px-4 py-3">
+            {/* Mint accent bar */}
+            <span className="h-8 w-[3px] shrink-0 rounded-full bg-[#5DCAA5]" aria-hidden="true" />
+
+            {/* Label + current value */}
+            <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-700">{label}</p>
+                <p className="mt-0.5 text-sm font-semibold text-neutral-950">{currentValue}</p>
+            </div>
+
+            {/* Required threshold */}
+            <div className="shrink-0 text-right">
+                <p className="text-[10px] font-medium text-neutral-400">Syarat</p>
+                <p className="text-sm font-semibold text-neutral-700">{threshold}</p>
+            </div>
+
+            {/* Status icon */}
+            <div className="shrink-0">
+                {met ? (
+                    <CheckCircle2 className="size-5 text-emerald-500" aria-label="Memenuhi syarat" />
+                ) : (
+                    <XCircle className="size-5 text-red-400" aria-label="Belum memenuhi syarat" />
+                )}
+            </div>
         </div>
     );
 }
 
-function LearningItemButton({ icon: Icon, tone, title, eyebrow, meta, status, onClick }) {
+// Certificate Eligibility Section Component
+function CertificateEligibilitySection({ certificate_criteria, certificate_eligibility, has_certificate, certificate_id, course }) {
+    const eligible = certificate_eligibility?.eligible === true;
+    const { flash } = usePage().props;
+    const { post, processing } = useForm();
+
+    // Flash message state with 4-second auto-dismiss
+    const [flashMessage, setFlashMessage] = useState(null);
+
+    useEffect(() => {
+        if (flash?.success) {
+            setFlashMessage({ type: 'success', text: flash.success });
+        } else if (flash?.error) {
+            setFlashMessage({ type: 'error', text: flash.error });
+        } else if (flash?.warning) {
+            setFlashMessage({ type: 'warning', text: flash.warning });
+        }
+    }, [flash]);
+
+    useEffect(() => {
+        if (!flashMessage) return;
+        const timer = setTimeout(() => setFlashMessage(null), 4000);
+        return () => clearTimeout(timer);
+    }, [flashMessage]);
+
+    const handleRequestCertificate = (e) => {
+        e.preventDefault();
+        post(`/student/courses/${course.id}/certificates/request`);
+    };
+
+    return (
+        <div className="overflow-hidden rounded-[14px] border border-neutral-200 bg-white">
+            {/* Section Header */}
+            <div className="flex items-center justify-between gap-3 border-b border-neutral-200 p-4 md:p-5">
+                <div className="flex items-center gap-3">
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-emerald-200 bg-emerald-50 text-emerald-700">
+                        <Award className="size-5" aria-label="Sertifikat" />
+                    </span>
+                    <div>
+                        <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-700">Pencapaian</p>
+                        <h3 className="text-[15px] font-semibold text-neutral-950">Sertifikat Kursus</h3>
+                    </div>
+                </div>
+
+                {/* Eligibility Badge */}
+                {certificate_eligibility && (
+                    eligible ? (
+                        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-[12px] font-semibold text-emerald-700">
+                            <CheckCircle2 className="size-3.5" aria-hidden="true" />
+                            Memenuhi Syarat
+                        </span>
+                    ) : (
+                        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1.5 text-[12px] font-semibold text-amber-700">
+                            <AlertTriangle className="size-3.5" aria-hidden="true" />
+                            Belum Memenuhi Syarat
+                        </span>
+                    )
+                )}
+            </div>
+
+            {/* Criteria Progress List */}
+            <div className="space-y-2 p-4 md:p-5">
+                {'min_progress' in certificate_criteria && (
+                    <CriterionRow
+                        label="Progress Materi"
+                        currentValue={
+                            certificate_eligibility?.current_progress != null
+                                ? `${certificate_eligibility.current_progress}%`
+                                : 'Belum ada data'
+                        }
+                        threshold={`≥ ${certificate_criteria.min_progress}%`}
+                        met={
+                            certificate_eligibility?.current_progress != null &&
+                            certificate_eligibility.current_progress >= certificate_criteria.min_progress
+                        }
+                    />
+                )}
+
+                {'min_quiz_score' in certificate_criteria && (
+                    <CriterionRow
+                        label="Nilai Kuis"
+                        currentValue={
+                            certificate_eligibility?.current_quiz_score != null
+                                ? certificate_eligibility.current_quiz_score
+                                : 'Belum ada percobaan'
+                        }
+                        threshold={`≥ ${certificate_criteria.min_quiz_score}`}
+                        met={
+                            certificate_eligibility?.current_quiz_score != null &&
+                            certificate_eligibility.current_quiz_score >= certificate_criteria.min_quiz_score
+                        }
+                    />
+                )}
+
+                {'min_assignment_score' in certificate_criteria && (
+                    <CriterionRow
+                        label="Nilai Tugas"
+                        currentValue={
+                            certificate_eligibility?.current_assignment_score != null
+                                ? certificate_eligibility.current_assignment_score
+                                : 'Belum ada pengumpulan'
+                        }
+                        threshold={`≥ ${certificate_criteria.min_assignment_score}`}
+                        met={
+                            certificate_eligibility?.current_assignment_score != null &&
+                            certificate_eligibility.current_assignment_score >= certificate_criteria.min_assignment_score
+                        }
+                    />
+                )}
+            </div>
+
+            {/* Flash Messages */}
+            <AnimatePresence>
+                {flashMessage && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        transition={{ duration: 0.2 }}
+                        className={`mx-4 mb-2 flex items-start gap-2.5 rounded-[10px] border px-4 py-3 text-sm font-medium md:mx-5 ${
+                            flashMessage.type === 'success'
+                                ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                                : flashMessage.type === 'error'
+                                ? 'border-red-200 bg-red-50 text-red-800'
+                                : 'border-amber-200 bg-amber-50 text-amber-800'
+                        }`}
+                        role="alert"
+                    >
+                        {flashMessage.type === 'success' && <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-600" aria-hidden="true" />}
+                        {flashMessage.type === 'error' && <XCircle className="mt-0.5 size-4 shrink-0 text-red-500" aria-hidden="true" />}
+                        {flashMessage.type === 'warning' && <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-500" aria-hidden="true" />}
+                        <span>{flashMessage.text}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Action Button */}
+            {has_certificate ? (
+                /* View Certificate — already has one */
+                <div className="border-t border-neutral-100 px-4 pb-4 pt-3 md:px-5 md:pb-5">
+                    <Link
+                        href={`/student/certificates/${certificate_id}`}
+                        className="inline-flex items-center gap-2 rounded-[10px] border border-emerald-300 bg-emerald-50 px-5 py-2.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+                    >
+                        <Award className="size-4" aria-hidden="true" />
+                        Lihat Sertifikat
+                    </Link>
+                </div>
+            ) : eligible ? (
+                /* Request Certificate — eligible but no certificate yet */
+                <div className="border-t border-neutral-100 px-4 pb-4 pt-3 md:px-5 md:pb-5">
+                    <form onSubmit={handleRequestCertificate}>
+                        <motion.button
+                            type="submit"
+                            disabled={processing}
+                            whileHover={{ scale: processing ? 1 : 1.02 }}
+                            whileTap={{ scale: processing ? 1 : 0.98 }}
+                            className="inline-flex items-center gap-2 rounded-[10px] bg-gradient-to-r from-[#0B3D2E] to-emerald-700 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(11,61,46,0.30)] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                            <Award className="size-4" aria-hidden="true" />
+                            {processing ? 'Memproses...' : 'Minta Sertifikat'}
+                        </motion.button>
+                    </form>
+                </div>
+            ) : null /* Not eligible — criteria rows explain what's missing */}
+        </div>
+    );
+}
+
+function LearningItemButton({ tone, title, eyebrow, meta, status, onClick }) {
     const tones = {
         blue: {
             accent: 'bg-blue-500',
-            icon: 'bg-blue-50 text-blue-700 ring-blue-100',
             hover: 'hover:border-blue-200 hover:bg-blue-50/40',
             eyebrow: 'text-blue-700',
         },
         amber: {
             accent: 'bg-amber-500',
-            icon: 'bg-amber-50 text-amber-700 ring-amber-100',
             hover: 'hover:border-amber-200 hover:bg-amber-50/40',
             eyebrow: 'text-amber-700',
         },
         emerald: {
             accent: 'bg-emerald-500',
-            icon: 'bg-emerald-50 text-emerald-700 ring-emerald-100',
             hover: 'hover:border-emerald-200 hover:bg-emerald-50/40',
             eyebrow: 'text-emerald-700',
         },
@@ -522,21 +674,17 @@ function LearningItemButton({ icon: Icon, tone, title, eyebrow, meta, status, on
         <button
             type="button"
             onClick={onClick}
-            className={`group relative w-full overflow-hidden rounded-[16px] border border-neutral-200 bg-white p-3 text-left shadow-sm transition-all ${selectedTone.hover} hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(15,23,42,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2`}
+            className={`group relative w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-neutral-50 p-3 text-left transition-colors ${selectedTone.hover} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 md:px-4`}
         >
-            <span className={`absolute inset-y-3 left-0 w-1 rounded-r-full ${selectedTone.accent}`} />
+            <span className={`absolute inset-y-3 left-0 w-[3px] rounded-r-full ${selectedTone.accent}`} />
             <div className="flex items-center gap-3 pl-2">
-                <div className={`flex size-10 shrink-0 items-center justify-center rounded-[12px] ring-1 ${selectedTone.icon}`}>
-                    <Icon className="size-5" aria-hidden="true" />
-                </div>
                 <div className="min-w-0 flex-1">
-                    <p className={`text-[10px] font-bold uppercase tracking-[0.14em] ${selectedTone.eyebrow}`}>{eyebrow}</p>
-                    <p className="mt-0.5 truncate text-sm font-bold text-neutral-950 md:text-[15px]">{title}</p>
-                    {meta && <p className="mt-1 text-xs text-neutral-500">{meta}</p>}
+                    <p className={`text-[10px] font-bold uppercase tracking-[0.08em] ${selectedTone.eyebrow}`}>{eyebrow}</p>
+                    <p className="mt-0.5 truncate text-sm font-medium text-neutral-950">{title}</p>
+                    {meta && <p className="mt-1 text-[12px] text-neutral-500">{meta}</p>}
                 </div>
                 {status && (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700">
-                        <CheckCircle2 className="size-3.5" aria-hidden="true" />
+                    <span className="inline-flex shrink-0 items-center rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
                         {status}
                     </span>
                 )}
@@ -658,12 +806,10 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
 
             {/* Breadcrumb */}
             <div className="text-xs text-neutral-600">
-                <span className="font-semibold text-emerald-600">Modul {currentModule.order}</span>
-                <span className="mx-1.5">›</span>
-                <span>{currentModule.title}</span>
+                <span className="font-semibold text-emerald-600">{currentModule.title}</span>
                 {currentMaterial && (
                     <>
-                        <span className="mx-1.5">›</span>
+                        <span className="mx-1.5">/</span>
                         <span>{currentMaterial.title}</span>
                     </>
                 )}
@@ -681,16 +827,22 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
                     />
                 )}
                 {currentItem.type === 'content' && (
-                    <ContentView content={currentItem.data} completed={currentItem.completed} />
+                    <div className="p-4 md:p-6">
+                        <ContentView content={currentItem.data} completed={currentItem.completed} />
+                    </div>
                 )}
                 {currentItem.type === 'quiz' && (
                     <QuizView quiz={currentItem.data} attempt={currentItem.attempt} />
                 )}
                 {currentItem.type === 'assignment' && (
-                    <AssignmentView assignment={currentItem.data} submission={currentItem.submission} />
+                    <div className="p-4 md:p-6">
+                        <AssignmentView assignment={currentItem.data} submission={currentItem.submission} />
+                    </div>
                 )}
                 {currentItem.type === 'discussion' && (
-                    <DiscussionView materialId={currentItem.materialId} discussions={currentItem.discussions} />
+                    <div className="p-4 md:p-6">
+                        <DiscussionView materialId={currentItem.materialId} discussions={currentItem.discussions} />
+                    </div>
                 )}
             </div>
         </div>
@@ -839,7 +991,11 @@ function MaterialView({ material, completed, navigateTo, attemptsByQuizId, submi
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                    className="min-h-[300px] rounded-[20px] border border-neutral-200 bg-white p-4 shadow-[0_12px_36px_rgba(15,23,42,0.07)] md:p-5"
+                    className={`min-h-[300px] rounded-[20px] border shadow-[0_12px_36px_rgba(15,23,42,0.07)] overflow-hidden ${
+                        currentTab.type === 'quiz'
+                            ? 'border-transparent bg-transparent p-0'
+                            : 'border-neutral-200 bg-white p-4 md:p-5'
+                    }`}
                 >
                     {currentTab.type === 'content' && (
                         <ContentView content={currentTab.data} completed={completed.has(currentTab.data.id)} />
@@ -893,9 +1049,13 @@ function ContentView({ content, completed }) {
 
             <div className="rounded-[18px] border border-neutral-200 bg-gradient-to-br from-neutral-50 to-white p-3 md:p-4">
                 {content.type === 'artikel' && (
-                    <div className="prose prose-sm max-w-none rounded-[14px] bg-white p-4">
-                        <p className="whitespace-pre-line text-sm leading-7 text-neutral-700">{content.body}</p>
-                    </div>
+                    // Note: content.body contains HTML from the rich text editor (TipTap).
+                    // This is instructor-authored content. For production, consider adding
+                    // DOMPurify sanitization: dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content.body) }}
+                    <div
+                        className="prose prose-sm max-w-none rounded-[14px] bg-white p-4 text-neutral-700 leading-7"
+                        dangerouslySetInnerHTML={{ __html: content.body }}
+                    />
                 )}
                 {content.type === 'video' && (
                     <VideoPlayer
@@ -952,20 +1112,18 @@ function QuizView({ quiz, attempt }) {
     }, [form.data]);
 
     const postQuiz = () => {
-        if (hasSubmitted.current || form.processing) return;
+        if (hasSubmitted.current) return;
 
         hasSubmitted.current = true;
-        form
-            .transform(() => ({
-                answers: latestFormData.current.answers ?? {},
-                started_at: latestFormData.current.started_at,
-            }))
-            .post(`/student/quizzes/${quiz.id}/attempts`, {
-                preserveScroll: true,
-                onError: () => {
-                    hasSubmitted.current = false;
-                },
-            });
+        router.post(`/student/quizzes/${quiz.id}/attempts`, {
+            answers: latestFormData.current.answers ?? {},
+            started_at: latestFormData.current.started_at,
+        }, {
+            preserveScroll: true,
+            onError: () => {
+                hasSubmitted.current = false;
+            },
+        });
     };
 
     // Timer effect
@@ -992,13 +1150,14 @@ function QuizView({ quiz, attempt }) {
         const now = new Date().toISOString();
         setStartTime(Date.now());
         setQuizStarted(true);
+        latestFormData.current = { ...latestFormData.current, started_at: now };
         form.setData('started_at', now);
     };
 
     const submitQuiz = (event) => {
         event.preventDefault();
 
-        if (!form.data.started_at) {
+        if (!latestFormData.current.started_at) {
             alert('Error: Waktu mulai tidak tercatat. Silakan refresh halaman.');
             return;
         }
@@ -1068,133 +1227,133 @@ function QuizView({ quiz, attempt }) {
     // Quiz Start Screen (before starting)
     if (!quizStarted && canAttempt) {
         return (
-            <div className="space-y-4 sm:space-y-6">
-                <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg sm:size-10">
-                        <HelpCircle className="size-4 sm:size-5" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                        <h2 className="break-words text-lg font-bold leading-snug text-neutral-900 sm:text-xl">{quiz.title}</h2>
-                        <p className="mt-1 text-xs leading-relaxed text-neutral-600 sm:text-sm">Baca instruksi dengan teliti sebelum memulai</p>
-                        {hasAttempted && (
-                            <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
-                                <AlertTriangle className="size-3.5" />
-                                Percobaan ke-{attemptCount + 1} dari {quiz.max_attempts}
-                            </p>
-                        )}
-                    </div>
-                </div>
+            <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 shadow-2xl">
+                {/* Geometric pattern */}
+                <div
+                    className="pointer-events-none absolute inset-0 opacity-[0.04]"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                    }}
+                />
 
-                {/* Quiz Info Card */}
-                <div className="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-4 sm:p-6">
-                    <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-neutral-900 sm:text-base">
-                        <ClipboardList className="size-4 text-blue-700 sm:size-5" />
-                        Informasi Quiz
-                    </h3>
-                    
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        <div className="flex min-w-0 items-center gap-3 rounded-lg bg-white/70 p-3">
-                            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
-                                <FileText className="size-4" />
-                            </div>
-                            <div className="min-w-0">
-                                <p className="text-xs text-neutral-600">Jumlah Soal</p>
-                                <p className="truncate text-sm font-bold text-neutral-900">{quiz.questions.length} Soal</p>
-                            </div>
-                        </div>
-
-                        <div className="flex min-w-0 items-center gap-3 rounded-lg bg-white/70 p-3">
-                            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-purple-100 text-purple-700">
-                                <HelpCircle className="size-4" />
-                            </div>
-                            <div className="min-w-0">
-                                <p className="text-xs text-neutral-600">Maks. Percobaan</p>
-                                <p className="truncate text-sm font-bold text-neutral-900">{quiz.max_attempts}x {hasAttempted && `(Sisa: ${remainingAttempts}x)`}</p>
-                            </div>
-                        </div>
-
-                        {quiz.duration && (
-                            <div className="flex min-w-0 items-center gap-3 rounded-lg bg-white/70 p-3">
-                                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-700">
-                                    <Clock className="size-4" />
-                                </div>
-                                <div className="min-w-0">
-                                    <p className="text-xs text-neutral-600">Durasi</p>
-                                    <p className="truncate text-sm font-bold text-neutral-900">{quiz.duration} Menit</p>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="flex min-w-0 items-center gap-3 rounded-lg bg-white/70 p-3">
-                            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
-                                <CheckCircle2 className="size-4" />
-                            </div>
-                            <div className="min-w-0">
-                                <p className="text-xs text-neutral-600">Passing Score</p>
-                                <p className="truncate text-sm font-bold text-neutral-900">{quiz.passing_score}</p>
-                            </div>
+                {/* Header */}
+                <div className="relative px-6 pb-5 pt-6 sm:px-8 sm:pt-8">
+                    <div className="flex items-start gap-4">
+                        <motion.div
+                            initial={{ scale: 0, rotate: -90 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                            className="flex size-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/30"
+                        >
+                            <HelpCircle className="size-7 text-white" />
+                        </motion.div>
+                        <div className="min-w-0 flex-1">
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.1 }}
+                                className="mb-1 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-300"
+                            >
+                                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                Quiz
+                            </motion.div>
+                            <motion.h2
+                                initial={{ opacity: 0, y: 5 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.15 }}
+                                className="break-words text-xl font-bold leading-snug text-white sm:text-2xl"
+                            >
+                                {quiz.title}
+                            </motion.h2>
+                            {hasAttempted && (
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-500/20 px-2.5 py-1 text-xs font-semibold text-amber-300"
+                                >
+                                    <AlertTriangle className="size-3.5" />
+                                    Percobaan ke-{attemptCount + 1} dari {quiz.max_attempts}
+                                </motion.p>
+                            )}
                         </div>
                     </div>
                 </div>
+
+                {/* Stats row */}
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="relative mx-4 mb-4 grid grid-cols-2 gap-2 sm:mx-6 sm:grid-cols-4 sm:gap-3"
+                >
+                    {[
+                        { icon: <FileText className="size-4" />, value: `${quiz.questions.length}`, label: 'Soal', color: 'text-emerald-300' },
+                        { icon: <Clock className="size-4" />, value: quiz.duration ? `${quiz.duration}` : 'âˆž', label: 'Menit', color: 'text-teal-300' },
+                        { icon: <CheckCircle2 className="size-4" />, value: `${quiz.passing_score}`, label: 'Passing', color: 'text-green-300' },
+                        { icon: <HelpCircle className="size-4" />, value: `${remainingAttempts}`, label: 'Sisa Coba', color: 'text-cyan-300' },
+                    ].map((stat, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.25 + i * 0.05 }}
+                            className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur"
+                        >
+                            <span className={stat.color}>{stat.icon}</span>
+                            <div>
+                                <p className={`text-lg font-bold tabular-nums ${stat.color}`}>{stat.value}</p>
+                                <p className="text-[10px] text-white/40">{stat.label}</p>
+                            </div>
+                        </motion.div>
+                    ))}
+                </motion.div>
 
                 {/* Instructions */}
-                <div className="rounded-xl border border-neutral-200 bg-white p-4 sm:p-6">
-                    <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-neutral-900 sm:text-base">
-                        <AlertTriangle className="size-4 text-amber-600 sm:size-5" />
-                        Instruksi
-                    </h3>
-                    <ul className="space-y-2 text-xs leading-relaxed text-neutral-700 sm:text-sm">
-                        <li className="flex items-start gap-2">
-                            <span className="text-emerald-600 font-bold">•</span>
-                            <span>Pastikan koneksi internet Anda stabil</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span className="text-emerald-600 font-bold">•</span>
-                            <span>Jawab semua pertanyaan dengan teliti</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span className="text-rose-600 font-bold">•</span>
-                            <span><strong>Anda memiliki {quiz.max_attempts} kesempatan</strong> untuk mengerjakan quiz ini</span>
-                        </li>
-                        {hasAttempted && (
-                            <li className="flex items-start gap-2">
-                                <span className="text-amber-600 font-bold">•</span>
-                                <span><strong>Ini adalah percobaan ke-{attemptCount + 1}</strong> dari {quiz.max_attempts} percobaan</span>
-                            </li>
-                        )}
-                        {quiz.duration && (
-                            <>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-amber-600 font-bold">•</span>
-                                    <span>Waktu akan berjalan setelah Anda klik "Mulai Quiz"</span>
-                                </li>
-                                <li className="flex items-start gap-2">
-                                    <span className="text-amber-600 font-bold">•</span>
-                                    <span><strong>Quiz akan otomatis berakhir</strong> jika waktu habis</span>
-                                </li>
-                            </>
-                        )}
-                        <li className="flex items-start gap-2">
-                            <span className="text-blue-600 font-bold">•</span>
-                            <span>Pastikan Anda sudah siap sebelum memulai</span>
-                        </li>
-                    </ul>
-                </div>
-
-                {/* Start Button */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="sticky bottom-3 z-20 sm:static"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.35 }}
+                    className="relative mx-4 mb-5 rounded-xl border border-white/10 bg-white/5 px-5 py-4 sm:mx-6"
                 >
-                    <AnimatedButton
+                    <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-emerald-300">Instruksi</p>
+                    <ul className="space-y-2">
+                        {[
+                            'Pastikan koneksi internet Anda stabil sebelum memulai',
+                            `Anda memiliki ${quiz.max_attempts} kesempatan mengerjakan quiz ini`,
+                            quiz.duration ? `Waktu berjalan setelah klik "Mulai" â€” quiz otomatis berakhir jika waktu habis` : null,
+                            'Jawaban tidak dapat diubah setelah dikonfirmasi',
+                        ].filter(Boolean).map((item, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-white/60">
+                                <span className="mt-1.5 size-1.5 flex-shrink-0 rounded-full bg-emerald-400" />
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                </motion.div>
+
+                {/* Start button */}
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.45 }}
+                    className="relative px-4 pb-6 sm:px-6"
+                >
+                    <motion.button
                         type="button"
                         onClick={startQuiz}
-                        className="h-12 w-full text-sm font-bold shadow-xl sm:text-base bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="relative flex h-13 w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-400 to-teal-400 py-3.5 text-base font-bold text-emerald-950 shadow-xl shadow-emerald-500/30"
                     >
-                        Mulai Quiz
-                    </AnimatedButton>
+                        <motion.div
+                            className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                            animate={{ x: ['-100%', '200%'] }}
+                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1.5 }}
+                        />
+                        <PlayCircle className="relative size-5" />
+                        <span className="relative">Mulai Quiz</span>
+                    </motion.button>
                 </motion.div>
             </div>
         );
@@ -1202,337 +1361,657 @@ function QuizView({ quiz, attempt }) {
 
     // Max attempts reached
     if (!canAttempt) {
+        const passed = canShowScore && Number(attempt.score) >= Number(quiz.passing_score);
         return (
-            <div className="space-y-4">
-                <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-red-600 text-white shadow-lg sm:size-10">
-                        <Ban className="size-4 sm:size-5" />
+            <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 shadow-2xl">
+                <div
+                    className="pointer-events-none absolute inset-0 opacity-[0.04]"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                    }}
+                />
+                <div className="relative px-6 py-6 sm:px-8 sm:py-8">
+                    {/* Title */}
+                    <div className="mb-5 flex items-start gap-4">
+                        <div className="flex size-12 flex-shrink-0 items-center justify-center rounded-2xl bg-white/10 backdrop-blur">
+                            <Ban className="size-6 text-white/60" />
+                        </div>
+                        <div>
+                            <p className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-white/40">Quiz</p>
+                            <h2 className="text-xl font-bold text-white">{quiz.title}</h2>
+                        </div>
                     </div>
-                    <div className="min-w-0 flex-1">
-                        <h2 className="break-words text-lg font-bold leading-snug text-neutral-900 sm:text-xl">{quiz.title}</h2>
-                        <p className="mt-1 text-xs text-neutral-600 sm:text-sm">Batas percobaan telah tercapai</p>
-                    </div>
-                </div>
 
-                <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-center sm:p-6">
-                    <Ban className="mx-auto mb-2 size-8 text-rose-700" />
-                    <p className="mb-2 text-base font-bold text-rose-700 sm:text-lg">Batas Percobaan Tercapai</p>
-                    <p className="text-xs leading-relaxed text-rose-600 sm:text-sm">
-                        Anda telah menggunakan semua {quiz.max_attempts} percobaan untuk quiz ini.
-                    </p>
-                </div>
-
-                {canShowScore && (
-                    <div className={`rounded-xl p-4 ${
-                        Number(attempt.score) >= Number(quiz.passing_score)
-                            ? 'bg-emerald-50 border-2 border-emerald-200'
-                            : 'bg-rose-50 border-2 border-rose-200'
-                    }`}>
-                        <p className="text-sm font-bold text-neutral-900 sm:text-base">
-                            Nilai Terakhir: <span className={Number(attempt.score) >= Number(quiz.passing_score) ? 'text-emerald-700' : 'text-rose-700'}>
+                    {/* Score card */}
+                    {canShowScore && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.1 }}
+                            className={`mb-4 rounded-2xl border p-5 text-center ${
+                                passed
+                                    ? 'border-emerald-400/30 bg-emerald-500/15'
+                                    : 'border-amber-400/30 bg-amber-500/15'
+                            }`}
+                        >
+                            <p className={`text-4xl font-bold tabular-nums ${passed ? 'text-emerald-300' : 'text-amber-300'}`}>
                                 {attempt.score}
-                            </span>
-                        </p>
-                        <p className="mt-1.5 text-xs leading-relaxed text-neutral-700 sm:text-sm">
-                            {Number(attempt.score) >= Number(quiz.passing_score) ? 'Selamat, Anda lulus quiz ini.' : 'Belum lulus. Silakan pelajari kembali materinya.'}
+                            </p>
+                            <p className="mt-1 text-sm font-semibold text-white/60">Nilai Terakhir</p>
+                            <div className={`mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
+                                passed ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                            }`}>
+                                {passed ? 'ðŸŽ‰ Lulus' : 'ðŸ“š Belum Lulus'}
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {/* Info */}
+                    <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center">
+                        <p className="text-sm text-white/50">
+                            Semua <span className="font-bold text-white/70">{quiz.max_attempts}</span> percobaan telah digunakan
                         </p>
                     </div>
-                )}
+                </div>
             </div>
         );
     }
 
-    // Quiz Questions (after starting or if already attempted)
-    return (
-        <div className="space-y-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-                <div className="flex items-start gap-3 sm:flex-1">
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg sm:size-10">
-                        <HelpCircle className="size-4 sm:size-5" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                        <h2 className="break-words text-lg font-bold leading-snug text-neutral-900 sm:text-xl">{quiz.title}</h2>
-                        <div className="mt-2 flex flex-wrap gap-1.5 sm:gap-2">
-                            <span className="rounded-full bg-blue-100 px-2.5 py-1 text-[11px] font-semibold text-blue-700 sm:px-3 sm:text-xs">
-                                {quiz.questions.length} Soal
-                            </span>
-                            <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-semibold text-emerald-700 sm:px-3 sm:text-xs">
-                                Passing: {quiz.passing_score}
-                            </span>
-                            {quiz.duration && (
-                                <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-semibold text-amber-700 sm:px-3 sm:text-xs">
-                                    {quiz.duration} Menit
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                </div>
-                {attempt && (
-                    <span className={`w-fit rounded-full px-3 py-1 text-xs font-bold sm:ml-auto ${
-                        attempt.status === 'graded' 
-                            ? 'bg-emerald-100 text-emerald-700' 
-                            : 'bg-amber-100 text-amber-700'
-                    }`}>
-                        {attempt.status === 'graded' ? (canShowScore ? `Nilai: ${attempt.score}` : 'Selesai') : 'Menunggu Penilaian'}
-                    </span>
-                )}
-            </div>
-
-            {/* Timer Display (only when quiz is active) */}
-            {!attempt && quizStarted && (
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`sticky top-2 z-10 rounded-xl border p-3 shadow-lg sm:top-4 sm:p-4 ${
-                        timeExpired
-                            ? 'bg-rose-50 border-rose-300'
-                            : isWarningTime
-                            ? 'bg-amber-50 border-amber-300'
-                            : 'bg-blue-50 border-blue-300'
-                    }`}
-                >
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="flex items-center gap-3">
-                            <div className={`flex size-10 items-center justify-center rounded-lg ${
-                                timeExpired
-                                    ? 'bg-rose-200 text-rose-700'
-                                    : isWarningTime
-                                    ? 'bg-amber-200 text-amber-700 animate-pulse'
-                                    : 'bg-blue-200 text-blue-700'
-                            }`}>
-                                <Clock className="size-5" />
+    // Quiz already attempted (show result summary, NOT fullscreen)
+    if (attempt) {
+        const passed = canShowScore && Number(attempt.score) >= Number(quiz.passing_score);
+        return (
+            <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 shadow-2xl">
+                <div
+                    className="pointer-events-none absolute inset-0 opacity-[0.04]"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                    }}
+                />
+                <div className="relative px-6 py-6 sm:px-8 sm:py-8">
+                    {/* Title row */}
+                    <div className="mb-5 flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-4">
+                            <div className="flex size-12 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/30">
+                                <HelpCircle className="size-6 text-white" />
                             </div>
                             <div>
-                                <p className="text-xs font-semibold text-neutral-600">
-                                    {quiz.duration ? 'Waktu Tersisa' : 'Waktu Berjalan'}
-                                </p>
-                                <p className={`text-2xl font-bold ${
-                                    timeExpired
-                                        ? 'text-rose-700'
-                                        : isWarningTime
-                                        ? 'text-amber-700'
-                                        : 'text-blue-700'
-                                }`}>
-                                    {quiz.duration ? formatTime(remainingSeconds) : formatTime(elapsedSeconds)}
-                                </p>
+                                <p className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-white/40">Quiz</p>
+                                <h2 className="text-xl font-bold text-white">{quiz.title}</h2>
+                                <div className="mt-2 flex flex-wrap gap-1.5">
+                                    <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-300">
+                                        {quiz.questions.length} Soal
+                                    </span>
+                                    <span className="rounded-full bg-teal-500/20 px-2.5 py-0.5 text-[10px] font-semibold text-teal-300">
+                                        Passing: {quiz.passing_score}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        {timeExpired && (
-                            <span className="w-fit rounded-full bg-rose-200 px-3 py-1.5 text-xs font-bold text-rose-800">
-                                Mengirim Otomatis
-                            </span>
-                        )}
-                        {isWarningTime && !timeExpired && (
-                            <span className="w-fit animate-pulse rounded-full bg-amber-200 px-3 py-1.5 text-xs font-bold text-amber-800">
-                                Segera Selesaikan
-                            </span>
-                        )}
-                    </div>
-                </motion.div>
-            )}
-
-            {canShowScore && (
-                <div className={`rounded-xl p-4 ${
-                    Number(attempt.score) >= Number(quiz.passing_score)
-                        ? 'bg-emerald-50 border-2 border-emerald-200'
-                        : 'bg-rose-50 border-2 border-rose-200'
-                }`}>
-                    <p className="text-sm font-bold text-neutral-900 sm:text-base">
-                        Hasil Quiz: <span className={Number(attempt.score) >= Number(quiz.passing_score) ? 'text-emerald-700' : 'text-rose-700'}>
-                            {attempt.score}
+                        <span className={`flex-shrink-0 rounded-full px-3 py-1 text-xs font-bold ${
+                            attempt.status === 'graded'
+                                ? 'bg-emerald-500/20 text-emerald-300'
+                                : 'bg-amber-500/20 text-amber-300'
+                        }`}>
+                            {attempt.status === 'graded' ? 'Selesai' : 'Menunggu Penilaian'}
                         </span>
-                    </p>
-                    <p className="mt-1.5 text-xs leading-relaxed text-neutral-700 sm:text-sm">
-                        {Number(attempt.score) >= Number(quiz.passing_score) ? 'Selamat, Anda lulus quiz ini.' : 'Belum lulus. Silakan pelajari kembali materinya.'}
-                    </p>
+                    </div>
+
+                    {/* Score */}
+                    {canShowScore && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className={`rounded-2xl border p-5 text-center ${
+                                passed
+                                    ? 'border-emerald-400/30 bg-emerald-500/15'
+                                    : 'border-amber-400/30 bg-amber-500/15'
+                            }`}
+                        >
+                            <p className={`text-5xl font-bold tabular-nums ${passed ? 'text-emerald-300' : 'text-amber-300'}`}>
+                                {attempt.score}
+                            </p>
+                            <p className="mt-1 text-sm text-white/50">Nilai Kamu</p>
+                            <div className={`mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
+                                passed ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                            }`}>
+                                {passed ? 'ðŸŽ‰ Selamat, kamu lulus!' : 'ðŸ“š Belum lulus, pelajari lagi'}
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {!canShowScore && attempt.status !== 'graded' && (
+                        <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-center">
+                            <p className="text-sm text-amber-300">Jawaban kamu sedang dinilai oleh instruktur</p>
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
+        );
+    }
 
-            {!attempt && (
-                <form onSubmit={submitQuiz} className="space-y-4">
-                    <div className="rounded-2xl border border-neutral-200 bg-white p-3 shadow-sm sm:p-4">
-                        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
-                                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-blue-700">
-                                    Soal {Math.min(currentQuestionIndex + 1, totalQuestions)} dari {totalQuestions}
-                                </p>
-                                <p className="mt-1 text-xs font-semibold text-neutral-500">
-                                    {answeredCount}/{totalQuestions} terjawab
-                                </p>
-                            </div>
-                            <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-100 sm:w-56">
-                                <motion.div
-                                    initial={false}
-                                    animate={{ width: `${progressPercent}%` }}
-                                    className="h-full rounded-full bg-gradient-to-r from-blue-500 to-emerald-500"
+    // Quiz Active â€” FULLSCREEN Quizizz/Wayground style (rendered via portal to escape layout)
+    return createPortal(
+        <QuizFullscreen
+            quiz={quiz}
+            currentQuestionIndex={currentQuestionIndex}
+            totalQuestions={totalQuestions}
+            activeQuestion={activeQuestion}
+            activeAnswer={activeAnswer}
+            answeredCount={answeredCount}
+            progressPercent={progressPercent}
+            isLastQuestion={isLastQuestion}
+            timeExpired={timeExpired}
+            isWarningTime={isWarningTime}
+            remainingSeconds={remainingSeconds}
+            elapsedSeconds={elapsedSeconds}
+            duration={quiz.duration}
+            formatTime={formatTime}
+            setAnswer={setAnswer}
+            goToQuestion={goToQuestion}
+            goToNextQuestion={goToNextQuestion}
+            postQuiz={postQuiz}
+            submitQuiz={submitQuiz}
+            processing={form.processing}
+            errors={form.errors}
+            answers={form.data.answers}
+        />,
+        document.body
+    );
+}
+
+// Fullscreen Quizizz/Wayground-style quiz player
+function QuizFullscreen({
+    quiz,
+    currentQuestionIndex,
+    totalQuestions,
+    activeQuestion,
+    activeAnswer,
+    answeredCount,
+    progressPercent,
+    isLastQuestion,
+    timeExpired,
+    isWarningTime,
+    remainingSeconds,
+    elapsedSeconds,
+    duration,
+    formatTime,
+    setAnswer,
+    goToQuestion,
+    goToNextQuestion,
+    postQuiz,
+    submitQuiz,
+    processing,
+    errors,
+    answers,
+}) {
+    const [showExitConfirm, setShowExitConfirm] = useState(false);
+    const [showNavigator, setShowNavigator] = useState(false);
+
+    // Lock body scroll while quiz is fullscreen
+    useEffect(() => {
+        const original = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = original;
+        };
+    }, []);
+
+    // Wayground-style answer color palette (matching the brand emerald/teal LMS theme)
+    // LMS-themed answer palette: emerald/teal dominant, with teal, green, and cyan variants
+    const answerStyles = [
+        {
+            bg: 'bg-emerald-600 hover:bg-emerald-700',
+            selected: 'bg-emerald-700 ring-4 ring-emerald-300',
+            shape: (
+                <svg viewBox="0 0 24 24" className="size-7 fill-white"><polygon points="12,3 22,21 2,21" /></svg>
+            ),
+        },
+        {
+            bg: 'bg-teal-600 hover:bg-teal-700',
+            selected: 'bg-teal-700 ring-4 ring-teal-300',
+            shape: (
+                <svg viewBox="0 0 24 24" className="size-7 fill-white"><polygon points="12,2 22,12 12,22 2,12" /></svg>
+            ),
+        },
+        {
+            bg: 'bg-green-600 hover:bg-green-700',
+            selected: 'bg-green-700 ring-4 ring-green-300',
+            shape: (
+                <svg viewBox="0 0 24 24" className="size-7 fill-white"><circle cx="12" cy="12" r="10" /></svg>
+            ),
+        },
+        {
+            bg: 'bg-cyan-600 hover:bg-cyan-700',
+            selected: 'bg-cyan-700 ring-4 ring-cyan-300',
+            shape: (
+                <svg viewBox="0 0 24 24" className="size-7 fill-white"><rect x="3" y="3" width="18" height="18" rx="2" /></svg>
+            ),
+        },
+    ];
+
+    const timerSeconds = duration ? remainingSeconds : elapsedSeconds;
+    const timerProgress = duration ? remainingSeconds / (duration * 60) : 1;
+    const timerCircumference = 2 * Math.PI * 26;
+    const timerOffset = timerCircumference * (1 - timerProgress);
+
+    return (
+        <div className="fixed inset-0 z-[100] overflow-hidden bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950">
+            {/* Ambient orbs */}
+            <motion.div
+                animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.3, 0.2] }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+                className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-emerald-500 blur-3xl"
+            />
+            <motion.div
+                animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+                transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+                className="pointer-events-none absolute -bottom-40 -right-40 h-[600px] w-[600px] rounded-full bg-teal-500 blur-3xl"
+            />
+
+            {/* Geometric pattern */}
+            <div
+                className="pointer-events-none absolute inset-0 opacity-[0.04]"
+                style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                }}
+            />
+
+            <div className="relative flex h-full flex-col">
+                {/* â”€â”€ TOP BAR â”€â”€ */}
+                <header className="flex flex-shrink-0 items-center gap-3 px-4 py-4 sm:gap-5 sm:px-8 sm:py-5">
+                    {/* Exit */}
+                    <button
+                        type="button"
+                        onClick={() => setShowExitConfirm(true)}
+                        className="flex size-11 flex-shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/80 backdrop-blur transition hover:bg-white/20 hover:text-white"
+                        aria-label="Keluar quiz"
+                    >
+                        <X className="size-5" />
+                    </button>
+
+                    {/* Question counter */}
+                    <div className="hidden items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 backdrop-blur sm:flex">
+                        <span className="text-sm font-bold tabular-nums text-white">{currentQuestionIndex + 1}</span>
+                        <span className="text-sm text-white/40">/</span>
+                        <span className="text-sm tabular-nums text-white/60">{totalQuestions}</span>
+                    </div>
+
+                    {/* Progress bar */}
+                    <div className="relative flex-1">
+                        <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
+                            <motion.div
+                                initial={false}
+                                animate={{ width: `${progressPercent}%` }}
+                                transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+                                className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-400 shadow-lg shadow-emerald-500/40"
+                            />
+                        </div>
+                        <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-white/40 sm:hidden">
+                            Soal {currentQuestionIndex + 1}/{totalQuestions} â€¢ {answeredCount} terjawab
+                        </p>
+                    </div>
+
+                    {/* Question grid toggle */}
+                    <button
+                        type="button"
+                        onClick={() => setShowNavigator((v) => !v)}
+                        className="flex size-11 flex-shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/80 backdrop-blur transition hover:bg-white/20 hover:text-white"
+                        aria-label="Daftar soal"
+                    >
+                        <List className="size-5" />
+                    </button>
+
+                    {/* Timer ring */}
+                    {duration ? (
+                        <div className="relative flex size-14 flex-shrink-0 items-center justify-center sm:size-16">
+                            <svg className="absolute inset-0 -rotate-90" viewBox="0 0 60 60">
+                                <circle cx="30" cy="30" r="26" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="4" />
+                                <motion.circle
+                                    cx="30" cy="30" r="26"
+                                    fill="none"
+                                    stroke={timeExpired ? '#f43f5e' : isWarningTime ? '#f59e0b' : '#10b981'}
+                                    strokeWidth="4"
+                                    strokeLinecap="round"
+                                    strokeDasharray={timerCircumference}
+                                    animate={{ strokeDashoffset: timerOffset }}
+                                    transition={{ duration: 0.5 }}
                                 />
+                            </svg>
+                            <motion.span
+                                animate={isWarningTime && !timeExpired ? { scale: [1, 1.15, 1] } : {}}
+                                transition={{ repeat: Infinity, duration: 0.6 }}
+                                className={`relative text-xs font-bold tabular-nums sm:text-sm ${
+                                    timeExpired ? 'text-rose-400' : isWarningTime ? 'text-amber-300' : 'text-emerald-300'
+                                }`}
+                            >
+                                {formatTime(timerSeconds)}
+                            </motion.span>
+                        </div>
+                    ) : (
+                        <div className="flex flex-shrink-0 items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 backdrop-blur">
+                            <Clock className="size-4 text-emerald-300" />
+                            <span className="text-sm font-bold tabular-nums text-white">{formatTime(elapsedSeconds)}</span>
+                        </div>
+                    )}
+                </header>
+
+                {/* Question grid drawer */}
+                <AnimatePresence>
+                    {showNavigator && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="absolute left-1/2 top-20 z-30 max-h-[60vh] w-[min(92vw,420px)] -translate-x-1/2 overflow-y-auto rounded-2xl border border-white/15 bg-emerald-950/95 p-5 shadow-2xl backdrop-blur-xl"
+                        >
+                            <div className="mb-3 flex items-center justify-between">
+                                <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">Daftar Soal</p>
+                                <p className="text-xs text-white/50">{answeredCount}/{totalQuestions} terjawab</p>
                             </div>
-                        </div>
+                            <div className="grid grid-cols-6 gap-2 sm:grid-cols-8">
+                                {quiz.questions.map((q, i) => {
+                                    const filled = answers[q.id] !== undefined && String(answers[q.id]).trim() !== '';
+                                    const isActive = i === currentQuestionIndex;
+                                    return (
+                                        <button
+                                            key={q.id}
+                                            type="button"
+                                            onClick={() => {
+                                                goToQuestion(i);
+                                                setShowNavigator(false);
+                                            }}
+                                            className={`flex aspect-square items-center justify-center rounded-xl text-sm font-bold transition ${
+                                                isActive
+                                                    ? 'bg-emerald-400 text-emerald-950 shadow-lg shadow-emerald-500/40'
+                                                    : filled
+                                                    ? 'bg-emerald-500/30 text-emerald-200 hover:bg-emerald-500/50'
+                                                    : 'bg-white/5 text-white/50 hover:bg-white/10'
+                                            }`}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
-                        <div className="mb-5 flex flex-wrap gap-1.5">
-                            {quiz.questions.map((question, index) => {
-                                const hasAnswer = form.data.answers[question.id] !== undefined && String(form.data.answers[question.id]).trim() !== '';
-                                const isActive = index === currentQuestionIndex;
-
-                                return (
-                                    <button
-                                        key={question.id}
-                                        type="button"
-                                        onClick={() => goToQuestion(index)}
-                                        disabled={form.processing}
-                                        className={`flex size-9 items-center justify-center rounded-lg border text-xs font-black transition-all ${
-                                            isActive
-                                                ? 'border-blue-600 bg-blue-600 text-white shadow-md'
-                                                : hasAnswer
-                                                ? 'border-emerald-300 bg-emerald-50 text-emerald-700'
-                                                : 'border-neutral-200 bg-white text-neutral-500 hover:border-blue-200 hover:bg-blue-50'
-                                        }`}
-                                        aria-label={`Buka soal ${index + 1}`}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                );
-                            })}
-                        </div>
-
+                {/* â”€â”€ MAIN â”€â”€ */}
+                <main className="flex flex-1 flex-col overflow-y-auto px-4 pb-4 sm:px-8 sm:pb-6">
+                    <AnimatePresence mode="wait">
                         {activeQuestion ? (
-                            <AnimatePresence mode="wait">
+                            <motion.div
+                                key={activeQuestion.id}
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -30, scale: 0.97 }}
+                                transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+                                className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
+                            >
+                                {/* Question card */}
                                 <motion.div
-                                    key={activeQuestion.id}
-                                    initial={{ opacity: 0, x: 24 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -24 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="space-y-4"
+                                    initial={{ scale: 0.96 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ delay: 0.05, duration: 0.35 }}
+                                    className="relative mb-5 flex min-h-[140px] flex-shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-white/95 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl sm:min-h-[180px] sm:p-10"
                                 >
-                                    <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-emerald-50 p-4 sm:p-5">
-                                        <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-blue-700">
-                                            {activeQuestion.type === 'essay' ? 'Essay' : activeQuestion.type === 'true_false' ? 'Benar atau Salah' : 'Pilihan Ganda'}
-                                        </p>
-                                        <h3 className="break-words text-lg font-black leading-snug text-neutral-950 sm:text-2xl">
-                                            {activeQuestion.question}
-                                        </h3>
+                                    {/* Top accent */}
+                                    <div className="absolute left-10 right-10 top-0 h-[2px] rounded-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent" />
+
+                                    {/* Type badge */}
+                                    <div className="absolute left-5 top-4 inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-700">
+                                        <span className="size-1.5 rounded-full bg-emerald-500" />
+                                        {activeQuestion.type === 'essay' ? 'Essay' : activeQuestion.type === 'true_false' ? 'Benar / Salah' : 'Pilihan Ganda'}
                                     </div>
 
-                                    {activeQuestion.type === 'multiple_choice' && (
-                                        <div className="grid gap-3 sm:grid-cols-2">
-                                            {activeQuestion.options?.map((option, optionIndex) => {
-                                                const selected = activeAnswer === option;
+                                    {/* Question number badge */}
+                                    <div className="absolute right-5 top-4 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold tabular-nums text-emerald-700">
+                                        {currentQuestionIndex + 1} / {totalQuestions}
+                                    </div>
 
-                                                return (
-                                                    <button
-                                                        key={option}
-                                                        type="button"
-                                                        onClick={() => setAnswer(activeQuestion.id, option)}
-                                                        disabled={form.processing}
-                                                        className={`min-h-24 rounded-2xl border-2 p-4 text-left text-sm font-bold leading-relaxed shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 sm:text-base ${
-                                                            selected
-                                                                ? 'border-blue-700 bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                                                                : answerTones[optionIndex % answerTones.length]
-                                                        }`}
-                                                    >
-                                                        <span className={`mb-3 flex size-7 items-center justify-center rounded-lg text-xs font-black ${
-                                                            selected ? 'bg-white text-blue-700' : 'bg-white/80 text-neutral-700'
-                                                        }`}>
-                                                            {String.fromCharCode(65 + optionIndex)}
-                                                        </span>
-                                                        <span className="break-words">{option}</span>
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-
-                                    {activeQuestion.type === 'true_false' && (
-                                        <div className="grid gap-3 sm:grid-cols-2">
-                                            {[
-                                                ['true', 'Benar'],
-                                                ['false', 'Salah'],
-                                            ].map(([value, label], optionIndex) => {
-                                                const selected = activeAnswer === value;
-
-                                                return (
-                                                    <button
-                                                        key={value}
-                                                        type="button"
-                                                        onClick={() => setAnswer(activeQuestion.id, value)}
-                                                        disabled={form.processing}
-                                                        className={`min-h-24 rounded-2xl border-2 p-4 text-center text-base font-black shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
-                                                            selected
-                                                                ? 'border-blue-700 bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                                                                : answerTones[optionIndex]
-                                                        }`}
-                                                    >
-                                                        {label}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-
-                                    {activeQuestion.type === 'essay' && (
-                                        <textarea
-                                            value={form.data.answers[activeQuestion.id] ?? ''}
-                                            onChange={(event) => setAnswer(activeQuestion.id, event.target.value)}
-                                            rows="7"
-                                            placeholder="Tulis jawaban Anda di sini..."
-                                            disabled={form.processing}
-                                            className="min-h-44 w-full rounded-2xl border border-neutral-200 px-4 py-3 text-sm leading-relaxed outline-none transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
-                                        />
-                                    )}
+                                    <h2 className="mt-4 break-words text-center text-xl font-bold leading-snug text-neutral-900 sm:text-2xl md:text-3xl">
+                                        {activeQuestion.question}
+                                    </h2>
                                 </motion.div>
-                            </AnimatePresence>
+
+                                {/* Answers */}
+                                {activeQuestion.type === 'multiple_choice' && (
+                                    <div className="grid flex-1 gap-3 content-start sm:grid-cols-2 sm:gap-4">
+                                        {activeQuestion.options?.map((option, i) => {
+                                            const style = answerStyles[i % answerStyles.length];
+                                            const selected = activeAnswer === option;
+                                            return (
+                                                <motion.button
+                                                    key={option}
+                                                    type="button"
+                                                    onClick={() => setAnswer(activeQuestion.id, option)}
+                                                    disabled={processing || timeExpired}
+                                                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                    transition={{ delay: 0.1 + i * 0.06, type: 'spring', stiffness: 300, damping: 22 }}
+                                                    whileHover={{ scale: 1.02, y: -2 }}
+                                                    whileTap={{ scale: 0.97 }}
+                                                    className={`group relative overflow-hidden rounded-2xl p-5 text-left text-white shadow-xl transition-all sm:p-6 ${
+                                                        selected ? style.selected : style.bg
+                                                    } disabled:cursor-not-allowed disabled:opacity-60`}
+                                                >
+                                                    {/* Shine */}
+                                                    <motion.div
+                                                        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100"
+                                                        animate={{ x: ['-100%', '200%'] }}
+                                                        transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0.5 }}
+                                                    />
+                                                    <div className="absolute inset-x-0 top-0 h-[1px] bg-white/30" />
+
+                                                    <div className="relative flex items-center gap-4">
+                                                        <div className="flex size-12 flex-shrink-0 items-center justify-center rounded-xl bg-black/25">
+                                                            {style.shape}
+                                                        </div>
+                                                        <span className="flex-1 break-words text-base font-bold leading-snug sm:text-lg">
+                                                            {option}
+                                                        </span>
+                                                        {selected && (
+                                                            <motion.div
+                                                                initial={{ scale: 0 }}
+                                                                animate={{ scale: 1 }}
+                                                                className="flex size-7 flex-shrink-0 items-center justify-center rounded-full bg-white text-current"
+                                                            >
+                                                                <CheckCircle2 className="size-5" />
+                                                            </motion.div>
+                                                        )}
+                                                    </div>
+                                                </motion.button>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+
+                                {activeQuestion.type === 'true_false' && (
+                                    <div className="grid flex-1 gap-3 content-start sm:grid-cols-2 sm:gap-4">
+                                        {[
+                                            ['true', 'Benar'],
+                                            ['false', 'Salah'],
+                                        ].map(([val, label], i) => {
+                                            const style = answerStyles[i === 0 ? 3 : 0];
+                                            const selected = activeAnswer === val;
+                                            return (
+                                                <motion.button
+                                                    key={val}
+                                                    type="button"
+                                                    onClick={() => setAnswer(activeQuestion.id, val)}
+                                                    disabled={processing || timeExpired}
+                                                    initial={{ opacity: 0, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    transition={{ delay: 0.1 + i * 0.1, type: 'spring' }}
+                                                    whileHover={{ scale: 1.02 }}
+                                                    whileTap={{ scale: 0.97 }}
+                                                    className={`flex min-h-[120px] items-center justify-center gap-4 rounded-2xl p-6 text-2xl font-black text-white shadow-xl transition-all ${
+                                                        selected ? style.selected : style.bg
+                                                    } disabled:cursor-not-allowed disabled:opacity-60`}
+                                                >
+                                                    <div className="flex size-14 items-center justify-center rounded-xl bg-black/25">
+                                                        {style.shape}
+                                                    </div>
+                                                    {label}
+                                                </motion.button>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+
+                                {activeQuestion.type === 'essay' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.15 }}
+                                        className="flex-1"
+                                    >
+                                        <textarea
+                                            value={answers[activeQuestion.id] ?? ''}
+                                            onChange={(e) => setAnswer(activeQuestion.id, e.target.value)}
+                                            rows="8"
+                                            placeholder="Tulis jawaban Anda di sini..."
+                                            disabled={processing || timeExpired}
+                                            className="min-h-[200px] w-full rounded-2xl border-2 border-white/15 bg-white/95 px-5 py-4 text-base leading-relaxed text-neutral-900 outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-400/20"
+                                        />
+                                    </motion.div>
+                                )}
+                            </motion.div>
                         ) : (
-                            <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-amber-800">
+                            <div className="m-auto rounded-2xl border border-amber-300/30 bg-amber-500/10 p-6 text-center text-amber-200">
                                 Quiz ini belum memiliki soal.
                             </div>
                         )}
-                    </div>
+                    </AnimatePresence>
+                </main>
 
-                    {form.errors.answers && <p role="alert" className="text-sm text-rose-600 font-semibold">{form.errors.answers}</p>}
-                    
-                    <div className="sticky bottom-3 z-20 rounded-2xl border border-neutral-200 bg-white/95 p-2 shadow-xl backdrop-blur sm:static sm:p-0 sm:shadow-none sm:border-0 sm:bg-transparent">
-                        <div className="grid grid-cols-[auto_1fr] gap-2 sm:grid-cols-[auto_auto_1fr]">
-                            <Button
+                {/* â”€â”€ BOTTOM BAR â”€â”€ */}
+                <footer className="flex flex-shrink-0 items-center gap-2 border-t border-white/10 bg-emerald-950/40 px-4 py-3 backdrop-blur sm:gap-3 sm:px-8 sm:py-4">
+                    <button
+                        type="button"
+                        onClick={() => goToQuestion(currentQuestionIndex - 1)}
+                        disabled={processing || currentQuestionIndex === 0}
+                        className="flex h-12 items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 text-sm font-bold text-white/80 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                    >
+                        <ChevronLeft className="size-4" />
+                        <span className="hidden sm:inline">Sebelumnya</span>
+                    </button>
+
+                    {!isLastQuestion ? (
+                        <>
+                            <button
                                 type="button"
-                                variant="outline"
-                                onClick={() => goToQuestion(currentQuestionIndex - 1)}
-                                disabled={form.processing || currentQuestionIndex === 0}
-                                className="h-12 rounded-xl px-4 font-bold"
+                                onClick={() => goToQuestion(currentQuestionIndex + 1)}
+                                disabled={processing || timeExpired}
+                                className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-white/10 px-4 text-sm font-bold text-white transition hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                                <ChevronLeft className="size-4" />
-                                <span className="hidden sm:inline">Sebelumnya</span>
-                            </Button>
-
-                            {!isLastQuestion && (
-                                <Button
-                                    type="button"
-                                    onClick={goToNextQuestion}
-                                    disabled={form.processing || totalQuestions === 0 || timeExpired}
-                                    className="h-12 rounded-xl bg-blue-600 px-4 font-bold text-white hover:bg-blue-700 sm:col-auto"
-                                >
-                                    <span>Lanjut</span>
-                                    <ChevronRight className="size-4" />
-                                </Button>
-                            )}
-
-                            <AnimatedButton
-                                type={isLastQuestion ? 'submit' : 'button'}
-                                onClick={isLastQuestion ? undefined : postQuiz}
-                                className={`h-12 w-full text-sm font-bold shadow-xl text-white ${
-                                    isLastQuestion
-                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700'
-                                        : 'bg-gradient-to-r from-neutral-700 to-neutral-900 hover:from-neutral-800 hover:to-black'
-                                }`}
-                                disabled={form.processing || totalQuestions === 0 || timeExpired}
+                                <span>Lanjut</span>
+                                <ChevronRight className="size-4" />
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <div className="flex-1" />
+                            <motion.button
+                                type="button"
+                                onClick={postQuiz}
+                                disabled={processing || totalQuestions === 0}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="relative flex h-12 items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-400 to-teal-400 px-6 text-sm font-bold text-emerald-950 shadow-xl shadow-emerald-500/40 transition disabled:cursor-not-allowed disabled:opacity-60"
                             >
-                                {form.processing && timeExpired ? 'Mengirim Otomatis...' : isLastQuestion ? 'Kirim Jawaban' : 'Selesaikan Sekarang'}
-                                <Send className="size-4" />
-                            </AnimatedButton>
-                        </div>
+                                <motion.div
+                                    className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                                    animate={{ x: ['-100%', '200%'] }}
+                                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                                />
+                                <span className="relative">
+                                    {processing ? 'Mengirim...' : 'Kirim Jawaban'}
+                                </span>
+                                <Send className="relative size-4" />
+                            </motion.button>
+                        </>
+                    )}
+                </footer>
+
+                {errors.answers && (
+                    <div className="absolute bottom-20 left-1/2 -translate-x-1/2 rounded-xl border border-rose-400/40 bg-rose-500/20 px-4 py-2 text-sm font-semibold text-rose-200 backdrop-blur">
+                        {errors.answers}
                     </div>
-                </form>
-            )}
+                )}
+            </div>
+
+            {/* Time expired overlay */}
+            <AnimatePresence>
+                {timeExpired && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 z-40 flex items-center justify-center bg-emerald-950/80 backdrop-blur-md"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.85, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="rounded-3xl border border-rose-400/30 bg-emerald-950 p-8 text-center shadow-2xl"
+                        >
+                            <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-rose-500/20">
+                                <Clock className="size-8 text-rose-400" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white">Waktu Habis</h3>
+                            <p className="mt-2 text-sm text-white/60">Mengirim jawabanmu otomatis...</p>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Exit confirmation modal */}
+            <AnimatePresence>
+                {showExitConfirm && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                        onClick={() => setShowExitConfirm(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-full max-w-md rounded-3xl border border-white/15 bg-emerald-950 p-6 shadow-2xl"
+                        >
+                            <div className="mb-4 flex size-14 items-center justify-center rounded-full bg-amber-500/20">
+                                <AlertTriangle className="size-7 text-amber-400" />
+                            </div>
+                            <h3 className="mb-2 text-xl font-bold text-white">Keluar dari Quiz?</h3>
+                            <p className="text-sm leading-relaxed text-white/60">
+                                Jawabanmu yang sudah diisi belum dikirim. Yakin ingin keluar?
+                            </p>
+                            <div className="mt-6 grid grid-cols-2 gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowExitConfirm(false)}
+                                    className="h-11 rounded-xl border border-white/15 bg-white/5 text-sm font-bold text-white transition hover:bg-white/10"
+                                >
+                                    Lanjutkan Quiz
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => window.location.reload()}
+                                    className="h-11 rounded-xl bg-rose-500 text-sm font-bold text-white transition hover:bg-rose-600"
+                                >
+                                    Ya, Keluar
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
@@ -1541,6 +2020,8 @@ function QuizView({ quiz, attempt }) {
 function AssignmentView({ assignment, submission }) {
     const form = useForm({ file: null, link_url: '' });
     const isLate = assignment.deadline && new Date() > new Date(assignment.deadline);
+    const isGraded = submission?.status === 'graded';
+    const passed = isGraded && submission.grade !== null;
 
     const submitAssignment = (event) => {
         event.preventDefault();
@@ -1551,72 +2032,101 @@ function AssignmentView({ assignment, submission }) {
     };
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-3">
+            {/* Header */}
             <div className="flex items-start gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25">
                     <ClipboardList className="size-5" />
                 </div>
-                <div className="flex-1">
-                    <h2 className="text-xl font-bold text-neutral-900">{assignment.title}</h2>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                        <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">
-                            Deadline: {assignment.deadline ? new Date(assignment.deadline).toLocaleString('id-ID') : 'Tidak ada'}
+                <div className="min-w-0 flex-1">
+                    <h2 className="break-words text-lg font-bold leading-snug text-neutral-900">{assignment.title}</h2>
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                            isLate ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'
+                        }`}>
+                            <Clock className="size-3" />
+                            {assignment.deadline
+                                ? new Date(assignment.deadline).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })
+                                : 'Tidak ada deadline'}
                         </span>
                         {isLate && (
-                            <span className="px-3 py-1 rounded-full bg-rose-100 text-rose-700 text-xs font-bold">
-                                ⚠️ Lewat Deadline
+                            <span className="rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-bold text-rose-700">
+                                Lewat Deadline
                             </span>
                         )}
                     </div>
                 </div>
                 {submission && (
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                        submission.status === 'graded' 
-                            ? 'bg-emerald-100 text-emerald-700' 
+                    <span className={`flex-shrink-0 rounded-full px-3 py-1 text-xs font-bold ${
+                        isGraded
+                            ? 'bg-emerald-100 text-emerald-700'
                             : submission.status === 'late'
                             ? 'bg-rose-100 text-rose-700'
-                            : 'bg-amber-100 text-amber-700'
+                            : 'bg-teal-100 text-teal-700'
                     }`}>
-                        {submission.status === 'graded' ? `Nilai: ${submission.grade}` : submission.status === 'late' ? 'Terlambat' : 'Sudah Dikumpulkan'}
+                        {isGraded ? `Nilai: ${submission.grade ?? 'â€”'}` : submission.status === 'late' ? 'Terlambat' : 'Dikumpulkan'}
                     </span>
                 )}
             </div>
 
+            {/* Description */}
             {assignment.description && (
-                <div className="rounded-xl border-2 border-neutral-200 bg-neutral-50/50 p-4">
-                    <h3 className="text-sm font-bold text-neutral-900 mb-2">📋 Deskripsi Tugas</h3>
-                    <p className="whitespace-pre-line text-sm leading-6 text-neutral-700">{assignment.description}</p>
+                <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-neutral-500">Deskripsi Tugas</p>
+                    <p className="whitespace-pre-line text-sm leading-relaxed text-neutral-700">{assignment.description}</p>
                 </div>
             )}
 
-            {submission?.status === 'graded' && submission.feedback && (
-                <div className="rounded-xl border-2 border-emerald-200 bg-emerald-50 p-4">
-                    <h3 className="text-sm font-bold text-emerald-900 mb-2">💬 Feedback Dosen</h3>
-                    <p className="whitespace-pre-line text-sm leading-6 text-emerald-800">{submission.feedback}</p>
+            {/* Feedback */}
+            {isGraded && submission.feedback && (
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-emerald-600">Feedback Dosen</p>
+                    <p className="whitespace-pre-line text-sm leading-relaxed text-emerald-800">{submission.feedback}</p>
                 </div>
             )}
 
-            {(!submission || submission.status !== 'graded') && (
-                <form onSubmit={submitAssignment} className="space-y-4">
-                    <div className="rounded-xl border-2 border-neutral-200 bg-white p-4 space-y-4">
+            {/* Grade display */}
+            {isGraded && (
+                <div className={`rounded-xl border-2 p-4 text-center ${
+                    Number(submission.grade) >= (assignment.passing_grade ?? 70)
+                        ? 'border-emerald-200 bg-emerald-50'
+                        : 'border-amber-200 bg-amber-50'
+                }`}>
+                    <p className={`text-3xl font-bold tabular-nums ${
+                        Number(submission.grade) >= (assignment.passing_grade ?? 70) ? 'text-emerald-700' : 'text-amber-700'
+                    }`}>
+                        {submission.grade}
+                    </p>
+                    <p className="mt-0.5 text-xs font-semibold text-neutral-500">Nilai Kamu</p>
+                </div>
+            )}
+
+            {/* Submit form */}
+            {!isGraded && (
+                <form onSubmit={submitAssignment} className="space-y-3">
+                    <div className="rounded-xl border border-neutral-200 bg-white p-4 space-y-4">
                         {assignment.allow_file && (
                             <div>
-                                <label htmlFor={`file-${assignment.id}`} className="block text-sm font-bold text-neutral-900 mb-2">
-                                    📎 Upload File
+                                <label htmlFor={`file-${assignment.id}`} className="mb-2 flex items-center gap-1.5 text-sm font-bold text-neutral-800">
+                                    <Upload className="size-4 text-emerald-600" />
+                                    Upload File
                                 </label>
                                 <input
                                     id={`file-${assignment.id}`}
                                     type="file"
                                     onChange={(e) => form.setData('file', e.target.files?.[0] ?? null)}
-                                    className="w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-100 file:px-4 file:py-2 file:text-emerald-700 file:font-bold cursor-pointer hover:file:bg-emerald-200 transition-colors"
+                                    className="w-full cursor-pointer text-sm text-neutral-600 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-100 file:px-4 file:py-2 file:text-sm file:font-bold file:text-emerald-700 hover:file:bg-emerald-200 transition-colors"
                                 />
-                                {form.errors.file && <p role="alert" className="mt-1.5 text-sm text-rose-600 font-semibold">{form.errors.file}</p>}
+                                {form.errors.file && (
+                                    <p role="alert" className="mt-1.5 text-xs font-semibold text-rose-600">{form.errors.file}</p>
+                                )}
                             </div>
                         )}
                         {assignment.allow_link && (
                             <div>
-                                <label htmlFor={`link-${assignment.id}`} className="block text-sm font-bold text-neutral-900 mb-2">
-                                    🔗 Link URL
+                                <label htmlFor={`link-${assignment.id}`} className="mb-2 flex items-center gap-1.5 text-sm font-bold text-neutral-800">
+                                    <Download className="size-4 text-emerald-600" />
+                                    Link URL
                                 </label>
                                 <input
                                     id={`link-${assignment.id}`}
@@ -1624,20 +2134,25 @@ function AssignmentView({ assignment, submission }) {
                                     value={form.data.link_url}
                                     onChange={(e) => form.setData('link_url', e.target.value)}
                                     placeholder="https://..."
-                                    className="h-10 w-full rounded-lg border-2 border-neutral-200 px-3 text-sm outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                                    className="h-10 w-full rounded-lg border-2 border-neutral-200 px-3 text-sm outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                                 />
-                                {form.errors.link_url && <p role="alert" className="mt-1.5 text-sm text-rose-600 font-semibold">{form.errors.link_url}</p>}
+                                {form.errors.link_url && (
+                                    <p role="alert" className="mt-1.5 text-xs font-semibold text-rose-600">{form.errors.link_url}</p>
+                                )}
                             </div>
                         )}
                     </div>
-                    <AnimatedButton
+
+                    <motion.button
                         type="submit"
-                        className="w-full h-11 text-sm font-bold bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white"
                         disabled={form.processing}
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="relative flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-sm font-bold text-white shadow-lg shadow-emerald-500/25 transition disabled:cursor-not-allowed disabled:opacity-60 hover:from-emerald-700 hover:to-teal-700"
                     >
-                        <Upload className="mr-1.5 size-4" />
-                        {submission ? 'Kirim Ulang Tugas' : 'Kirim Tugas'}
-                    </AnimatedButton>
+                        <Upload className="size-4" />
+                        {form.processing ? 'Mengirim...' : submission ? 'Kirim Ulang Tugas' : 'Kirim Tugas'}
+                    </motion.button>
                 </form>
             )}
         </div>
@@ -1707,7 +2222,7 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
             <form onSubmit={submitDiscussion} className="space-y-3">
                 {replyingTo && (
                     <div className="flex items-center justify-between rounded-lg bg-emerald-100 px-4 py-2 text-sm text-emerald-700 font-semibold">
-                        <span>💬 Membalas diskusi...</span>
+                        <span>ðŸ’¬ Membalas diskusi...</span>
                         <button type="button" onClick={cancelReply} className="text-emerald-900 hover:text-emerald-950 font-bold text-xs">
                             Batal
                         </button>
@@ -1750,7 +2265,7 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
                                 <div className="mt-2 flex items-center gap-3 text-xs text-neutral-500">
                                     <span>{new Date(discussion.created_at).toLocaleString('id-ID')}</span>
                                     <button type="button" onClick={() => startReply(discussion.id)} className="font-bold text-emerald-600 hover:text-emerald-700">
-                                        💬 Balas
+                                        ðŸ’¬ Balas
                                     </button>
                                     {discussion.user_id === auth?.user?.id && (
                                         <button
@@ -1758,7 +2273,7 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
                                             onClick={() => handleDelete(discussion.id)}
                                             className="font-bold text-rose-600 hover:text-rose-700"
                                         >
-                                            🗑️ Hapus
+                                            ðŸ—‘ï¸ Hapus
                                         </button>
                                     )}
                                 </div>

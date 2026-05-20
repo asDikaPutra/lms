@@ -1,0 +1,339 @@
+import { Head, Link, router } from '@inertiajs/react';
+import { BarChart3, TrendingUp, TrendingDown, AlertCircle, Clock, Download, Settings, FileText, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+
+import InstructorLayout from '@/Layouts/InstructorLayout';
+import CourseWorkspaceLayout from '@/components/instructor/CourseWorkspaceLayout';
+import { Button } from '@/components/ui/button';
+
+export default function Grades({ course, gradebook, needsGrading, stats, tab }) {
+    const [activeTab, setActiveTab] = useState(tab || 'gradebook');
+
+    const tabs = [
+        { id: 'gradebook', label: 'Gradebook', icon: BarChart3 },
+        { id: 'needs_grading', label: 'Perlu Dinilai', icon: Clock, count: stats.needs_grading },
+        { id: 'weights', label: 'Bobot Nilai', icon: Settings },
+        { id: 'export', label: 'Export', icon: Download },
+    ];
+
+    const handleTabChange = (tabId) => {
+        setActiveTab(tabId);
+        router.get(`/instructor/courses/${course.id}/grades`, { tab: tabId }, {
+            preserveState: true,
+            replace: true,
+            preserveScroll: true,
+        });
+    };
+
+    return (
+        <InstructorLayout title={`${course.name} - Nilai`}>
+            <Head title={`${course.name} - Nilai`} />
+
+            <CourseWorkspaceLayout course={course}>
+                <div className="space-y-6">
+                    {/* Header */}
+                    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                        <div>
+                            <h2 className="text-2xl font-bold text-neutral-900">Nilai</h2>
+                            <p className="text-sm text-neutral-600 mt-1">Kelola nilai dan rekap penilaian kursus ini.</p>
+                        </div>
+                        <div className="flex gap-2">
+                            <Button variant="outline" className="gap-2">
+                                <Download className="size-4" /> Export
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Stats Cards */}
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                        <StatCard label="Rata-rata Kelas" value={stats.avg_grade} icon={BarChart3} color="emerald" />
+                        <StatCard label="Nilai Tertinggi" value={stats.highest} icon={TrendingUp} color="teal" />
+                        <StatCard label="Nilai Terendah" value={stats.lowest} icon={TrendingDown} color="amber" />
+                        <StatCard label="Belum Lengkap" value={stats.incomplete} icon={AlertCircle} color="red" />
+                        <StatCard label="Perlu Dinilai" value={stats.needs_grading} icon={Clock} color="blue" />
+                    </div>
+
+                    {/* Tabs */}
+                    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden">
+                        <div className="border-b border-neutral-100">
+                            <nav className="flex gap-1 p-1.5">
+                                {tabs.map((t) => {
+                                    const Icon = t.icon;
+                                    return (
+                                        <button
+                                            key={t.id}
+                                            onClick={() => handleTabChange(t.id)}
+                                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                                                activeTab === t.id
+                                                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/25'
+                                                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                                            }`}
+                                        >
+                                            <Icon className="size-4" />
+                                            {t.label}
+                                            {t.count > 0 && (
+                                                <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${
+                                                    activeTab === t.id ? 'bg-white/20 text-white' : 'bg-amber-100 text-amber-700'
+                                                }`}>
+                                                    {t.count}
+                                                </span>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </nav>
+                        </div>
+
+                        <div className="p-4">
+                            {activeTab === 'gradebook' && <GradebookTab gradebook={gradebook} />}
+                            {activeTab === 'needs_grading' && <NeedsGradingTab items={needsGrading} courseId={course.id} />}
+                            {activeTab === 'weights' && <WeightsTab />}
+                            {activeTab === 'export' && <ExportTab />}
+                        </div>
+                    </div>
+                </div>
+            </CourseWorkspaceLayout>
+        </InstructorLayout>
+    );
+}
+
+function GradebookTab({ gradebook }) {
+    if (!gradebook || gradebook.length === 0) {
+        return (
+            <div className="text-center py-12">
+                <BarChart3 className="size-12 text-neutral-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-neutral-900 mb-2">Belum Ada Data Nilai</h3>
+                <p className="text-neutral-500">Data nilai akan muncul setelah mahasiswa mengerjakan tugas dan kuis.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="overflow-x-auto">
+            <table className="w-full min-w-[700px]">
+                <thead>
+                    <tr className="border-b border-neutral-100 bg-neutral-50/50">
+                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Mahasiswa</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Tugas</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Kuis</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Nilai Akhir</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Status</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-100">
+                    {gradebook.map((item, index) => (
+                        <tr key={index} className="hover:bg-neutral-50/50 transition-colors">
+                            <td className="py-3 px-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-medium text-sm">
+                                        {item.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-neutral-900">{item.user?.name ?? '-'}</p>
+                                        <p className="text-xs text-neutral-500">{item.user?.nim ?? '-'}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                <GradeCell value={item.assignment_avg} />
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                <GradeCell value={item.quiz_avg} />
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                <span className={`text-lg font-bold ${getGradeColor(item.final_grade)}`}>
+                                    {item.final_grade ?? '-'}
+                                </span>
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                {item.is_complete ? (
+                                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                        <CheckCircle2 className="size-3" /> Lengkap
+                                    </span>
+                                ) : (
+                                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 border border-amber-200">
+                                        <AlertCircle className="size-3" /> Belum Lengkap
+                                    </span>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+
+function NeedsGradingTab({ items, courseId }) {
+    if (!items || items.length === 0) {
+        return (
+            <div className="text-center py-12">
+                <CheckCircle2 className="size-12 text-emerald-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-neutral-900 mb-2">Semua Sudah Dinilai</h3>
+                <p className="text-neutral-500">Tidak ada submission yang perlu dinilai saat ini.</p>
+            </div>
+        );
+    }
+
+    const formatDate = (dateString) => {
+        if (!dateString) return '-';
+        return new Date(dateString).toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    };
+
+    return (
+        <div className="overflow-x-auto">
+            <table className="w-full min-w-[600px]">
+                <thead>
+                    <tr className="border-b border-neutral-100 bg-neutral-50/50">
+                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Item</th>
+                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Mahasiswa</th>
+                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Submit</th>
+                        <th className="text-right py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-100">
+                    {items.map((item) => (
+                        <tr key={item.id} className="hover:bg-neutral-50/50 transition-colors">
+                            <td className="py-3 px-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex size-8 items-center justify-center rounded-lg bg-amber-100">
+                                        <FileText className="size-4 text-amber-600" />
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-neutral-900">{item.assignment?.title ?? '-'}</p>
+                                        <p className="text-xs text-neutral-500">Tugas</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td className="py-3 px-4">
+                                <span className="text-sm text-neutral-600">{item.user?.name ?? '-'}</span>
+                            </td>
+                            <td className="py-3 px-4">
+                                <span className="text-sm text-neutral-500">{formatDate(item.submitted_at)}</span>
+                            </td>
+                            <td className="py-3 px-4">
+                                <div className="flex justify-end">
+                                    <Button size="sm" className="h-8 bg-emerald-600 hover:bg-emerald-700">
+                                        Nilai
+                                    </Button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+function WeightsTab() {
+    return (
+        <div className="max-w-md mx-auto py-8">
+            <div className="text-center mb-6">
+                <Settings className="size-12 text-neutral-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-neutral-900 mb-2">Bobot Nilai</h3>
+                <p className="text-neutral-500 text-sm">Atur bobot penilaian untuk setiap komponen.</p>
+            </div>
+            <div className="space-y-4 bg-neutral-50 rounded-xl p-6 border border-neutral-200">
+                <WeightItem label="Tugas" value={30} />
+                <WeightItem label="Kuis" value={20} />
+                <WeightItem label="Diskusi" value={10} />
+                <WeightItem label="UTS" value={20} />
+                <WeightItem label="UAS" value={20} />
+                <div className="pt-4 border-t border-neutral-200">
+                    <div className="flex justify-between items-center">
+                        <span className="font-semibold text-neutral-900">Total</span>
+                        <span className="font-bold text-emerald-600">100%</span>
+                    </div>
+                </div>
+            </div>
+            <p className="text-xs text-neutral-500 text-center mt-4">
+                Fitur pengaturan bobot akan segera tersedia.
+            </p>
+        </div>
+    );
+}
+
+function WeightItem({ label, value }) {
+    return (
+        <div className="flex justify-between items-center">
+            <span className="text-neutral-700">{label}</span>
+            <span className="font-medium text-neutral-900">{value}%</span>
+        </div>
+    );
+}
+
+function ExportTab() {
+    return (
+        <div className="text-center py-12">
+            <Download className="size-12 text-neutral-300 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-neutral-900 mb-2">Export Nilai</h3>
+            <p className="text-neutral-500 mb-6">Unduh rekap nilai dalam berbagai format.</p>
+            <div className="flex justify-center gap-3">
+                <Button variant="outline" className="gap-2">
+                    <FileText className="size-4" /> Excel
+                </Button>
+                <Button variant="outline" className="gap-2">
+                    <FileText className="size-4" /> CSV
+                </Button>
+                <Button variant="outline" className="gap-2">
+                    <FileText className="size-4" /> PDF
+                </Button>
+            </div>
+            <p className="text-xs text-neutral-500 mt-4">
+                Fitur export akan segera tersedia.
+            </p>
+        </div>
+    );
+}
+
+
+function GradeCell({ value }) {
+    if (value === null || value === undefined) {
+        return <span className="text-neutral-400">-</span>;
+    }
+    return <span className={`font-medium ${getGradeColor(value)}`}>{value}</span>;
+}
+
+function getGradeColor(value) {
+    if (value === null || value === undefined) return 'text-neutral-400';
+    if (value >= 80) return 'text-emerald-600';
+    if (value >= 60) return 'text-amber-600';
+    return 'text-red-600';
+}
+
+function StatCard({ label, value, icon: Icon, color }) {
+    const colors = {
+        emerald: 'from-emerald-500 to-teal-500 shadow-emerald-500/25',
+        teal: 'from-teal-500 to-cyan-500 shadow-teal-500/25',
+        amber: 'from-amber-500 to-orange-500 shadow-amber-500/25',
+        red: 'from-red-500 to-rose-500 shadow-red-500/25',
+        blue: 'from-blue-500 to-indigo-500 shadow-blue-500/25',
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4"
+        >
+            <div className="flex items-center gap-3">
+                <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
+                    <Icon className="size-5 text-white" />
+                </div>
+                <div>
+                    <p className="text-2xl font-bold text-neutral-900">{value}</p>
+                    <p className="text-xs text-neutral-500">{label}</p>
+                </div>
+            </div>
+        </motion.div>
+    );
+}

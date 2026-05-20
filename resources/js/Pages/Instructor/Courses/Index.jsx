@@ -1,9 +1,12 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { BookPlus, Edit3, RefreshCw, Search, Trash2, X, Plus, BookOpen, Layers3, CheckCircle2 } from 'lucide-react';
+import { BookOpen, CheckCircle2, Edit3, Plus, Search, Users, Layers3, ClipboardCheck, X } from 'lucide-react';
 import { cloneElement, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import { Button } from '@/components/ui/button';
+import { AnimatedPage, StaggerContainer } from '@/components/animated/AnimatedPage';
+import { fadeUp } from '@/lib/animations';
 
 const emptyForm = {
     code: '',
@@ -20,64 +23,29 @@ const emptyForm = {
 
 export default function Index({ courses, filters }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingCourse, setEditingCourse] = useState(null);
     const form = useForm(emptyForm);
     const filterForm = useForm({
         search: filters.search ?? '',
         status: filters.status ?? '',
     });
 
-    const openModal = (course = null) => {
-        if (course) {
-            setEditingCourse(course);
-            form.setData({
-                code: course.code ?? '',
-                name: course.name ?? '',
-                description: course.description ?? '',
-                semester: course.semester ?? '',
-                enrollment_type: course.enrollment_type ?? 'auto',
-                leaderboard_enabled: Boolean(course.leaderboard_enabled),
-                is_active: Boolean(course.is_active),
-                certificate_criteria: {
-                    min_progress: course.certificate_criteria?.min_progress ?? 100,
-                    min_score: course.certificate_criteria?.min_score ?? 70,
-                },
-            });
-        } else {
-            setEditingCourse(null);
-            form.reset();
-        }
+    const openModal = () => {
+        form.reset();
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setEditingCourse(null);
         form.reset();
         form.clearErrors();
     };
 
     const submitCourse = (event) => {
         event.preventDefault();
-
-        if (editingCourse) {
-            form.put(`/instructor/courses/${editingCourse.id}`, {
-                preserveScroll: true,
-                onSuccess: () => closeModal(),
-            });
-            return;
-        }
-
         form.post('/instructor/courses', {
             preserveScroll: true,
             onSuccess: () => closeModal(),
         });
-    };
-
-    const deleteCourse = (id) => {
-        if (confirm('Apakah Anda yakin ingin menghapus kursus ini? Semua data terkait akan ikut terhapus.')) {
-            router.delete(`/instructor/courses/${id}`, { preserveScroll: true });
-        }
     };
 
     useEffect(() => {
@@ -93,103 +61,169 @@ export default function Index({ courses, filters }) {
     }, [filterForm.data]);
 
     return (
-        <InstructorLayout title="Manajemen Kursus">
-            <Head title="Manajemen Kursus" />
+        <InstructorLayout title="Kursus Saya">
+            <Head title="Kursus Saya" />
 
-            <div className="w-full tracking-[-0.01em]">
-                <section aria-labelledby="course-list-title" className="rounded-[10px] bg-white p-4 lg:p-5 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)]">
-                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-[#edebe9] pb-4">
-                        <div>
-                            <h2 id="course-list-title" className="text-[18px] font-semibold text-sb-text-black tracking-[-0.16px]">
-                                Kursus Anda
-                            </h2>
-                            <p className="mt-0.5 text-[12px] text-sb-text-soft">Kelola daftar kursus, pendaftaran, dan kurikulum.</p>
+            <AnimatedPage>
+                {/* Header Section */}
+                <section className="mb-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+                    >
+                        <div className="space-y-2">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.1 }}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-100/80 backdrop-blur-sm border border-emerald-200/60"
+                            >
+                                <BookOpen className="size-3.5 text-emerald-700" />
+                                <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">
+                                    Manajemen Kursus
+                                </span>
+                            </motion.div>
+                            
+                            <motion.h1 
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2 }}
+                                className="text-3xl md:text-4xl font-bold tracking-tight leading-[1.1]"
+                            >
+                                <span className="bg-gradient-to-r from-emerald-700 via-teal-600 to-emerald-600 bg-clip-text text-transparent">
+                                    Kursus Saya
+                                </span>
+                            </motion.h1>
+                            
+                            <motion.p 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.3 }}
+                                className="max-w-2xl text-sm leading-relaxed text-neutral-600"
+                            >
+                                Kelola kursus yang Anda ampu.
+                            </motion.p>
                         </div>
-                        <div className="flex flex-wrap items-center gap-3">
-                            <div className="flex items-center gap-2" aria-label="Filter kursus">
-                                <div className="relative">
-                                    <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-sb-text-soft" aria-hidden="true" />
-                                    <input
-                                        id="course-search"
-                                        value={filterForm.data.search}
-                                        onChange={(event) => filterForm.setData('search', event.target.value)}
-                                        placeholder="Cari kursus..."
-                                        className="h-[36px] w-full rounded-[6px] border border-[#d6dbde] pl-8 pr-3 text-[13px] outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent md:w-48"
-                                    />
-                                </div>
-                                <select
-                                    id="course-status"
-                                    value={filterForm.data.status}
-                                    onChange={(event) => filterForm.setData('status', event.target.value)}
-                                    className="h-[36px] rounded-[6px] border border-[#d6dbde] px-3 py-0 text-[13px] outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent"
-                                >
-                                    <option value="">Semua Status</option>
-                                    <option value="active">Aktif</option>
-                                    <option value="inactive">Arsip</option>
-                                </select>
-                            </div>
-                            <Button onClick={() => openModal()} size="sm" className="h-[36px]">
-                                <Plus className="mr-1.5 size-4" /> Tambah Kursus
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 }}
+                        >
+                            <Button onClick={openModal} className="h-11 px-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30 transition-all">
+                                <Plus className="mr-2 size-4" /> Tambah Kursus
                             </Button>
-                        </div>
-                    </div>
-
-                    <div className="mt-4 overflow-x-auto">
-                        <table className="w-full min-w-[50rem] text-left text-[13px]">
-                            <thead>
-                                <tr className="border-b border-[#edebe9] text-sb-text-soft">
-                                    <th className="py-2.5 pr-4 font-medium">Informasi Kursus</th>
-                                    <th className="py-2.5 pr-4 font-medium">Kode Enroll</th>
-                                    <th className="py-2.5 pr-4 font-medium">Enrollment</th>
-                                    <th className="py-2.5 pr-4 font-medium">Status</th>
-                                    <th className="py-2.5 text-right font-medium">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-[#edebe9]">
-                                {courses.data.map((course) => (
-                                    <tr key={course.id} className="transition-colors hover:bg-slate-50">
-                                        <td className="py-3 pr-4">
-                                            <p className="font-semibold text-sb-text-black">{course.name}</p>
-                                            <p className="text-[12px] text-sb-text-soft uppercase tracking-[0.05em] mt-0.5">{course.code} &bull; {course.semester ?? 'TIDAK ADA SMT'}</p>
-                                        </td>
-                                        <td className="py-3 pr-4">
-                                            <span className="font-mono bg-[#f9f9f9] border border-[#edebe9] rounded-[4px] px-2 py-0.5 text-sb-text-black">{course.enroll_code}</span>
-                                        </td>
-                                        <td className="py-3 pr-4 text-sb-text-soft text-[12px]">
-                                            <span className="capitalize">{course.enrollment_type}</span> &bull; {course.active_enrollments_count} aktif, {course.pending_enrollments_count} pending
-                                        </td>
-                                        <td className="py-3 pr-4">
-                                            <span className={`inline-block rounded-pill px-2.5 py-0.5 text-[11px] font-medium border ${course.is_active ? 'bg-sb-light border-sb-light text-sb-green' : 'bg-white border-[#edebe9] text-sb-text-soft'}`}>
-                                                {course.is_active ? 'Aktif' : 'Arsip'}
-                                            </span>
-                                        </td>
-                                        <td className="py-3 text-right">
-                                            <div className="flex justify-end gap-1.5 items-center">
-                                                <Link href={`/instructor/courses/${course.id}`} className="inline-flex h-[28px] items-center justify-center rounded-[6px] border border-sb-green bg-sb-light/30 px-2.5 text-[11px] font-semibold text-sb-green hover:bg-sb-light transition-colors">
-                                                    <Layers3 className="mr-1.5 size-3.5" /> Builder
-                                                </Link>
-                                                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal(course)}>
-                                                    <Edit3 className="mr-1.5 size-3.5" /> Edit
-                                                </Button>
-                                                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-soft hover:text-sb-text-black hover:bg-slate-50" onClick={() => router.patch(`/instructor/courses/${course.id}/regenerate-code`, {}, { preserveScroll: true })}>
-                                                    <RefreshCw className="mr-1.5 size-3.5" /> Kode
-                                                </Button>
-                                                <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] font-medium border-[#edebe9] ${course.is_active ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50' : 'text-sb-green hover:text-sb-green hover:bg-sb-light'}`} onClick={() => router.patch(`/instructor/courses/${course.id}/toggle`, {}, { preserveScroll: true })}>
-                                                    {course.is_active ? 'Arsip' : 'Aktif'}
-                                                </Button>
-                                                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => deleteCourse(course.id)}>
-                                                    <Trash2 className="size-3.5" />
-                                                </Button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                        </motion.div>
+                    </motion.div>
                 </section>
 
-            </div>
+                {/* Filter and Search Bar */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                    {/* Filter Tabs */}
+                    <div className="flex gap-2">
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => filterForm.setData('status', '')}
+                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                filterForm.data.status === ''
+                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
+                                    : 'bg-white text-neutral-600 border border-neutral-200 hover:border-emerald-300'
+                            }`}
+                        >
+                            Semua
+                        </motion.button>
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => filterForm.setData('status', 'active')}
+                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                filterForm.data.status === 'active'
+                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
+                                    : 'bg-white text-neutral-600 border border-neutral-200 hover:border-emerald-300'
+                            }`}
+                        >
+                            Aktif
+                        </motion.button>
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => filterForm.setData('status', 'inactive')}
+                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                                filterForm.data.status === 'inactive'
+                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
+                                    : 'bg-white text-neutral-600 border border-neutral-200 hover:border-emerald-300'
+                            }`}
+                        >
+                            Arsip
+                        </motion.button>
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className="relative w-full sm:w-80">
+                        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+                        <motion.input
+                            whileFocus={{ scale: 1.01 }}
+                            value={filterForm.data.search}
+                            onChange={(event) => filterForm.setData('search', event.target.value)}
+                            placeholder="Cari kursus..."
+                            className="h-11 w-full rounded-xl border-2 border-neutral-200 pl-10 pr-4 text-sm outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 bg-white/90 backdrop-blur-sm shadow-sm"
+                        />
+                    </div>
+                </motion.div>
+
+                {/* Course Grid */}
+                <StaggerContainer delay={0.5} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    {courses.data.length === 0 && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="col-span-full rounded-2xl border-2 border-dashed border-neutral-200 p-12 text-center bg-white/60 backdrop-blur-sm"
+                        >
+                            <span className="text-5xl mb-4 block">📚</span>
+                            <p className="text-sm text-neutral-600 font-medium">
+                                Belum ada kursus yang dibuat.
+                            </p>
+                            <p className="text-xs text-neutral-500 mt-2">Klik tombol "Tambah Kursus" untuk membuat kursus baru.</p>
+                        </motion.div>
+                    )}
+                    {courses.data.map((course, index) => (
+                        <CourseCard key={course.id} course={course} delay={index * 0.1} />
+                    ))}
+                </StaggerContainer>
+
+                {/* Pagination */}
+                {courses.last_page > 1 && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.6 }}
+                        className="mt-8 flex justify-center gap-2"
+                    >
+                        {courses.links.map((link, index) => (
+                            <Link
+                                key={index}
+                                href={link.url ?? '#'}
+                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                                    link.active
+                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg'
+                                        : link.url
+                                        ? 'bg-white text-neutral-600 border border-neutral-200 hover:border-emerald-300'
+                                        : 'bg-neutral-100 text-neutral-400 cursor-not-allowed'
+                                }`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatedPage>
 
             {/* Modal Form */}
             {isModalOpen && (
@@ -197,7 +231,7 @@ export default function Index({ courses, filters }) {
                     <div className="w-full max-w-lg rounded-[12px] bg-white shadow-xl ring-1 ring-black/5 animate-in fade-in zoom-in-95 duration-200" role="dialog" aria-modal="true">
                         <div className="flex items-center justify-between border-b border-[#edebe9] px-5 py-4">
                             <h3 className="text-[16px] font-semibold text-sb-text-black">
-                                {editingCourse ? 'Edit Kursus' : 'Buat Kursus Baru'}
+                                Buat Kursus Baru
                             </h3>
                             <button onClick={closeModal} className="rounded-full p-1 text-sb-text-soft hover:bg-[#f9f9f9] hover:text-sb-text-black transition-colors">
                                 <X className="size-5" />
@@ -265,17 +299,10 @@ export default function Index({ courses, filters }) {
                                     </div>
                                 </div>
 
-                                {editingCourse && (
-                                    <label className="flex items-center gap-2 text-[13px] text-sb-text-black cursor-pointer">
-                                        <input type="checkbox" checked={form.data.is_active} onChange={(event) => form.setData('is_active', event.target.checked)} className="size-4 rounded border-[#d6dbde] text-sb-accent focus:ring-sb-accent" />
-                                        Kursus aktif (Publik)
-                                    </label>
-                                )}
-
                                 <div className="flex justify-end gap-3 pt-3">
                                     <Button type="button" variant="outline" onClick={closeModal}>Batal</Button>
                                     <Button type="submit" disabled={form.processing} className="px-6">
-                                        <CheckCircle2 className="mr-1.5 size-4" /> {editingCourse ? 'Simpan Perubahan' : 'Buat Kursus'}
+                                        <CheckCircle2 className="mr-1.5 size-4" /> Buat Kursus
                                     </Button>
                                 </div>
                             </form>
@@ -284,6 +311,138 @@ export default function Index({ courses, filters }) {
                 </div>
             )}
         </InstructorLayout>
+    );
+}
+
+function CourseCard({ course, delay }) {
+    const getStatusConfig = () => {
+        if (course.is_active) {
+            return {
+                label: 'Aktif',
+                className: 'bg-emerald-100/80 text-emerald-800 border-emerald-300/70',
+            };
+        }
+        return {
+            label: 'Arsip',
+            className: 'bg-neutral-100/80 text-neutral-600 border-neutral-300/70',
+        };
+    };
+
+    const status = getStatusConfig();
+
+    return (
+        <motion.article
+            variants={fadeUp}
+            whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3, ease: [0.23, 1, 0.32, 1] } }}
+            className="group relative overflow-hidden rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] hover:shadow-[0_12px_40px_rgb(16,185,129,0.2)] transition-all duration-400"
+        >
+            {/* Outer glow ring */}
+            <div className="absolute -inset-[2px] bg-gradient-to-br from-emerald-400 via-teal-400 to-green-500 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 rounded-2xl" />
+            
+            {/* Card container */}
+            <div className="relative bg-white rounded-2xl overflow-hidden border border-neutral-100">
+                {/* Header with gradient */}
+                <div className="relative h-28 bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-600 overflow-hidden">
+                    {/* Islamic pattern overlay */}
+                    <div
+                        className="absolute inset-0 opacity-[0.15]"
+                        style={{
+                            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                        }}
+                    />
+                    
+                    {/* Status badge */}
+                    <div className="absolute top-3 left-3">
+                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border shadow-sm backdrop-blur-sm ${status.className}`}>
+                            {status.label}
+                        </div>
+                    </div>
+
+                    {/* Course icon */}
+                    <motion.div
+                        animate={{ 
+                            y: [0, -4, 0],
+                        }}
+                        transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: 'easeInOut',
+                        }}
+                        className="absolute bottom-3 right-3 flex size-12 items-center justify-center rounded-xl bg-white/25 backdrop-blur-sm border border-white/40"
+                    >
+                        <BookOpen className="size-6 text-white" />
+                    </motion.div>
+                </div>
+
+                {/* Content section */}
+                <div className="p-5 space-y-4">
+                    {/* Course code badge */}
+                    <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                            <span className="size-1.5 rounded-full bg-emerald-500" />
+                            <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider font-mono">
+                                {course.code}
+                            </span>
+                        </span>
+                        {course.semester && (
+                            <span className="text-[10px] font-medium text-neutral-500 uppercase tracking-wider">
+                                {course.semester}
+                            </span>
+                        )}
+                    </div>
+                    
+                    {/* Course title */}
+                    <h3 className="text-base font-bold text-neutral-900 leading-snug line-clamp-2">
+                        {course.name}
+                    </h3>
+
+                    {/* Stats grid */}
+                    <div className="grid grid-cols-3 gap-3 py-3 border-y border-neutral-100">
+                        <div className="text-center">
+                            <div className="flex items-center justify-center gap-1 text-emerald-600 mb-1">
+                                <Users className="size-3.5" />
+                            </div>
+                            <p className="text-sm font-bold text-neutral-900">{course.active_enrollments_count}</p>
+                            <p className="text-[10px] text-neutral-500">Mahasiswa</p>
+                        </div>
+                        <div className="text-center border-x border-neutral-100">
+                            <div className="flex items-center justify-center gap-1 text-teal-600 mb-1">
+                                <Layers3 className="size-3.5" />
+                            </div>
+                            <p className="text-sm font-bold text-neutral-900">{course.modules_count ?? 0}</p>
+                            <p className="text-[10px] text-neutral-500">Modul</p>
+                        </div>
+                        <div className="text-center">
+                            <div className="flex items-center justify-center gap-1 text-amber-600 mb-1">
+                                <ClipboardCheck className="size-3.5" />
+                            </div>
+                            <p className="text-sm font-bold text-neutral-900">{course.pending_enrollments_count}</p>
+                            <p className="text-[10px] text-neutral-500">Pending</p>
+                        </div>
+                    </div>
+
+                    {/* Action button */}
+                    <Link href={`/instructor/courses/${course.id}`}>
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="relative w-full h-10 rounded-xl overflow-hidden group/btn shadow-md shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 group-hover/btn:from-emerald-700 group-hover/btn:via-teal-700 group-hover/btn:to-emerald-700 transition-all duration-300" />
+                            <span className="relative flex items-center justify-center gap-2 text-sm font-semibold text-white">
+                                Kelola
+                                <motion.span
+                                    animate={{ x: [0, 3, 0] }}
+                                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                                >
+                                    →
+                                </motion.span>
+                            </span>
+                        </motion.button>
+                    </Link>
+                </div>
+            </div>
+        </motion.article>
     );
 }
 

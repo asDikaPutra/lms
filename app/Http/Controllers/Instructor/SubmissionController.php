@@ -35,6 +35,15 @@ class SubmissionController extends Controller
     {
         abort_unless($this->ownedAssignmentIds($request)->contains($assignment->id), 403);
 
+        // Load the assignable with its parent relationships
+        // Module has course directly, Material has module.course
+        $assignment->load(['assignable.module.course']);
+        
+        // If assignable is a Module, also load its course directly
+        if ($assignment->assignable_type === 'module' || $assignment->assignable_type === Module::class) {
+            $assignment->load(['assignable.course']);
+        }
+
         $submissions = Submission::query()
             ->with(['user:id,name,nim'])
             ->where('assignment_id', $assignment->id)

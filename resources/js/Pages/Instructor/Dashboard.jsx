@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { BookOpen, CheckCircle2, Clock, FileCheck2, GraduationCap, HelpCircle, MessageSquare, TrendingUp } from 'lucide-react';
+import { BookOpen, CheckCircle2, Clock, FileCheck2, GraduationCap, HelpCircle, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import InstructorLayout from '@/Layouts/InstructorLayout';
@@ -7,11 +7,18 @@ import { AnimatedPage, StaggerContainer, FadeInWhenVisible } from '@/components/
 import { fadeUp } from '@/lib/animations';
 
 const statsConfig = [
-    { key: 'owned_courses', label: 'Kursus', icon: BookOpen, gradient: 'from-emerald-500 to-teal-600' },
-    { key: 'pending_enrollments', label: 'Menunggu Approval', icon: Clock, gradient: 'from-amber-500 to-orange-600' },
-    { key: 'submissions_needing_grading', label: 'Tugas Perlu Nilai', icon: FileCheck2, gradient: 'from-blue-500 to-cyan-600' },
-    { key: 'quiz_attempts_needing_grading', label: 'Quiz Perlu Nilai', icon: HelpCircle, gradient: 'from-purple-500 to-pink-600' },
+    { key: 'owned_courses', label: 'Kursus', icon: BookOpen, tone: 'emerald' },
+    { key: 'pending_enrollments', label: 'Menunggu Approval', icon: Clock, tone: 'amber' },
+    { key: 'submissions_needing_grading', label: 'Tugas Perlu Nilai', icon: FileCheck2, tone: 'blue' },
+    { key: 'quiz_attempts_needing_grading', label: 'Quiz Perlu Nilai', icon: HelpCircle, tone: 'slate' },
 ];
+
+const iconToneClasses = {
+    emerald: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+    amber: 'border-amber-200 bg-amber-50 text-amber-700',
+    blue: 'border-sky-200 bg-sky-50 text-sky-700',
+    slate: 'border-slate-200 bg-slate-50 text-slate-700',
+};
 
 export default function Dashboard({ stats, courses, pendingEnrollments, recentDiscussions }) {
     return (
@@ -72,9 +79,6 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                                 className="group relative overflow-hidden rounded-xl bg-white/90 backdrop-blur-sm p-5 shadow-lg border border-neutral-200/60 hover:shadow-2xl hover:border-emerald-200/60 transition-all"
                             >
-                                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-[0.07] transition-opacity duration-300`} />
-                                <div className={`absolute -inset-1 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300`} />
-                                
                                 <div className="relative flex items-start justify-between">
                                     <div>
                                         <motion.p 
@@ -87,13 +91,9 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                         </motion.p>
                                         <p className="mt-1.5 text-xs font-semibold text-neutral-600">{item.label}</p>
                                     </div>
-                                    <motion.div
-                                        whileHover={{ rotate: 360, scale: 1.1 }}
-                                        transition={{ duration: 0.5 }}
-                                        className={`flex size-11 items-center justify-center rounded-lg bg-gradient-to-br ${item.gradient} text-white shadow-lg`}
-                                    >
-                                        <Icon className="size-5" />
-                                    </motion.div>
+                                    <div className={`flex size-11 items-center justify-center rounded-[10px] border ${iconToneClasses[item.tone]}`}>
+                                        <Icon className="size-5" aria-hidden="true" />
+                                    </div>
                                 </div>
                             </motion.article>
                         );
@@ -108,13 +108,11 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                             whileHover={{ y: -2 }}
                             className="relative overflow-hidden rounded-2xl bg-white/90 backdrop-blur-xl p-6 shadow-xl border border-neutral-200/60 h-full"
                         >
-                            <div className="absolute -top-20 -right-20 w-32 h-32 bg-gradient-to-br from-emerald-400/10 to-teal-400/10 rounded-full blur-3xl" />
-                            
                             <div className="relative">
                                 <div className="flex items-center justify-between mb-6">
                                     <div>
                                         <h2 className="text-xl font-bold text-neutral-900 flex items-center gap-2.5">
-                                            <span className="text-2xl">📚</span>
+                                            <BookOpen className="size-5 text-emerald-700" aria-hidden="true" />
                                             Kursus Saya
                                         </h2>
                                         <p className="mt-1 text-xs text-neutral-600">Kelola dan pantau kursus Anda</p>
@@ -130,7 +128,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 <div className="grid gap-4 md:grid-cols-2">
                                     {courses.length === 0 && (
                                         <div className="col-span-2 rounded-xl border-2 border-dashed border-neutral-200 p-8 text-center bg-neutral-50/50">
-                                            <span className="text-4xl mb-3 block">📖</span>
+                                            <BookOpen className="mx-auto mb-3 size-8 text-neutral-400" aria-hidden="true" />
                                             <p className="text-xs text-neutral-500 font-medium">Belum ada kursus.</p>
                                         </div>
                                     )}
@@ -150,17 +148,14 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 whileHover={{ y: -2 }}
                                 className="relative overflow-hidden rounded-2xl bg-white/90 backdrop-blur-xl p-6 shadow-xl border border-neutral-200/60"
                             >
-                                <div className="absolute -top-20 -left-20 w-32 h-32 bg-gradient-to-br from-amber-400/10 to-orange-400/10 rounded-full blur-3xl" />
                                 
                                 <div className="relative">
                                     <div className="flex items-center gap-2.5 mb-6">
-                                        <motion.div
-                                            animate={{ rotate: [0, -10, 10, 0] }}
-                                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                                            className="flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg"
+                                        <div
+                                            className="flex size-10 items-center justify-center rounded-[10px] border border-amber-200 bg-amber-50 text-amber-700"
                                         >
-                                            <Clock className="size-5" />
-                                        </motion.div>
+                                            <Clock className="size-5" aria-hidden="true" />
+                                        </div>
                                         <div>
                                             <h2 className="text-xl font-bold text-neutral-900">Pengajuan Enrollment</h2>
                                             <p className="text-xs text-neutral-600">Perlu persetujuan Anda</p>
@@ -170,7 +165,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                     <div className="space-y-3">
                                         {pendingEnrollments.length === 0 && (
                                             <div className="text-center py-8 bg-neutral-50/50 rounded-xl">
-                                                <span className="text-4xl mb-3 block">✅</span>
+                                                <CheckCircle2 className="mx-auto mb-3 size-8 text-neutral-400" aria-hidden="true" />
                                                 <p className="text-xs text-neutral-500 font-medium">Belum ada pengajuan baru.</p>
                                             </div>
                                         )}
@@ -188,11 +183,10 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 whileHover={{ y: -2 }}
                                 className="relative overflow-hidden rounded-2xl bg-white/90 backdrop-blur-xl p-6 shadow-xl border border-neutral-200/60"
                             >
-                                <div className="absolute -top-20 -right-20 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-cyan-400/10 rounded-full blur-3xl" />
                                 
                                 <div className="relative">
                                     <div className="flex items-center gap-2.5 mb-6">
-                                        <div className="flex size-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 text-white shadow-lg">
+                                        <div className="flex size-10 items-center justify-center rounded-[10px] border border-sky-200 bg-sky-50 text-sky-700">
                                             <MessageSquare className="size-5" />
                                         </div>
                                         <div>
@@ -204,7 +198,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                     <div className="space-y-3 max-h-[400px] overflow-y-auto">
                                         {recentDiscussions.length === 0 && (
                                             <div className="text-center py-8 bg-neutral-50/50 rounded-xl">
-                                                <span className="text-4xl mb-3 block">💬</span>
+                                                <MessageSquare className="mx-auto mb-3 size-8 text-neutral-400" aria-hidden="true" />
                                                 <p className="text-xs text-neutral-500 font-medium">Belum ada diskusi.</p>
                                             </div>
                                         )}
@@ -228,16 +222,14 @@ function CourseCard({ course, delay }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay, duration: 0.4 }}
-            whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.2 } }}
-            className="group relative overflow-hidden rounded-xl bg-white/70 backdrop-blur-sm border border-neutral-200/60 shadow-lg hover:shadow-2xl hover:border-emerald-200/60 transition-all"
+            whileHover={{ y: -3, transition: { duration: 0.2 } }}
+            className="rounded-[12px] border border-neutral-200 bg-white shadow-sm transition-all hover:border-emerald-200 hover:shadow-md"
         >
-            <div className="absolute -inset-1 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300" />
-            
             <div className="relative p-4">
                 <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
-                        <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-100/60 backdrop-blur-sm border border-emerald-200/50 mb-2">
-                            <span className="size-1 rounded-full bg-emerald-500 animate-pulse" />
+                        <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 mb-2">
+                            <span className="size-1 rounded-full bg-emerald-600" />
                             <p className="text-[9px] font-bold text-emerald-700 uppercase tracking-wider font-mono">
                                 {course.code}
                             </p>
@@ -255,15 +247,15 @@ function CourseCard({ course, delay }) {
                 </div>
 
                 <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
-                    <div className="text-center p-2 rounded-lg bg-white/40 backdrop-blur-sm border border-white/60">
+                    <div className="text-center p-2 rounded-lg border border-neutral-200 bg-neutral-50">
                         <p className="font-bold text-neutral-900">{course.modules_count}</p>
                         <p className="text-[10px] text-neutral-600">Modul</p>
                     </div>
-                    <div className="text-center p-2 rounded-lg bg-white/40 backdrop-blur-sm border border-white/60">
+                    <div className="text-center p-2 rounded-lg border border-neutral-200 bg-neutral-50">
                         <p className="font-bold text-neutral-900">{course.active_enrollments_count}</p>
                         <p className="text-[10px] text-neutral-600">Aktif</p>
                     </div>
-                    <div className="text-center p-2 rounded-lg bg-white/40 backdrop-blur-sm border border-white/60">
+                    <div className="text-center p-2 rounded-lg border border-neutral-200 bg-neutral-50">
                         <p className="font-bold text-neutral-900">{course.pending_enrollments_count}</p>
                         <p className="text-[10px] text-neutral-600">Pending</p>
                     </div>
@@ -277,12 +269,7 @@ function CourseCard({ course, delay }) {
                         Buka builder
                         <span className="absolute -bottom-0.5 left-0 w-0 h-[2px] bg-emerald-600 group-hover/link:w-full transition-all duration-300" />
                     </span>
-                    <motion.span
-                        animate={{ x: [0, 4, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                        →
-                    </motion.span>
+                    <span aria-hidden="true">-&gt;</span>
                 </Link>
             </div>
         </motion.article>
@@ -295,8 +282,8 @@ function EnrollmentCard({ enrollment, delay }) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay, duration: 0.4 }}
-            whileHover={{ x: 4, y: -2 }}
-            className="group relative overflow-hidden rounded-xl bg-white/70 backdrop-blur-sm border border-neutral-200/60 p-3 hover:border-amber-200 hover:shadow-xl shadow-lg transition-all"
+            whileHover={{ y: -2 }}
+            className="rounded-[12px] border border-neutral-200 bg-white p-3 shadow-sm transition-all hover:border-amber-200 hover:bg-amber-50/30"
         >
             <div className="flex items-start gap-2">
                 <div className="size-8 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center border border-emerald-200/60 shrink-0">
@@ -314,7 +301,7 @@ function EnrollmentCard({ enrollment, delay }) {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => router.patch(`/instructor/courses/${enrollment.course.id}/enrollments/${enrollment.id}/approve`, {}, { preserveScroll: true })}
-                            className="flex-1 h-8 px-3 rounded-lg bg-gradient-to-r from-emerald-600/95 to-teal-600/95 backdrop-blur-sm text-white text-xs font-bold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-1.5"
+                            className="flex-1 h-8 px-3 rounded-lg bg-emerald-700 text-white text-xs font-bold transition-colors hover:bg-emerald-800 flex items-center justify-center gap-1.5"
                         >
                             <CheckCircle2 className="size-3" />
                             Setujui
@@ -340,8 +327,8 @@ function DiscussionCard({ discussion, delay }) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay, duration: 0.4 }}
-            whileHover={{ x: 4, y: -2 }}
-            className="group relative overflow-hidden rounded-xl bg-white/70 backdrop-blur-sm border border-neutral-200/60 p-3 hover:border-blue-200 hover:shadow-xl shadow-lg transition-all"
+            whileHover={{ y: -2 }}
+            className="rounded-[12px] border border-neutral-200 bg-white p-3 shadow-sm transition-all hover:border-blue-200 hover:bg-sky-50/30"
         >
             <div className="flex items-start gap-2">
                 <div className="size-8 rounded-full bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center border border-blue-200/60 shrink-0">
@@ -354,9 +341,9 @@ function DiscussionCard({ discussion, delay }) {
                     <p className="mt-1 text-xs text-neutral-600 line-clamp-2">{discussion.body}</p>
                     <div className="mt-2 flex items-center gap-2 text-[10px] text-neutral-500">
                         <span className="text-blue-600 font-semibold">{discussion.course_code}</span>
-                        <span>•</span>
+                        <span>/</span>
                         <span className="line-clamp-1">{discussion.material_title}</span>
-                        <span>•</span>
+                        <span>/</span>
                         <span>{new Date(discussion.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</span>
                     </div>
                     <Link 
@@ -367,12 +354,7 @@ function DiscussionCard({ discussion, delay }) {
                             Lihat diskusi
                             <span className="absolute -bottom-0.5 left-0 w-0 h-[2px] bg-blue-600 group-hover/link:w-full transition-all duration-300" />
                         </span>
-                        <motion.span
-                            animate={{ x: [0, 4, 0] }}
-                            transition={{ duration: 1.5, repeat: Infinity }}
-                        >
-                            →
-                        </motion.span>
+                    <span aria-hidden="true">-&gt;</span>
                     </Link>
                 </div>
             </div>

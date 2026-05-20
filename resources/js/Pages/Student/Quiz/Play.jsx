@@ -1,332 +1,443 @@
 import { useState, useEffect, useCallback } from 'react';
 import { router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, Zap } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/Components/ui/progress';
+import { Clock, ChevronRight } from 'lucide-react';
 
-const ANSWER_COLORS = [
-  { bg: 'bg-red-500', hover: 'hover:bg-red-600', text: 'text-white', icon: '△' },
-  { bg: 'bg-blue-500', hover: 'hover:bg-blue-600', text: 'text-white', icon: '◇' },
-  { bg: 'bg-amber-500', hover: 'hover:bg-amber-600', text: 'text-white', icon: '○' },
-  { bg: 'bg-green-500', hover: 'hover:bg-green-600', text: 'text-white', icon: '□' },
+// Quizizz-style answer shapes & colors — adapted to emerald/teal LMS palette
+const ANSWER_STYLES = [
+    {
+        bg: 'from-rose-500 to-red-600',
+        glow: 'shadow-rose-500/40',
+        border: 'border-rose-400/50',
+        icon: (
+            <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white/80">
+                <polygon points="12,2 22,22 2,22" />
+            </svg>
+        ),
+    },
+    {
+        bg: 'from-sky-500 to-blue-600',
+        glow: 'shadow-sky-500/40',
+        border: 'border-sky-400/50',
+        icon: (
+            <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white/80">
+                <polygon points="12,2 22,12 12,22 2,12" />
+            </svg>
+        ),
+    },
+    {
+        bg: 'from-amber-500 to-orange-500',
+        glow: 'shadow-amber-500/40',
+        border: 'border-amber-400/50',
+        icon: (
+            <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white/80">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+        ),
+    },
+    {
+        bg: 'from-emerald-500 to-teal-600',
+        glow: 'shadow-emerald-500/40',
+        border: 'border-emerald-400/50',
+        icon: (
+            <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white/80">
+                <rect x="2" y="2" width="20" height="20" rx="3" />
+            </svg>
+        ),
+    },
 ];
 
 export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
-  const [question, setQuestion] = useState(null);
-  const [currentQuestion, setCurrentQuestion] = useState(initialQuestionNumber);
-  const [totalQuestions, setTotalQuestions] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [feedback, setFeedback] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [startTime, setStartTime] = useState(null);
+    const [question, setQuestion] = useState(null);
+    const [currentQuestion, setCurrentQuestion] = useState(initialQuestionNumber);
+    const [totalQuestions, setTotalQuestions] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(0);
+    const [maxTime, setMaxTime] = useState(0);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [showFeedback, setShowFeedback] = useState(false);
+    const [feedback, setFeedback] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [startTime, setStartTime] = useState(null);
+    const [transitioning, setTransitioning] = useState(false);
 
-  const loadQuestion = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`/student/quiz-attempts/${attemptId}/questions/${currentQuestion}`, {
-        headers: {
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      setQuestion(data.question);
-      setTotalQuestions(data.total);
-      setTimeLeft(data.question.time_limit);
-      setStartTime(Date.now());
-      setSelectedAnswer(null);
-      setShowFeedback(false);
-      setFeedback(null);
-    } catch (error) {
-      console.error('Failed to load question:', error);
-      alert('Gagal memuat soal. Silakan refresh halaman.');
-    } finally {
-      setLoading(false);
-    }
-  }, [attemptId, currentQuestion]);
-
-  useEffect(() => {
-    loadQuestion();
-  }, [loadQuestion]);
-
-  useEffect(() => {
-    if (timeLeft <= 0 || showFeedback) return;
-
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          handleTimeout();
-          return 0;
+    const loadQuestion = useCallback(async () => {
+        setLoading(true);
+        setTransitioning(false);
+        try {
+            const response = await fetch(
+                `/student/quiz-attempts/${attemptId}/questions/${currentQuestion}`,
+                {
+                    headers: {
+                        Accept: 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                }
+            );
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            setQuestion(data.question);
+            setTotalQuestions(data.total);
+            setTimeLeft(data.question.time_limit);
+            setMaxTime(data.question.time_limit);
+            setStartTime(Date.now());
+            setSelectedAnswer(null);
+            setShowFeedback(false);
+            setFeedback(null);
+        } catch (error) {
+            console.error('Failed to load question:', error);
+        } finally {
+            setLoading(false);
         }
-        return prev - 1;
-      });
-    }, 1000);
+    }, [attemptId, currentQuestion]);
 
-    return () => clearInterval(timer);
-  }, [timeLeft, showFeedback]);
+    useEffect(() => {
+        loadQuestion();
+    }, [loadQuestion]);
 
-  const handleTimeout = async () => {
-    if (showFeedback) return;
-    
-    const timeTaken = Math.floor((Date.now() - startTime) / 1000);
-    
-    try {
-      const response = await fetch(
-        `/student/quiz-attempts/${attemptId}/questions/${currentQuestion}/submit`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          },
-          body: JSON.stringify({
-            answer: null,
-            time_taken: timeTaken,
-          }),
+    useEffect(() => {
+        if (timeLeft <= 0 || showFeedback || loading) return;
+        const timer = setInterval(() => {
+            setTimeLeft((prev) => {
+                if (prev <= 1) {
+                    handleTimeout();
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [timeLeft, showFeedback, loading]);
+
+    const handleTimeout = async () => {
+        if (showFeedback) return;
+        const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+        try {
+            const response = await fetch(
+                `/student/quiz-attempts/${attemptId}/questions/${currentQuestion}/submit`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({ answer: null, time_taken: timeTaken }),
+                }
+            );
+            const data = await response.json();
+            setFeedback(data);
+            setShowFeedback(true);
+        } catch (error) {
+            console.error('Failed to submit on timeout:', error);
         }
-      );
+    };
 
-      const data = await response.json();
-      setFeedback(data);
-      setShowFeedback(true);
-    } catch (error) {
-      console.error('Failed to submit answer:', error);
-    }
-  };
-
-  const handleAnswerSelect = async (answer) => {
-    if (showFeedback) return;
-    
-    setSelectedAnswer(answer);
-    const timeTaken = Math.floor((Date.now() - startTime) / 1000);
-
-    try {
-      const response = await fetch(
-        `/student/quiz-attempts/${attemptId}/questions/${currentQuestion}/submit`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          },
-          body: JSON.stringify({
-            answer,
-            time_taken: timeTaken,
-          }),
+    const handleAnswerSelect = async (answer) => {
+        if (showFeedback || selectedAnswer) return;
+        setSelectedAnswer(answer);
+        const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+        try {
+            const response = await fetch(
+                `/student/quiz-attempts/${attemptId}/questions/${currentQuestion}/submit`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({ answer, time_taken: timeTaken }),
+                }
+            );
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            setFeedback(data);
+            setShowFeedback(true);
+        } catch (error) {
+            console.error('Failed to submit answer:', error);
         }
-      );
+    };
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+    const handleNext = () => {
+        if (currentQuestion < totalQuestions) {
+            setCurrentQuestion((prev) => prev + 1);
+        } else {
+            handleFinish();
+        }
+    };
 
-      const data = await response.json();
-      setFeedback(data);
-      setShowFeedback(true);
-    } catch (error) {
-      console.error('Failed to submit answer:', error);
-      alert('Gagal submit jawaban. Silakan coba lagi.');
-    }
-  };
+    const handleFinish = async () => {
+        try {
+            const response = await fetch(`/student/quiz-attempts/${attemptId}/finish`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+            });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            router.visit(`/student/quiz-attempts/${attemptId}/result`);
+        } catch (error) {
+            console.error('Failed to finish quiz:', error);
+        }
+    };
 
-  const handleNext = () => {
-    if (currentQuestion < totalQuestions) {
-      setCurrentQuestion((prev) => prev + 1);
-    } else {
-      handleFinish();
-    }
-  };
+    // Timer ring calculation
+    const timerProgress = maxTime > 0 ? timeLeft / maxTime : 0;
+    const circumference = 2 * Math.PI * 22; // r=22
+    const strokeDashoffset = circumference * (1 - timerProgress);
+    const timerColor =
+        timerProgress > 0.5
+            ? '#10b981' // emerald
+            : timerProgress > 0.25
+            ? '#f59e0b' // amber
+            : '#ef4444'; // red
 
-  const handleFinish = async () => {
-    try {
-      const response = await fetch(`/student/quiz-attempts/${attemptId}/finish`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Quiz finished:', data);
-      router.visit(`/student/quiz-attempts/${attemptId}/result`);
-    } catch (error) {
-      console.error('Failed to finish quiz:', error);
-      alert('Gagal menyelesaikan quiz. Silakan coba lagi.');
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 flex items-center justify-center">
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="text-white text-2xl font-bold"
-        >
-          Loading...
-        </motion.div>
-      </div>
-    );
-  }
-
-  const progressPercentage = (currentQuestion / totalQuestions) * 100;
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 p-4">
-      {/* Header */}
-      <div className="max-w-5xl mx-auto mb-6">
-        <div className="flex items-center justify-between text-white mb-4">
-          <div className="text-lg font-bold">
-            {currentQuestion} / {totalQuestions}
-          </div>
-          <motion.div
-            animate={timeLeft <= 5 ? { scale: [1, 1.1, 1] } : {}}
-            transition={{ repeat: timeLeft <= 5 ? Infinity : 0, duration: 0.5 }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full ${
-              timeLeft <= 5 ? 'bg-red-500' : 'bg-white/20'
-            }`}
-          >
-            <Clock className="w-5 h-5" />
-            <span className="text-2xl font-bold">{timeLeft}</span>
-          </motion.div>
-        </div>
-        <Progress value={progressPercentage} className="h-3 bg-white/20" />
-      </div>
-
-      {/* Question Card */}
-      <AnimatePresence mode="wait">
-        {!showFeedback ? (
-          <motion.div
-            key={`question-${currentQuestion}`}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            className="max-w-5xl mx-auto"
-          >
-            {/* Question */}
-            <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              className="bg-white rounded-2xl shadow-2xl p-8 mb-6 min-h-[200px] flex items-center justify-center"
-            >
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center">
-                {question?.question}
-              </h2>
-            </motion.div>
-
-            {/* Answer Options */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {question?.options?.map((option, index) => {
-                const colors = ANSWER_COLORS[index % ANSWER_COLORS.length];
-                return (
-                  <motion.button
-                    key={index}
+    // Loading screen
+    if (loading) {
+        return (
+            <div className="fixed inset-0 bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 flex items-center justify-center">
+                <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleAnswerSelect(option)}
-                    className={`${colors.bg} ${colors.hover} ${colors.text} p-6 rounded-2xl text-left font-bold text-lg shadow-lg transition-all relative overflow-hidden group`}
-                  >
-                    <div className="absolute top-4 left-4 text-3xl opacity-50">
-                      {colors.icon}
-                    </div>
-                    <div className="pl-12">
-                      {option}
-                    </div>
-                    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors" />
-                  </motion.button>
-                );
-              })}
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key={`feedback-${currentQuestion}`}
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
-            className="max-w-3xl mx-auto"
-          >
-            <motion.div
-              initial={{ rotate: -180, scale: 0 }}
-              animate={{ rotate: 0, scale: 1 }}
-              transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-              className={`rounded-3xl shadow-2xl p-12 mb-6 ${
-                feedback?.is_correct ? 'bg-green-500' : 'bg-red-500'
-              }`}
-            >
-              <div className="text-center text-white">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
-                  className="text-8xl font-bold mb-4"
+                    className="flex flex-col items-center gap-4"
                 >
-                  {feedback?.is_correct ? '✓' : '✗'}
+                    <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        className="w-12 h-12 rounded-full border-4 border-emerald-500/30 border-t-emerald-400"
+                    />
+                    <span className="text-emerald-300 font-medium">Memuat soal...</span>
                 </motion.div>
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="text-4xl font-bold mb-4"
-                >
-                  {feedback?.is_correct ? 'Benar!' : 'Salah!'}
-                </motion.h2>
-                {!feedback?.is_correct && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="text-xl"
-                  >
-                    Jawaban benar: <span className="font-bold">{feedback?.correct_answer}</span>
-                  </motion.div>
-                )}
-                {feedback?.is_correct && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="flex items-center justify-center gap-2 text-2xl"
-                  >
-                    <Zap className="w-6 h-6" />
-                    <span>+{feedback?.points || 100} poin</span>
-                  </motion.div>
-                )}
-              </div>
-            </motion.div>
-
-            <div className="text-center">
-              <Button
-                onClick={handleNext}
-                size="lg"
-                className="bg-white text-purple-600 hover:bg-gray-100 text-xl px-12 py-6 rounded-full font-bold shadow-lg"
-              >
-                {currentQuestion < totalQuestions ? 'Lanjut' : 'Lihat Hasil'}
-              </Button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+        );
+    }
+
+    const progressPct = ((currentQuestion - 1) / totalQuestions) * 100;
+
+    return (
+        <div className="fixed inset-0 bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 overflow-hidden">
+            {/* Ambient background orbs */}
+            <motion.div
+                animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.25, 0.15] }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-emerald-500 rounded-full blur-3xl pointer-events-none"
+            />
+            <motion.div
+                animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+                className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-teal-500 rounded-full blur-3xl pointer-events-none"
+            />
+
+            {/* Geometric pattern */}
+            <div
+                className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                }}
+            />
+
+            {/* ── TOP BAR ── */}
+            <div className="relative z-10 flex items-center gap-4 px-4 sm:px-8 pt-5 pb-3">
+                {/* Question counter */}
+                <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full px-4 py-2">
+                    <span className="text-white font-bold text-sm tabular-nums">
+                        {currentQuestion}
+                    </span>
+                    <span className="text-white/40 text-sm">/</span>
+                    <span className="text-white/60 text-sm tabular-nums">{totalQuestions}</span>
+                </div>
+
+                {/* Progress bar */}
+                <div className="flex-1 h-2.5 bg-white/10 rounded-full overflow-hidden">
+                    <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${progressPct}%` }}
+                        transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+                        className="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full"
+                    />
+                </div>
+
+                {/* Timer ring */}
+                <div className="relative flex items-center justify-center w-14 h-14 flex-shrink-0">
+                    <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 48 48">
+                        <circle cx="24" cy="24" r="22" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3" />
+                        <motion.circle
+                            cx="24"
+                            cy="24"
+                            r="22"
+                            fill="none"
+                            stroke={timerColor}
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeDasharray={circumference}
+                            animate={{ strokeDashoffset }}
+                            transition={{ duration: 0.5 }}
+                        />
+                    </svg>
+                    <motion.span
+                        animate={timeLeft <= 5 ? { scale: [1, 1.2, 1] } : {}}
+                        transition={{ repeat: timeLeft <= 5 ? Infinity : 0, duration: 0.5 }}
+                        className="relative text-white font-bold text-sm tabular-nums"
+                        style={{ color: timerColor }}
+                    >
+                        {timeLeft}
+                    </motion.span>
+                </div>
+            </div>
+
+            {/* ── MAIN CONTENT ── */}
+            <div className="relative z-10 flex flex-col h-[calc(100%-80px)] px-4 sm:px-8 pb-6">
+                <AnimatePresence mode="wait">
+                    {!showFeedback ? (
+                        <motion.div
+                            key={`q-${currentQuestion}`}
+                            initial={{ opacity: 0, y: 40 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -40, scale: 0.95 }}
+                            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                            className="flex flex-col h-full"
+                        >
+                            {/* Question card */}
+                            <motion.div
+                                initial={{ scale: 0.95 }}
+                                animate={{ scale: 1 }}
+                                transition={{ delay: 0.1, duration: 0.4 }}
+                                className="relative flex-shrink-0 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/30 p-6 sm:p-8 mb-5 flex items-center justify-center min-h-[140px] sm:min-h-[160px]"
+                            >
+                                {/* Decorative top accent */}
+                                <div className="absolute top-0 left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent rounded-full" />
+
+                                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 text-center leading-snug">
+                                    {question?.question}
+                                </h2>
+                            </motion.div>
+
+                            {/* Answer grid */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1 content-start">
+                                {question?.options?.map((option, index) => {
+                                    const style = ANSWER_STYLES[index % ANSWER_STYLES.length];
+                                    return (
+                                        <motion.button
+                                            key={index}
+                                            initial={{ opacity: 0, scale: 0.85, y: 20 }}
+                                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                                            transition={{
+                                                delay: 0.15 + index * 0.08,
+                                                type: 'spring',
+                                                stiffness: 300,
+                                                damping: 20,
+                                            }}
+                                            whileHover={{ scale: 1.03, y: -3 }}
+                                            whileTap={{ scale: 0.97 }}
+                                            onClick={() => handleAnswerSelect(option)}
+                                            disabled={!!selectedAnswer}
+                                            className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${style.bg} shadow-xl ${style.glow} border ${style.border} p-5 text-left group transition-all duration-200 disabled:cursor-not-allowed`}
+                                        >
+                                            {/* Shine on hover */}
+                                            <motion.div
+                                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100"
+                                                animate={{ x: ['-100%', '200%'] }}
+                                                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0.5 }}
+                                            />
+
+                                            {/* Inner shadow top */}
+                                            <div className="absolute inset-x-0 top-0 h-[1px] bg-white/30" />
+
+                                            <div className="relative flex items-center gap-4">
+                                                {/* Shape icon */}
+                                                <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-black/20 rounded-xl">
+                                                    {style.icon}
+                                                </div>
+                                                <span className="text-white font-bold text-base sm:text-lg leading-snug">
+                                                    {option}
+                                                </span>
+                                            </div>
+                                        </motion.button>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+                    ) : (
+                        /* ── FEEDBACK SCREEN ── */
+                        <motion.div
+                            key={`fb-${currentQuestion}`}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            transition={{ type: 'spring', stiffness: 200, damping: 18 }}
+                            className="flex flex-col items-center justify-center h-full gap-6"
+                        >
+                            {/* Result icon */}
+                            <motion.div
+                                initial={{ scale: 0, rotate: -90 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                                transition={{ type: 'spring', stiffness: 250, damping: 15, delay: 0.1 }}
+                                className={`relative flex items-center justify-center w-32 h-32 rounded-full shadow-2xl ${
+                                    feedback?.is_correct
+                                        ? 'bg-gradient-to-br from-emerald-400 to-teal-500 shadow-emerald-500/50'
+                                        : 'bg-gradient-to-br from-rose-400 to-red-500 shadow-rose-500/50'
+                                }`}
+                            >
+                                {/* Pulse ring */}
+                                <motion.div
+                                    animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
+                                    transition={{ duration: 1.5, repeat: Infinity }}
+                                    className={`absolute inset-0 rounded-full ${
+                                        feedback?.is_correct ? 'bg-emerald-400' : 'bg-rose-400'
+                                    }`}
+                                />
+                                <span className="relative text-6xl">
+                                    {feedback?.is_correct ? '✓' : '✗'}
+                                </span>
+                            </motion.div>
+
+                            {/* Result text */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.25 }}
+                                className="text-center"
+                            >
+                                <h2 className="text-4xl font-bold text-white mb-2">
+                                    {feedback?.is_correct ? 'Benar!' : 'Salah!'}
+                                </h2>
+                                {!feedback?.is_correct && feedback?.correct_answer && (
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 0.4 }}
+                                        className="mt-3 px-5 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl"
+                                    >
+                                        <p className="text-white/60 text-sm mb-1">Jawaban yang benar:</p>
+                                        <p className="text-white font-bold text-lg">{feedback.correct_answer}</p>
+                                    </motion.div>
+                                )}
+                            </motion.div>
+
+                            {/* Next button */}
+                            <motion.button
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5 }}
+                                onClick={handleNext}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="relative flex items-center gap-3 px-10 py-4 bg-white text-emerald-800 font-bold text-lg rounded-2xl shadow-2xl shadow-black/30 overflow-hidden group"
+                            >
+                                <motion.div
+                                    className="absolute inset-0 bg-gradient-to-r from-emerald-50 to-teal-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                                />
+                                <span className="relative">
+                                    {currentQuestion < totalQuestions ? 'Soal Berikutnya' : 'Lihat Hasil'}
+                                </span>
+                                <ChevronRight className="relative w-5 h-5" />
+                            </motion.button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+        </div>
+    );
 }

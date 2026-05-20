@@ -92,4 +92,17 @@ class CourseController extends Controller
             'Content-Type' => 'text/csv',
         ]);
     }
+
+    public function destroy(Course $course): RedirectResponse
+    {
+        if ($course->enrollments()->where('status', 'active')->exists()) {
+            return back()->with('error', 'Tidak dapat menghapus kursus yang memiliki enrollment aktif.')
+                ->setStatusCode(409);
+        }
+
+        $course->delete();
+
+        return redirect()->route('admin.courses.index')
+            ->with('success', 'Kursus berhasil dihapus.');
+    }
 }

@@ -1,0 +1,370 @@
+import { Head, router } from '@inertiajs/react';
+import { TrendingUp, Users, Layers3, AlertTriangle, Activity, CheckCircle2, Clock } from 'lucide-react';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+
+import InstructorLayout from '@/Layouts/InstructorLayout';
+import CourseWorkspaceLayout from '@/components/instructor/CourseWorkspaceLayout';
+
+export default function Progress({ course, studentProgress, moduleProgress, stats, tab }) {
+    const [activeTab, setActiveTab] = useState(tab || 'students');
+
+    const tabs = [
+        { id: 'students', label: 'Per Mahasiswa', icon: Users },
+        { id: 'modules', label: 'Per Modul', icon: Layers3 },
+        { id: 'at_risk', label: 'Mahasiswa Berisiko', icon: AlertTriangle, count: stats.at_risk },
+    ];
+
+    const handleTabChange = (tabId) => {
+        setActiveTab(tabId);
+        router.get(`/instructor/courses/${course.id}/progress`, { tab: tabId }, {
+            preserveState: true,
+            replace: true,
+            preserveScroll: true,
+        });
+    };
+
+    return (
+        <InstructorLayout title={`${course.name} - Progres`}>
+            <Head title={`${course.name} - Progres`} />
+
+            <CourseWorkspaceLayout course={course}>
+                <div className="space-y-6">
+                    {/* Header */}
+                    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                        <div>
+                            <h2 className="text-2xl font-bold text-neutral-900">Progres</h2>
+                            <p className="text-sm text-neutral-600 mt-1">Pantau perkembangan belajar mahasiswa pada kursus ini.</p>
+                        </div>
+                    </div>
+
+                    {/* Stats Cards */}
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                        <StatCard label="Progres Kelas" value={stats.avg_progress} icon={TrendingUp} color="emerald" suffix="%" />
+                        <StatCard label="Mahasiswa Berisiko" value={stats.at_risk} icon={AlertTriangle} color="red" />
+                        <StatCard 
+                            label="Modul Terbanyak Selesai" 
+                            value={stats.most_completed_module ?? '-'} 
+                            icon={CheckCircle2} 
+                            color="teal" 
+                            isText 
+                        />
+                        <StatCard 
+                            label="Modul Paling Tertinggal" 
+                            value={stats.least_completed_module ?? '-'} 
+                            icon={Clock} 
+                            color="amber" 
+                            isText 
+                        />
+                    </div>
+
+                    {/* Tabs */}
+                    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden">
+                        <div className="border-b border-neutral-100">
+                            <nav className="flex gap-1 p-1.5">
+                                {tabs.map((t) => {
+                                    const Icon = t.icon;
+                                    return (
+                                        <button
+                                            key={t.id}
+                                            onClick={() => handleTabChange(t.id)}
+                                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                                                activeTab === t.id
+                                                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/25'
+                                                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                                            }`}
+                                        >
+                                            <Icon className="size-4" />
+                                            {t.label}
+                                            {t.count > 0 && (
+                                                <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${
+                                                    activeTab === t.id ? 'bg-white/20 text-white' : 'bg-red-100 text-red-700'
+                                                }`}>
+                                                    {t.count}
+                                                </span>
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </nav>
+                        </div>
+
+                        <div className="p-4">
+                            {activeTab === 'students' && <StudentProgressTab data={studentProgress} />}
+                            {activeTab === 'modules' && <ModuleProgressTab data={moduleProgress} />}
+                            {activeTab === 'at_risk' && <AtRiskTab data={studentProgress?.filter(s => s.is_at_risk) ?? []} />}
+                        </div>
+                    </div>
+                </div>
+            </CourseWorkspaceLayout>
+        </InstructorLayout>
+    );
+}
+
+function StudentProgressTab({ data }) {
+    if (!data || data.length === 0) {
+        return (
+            <div className="text-center py-12">
+                <Users className="size-12 text-neutral-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-neutral-900 mb-2">Belum Ada Data</h3>
+                <p className="text-neutral-500">Data progres akan muncul setelah mahasiswa mulai belajar.</p>
+            </div>
+        );
+    }
+
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Tidak ada aktivitas';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 60) return `${diffMins} menit lalu`;
+        if (diffHours < 24) return `${diffHours} jam lalu`;
+        if (diffDays < 7) return `${diffDays} hari lalu`;
+        return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+    };
+
+    return (
+        <div className="overflow-x-auto">
+            <table className="w-full min-w-[800px]">
+                <thead>
+                    <tr className="border-b border-neutral-100 bg-neutral-50/50">
+                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Mahasiswa</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Progres</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Modul</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Tugas</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Kuis</th>
+                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Aktivitas Terakhir</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Status</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-100">
+                    {data.map((item, index) => (
+                        <tr key={index} className="hover:bg-neutral-50/50 transition-colors">
+                            <td className="py-3 px-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-medium text-sm">
+                                        {item.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-neutral-900">{item.user?.name ?? '-'}</p>
+                                        <p className="text-xs text-neutral-500">{item.user?.nim ?? '-'}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td className="py-3 px-4">
+                                <div className="flex flex-col items-center gap-1">
+                                    <span className="text-sm font-medium text-neutral-900">{item.progress}%</span>
+                                    <div className="w-20 h-1.5 bg-neutral-200 rounded-full overflow-hidden">
+                                        <div 
+                                            className={`h-full rounded-full ${getProgressColor(item.progress)}`}
+                                            style={{ width: `${item.progress}%` }}
+                                        />
+                                    </div>
+                                </div>
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                <span className="text-sm text-neutral-600">{item.modules_completed}/{item.total_modules}</span>
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                <span className="text-sm text-neutral-600">{item.assignments_submitted}/{item.total_assignments}</span>
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                <span className="text-sm text-neutral-600">{item.quizzes_completed}/{item.total_quizzes}</span>
+                            </td>
+                            <td className="py-3 px-4">
+                                <span className="text-sm text-neutral-500">{formatDate(item.last_activity)}</span>
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                <StatusBadge isAtRisk={item.is_at_risk} />
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+
+function ModuleProgressTab({ data }) {
+    if (!data || data.length === 0) {
+        return (
+            <div className="text-center py-12">
+                <Layers3 className="size-12 text-neutral-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-neutral-900 mb-2">Belum Ada Modul</h3>
+                <p className="text-neutral-500">Buat modul di Struktur Kurikulum untuk melihat progres per modul.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="overflow-x-auto">
+            <table className="w-full min-w-[600px]">
+                <thead>
+                    <tr className="border-b border-neutral-100 bg-neutral-50/50">
+                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Modul</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Materi Selesai</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Tugas Submit</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Kuis Selesai</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Progres Rata-rata</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-100">
+                    {data.map((module) => (
+                        <tr key={module.id} className="hover:bg-neutral-50/50 transition-colors">
+                            <td className="py-3 px-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex size-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 font-bold text-sm">
+                                        {module.order}
+                                    </div>
+                                    <span className="font-medium text-neutral-900">{module.title}</span>
+                                </div>
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                <span className="text-sm text-neutral-600">
+                                    {module.content_completions}/{module.max_content_completions}
+                                </span>
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                <span className="text-sm text-neutral-600">{module.assignment_submissions}</span>
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                                <span className="text-sm text-neutral-600">{module.quiz_completions}</span>
+                            </td>
+                            <td className="py-3 px-4">
+                                <div className="flex flex-col items-center gap-1">
+                                    <span className="text-sm font-medium text-neutral-900">{module.avg_progress}%</span>
+                                    <div className="w-20 h-1.5 bg-neutral-200 rounded-full overflow-hidden">
+                                        <div 
+                                            className={`h-full rounded-full ${getProgressColor(module.avg_progress)}`}
+                                            style={{ width: `${module.avg_progress}%` }}
+                                        />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+function AtRiskTab({ data }) {
+    if (!data || data.length === 0) {
+        return (
+            <div className="text-center py-12">
+                <CheckCircle2 className="size-12 text-emerald-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-neutral-900 mb-2">Tidak Ada Mahasiswa Berisiko</h3>
+                <p className="text-neutral-500">Semua mahasiswa memiliki progres yang baik.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-4">
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                <div className="flex items-start gap-3">
+                    <AlertTriangle className="size-5 text-red-600 mt-0.5" />
+                    <div>
+                        <h4 className="font-medium text-red-900">Perhatian</h4>
+                        <p className="text-sm text-red-700 mt-1">
+                            Mahasiswa berikut memiliki progres di bawah 30% dan mungkin memerlukan perhatian khusus.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {data.map((item, index) => (
+                    <div key={index} className="bg-white border border-neutral-200 rounded-xl p-4">
+                        <div className="flex items-center gap-3 mb-3">
+                            <div className="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-red-400 to-rose-500 text-white font-medium">
+                                {item.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
+                            </div>
+                            <div>
+                                <p className="font-medium text-neutral-900">{item.user?.name ?? '-'}</p>
+                                <p className="text-xs text-neutral-500">{item.user?.nim ?? '-'}</p>
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                                <span className="text-neutral-500">Progres</span>
+                                <span className="font-medium text-red-600">{item.progress}%</span>
+                            </div>
+                            <div className="w-full h-2 bg-neutral-200 rounded-full overflow-hidden">
+                                <div 
+                                    className="h-full rounded-full bg-red-500"
+                                    style={{ width: `${item.progress}%` }}
+                                />
+                            </div>
+                            <div className="flex justify-between text-xs text-neutral-500 pt-1">
+                                <span>Modul: {item.modules_completed}/{item.total_modules}</span>
+                                <span>Tugas: {item.assignments_submitted}/{item.total_assignments}</span>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+
+function getProgressColor(value) {
+    if (value >= 70) return 'bg-emerald-500';
+    if (value >= 30) return 'bg-amber-500';
+    return 'bg-red-500';
+}
+
+function StatusBadge({ isAtRisk }) {
+    if (isAtRisk) {
+        return (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-200">
+                <AlertTriangle className="size-3" />
+                Berisiko
+            </span>
+        );
+    }
+    return (
+        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 border border-emerald-200">
+            <CheckCircle2 className="size-3" />
+            Aktif
+        </span>
+    );
+}
+
+function StatCard({ label, value, icon: Icon, color, suffix = '', isText = false }) {
+    const colors = {
+        emerald: 'from-emerald-500 to-teal-500 shadow-emerald-500/25',
+        teal: 'from-teal-500 to-cyan-500 shadow-teal-500/25',
+        amber: 'from-amber-500 to-orange-500 shadow-amber-500/25',
+        red: 'from-red-500 to-rose-500 shadow-red-500/25',
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4"
+        >
+            <div className="flex items-center gap-3">
+                <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
+                    <Icon className="size-5 text-white" />
+                </div>
+                <div className="min-w-0 flex-1">
+                    {isText ? (
+                        <p className="text-sm font-bold text-neutral-900 truncate">{value}</p>
+                    ) : (
+                        <p className="text-2xl font-bold text-neutral-900">{value}{suffix}</p>
+                    )}
+                    <p className="text-xs text-neutral-500">{label}</p>
+                </div>
+            </div>
+        </motion.div>
+    );
+}

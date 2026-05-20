@@ -1,202 +1,277 @@
 import { Head, Link } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Trophy, CheckCircle, XCircle, Clock, ArrowLeft, Zap } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, ArrowLeft, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Result({ attempt, courseId }) {
-  const totalQuestions = attempt.quiz.questions.length;
-  const answers = attempt.answers || {};
-  const correctAnswers = Object.values(answers).filter(a => a.is_correct).length;
-  const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
-  const passed = percentage >= (attempt.quiz.passing_score || 0);
+    const totalQuestions = attempt.quiz.questions.length;
+    const answers = attempt.answers || {};
+    const correctAnswers = Object.values(answers).filter((a) => a.is_correct).length;
+    const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+    const passed = percentage >= (attempt.quiz.passing_score || 0);
+    const totalTime = Object.values(answers).reduce((sum, a) => sum + (a.time_taken || 0), 0);
+    const courseUrl = courseId ? `/student/courses/${courseId}` : '/student/courses';
 
-  const totalTime = Object.values(answers).reduce((sum, a) => sum + (a.time_taken || 0), 0);
-  const courseUrl = courseId ? `/student/courses/${courseId}` : '/student/courses';
+    // Circular progress ring
+    const radius = 54;
+    const circumference = 2 * Math.PI * radius;
+    const strokeDashoffset = circumference * (1 - percentage / 100);
 
-  return (
-    <>
-      <Head title="Hasil Quiz" />
+    return (
+        <>
+            <Head title="Hasil Quiz" />
 
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Score Card */}
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0, rotateY: 180 }}
-            animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-            transition={{ type: 'spring', stiffness: 100, damping: 15 }}
-            className="bg-white rounded-3xl shadow-2xl overflow-hidden mb-6"
-          >
-            {/* Header */}
-            <div className={`p-12 text-center ${
-              passed 
-                ? 'bg-gradient-to-br from-green-400 to-emerald-500' 
-                : 'bg-gradient-to-br from-amber-400 to-orange-500'
-            }`}>
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-                className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-4"
-              >
-                <Trophy className={`w-12 h-12 ${passed ? 'text-green-600' : 'text-orange-600'}`} />
-              </motion.div>
-              
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-4xl font-bold text-white mb-2"
-              >
-                {passed ? '🎉 Selamat!' : '💪 Tetap Semangat!'}
-              </motion.h1>
-              
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-                className="text-7xl font-bold text-white mb-2"
-              >
-                {attempt.score}
-              </motion.div>
-              
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="text-2xl text-white/90"
-              >
-                {correctAnswers} / {totalQuestions} benar ({percentage}%)
-              </motion.p>
-            </div>
-
-            <div className="p-8">
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="fixed inset-0 bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 overflow-y-auto">
+                {/* Background orbs */}
                 <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.7 }}
-                  className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 text-center"
-                >
-                  <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <div className="text-3xl font-bold text-green-900">{correctAnswers}</div>
-                  <div className="text-sm text-green-700 font-medium">Benar</div>
-                </motion.div>
-
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+                    transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+                    className="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-500 rounded-full blur-3xl pointer-events-none"
+                />
                 <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                  className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 text-center"
-                >
-                  <XCircle className="w-8 h-8 text-red-600 mx-auto mb-2" />
-                  <div className="text-3xl font-bold text-red-900">
-                    {totalQuestions - correctAnswers}
-                  </div>
-                  <div className="text-sm text-red-700 font-medium">Salah</div>
-                </motion.div>
+                    animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.2, 0.1] }}
+                    transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+                    className="fixed -bottom-40 -right-40 w-[600px] h-[600px] bg-teal-500 rounded-full blur-3xl pointer-events-none"
+                />
 
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.9 }}
-                  className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 text-center"
-                >
-                  <Clock className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                  <div className="text-3xl font-bold text-blue-900">{totalTime}s</div>
-                  <div className="text-sm text-blue-700 font-medium">Total Waktu</div>
-                </motion.div>
-              </div>
+                {/* Geometric pattern */}
+                <div
+                    className="fixed inset-0 opacity-[0.03] pointer-events-none"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                    }}
+                />
 
-              {/* Question Review */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1 }}
-                className="space-y-4"
-              >
-                <h3 className="font-bold text-xl text-gray-900 flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-purple-600" />
-                  Review Jawaban
-                </h3>
-                <div className="max-h-96 overflow-y-auto space-y-3">
-                  {attempt.quiz.questions.map((question, index) => {
-                    const answer = answers[question.id];
-                    const isCorrect = answer?.is_correct || false;
+                <div className="relative z-10 min-h-full flex flex-col items-center justify-start py-10 px-4">
+                    <div className="w-full max-w-2xl">
+                        {/* ── SCORE HERO ── */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+                            className="relative bg-white/10 backdrop-blur-xl border border-white/15 rounded-3xl overflow-hidden mb-5 shadow-2xl shadow-black/30"
+                        >
+                            {/* Top accent */}
+                            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-400 to-transparent" />
 
-                    return (
-                      <motion.div
-                        key={question.id}
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 1.1 + index * 0.05 }}
-                        className={`border-2 rounded-xl p-4 ${
-                          isCorrect 
-                            ? 'border-green-300 bg-green-50' 
-                            : 'border-red-300 bg-red-50'
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                            isCorrect ? 'bg-green-500' : 'bg-red-500'
-                          }`}>
-                            {isCorrect ? (
-                              <CheckCircle className="w-5 h-5 text-white" />
-                            ) : (
-                              <XCircle className="w-5 h-5 text-white" />
-                            )}
-                          </div>
-                          <div className="flex-1">
-                            <div className="font-bold text-gray-900 mb-2">
-                              {index + 1}. {question.question}
+                            <div className="p-8 sm:p-10 flex flex-col items-center text-center">
+                                {/* Circular score ring */}
+                                <motion.div
+                                    initial={{ scale: 0, rotate: -180 }}
+                                    animate={{ scale: 1, rotate: 0 }}
+                                    transition={{ delay: 0.2, type: 'spring', stiffness: 150, damping: 15 }}
+                                    className="relative w-36 h-36 mb-6"
+                                >
+                                    <svg className="w-full h-full -rotate-90" viewBox="0 0 128 128">
+                                        {/* Track */}
+                                        <circle
+                                            cx="64" cy="64" r={radius}
+                                            fill="none"
+                                            stroke="rgba(255,255,255,0.1)"
+                                            strokeWidth="8"
+                                        />
+                                        {/* Progress */}
+                                        <motion.circle
+                                            cx="64" cy="64" r={radius}
+                                            fill="none"
+                                            stroke={passed ? '#10b981' : '#f59e0b'}
+                                            strokeWidth="8"
+                                            strokeLinecap="round"
+                                            strokeDasharray={circumference}
+                                            initial={{ strokeDashoffset: circumference }}
+                                            animate={{ strokeDashoffset }}
+                                            transition={{ delay: 0.5, duration: 1.2, ease: [0.23, 1, 0.32, 1] }}
+                                        />
+                                    </svg>
+                                    {/* Center content */}
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                        <motion.span
+                                            initial={{ opacity: 0, scale: 0.5 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            transition={{ delay: 0.7, type: 'spring' }}
+                                            className="text-4xl font-bold text-white tabular-nums"
+                                        >
+                                            {percentage}%
+                                        </motion.span>
+                                    </div>
+                                </motion.div>
+
+                                {/* Status */}
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: 0.6 }}
+                                    className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mb-3 ${
+                                        passed
+                                            ? 'bg-emerald-500/25 border border-emerald-400/40 text-emerald-300'
+                                            : 'bg-amber-500/25 border border-amber-400/40 text-amber-300'
+                                    }`}
+                                >
+                                    <span>{passed ? '🎉' : '💪'}</span>
+                                    <span>{passed ? 'Lulus' : 'Belum Lulus'}</span>
+                                </motion.div>
+
+                                <motion.h1
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.65 }}
+                                    className="text-2xl sm:text-3xl font-bold text-white mb-1"
+                                >
+                                    {passed ? 'Selamat!' : 'Tetap Semangat!'}
+                                </motion.h1>
+
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.7 }}
+                                    className="text-white/60 text-base"
+                                >
+                                    {correctAnswers} dari {totalQuestions} jawaban benar
+                                </motion.p>
                             </div>
-                            <div className="space-y-1 text-sm">
-                              <div>
-                                <span className="font-semibold text-gray-700">Jawaban Anda:</span>{' '}
-                                <span className={`font-medium ${isCorrect ? 'text-green-700' : 'text-red-700'}`}>
-                                  {answer?.answer || 'Tidak dijawab'}
-                                </span>
-                              </div>
-                              {!isCorrect && (
-                                <div>
-                                  <span className="font-semibold text-gray-700">Jawaban Benar:</span>{' '}
-                                  <span className="font-medium text-green-700">{question.correct_answer}</span>
-                                </div>
-                              )}
-                              <div className="text-gray-600 flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {answer?.time_taken || 0}s
-                              </div>
+
+                            {/* Stats row */}
+                            <div className="grid grid-cols-3 divide-x divide-white/10 border-t border-white/10">
+                                {[
+                                    {
+                                        icon: <CheckCircle className="w-5 h-5 text-emerald-400" />,
+                                        value: correctAnswers,
+                                        label: 'Benar',
+                                        color: 'text-emerald-300',
+                                    },
+                                    {
+                                        icon: <XCircle className="w-5 h-5 text-rose-400" />,
+                                        value: totalQuestions - correctAnswers,
+                                        label: 'Salah',
+                                        color: 'text-rose-300',
+                                    },
+                                    {
+                                        icon: <Clock className="w-5 h-5 text-sky-400" />,
+                                        value: `${totalTime}s`,
+                                        label: 'Waktu',
+                                        color: 'text-sky-300',
+                                    },
+                                ].map((stat, i) => (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ opacity: 0, y: 15 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.75 + i * 0.1 }}
+                                        className="flex flex-col items-center gap-1.5 py-5"
+                                    >
+                                        {stat.icon}
+                                        <span className={`text-2xl font-bold tabular-nums ${stat.color}`}>
+                                            {stat.value}
+                                        </span>
+                                        <span className="text-xs text-white/40 font-medium">{stat.label}</span>
+                                    </motion.div>
+                                ))}
                             </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
+                        </motion.div>
+
+                        {/* ── ANSWER REVIEW ── */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.9 }}
+                            className="bg-white/8 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden mb-5"
+                        >
+                            <div className="px-6 py-4 border-b border-white/10 flex items-center gap-2">
+                                <BookOpen className="w-4 h-4 text-emerald-400" />
+                                <h3 className="font-bold text-white text-sm uppercase tracking-widest">
+                                    Review Jawaban
+                                </h3>
+                            </div>
+
+                            <div className="divide-y divide-white/8">
+                                {attempt.quiz.questions.map((q, index) => {
+                                    const answer = answers[q.id];
+                                    const isCorrect = answer?.is_correct || false;
+
+                                    return (
+                                        <motion.div
+                                            key={q.id}
+                                            initial={{ opacity: 0, x: -15 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: 1 + index * 0.05 }}
+                                            className="px-6 py-4 flex items-start gap-4"
+                                        >
+                                            {/* Status dot */}
+                                            <div
+                                                className={`flex-shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold ${
+                                                    isCorrect
+                                                        ? 'bg-emerald-500/30 text-emerald-300'
+                                                        : 'bg-rose-500/30 text-rose-300'
+                                                }`}
+                                            >
+                                                {isCorrect ? '✓' : '✗'}
+                                            </div>
+
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-white/80 text-sm font-medium mb-2 leading-snug">
+                                                    <span className="text-white/40 mr-1">{index + 1}.</span>
+                                                    {q.question}
+                                                </p>
+                                                <div className="space-y-1 text-xs">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-white/40">Jawaban kamu:</span>
+                                                        <span
+                                                            className={`font-semibold ${
+                                                                isCorrect ? 'text-emerald-300' : 'text-rose-300'
+                                                            }`}
+                                                        >
+                                                            {answer?.answer || 'Tidak dijawab'}
+                                                        </span>
+                                                    </div>
+                                                    {!isCorrect && (
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-white/40">Jawaban benar:</span>
+                                                            <span className="font-semibold text-emerald-300">
+                                                                {q.correct_answer}
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Time taken */}
+                                            <div className="flex-shrink-0 flex items-center gap-1 text-white/30 text-xs">
+                                                <Clock className="w-3 h-3" />
+                                                <span>{answer?.time_taken || 0}s</span>
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+
+                        {/* ── BACK BUTTON ── */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 1.1 }}
+                        >
+                            <Link href={courseUrl}>
+                                <motion.div
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="relative w-full h-14 rounded-2xl overflow-hidden flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30 group cursor-pointer"
+                                >
+                                    {/* Shine */}
+                                    <motion.div
+                                        animate={{ x: ['-100%', '200%'] }}
+                                        transition={{ duration: 2, repeat: Infinity, repeatDelay: 1.5 }}
+                                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                                    />
+                                    <ArrowLeft className="relative w-5 h-5 text-white" />
+                                    <span className="relative text-white font-bold text-base">
+                                        Kembali ke Pembelajaran
+                                    </span>
+                                </motion.div>
+                            </Link>
+                        </motion.div>
+                    </div>
                 </div>
-              </motion.div>
-
-              {/* Action Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
-                className="mt-8"
-              >
-                <Button 
-                  asChild 
-                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-lg py-6 rounded-2xl font-bold"
-                >
-                  <Link href={courseUrl}>
-                    <ArrowLeft className="w-5 h-5 mr-2" />
-                    Kembali ke Pembelajaran
-                  </Link>
-                </Button>
-              </motion.div>
             </div>
-          </motion.div>
-        </div>
-      </div>
-    </>
-  );
+        </>
+    );
 }

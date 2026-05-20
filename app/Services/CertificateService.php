@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Certificate;
+use App\Models\Content;
+use App\Models\ContentProgress;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\User;
@@ -84,22 +86,28 @@ class CertificateService
      */
     public function calculateProgress(User $student, Course $course): float
     {
-        $totalContents = $course->modules()
-            ->where('is_published', true)
-            ->with(['materials' => fn($q) => $q->where('is_published', true)])
-            ->get()
-            ->flatMap(fn($module) => $module->materials)
-            ->flatMap(fn($material) => $material->contents)
-            ->count();
+        $contentIds = Content::query()
+            ->whereHas('material', function ($query) use ($course): void {
+                $query
+                    ->where('is_published', true)
+                    ->whereHas('module', function ($moduleQuery) use ($course): void {
+                        $moduleQuery
+                            ->where('course_id', $course->id)
+                            ->where('is_published', true);
+                    });
+            })
+            ->pluck('id');
+
+        $totalContents = $contentIds->count();
 
         if ($totalContents === 0) {
             return 100;
         }
 
-        $completedContents = \App\Models\ContentProgress::query()
+        $completedContents = ContentProgress::query()
             ->where('user_id', $student->id)
-            ->whereHas('content.material.module', fn($q) => $q->where('course_id', $course->id))
-            ->where('completed', true)
+            ->whereIn('content_id', $contentIds)
+            ->whereNotNull('completed_at')
             ->count();
 
         return round(($completedContents / $totalContents) * 100, 2);
