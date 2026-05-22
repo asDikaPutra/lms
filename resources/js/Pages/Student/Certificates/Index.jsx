@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { Award, GraduationCap } from 'lucide-react';
+import { Award, GraduationCap, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import StudentLayout from '@/Layouts/StudentLayout';
@@ -128,10 +128,7 @@ function CertificateCard({ certificate }) {
 
                     {/* Ornamental star SVG in corner */}
                     <div className="absolute top-3 right-3">
-                        <svg width="40" height="40" viewBox="0 0 48 48" fill="none" className="opacity-40 drop-shadow-lg">
-                            <path d="M24 4L28 16L40 20L28 24L24 36L20 24L8 20L20 16L24 4Z" fill="white" />
-                            <circle cx="24" cy="20" r="3" fill="white" fillOpacity="0.7" />
-                        </svg>
+                        <Sparkles className="size-10 text-white/40 drop-shadow-lg" />
                     </div>
 
                     {/* Floating Award icon */}

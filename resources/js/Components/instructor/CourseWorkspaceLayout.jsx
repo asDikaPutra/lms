@@ -123,13 +123,13 @@ export default function CourseWorkspaceLayout({ course, children, activeTab = ''
                             <Link
                                 key={item.href}
                                 href={fullHref}
-                                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                                className={`flex items-center gap-2 px-3.5 py-2 rounded-[10px] text-sm font-medium transition-all ${
                                     isActive
-                                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/25'
-                                        : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                                        ? 'bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-white shadow-[0_4px_12px_rgba(5,150,105,0.32)]'
+                                        : 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900'
                                 }`}
                             >
-                                <Icon className="size-4" />
+                                <Icon className="size-4 shrink-0" strokeWidth={1.75} />
                                 <span className="whitespace-nowrap">{item.label}</span>
                             </Link>
                         );

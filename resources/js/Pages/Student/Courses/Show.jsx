@@ -1,5 +1,5 @@
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
-import { AlertTriangle, Award, Ban, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ClipboardList, Clock, Download, FileText, HelpCircle, List, MessageSquare, PlayCircle, Send, Trash2, Upload, X, XCircle } from 'lucide-react';
+import { AlertTriangle, Award, Ban, BookOpen, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Circle, ClipboardList, Clock, Diamond, Download, FileText, HelpCircle, Layers3, List, MessageSquare, PlayCircle, Send, Square, Trash2, Triangle, Upload, Users, X, XCircle } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -36,16 +36,16 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === 'Escape') {
-                if (currentView !== 'overview') {
-                    navigateTo('overview');
-                } else {
+                if (showSidebar) {
                     setShowSidebar(false);
+                } else if (currentView !== 'overview') {
+                    navigateTo('overview');
                 }
             }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [currentView]);
+    }, [currentView, showSidebar]);
 
     const slideVariants = {
         enter: (direction) => ({
@@ -68,88 +68,128 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
         <StudentLayout title="Belajar">
             <Head title={`${course.name} - Belajar`} />
 
-            {/* Background - Nature Fresh */}
-            <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none bg-gradient-to-br from-emerald-50 via-teal-50/50 to-green-50">
-                <div
-                    className="absolute inset-0 opacity-[0.03]"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23059669' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
-                />
-            </div>
+            {/* Background — handled by AtmosphericBackground in layout */}
 
-            {/* Course Header */}
+            {/* Course Header - Same as Instructor */}
             <motion.div
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="relative mb-6 overflow-hidden rounded-[16px] border border-emerald-300/30 bg-gradient-to-br from-emerald-500 to-teal-600 px-5 py-6 text-white shadow-xl shadow-emerald-900/10 md:px-8 md:py-7"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-600 p-6 text-white shadow-xl shadow-emerald-500/20 relative overflow-hidden"
             >
+                {/* Islamic pattern overlay */}
                 <div
-                    className="absolute inset-0 opacity-[0.06]"
+                    className="absolute inset-0 opacity-[0.1]"
                     style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='56' height='56' viewBox='0 0 56 56' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Cpath d='M14 0v56M42 0v56M0 14h56M0 42h56'/%3E%3Ccircle cx='28' cy='28' r='6'/%3E%3C/g%3E%3C/svg%3E")`,
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
                     }}
                 />
-                
-                <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-                    <div className="flex-1">
-                        <h1 className="font-heading text-[26px] leading-tight">{course.name}</h1>
-                        <p className="mt-3 text-sm font-medium text-white/80">{course.code} - {course.instructor?.name}</p>
 
-                        {/* Certificate Button — shown below title on the left */}
-                        {course.certificate_criteria && (
-                            <div className="mt-4">
-                                {course.has_certificate ? (
-                                    <Link
-                                        href={`/student/certificates/${course.certificate_id}`}
-                                        className="inline-flex items-center gap-2 rounded-[10px] border border-white/30 bg-white/20 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-                                    >
-                                        <Award className="size-3.5" />
-                                        Lihat Sertifikat
-                                    </Link>
-                                ) : course.certificate_eligibility?.eligible ? (
-                                    <button
-                                        onClick={() => router.post(`/student/courses/${course.id}/certificates/request`)}
-                                        className="inline-flex items-center gap-2 rounded-[10px] border border-white/30 bg-white/20 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-                                    >
-                                        <Award className="size-3.5" />
-                                        Minta Sertifikat
-                                    </button>
-                                ) : null}
-                            </div>
-                        )}
-                    </div>
+                <div className="relative">
+                    {/* Back link */}
+                    <Link
+                        href="/student/courses"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-white/80 hover:text-white transition-colors mb-4"
+                    >
+                        <ChevronLeft className="size-4" />
+                        Kembali ke Kursus Saya
+                    </Link>
 
-                    <div className="flex w-full flex-col gap-2 sm:w-auto">
-                        {/* Progress */}
-                        <div className="flex min-w-[220px] items-center gap-3 rounded-[16px] border border-white/20 bg-white/10 px-5 py-3">
-                            <div className="text-right">
-                                <p className="text-[10px] font-bold text-white/80">Progress</p>
-                                <p className="text-[28px] font-bold leading-none text-white">{progress}%</p>
+                    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                        <div className="space-y-2">
+                            {/* Course code and semester */}
+                            <div className="flex items-center gap-3">
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
+                                    <span className="size-1.5 rounded-full bg-white" />
+                                    <span className="text-xs font-bold uppercase tracking-wider font-mono">
+                                        {course.code}
+                                    </span>
+                                </span>
+                                {course.semester && (
+                                    <span className="text-sm font-medium text-white/80">
+                                        {course.semester}
+                                    </span>
+                                )}
+                                {course.instructor?.name && (
+                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 text-xs font-semibold text-white/90">
+                                        <Users className="size-3.5" />
+                                        {course.instructor.name}
+                                    </span>
+                                )}
                             </div>
-                            <div className="h-2 w-full min-w-24 overflow-hidden rounded-full bg-white/25">
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${progress}%` }}
-                                    transition={{ duration: 1, ease: 'easeOut' }}
-                                    className="h-2 rounded-full bg-[#5DCAA5]"
-                                />
+
+                            {/* Course name */}
+                            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+                                {course.name}
+                            </h1>
+
+                            {/* Course info */}
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
+                                <span className="flex items-center gap-1.5">
+                                    <Layers3 className="size-4" />
+                                    {course.modules?.length ?? 0} Modul
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                    <BookOpen className="size-4" />
+                                    Belajar Mandiri
+                                </span>
                             </div>
+
+                            {/* Certificate Button */}
+                            {course.certificate_criteria && (
+                                <div className="pt-2">
+                                    {course.has_certificate ? (
+                                        <Link
+                                            href={`/student/certificates/${course.certificate_id}`}
+                                            className="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/20 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                                        >
+                                            <Award className="size-3.5" />
+                                            Lihat Sertifikat
+                                        </Link>
+                                    ) : course.certificate_eligibility?.eligible ? (
+                                        <button
+                                            type="button"
+                                            onClick={() => router.post(`/student/courses/${course.id}/certificates/request`)}
+                                            className="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/20 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                                        >
+                                            <Award className="size-3.5" />
+                                            Minta Sertifikat
+                                        </button>
+                                    ) : null}
+                                </div>
+                            )}
                         </div>
 
-                        {/* Sidebar Toggle */}
-                        <button
-                            onClick={() => setShowSidebar(!showSidebar)}
-                            className="inline-flex min-h-11 items-center justify-center rounded-[12px] border border-white/20 bg-white/10 px-4 text-xs font-semibold text-white transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-                        >
-                            Daftar Materi
-                        </button>
+                        <div className="flex flex-col gap-3 md:max-w-sm">
+                            <div className="flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-4 py-3 backdrop-blur-sm sm:rounded-2xl sm:px-5">
+                                <div className="shrink-0">
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/80">Progress</p>
+                                    <p className="text-2xl font-bold leading-none text-white sm:text-[28px]">{progress}%</p>
+                                </div>
+                                <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-white/25">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${progress}%` }}
+                                        transition={{ duration: 1, ease: 'easeOut' }}
+                                        className="h-2 rounded-full bg-white"
+                                    />
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setShowSidebar(true)}
+                                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 text-sm font-semibold text-white transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                            >
+                                <List className="size-4" />
+                                Daftar Materi
+                            </button>
+                        </div>
                     </div>
                 </div>
             </motion.div>
 
-            {/* Main Content Area */}
-            <div className="relative min-h-[600px]">
+            {/* Main Content Area with spacing */}
+            <div className="relative min-h-[600px] mt-6">
                 <AnimatePresence initial={false} custom={direction} mode="wait">
                     <motion.div
                         key={currentView}
@@ -204,13 +244,13 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                             animate={{ x: 0 }}
                             exit={{ x: 400 }}
                             transition={{ type: "spring", damping: 25 }}
-                            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-50 overflow-y-auto"
+                            className="fixed right-0 top-0 bottom-0 w-full max-w-md shadow-2xl z-50 overflow-y-auto bg-white dark:bg-[#111a15]"
                         >
-                            <div className="sticky top-0 bg-white border-b border-neutral-200 p-4 flex items-center justify-between">
-                                <h2 className="text-lg font-bold text-neutral-900">Daftar Materi</h2>
+                            <div className="sticky top-0 border-b p-4 flex items-center justify-between bg-white dark:bg-[#111a15] border-neutral-200 dark:border-white/[0.07]">
+                                <h2 className="text-lg font-bold text-neutral-900 dark:text-white/90">Daftar Materi</h2>
                                 <button
                                     onClick={() => setShowSidebar(false)}
-                                    className="p-1.5 rounded-lg hover:bg-neutral-100 transition-colors"
+                                    className="p-1.5 rounded-lg transition-colors hover:bg-neutral-100 dark:hover:bg-white/8 text-neutral-600 dark:text-white/50"
                                 >
                                     <X className="size-4" />
                                 </button>
@@ -222,13 +262,13 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                     onClick={() => navigateTo('overview')}
                                     className={`w-full text-left p-3 rounded-lg border-2 transition-all ${
                                         currentView === 'overview'
-                                            ? 'border-emerald-500 bg-emerald-50'
-                                            : 'border-neutral-200 hover:border-emerald-200 hover:bg-emerald-50/50'
+                                            ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-500/15'
+                                            : 'border-neutral-200 dark:border-white/10 hover:border-emerald-200 hover:bg-emerald-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
                                     }`}
                                 >
                                     <div>
-                                        <p className="text-xs font-bold text-neutral-900">Overview</p>
-                                        <p className="text-[10px] text-neutral-500">Lihat semua modul</p>
+                                        <p className="text-xs font-bold text-neutral-900 dark:text-white/80">Overview</p>
+                                        <p className="text-[10px] text-neutral-500 dark:text-white/35">Lihat semua modul</p>
                                     </div>
                                 </button>
 
@@ -238,21 +278,21 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                         {/* Module Header */}
                                         <button
                                             onClick={() => toggleModule(module.id)}
-                                            className="w-full text-left p-2.5 rounded-lg bg-neutral-100 hover:bg-neutral-200 transition-colors"
+                                            className="w-full text-left p-2.5 rounded-lg transition-colors bg-neutral-100 hover:bg-neutral-200 dark:bg-white/8 dark:hover:bg-white/12"
                                         >
                                             <div className="flex items-center justify-between">
-                                                <span className="text-xs font-semibold text-neutral-900">{module.title}</span>
+                                                <span className="text-xs font-semibold text-neutral-900 dark:text-white/80">{module.title}</span>
                                                 {expandedModules[module.id] ? (
-                                                    <ChevronUp className="size-3.5 text-neutral-600" />
+                                                    <ChevronUp className="size-3.5 text-neutral-600 dark:text-white/40" />
                                                 ) : (
-                                                    <ChevronDown className="size-3.5 text-neutral-600" />
+                                                    <ChevronDown className="size-3.5 text-neutral-600 dark:text-white/40" />
                                                 )}
                                             </div>
                                         </button>
 
                                         {/* Materials under Module */}
                                         {expandedModules[module.id] && (
-                                            <div className="ml-3 space-y-1.5 border-l-2 border-emerald-200 pl-2">
+                                            <div className="ml-3 space-y-1.5 border-l-2 border-emerald-200 dark:border-emerald-500/30 pl-2">
                                                 {/* Module-level Quizzes */}
                                                 {module.quizzes?.map((quiz) => (
                                                     <button
@@ -260,11 +300,11 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                         onClick={() => navigateTo(`quiz-${quiz.id}`)}
                                                         className={`w-full text-left p-2 rounded-lg border transition-all ${
                                                             currentView === `quiz-${quiz.id}`
-                                                                ? 'border-blue-500 bg-blue-50'
-                                                                : 'border-neutral-200 hover:border-blue-200 hover:bg-blue-50/50'
+                                                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/15'
+                                                                : 'border-neutral-200 dark:border-white/10 hover:border-blue-200 hover:bg-blue-50/50 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/10'
                                                         }`}
                                                     >
-                                                        <span className="block truncate text-xs font-medium text-neutral-900">{quiz.title}</span>
+                                                        <span className="block truncate text-xs font-medium text-neutral-900 dark:text-white/70">{quiz.title}</span>
                                                     </button>
                                                 ))}
 
@@ -275,11 +315,11 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                         onClick={() => navigateTo(`assignment-${assignment.id}`)}
                                                         className={`w-full text-left p-2 rounded-lg border transition-all ${
                                                             currentView === `assignment-${assignment.id}`
-                                                                ? 'border-amber-500 bg-amber-50'
-                                                                : 'border-neutral-200 hover:border-amber-200 hover:bg-amber-50/50'
+                                                                ? 'border-amber-500 bg-amber-50 dark:bg-amber-500/15'
+                                                                : 'border-neutral-200 dark:border-white/10 hover:border-amber-200 hover:bg-amber-50/50 dark:hover:border-amber-500/30 dark:hover:bg-amber-500/10'
                                                         }`}
                                                     >
-                                                        <span className="block truncate text-xs font-medium text-neutral-900">{assignment.title}</span>
+                                                        <span className="block truncate text-xs font-medium text-neutral-900 dark:text-white/70">{assignment.title}</span>
                                                     </button>
                                                 ))}
 
@@ -290,11 +330,11 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                         onClick={() => navigateTo(`material-${material.id}`)}
                                                         className={`w-full text-left p-2 rounded-lg border transition-all ${
                                                             currentView === `material-${material.id}`
-                                                                ? 'border-emerald-500 bg-emerald-50'
-                                                                : 'border-neutral-200 hover:border-emerald-200 hover:bg-emerald-50/50'
+                                                                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-500/15'
+                                                                : 'border-neutral-200 dark:border-white/10 hover:border-emerald-200 hover:bg-emerald-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
                                                         }`}
                                                     >
-                                                        <span className="block truncate text-xs font-medium text-neutral-900">{material.title}</span>
+                                                        <span className="block truncate text-xs font-medium text-neutral-900 dark:text-white/70">{material.title}</span>
                                                     </button>
                                                 ))}
                                             </div>
@@ -313,138 +353,139 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
 // Overview Page Component
 function OverviewPage({ course, expandedModules, toggleModule, navigateTo, completed, attemptsByQuizId, submissionsByAssignmentId }) {
     return (
-        <div className="space-y-4">
-            {/* Modules List */}
-            <div className="space-y-3">
-                <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-                    <div>
-                        <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-emerald-700">Daftar pembelajaran</p>
-                        <h2 className="text-xl font-bold text-neutral-950">Pilih aktivitas belajar</h2>
-                    </div>
-                    <p className="text-sm text-neutral-500">Urut dari quiz, tugas, lalu materi utama.</p>
+        <div className="space-y-5">
+            {/* Enhanced header section */}
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-400">Daftar Pembelajaran</p>
+                    <h2 className="text-2xl font-bold text-neutral-950 dark:text-white/90 sm:text-3xl">Pilih Aktivitas Belajar</h2>
                 </div>
-                
-                {course.modules.length === 0 && (
-                    <div className="rounded-xl border-2 border-dashed border-neutral-200 bg-white/90 p-8 text-center">
-                        <FileText className="size-12 mx-auto text-neutral-400 mb-3" />
-                        <p className="text-neutral-500 text-sm font-medium">Belum ada materi yang dipublish.</p>
+            </div>
+
+            {course.modules.length === 0 && (
+                <div className="rounded-2xl border-2 border-dashed border-neutral-300 dark:border-white/10 bg-white dark:bg-[#111a15] p-12 text-center shadow-sm">
+                    <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-neutral-100 dark:bg-white/8">
+                        <FileText className="size-8 text-neutral-400 dark:text-white/30" />
                     </div>
-                )}
+                    <p className="text-base font-semibold text-neutral-600 dark:text-white/50">Belum ada materi yang dipublish.</p>
+                    <p className="mt-1 text-sm text-neutral-500 dark:text-white/35">Instruktur sedang menyiapkan konten pembelajaran.</p>
+                </div>
+            )}
 
-                {course.modules.map((module) => {
-                    const isExpanded = expandedModules[module.id];
+            {course.modules.map((module) => {
+                const isExpanded = expandedModules[module.id];
 
-                    return (
-                        <motion.div
-                            key={module.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="overflow-hidden rounded-[14px] border border-neutral-200 bg-white"
+                return (
+                    <motion.div
+                        key={module.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="overflow-hidden rounded-2xl border-2 border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg transition-shadow hover:shadow-xl md:rounded-[18px]"
+                    >
+                        {/* Enhanced Module Header */}
+                        <button
+                            onClick={() => toggleModule(module.id)}
+                            type="button"
+                            className="w-full border-b-2 border-neutral-200 dark:border-white/[0.07] bg-gradient-to-br from-white to-neutral-50/50 dark:from-[#111a15] dark:to-[#0d1610] p-4 text-left transition-colors hover:from-emerald-50/30 hover:to-teal-50/30 dark:hover:from-emerald-500/5 dark:hover:to-teal-500/5 sm:p-5 md:p-6"
                         >
-                            {/* Module Header */}
-                            <button
-                                onClick={() => toggleModule(module.id)}
-                                className="w-full border-b border-neutral-200 p-4 text-left transition-colors hover:bg-emerald-50/40 md:p-5"
-                            >
-                                <div className="flex items-start justify-between gap-4">
-                                    <div className="min-w-0 flex-1">
-                                        <h3 className="text-[15px] font-semibold text-neutral-950">{module.title}</h3>
-                                        {module.description && (
-                                            <p className="mt-2 max-w-3xl text-[13px] leading-6 text-neutral-600">{module.description}</p>
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="min-w-0 flex-1">
+                                    <h3 className="text-lg font-bold leading-snug text-neutral-950 dark:text-white/90 sm:text-xl">{module.title}</h3>
+                                    {module.description && (
+                                        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-neutral-600 dark:text-white/45">{module.description}</p>
+                                    )}
+                                </div>
+                                <motion.div
+                                    animate={{ rotate: isExpanded ? 180 : 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral-200 dark:border-white/10 bg-white dark:bg-white/5 text-neutral-600 dark:text-white/50 shadow-sm"
+                                >
+                                    <ChevronDown className="size-5" />
+                                </motion.div>
+                            </div>
+                        </button>
+
+                        {/* Module Content (Expanded) */}
+                        <AnimatePresence>
+                            {isExpanded && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="bg-gradient-to-br from-neutral-50/50 to-white dark:from-[#0d1610] dark:to-[#111a15]"
+                                >
+                                    <div className="space-y-3 p-4 sm:p-5 md:p-6">
+                                        {/* Module-level Quizzes */}
+                                        {module.quizzes?.length > 0 && (
+                                            <div className="space-y-2">
+                                                {module.quizzes.map((quiz) => {
+                                                    const attempt = attemptsByQuizId?.[quiz.id];
+                                                    return (
+                                                        <LearningItemButton
+                                                            key={quiz.id}
+                                                            onClick={() => navigateTo(`quiz-${quiz.id}`)}
+                                                            tone="blue"
+                                                            title={quiz.title}
+                                                            eyebrow="Quiz"
+                                                            meta={`${quiz.questions.length} soal - Passing ${quiz.passing_score}`}
+                                                            status={attempt ? 'Selesai' : null}
+                                                        />
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+
+                                        {/* Module-level Assignments */}
+                                        {module.assignments?.length > 0 && (
+                                            <div className="space-y-2">
+                                                {module.assignments.map((assignment) => {
+                                                    const submission = submissionsByAssignmentId?.[assignment.id];
+                                                    return (
+                                                        <LearningItemButton
+                                                            key={assignment.id}
+                                                            onClick={() => navigateTo(`assignment-${assignment.id}`)}
+                                                            tone="amber"
+                                                            title={assignment.title}
+                                                            eyebrow="Tugas"
+                                                            meta={`Deadline: ${assignment.deadline ? new Date(assignment.deadline).toLocaleDateString('id-ID') : 'Tidak ada'}`}
+                                                            status={submission ? (submission.status === 'graded' ? 'Dinilai' : 'Dikumpulkan') : null}
+                                                        />
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+
+                                        {/* Materials */}
+                                        {module.materials?.length > 0 && (
+                                            <div className="space-y-2">
+                                                {module.materials.map((material) => {
+                                                    const contentCount = material.contents?.length || 0;
+                                                    const quizCount = material.quizzes?.length || 0;
+                                                    const assignmentCount = material.assignments?.length || 0;
+                                                    const completedCount = material.contents?.filter(c => completed.has(c.id)).length || 0;
+
+                                                    return (
+                                                        <LearningItemButton
+                                                            key={material.id}
+                                                            onClick={() => navigateTo(`material-${material.id}`)}
+                                                            tone="emerald"
+                                                            title={material.title}
+                                                            eyebrow="Materi"
+                                                            meta={`${completedCount}/${contentCount} konten${quizCount > 0 ? ` - ${quizCount} quiz` : ''}${assignmentCount > 0 ? ` - ${assignmentCount} tugas` : ''}`}
+                                                            status={completedCount === contentCount && contentCount > 0 ? 'Selesai' : null}
+                                                        />
+                                                    );
+                                                })}
+                                            </div>
                                         )}
                                     </div>
-                                    <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600">
-                                        {isExpanded ? (
-                                            <ChevronUp className="size-4" />
-                                        ) : (
-                                            <ChevronDown className="size-4" />
-                                        )}
-                                    </span>
-                                </div>
-                            </button>
-
-                            {/* Module Content (Expanded) */}
-                            <AnimatePresence>
-                                {isExpanded && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                        className="bg-white"
-                                    >
-                                        <div className="space-y-3 p-4 md:p-5">
-                                            {/* Module-level Quizzes */}
-                                            {module.quizzes?.length > 0 && (
-                                                <div className="space-y-2">
-                                                    {module.quizzes.map((quiz) => {
-                                                        const attempt = attemptsByQuizId?.[quiz.id];
-                                                        return (
-                                                            <LearningItemButton
-                                                                key={quiz.id}
-                                                                onClick={() => navigateTo(`quiz-${quiz.id}`)}
-                                                                tone="blue"
-                                                                title={quiz.title}
-                                                                eyebrow="Quiz"
-                                                                meta={`${quiz.questions.length} soal - Passing ${quiz.passing_score}`}
-                                                                status={attempt ? 'Selesai' : null}
-                                                            />
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
-
-                                            {/* Module-level Assignments */}
-                                            {module.assignments?.length > 0 && (
-                                                <div className="space-y-2">
-                                                    {module.assignments.map((assignment) => {
-                                                        const submission = submissionsByAssignmentId?.[assignment.id];
-                                                        return (
-                                                            <LearningItemButton
-                                                                key={assignment.id}
-                                                                onClick={() => navigateTo(`assignment-${assignment.id}`)}
-                                                                tone="amber"
-                                                                title={assignment.title}
-                                                                eyebrow="Tugas"
-                                                                meta={`Deadline: ${assignment.deadline ? new Date(assignment.deadline).toLocaleDateString('id-ID') : 'Tidak ada'}`}
-                                                                status={submission ? (submission.status === 'graded' ? 'Dinilai' : 'Dikumpulkan') : null}
-                                                            />
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
-
-                                            {/* Materials */}
-                                            {module.materials?.length > 0 && (
-                                                <div className="space-y-2">
-                                                    {module.materials.map((material) => {
-                                                        const contentCount = material.contents?.length || 0;
-                                                        const quizCount = material.quizzes?.length || 0;
-                                                        const assignmentCount = material.assignments?.length || 0;
-                                                        const completedCount = material.contents?.filter(c => completed.has(c.id)).length || 0;
-
-                                                        return (
-                                                            <LearningItemButton
-                                                                key={material.id}
-                                                                onClick={() => navigateTo(`material-${material.id}`)}
-                                                                tone="emerald"
-                                                                title={material.title}
-                                                                eyebrow="Materi"
-                                                                meta={`${completedCount}/${contentCount} konten${quizCount > 0 ? ` - ${quizCount} quiz` : ''}${assignmentCount > 0 ? ` - ${assignmentCount} tugas` : ''}`}
-                                                                status={completedCount === contentCount && contentCount > 0 ? 'Selesai' : null}
-                                                            />
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </motion.div>
-                    );
-                })}
-            </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
+                );
+            })}
         </div>
     );
 }
@@ -452,20 +493,20 @@ function OverviewPage({ course, expandedModules, toggleModule, navigateTo, compl
 // CriterionRow sub-component — single criterion display row
 function CriterionRow({ label, currentValue, threshold, met }) {
     return (
-        <div className="flex items-center gap-3 rounded-[10px] border border-neutral-100 bg-neutral-50 px-4 py-3">
+        <div className="flex items-center gap-3 rounded-[10px] border border-neutral-100 dark:border-white/[0.07] bg-neutral-50 dark:bg-white/5 px-4 py-3">
             {/* Mint accent bar */}
             <span className="h-8 w-[3px] shrink-0 rounded-full bg-[#5DCAA5]" aria-hidden="true" />
 
             {/* Label + current value */}
             <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-700">{label}</p>
-                <p className="mt-0.5 text-sm font-semibold text-neutral-950">{currentValue}</p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-700 dark:text-emerald-400">{label}</p>
+                <p className="mt-0.5 text-sm font-semibold text-neutral-950 dark:text-white/90">{currentValue}</p>
             </div>
 
             {/* Required threshold */}
             <div className="shrink-0 text-right">
-                <p className="text-[10px] font-medium text-neutral-400">Syarat</p>
-                <p className="text-sm font-semibold text-neutral-700">{threshold}</p>
+                <p className="text-[10px] font-medium text-neutral-400 dark:text-white/30">Syarat</p>
+                <p className="text-sm font-semibold text-neutral-700 dark:text-white/60">{threshold}</p>
             </div>
 
             {/* Status icon */}
@@ -511,28 +552,28 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
     };
 
     return (
-        <div className="overflow-hidden rounded-[14px] border border-neutral-200 bg-white">
+        <div className="overflow-hidden rounded-[14px] border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15]">
             {/* Section Header */}
-            <div className="flex items-center justify-between gap-3 border-b border-neutral-200 p-4 md:p-5">
+            <div className="flex items-center justify-between gap-3 border-b border-neutral-200 dark:border-white/[0.07] p-4 md:p-5">
                 <div className="flex items-center gap-3">
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-emerald-200 bg-emerald-50 text-emerald-700">
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400">
                         <Award className="size-5" aria-label="Sertifikat" />
                     </span>
                     <div>
-                        <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-700">Pencapaian</p>
-                        <h3 className="text-[15px] font-semibold text-neutral-950">Sertifikat Kursus</h3>
+                        <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-700 dark:text-emerald-400">Pencapaian</p>
+                        <h3 className="text-[15px] font-semibold text-neutral-950 dark:text-white/90">Sertifikat Kursus</h3>
                     </div>
                 </div>
 
                 {/* Eligibility Badge */}
                 {certificate_eligibility && (
                     eligible ? (
-                        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-[12px] font-semibold text-emerald-700">
+                        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 px-3 py-1.5 text-[12px] font-semibold text-emerald-700 dark:text-emerald-300">
                             <CheckCircle2 className="size-3.5" aria-hidden="true" />
                             Memenuhi Syarat
                         </span>
                     ) : (
-                        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1.5 text-[12px] font-semibold text-amber-700">
+                        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-100 dark:bg-amber-500/20 px-3 py-1.5 text-[12px] font-semibold text-amber-700 dark:text-amber-300">
                             <AlertTriangle className="size-3.5" aria-hidden="true" />
                             Belum Memenuhi Syarat
                         </span>
@@ -619,10 +660,10 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
             {/* Action Button */}
             {has_certificate ? (
                 /* View Certificate — already has one */
-                <div className="border-t border-neutral-100 px-4 pb-4 pt-3 md:px-5 md:pb-5">
+                <div className="border-t border-neutral-100 dark:border-white/[0.06] px-4 pb-4 pt-3 md:px-5 md:pb-5">
                     <Link
                         href={`/student/certificates/${certificate_id}`}
-                        className="inline-flex items-center gap-2 rounded-[10px] border border-emerald-300 bg-emerald-50 px-5 py-2.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+                        className="inline-flex items-center gap-2 rounded-[10px] border border-emerald-300 dark:border-emerald-500/40 bg-emerald-50 dark:bg-emerald-500/15 px-5 py-2.5 text-sm font-semibold text-emerald-700 dark:text-emerald-300 transition-colors hover:bg-emerald-100 dark:hover:bg-emerald-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
                     >
                         <Award className="size-4" aria-hidden="true" />
                         Lihat Sertifikat
@@ -653,43 +694,64 @@ function LearningItemButton({ tone, title, eyebrow, meta, status, onClick }) {
     const tones = {
         blue: {
             accent: 'bg-blue-500',
-            hover: 'hover:border-blue-200 hover:bg-blue-50/40',
+            hover: 'hover:border-blue-300 hover:bg-blue-50 hover:shadow-md',
             eyebrow: 'text-blue-700',
+            icon: 'bg-blue-100 text-blue-600',
         },
         amber: {
             accent: 'bg-amber-500',
-            hover: 'hover:border-amber-200 hover:bg-amber-50/40',
+            hover: 'hover:border-amber-300 hover:bg-amber-50 hover:shadow-md',
             eyebrow: 'text-amber-700',
+            icon: 'bg-amber-100 text-amber-600',
         },
         emerald: {
             accent: 'bg-emerald-500',
-            hover: 'hover:border-emerald-200 hover:bg-emerald-50/40',
+            hover: 'hover:border-emerald-300 hover:bg-emerald-50 hover:shadow-md',
             eyebrow: 'text-emerald-700',
+            icon: 'bg-emerald-100 text-emerald-600',
         },
     };
 
     const selectedTone = tones[tone] ?? tones.emerald;
 
     return (
-        <button
+        <motion.button
             type="button"
             onClick={onClick}
-            className={`group relative w-full overflow-hidden rounded-[10px] border border-neutral-200 bg-neutral-50 p-3 text-left transition-colors ${selectedTone.hover} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 md:px-4`}
+            whileHover={{ scale: 1.01, y: -2 }}
+            whileTap={{ scale: 0.99 }}
+            className={`group relative w-full overflow-hidden rounded-xl border-2 border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] p-4 text-left shadow-sm transition-all ${selectedTone.hover} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2`}
         >
-            <span className={`absolute inset-y-3 left-0 w-[3px] rounded-r-full ${selectedTone.accent}`} />
-            <div className="flex items-center gap-3 pl-2">
+            {/* Accent bar */}
+            <span className={`absolute inset-y-0 left-0 w-1 ${selectedTone.accent}`} />
+
+            <div className="flex items-start gap-4 pl-3">
+                {/* Icon badge — rounded-square app icon style */}
+                <span className={`inline-flex size-10 shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br text-white shadow-[0_4px_12px_rgba(5,150,105,0.28)] ${
+                    eyebrow === 'Quiz'
+                        ? 'from-blue-400 via-blue-500 to-indigo-600 shadow-[0_4px_12px_rgba(99,102,241,0.28)]'
+                        : eyebrow === 'Tugas'
+                        ? 'from-amber-400 via-amber-500 to-orange-500 shadow-[0_4px_12px_rgba(245,158,11,0.28)]'
+                        : 'from-emerald-400 via-emerald-500 to-teal-600'
+                }`}>
+                    {eyebrow === 'Quiz' && <HelpCircle className="size-5" strokeWidth={1.75} />}
+                    {eyebrow === 'Tugas' && <ClipboardList className="size-5" strokeWidth={1.75} />}
+                    {eyebrow === 'Materi' && <BookOpen className="size-5" strokeWidth={1.75} />}
+                </span>
+
                 <div className="min-w-0 flex-1">
-                    <p className={`text-[10px] font-bold uppercase tracking-[0.08em] ${selectedTone.eyebrow}`}>{eyebrow}</p>
-                    <p className="mt-0.5 truncate text-sm font-medium text-neutral-950">{title}</p>
-                    {meta && <p className="mt-1 text-[12px] text-neutral-500">{meta}</p>}
+                    <p className="mt-1 text-base font-semibold leading-snug text-neutral-950 dark:text-white/90">{title}</p>
+                    {meta && <p className="mt-1.5 text-sm text-neutral-600 dark:text-white/45">{meta}</p>}
                 </div>
+
                 {status && (
-                    <span className="inline-flex shrink-0 items-center rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-100 dark:bg-emerald-500/20 px-3 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                        <CheckCircle2 className="size-3.5" />
                         {status}
                     </span>
                 )}
             </div>
-        </button>
+        </motion.button>
     );
 }
 
@@ -781,8 +843,8 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
 
     if (!currentItem) {
         return (
-            <div className="rounded-3xl bg-white/90 backdrop-blur-xl p-8 shadow-2xl border border-neutral-200/60 text-center">
-                <p className="text-neutral-500">Item tidak ditemukan</p>
+            <div className="rounded-3xl bg-white/90 dark:bg-[#111a15] backdrop-blur-xl p-8 shadow-2xl border border-neutral-200/60 dark:border-white/[0.07] text-center">
+                <p className="text-neutral-500 dark:text-white/40">Item tidak ditemukan</p>
                 <button
                     onClick={() => navigateTo('overview')}
                     className="mt-4 px-6 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-semibold"
@@ -798,15 +860,15 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
             {/* Back Button */}
             <button
                 onClick={() => navigateTo('overview')}
-                className="flex items-center gap-1.5 text-emerald-700 hover:text-emerald-800 font-semibold text-sm transition-colors"
+                className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 font-semibold text-sm transition-colors"
             >
                 <ChevronLeft className="size-4" />
                 Kembali ke Overview
             </button>
 
             {/* Breadcrumb */}
-            <div className="text-xs text-neutral-600">
-                <span className="font-semibold text-emerald-600">{currentModule.title}</span>
+            <div className="text-xs text-neutral-600 dark:text-white/40">
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400">{currentModule.title}</span>
                 {currentMaterial && (
                     <>
                         <span className="mx-1.5">/</span>
@@ -816,7 +878,7 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
             </div>
 
             {/* Content Renderer */}
-            <div className="min-h-[400px] overflow-hidden rounded-[24px] border border-white/70 bg-white/95 shadow-[0_18px_60px_rgba(15,23,42,0.10)] backdrop-blur-xl">
+            <div className="min-h-[400px]">
                 {currentItem.type === 'material' && (
                     <MaterialView 
                         material={currentItem.data} 
@@ -827,21 +889,29 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
                     />
                 )}
                 {currentItem.type === 'content' && (
-                    <div className="p-4 md:p-6">
-                        <ContentView content={currentItem.data} completed={currentItem.completed} />
+                    <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg md:rounded-[24px]">
+                        <div className="p-4 md:p-6">
+                            <ContentView content={currentItem.data} completed={currentItem.completed} />
+                        </div>
                     </div>
                 )}
                 {currentItem.type === 'quiz' && (
-                    <QuizView quiz={currentItem.data} attempt={currentItem.attempt} />
+                    <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg md:rounded-[24px]">
+                        <QuizView quiz={currentItem.data} attempt={currentItem.attempt} />
+                    </div>
                 )}
                 {currentItem.type === 'assignment' && (
-                    <div className="p-4 md:p-6">
-                        <AssignmentView assignment={currentItem.data} submission={currentItem.submission} />
+                    <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg md:rounded-[24px]">
+                        <div className="p-4 md:p-6">
+                            <AssignmentView assignment={currentItem.data} submission={currentItem.submission} />
+                        </div>
                     </div>
                 )}
                 {currentItem.type === 'discussion' && (
-                    <div className="p-4 md:p-6">
-                        <DiscussionView materialId={currentItem.materialId} discussions={currentItem.discussions} />
+                    <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg md:rounded-[24px]">
+                        <div className="p-4 md:p-6">
+                            <DiscussionView materialId={currentItem.materialId} discussions={currentItem.discussions} />
+                        </div>
                     </div>
                 )}
             </div>
@@ -905,85 +975,53 @@ function MaterialView({ material, completed, navigateTo, attemptsByQuizId, submi
         data: { materialId: material.id, discussions: material.discussions || [] },
         badge: material.discussions?.length > 0 ? `${material.discussions.length}` : null,
     });
-    
+
     const currentTab = tabs[activeTab];
-    const activeLabel = currentTab?.type === 'content' ? currentTab.data.type : currentTab?.type;
-    const completedCount = material.contents?.filter((content) => completed.has(content.id)).length || 0;
-    const totalContent = material.contents?.length || 0;
-    
+
     return (
-        <div className="space-y-5 p-4 md:p-6">
-            {/* Material Header */}
-            <div className="relative overflow-hidden rounded-[20px] border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-4 md:p-5">
-                <div className="absolute right-0 top-0 h-24 w-24 rounded-bl-full bg-emerald-100/50" />
-                <div className="relative flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                    <div className="min-w-0">
-                        <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-emerald-700">Ruang belajar</p>
-                        <h2 className="text-xl font-bold text-neutral-950 md:text-2xl">{material.title}</h2>
-                        <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
-                            Pilih ikon untuk berpindah materi, quiz, tugas, atau diskusi.
-                        </p>
-                    </div>
-
-                    <div className="flex shrink-0 items-center gap-2">
-                        {totalContent > 0 && (
-                            <span className="rounded-full border border-emerald-200 bg-white/80 px-3 py-1.5 text-xs font-bold text-emerald-800 shadow-sm">
-                                {completedCount}/{totalContent} selesai
-                            </span>
-                        )}
-                        <span className="rounded-full border border-neutral-200 bg-white/80 px-3 py-1.5 text-xs font-bold capitalize text-neutral-700 shadow-sm">
-                            {activeLabel}
-                        </span>
-                    </div>
+        <div className="space-y-4 md:space-y-5">
+            {/* Card Ruang Belajar - Separate card wrapper */}
+            <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] p-4 shadow-lg sm:p-5 md:rounded-[20px] md:p-6">
+                {/* Material header */}
+                <div className="mb-4 space-y-2">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-emerald-700 dark:text-emerald-400">Ruang Belajar</p>
+                    <h2 className="text-xl font-bold leading-tight text-neutral-950 dark:text-white/90 sm:text-2xl md:text-3xl">{material.title}</h2>
+                    <p className="text-sm text-neutral-600 dark:text-white/45">
+                        {tabs.length} aktivitas tersedia
+                    </p>
                 </div>
+
+                {/* Tab navigation */}
+                <nav className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                    <div className="flex gap-2">
+                        {tabs.map((tab, index) => {
+                            const Icon = tab.icon;
+                            const isActive = activeTab === index;
+
+                            return (
+                                <motion.button
+                                    key={tab.id}
+                                    type="button"
+                                    onClick={() => setActiveTab(index)}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    title={tab.title}
+                                    aria-label={tab.title}
+                                    className={`relative flex size-11 shrink-0 items-center justify-center rounded-[13px] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 sm:size-12 ${
+                                        isActive
+                                            ? 'bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-white shadow-[0_4px_14px_rgba(5,150,105,0.38)]'
+                                            : 'bg-neutral-100 text-neutral-500 hover:bg-emerald-50 hover:text-emerald-600'
+                                    }`}
+                                >
+                                    <Icon className="size-5" strokeWidth={1.75} aria-hidden="true" />
+                                </motion.button>
+                            );
+                        })}
+                    </div>
+                </nav>
             </div>
 
-            {/* Tab Navigation */}
-            <div className="border-b border-neutral-200">
-                <div className="flex gap-1.5 overflow-x-auto pb-1.5 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent">
-                    {tabs.map((tab, index) => {
-                        const Icon = tab.icon;
-                        const isActive = activeTab === index;
-                        
-                        return (
-                            <motion.button
-                                key={tab.id}
-                                onClick={() => setActiveTab(index)}
-                                aria-label={tab.title}
-                                title={tab.title}
-                                className={`relative flex items-center gap-1.5 rounded-t-lg px-3 py-2 text-xs font-semibold whitespace-nowrap transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
-                                    isActive
-                                        ? 'bg-white text-emerald-700 shadow-md'
-                                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900'
-                                }`}
-                                whileHover={{ y: -2 }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                <Icon className="size-3.5" aria-hidden="true" />
-                                <span className="max-w-[120px] truncate">{tab.title}</span>
-                                {tab.badge && (
-                                    <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
-                                        isActive 
-                                            ? 'bg-emerald-100 text-emerald-700' 
-                                            : 'bg-neutral-200 text-neutral-700'
-                                    }`}>
-                                        {tab.badge}
-                                    </span>
-                                )}
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="activeTab"
-                                        className="absolute bottom-0 left-0 right-0 h-0.5 rounded-t-full bg-gradient-to-r from-emerald-500 to-teal-500"
-                                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                    />
-                                )}
-                            </motion.button>
-                        );
-                    })}
-                </div>
-            </div>
-
-            {/* Tab Content */}
+            {/* Content area - Separate from Ruang Belajar card */}
             <AnimatePresence mode="wait">
                 <motion.div
                     key={currentTab.id}
@@ -991,11 +1029,7 @@ function MaterialView({ material, completed, navigateTo, attemptsByQuizId, submi
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                    className={`min-h-[300px] rounded-[20px] border shadow-[0_12px_36px_rgba(15,23,42,0.07)] overflow-hidden ${
-                        currentTab.type === 'quiz'
-                            ? 'border-transparent bg-transparent p-0'
-                            : 'border-neutral-200 bg-white p-4 md:p-5'
-                    }`}
+                    className="min-h-[300px] md:min-h-[400px]"
                 >
                     {currentTab.type === 'content' && (
                         <ContentView content={currentTab.data} completed={completed.has(currentTab.data.id)} />
@@ -1007,9 +1041,9 @@ function MaterialView({ material, completed, navigateTo, attemptsByQuizId, submi
                         <AssignmentView assignment={currentTab.data} submission={currentTab.submission} />
                     )}
                     {currentTab.type === 'discussion' && (
-                        <DiscussionView 
-                            materialId={currentTab.data.materialId} 
-                            discussions={currentTab.data.discussions} 
+                        <DiscussionView
+                            materialId={currentTab.data.materialId}
+                            discussions={currentTab.data.discussions}
                         />
                     )}
                 </motion.div>
@@ -1021,69 +1055,96 @@ function MaterialView({ material, completed, navigateTo, attemptsByQuizId, submi
 // Reuse ContentView, QuizView, AssignmentView from Show.jsx
 // (Copy the exact same implementations)
 
-// Content View Component (copied from Show.jsx)
 function ContentView({ content, completed }) {
     return (
         <div className="space-y-5">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="flex min-w-0 items-start gap-3">
-                    <div className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-gradient-to-br from-sky-500 to-cyan-600 text-white shadow-[0_10px_22px_rgba(14,165,233,0.26)]">
-                        {content.type === 'video' ? <PlayCircle className="size-5" /> : <FileText className="size-5" />}
-                    </div>
-                    <div className="min-w-0">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-sky-700">{content.type}</p>
-                        <h2 className="mt-1 text-xl font-bold text-neutral-950">{content.title}</h2>
+            {/* Card Konten - Separate card wrapper */}
+            <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg md:rounded-[24px]">
+                {/* Header */}
+                <div className="border-b border-neutral-200 dark:border-white/[0.07] bg-gradient-to-br from-emerald-50 via-teal-50/30 to-white dark:from-emerald-500/8 dark:via-teal-500/5 dark:to-[#111a15] p-5 sm:p-6 md:p-8">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="flex-1">
+                            {/* Title only - clean and simple */}
+                            <h2 className="max-w-3xl text-2xl font-bold leading-tight text-neutral-950 dark:text-white/90 sm:text-3xl md:text-4xl">
+                                {content.title}
+                            </h2>
+                        </div>
+
+                        {/* Action button */}
+                        <motion.button
+                            type="button"
+                            disabled={completed}
+                            onClick={() => router.patch(`/student/contents/${content.id}/complete`, {}, { preserveScroll: true })}
+                            whileHover={completed ? {} : { scale: 1.02 }}
+                            whileTap={completed ? {} : { scale: 0.98 }}
+                            className={`flex h-12 shrink-0 items-center gap-2 rounded-xl px-6 text-sm font-bold transition-all sm:w-auto ${
+                                completed
+                                    ? 'cursor-not-allowed border-2 border-emerald-200 bg-emerald-50 text-emerald-600'
+                                    : 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30'
+                            }`}
+                        >
+                            <CheckCircle2 className="size-4" />
+                            {completed ? 'Sudah Selesai' : 'Tandai Selesai'}
+                        </motion.button>
                     </div>
                 </div>
-                <Button
-                    type="button"
-                    variant={completed ? 'outline' : 'default'}
-                    className={`h-11 rounded-full px-5 text-sm font-bold ${completed ? 'border border-emerald-300 bg-emerald-50 text-emerald-700' : 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-[0_10px_22px_rgba(5,150,105,0.22)] hover:from-emerald-700 hover:to-teal-700'}`}
-                    disabled={completed}
-                    onClick={() => router.patch(`/student/contents/${content.id}/complete`, {}, { preserveScroll: true })}
-                >
-                    <CheckCircle2 className="mr-1.5 size-4" />
-                    {completed ? 'Selesai' : 'Tandai Selesai'}
-                </Button>
-            </div>
 
-            <div className="rounded-[18px] border border-neutral-200 bg-gradient-to-br from-neutral-50 to-white p-3 md:p-4">
-                {content.type === 'artikel' && (
-                    // Note: content.body contains HTML from the rich text editor (TipTap).
-                    // This is instructor-authored content. For production, consider adding
-                    // DOMPurify sanitization: dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content.body) }}
-                    <div
-                        className="prose prose-sm max-w-none rounded-[14px] bg-white p-4 text-neutral-700 leading-7"
-                        dangerouslySetInnerHTML={{ __html: content.body }}
-                    />
-                )}
-                {content.type === 'video' && (
-                    <VideoPlayer
-                        videoId={content.video_id}
-                        url={content.url}
-                        title={content.title}
-                        className="rounded-[14px]"
-                    />
-                )}
-                {content.type === 'audio' && (
-                    <audio controls className="w-full rounded-[14px]" src={storageUrl(content.file_path)} />
-                )}
-                {content.type === 'pdf' && (
-                    <div className="space-y-3">
-                        <iframe 
-                            title={content.title} 
-                            src={storageUrl(content.file_path)} 
-                            className="h-[500px] w-full rounded-[14px] border border-neutral-200 bg-white" 
-                        />
-                        <DownloadLink path={content.file_path} label="Buka PDF di Tab Baru" />
+                {/* Content body */}
+                <div className="p-5 sm:p-6 md:p-8">
+                    <div className="mx-auto w-full max-w-5xl">
+                        {content.type === 'artikel' && (
+                            <div
+                                className="prose prose-neutral prose-base max-w-none overflow-x-auto leading-relaxed dark:prose-invert prose-headings:font-bold prose-headings:text-neutral-900 dark:prose-headings:text-white/90 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:text-neutral-700 dark:prose-p:text-white/60 prose-a:text-emerald-600 dark:prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:text-emerald-700 hover:prose-a:underline prose-strong:text-neutral-900 dark:prose-strong:text-white/90 prose-code:rounded prose-code:bg-neutral-100 dark:prose-code:bg-white/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:text-emerald-700 dark:prose-code:text-emerald-400 prose-pre:rounded-xl prose-pre:bg-neutral-900 dark:prose-pre:bg-black/60 prose-img:rounded-xl prose-img:shadow-lg md:prose-lg [&_img]:h-auto [&_img]:max-w-full [&_table]:min-w-full"
+                                dangerouslySetInnerHTML={{ __html: content.body }}
+                            />
+                        )}
+                        {content.type === 'video' && (
+                            <div className="space-y-4">
+                                <VideoPlayer
+                                    videoId={content.video_id}
+                                    url={content.url}
+                                    title={content.title}
+                                    className="!rounded-xl !shadow-2xl md:!rounded-2xl"
+                                />
+                            </div>
+                        )}
+                        {content.type === 'audio' && (
+                            <div className="flex items-center justify-center rounded-2xl border-2 border-neutral-200 dark:border-white/10 bg-gradient-to-br from-neutral-50 to-white dark:from-white/5 dark:to-[#111a15] p-8 md:p-12">
+                                <div className="w-full max-w-2xl space-y-4">
+                                    <div className="flex items-center justify-center">
+                                        <div className="flex size-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg">
+                                            <PlayCircle className="size-8" />
+                                        </div>
+                                    </div>
+                                    <audio controls className="w-full" src={storageUrl(content.file_path)} />
+                                </div>
+                            </div>
+                        )}
+                        {content.type === 'pdf' && (
+                            <div className="space-y-4">
+                                <div className="overflow-hidden rounded-2xl border-2 border-neutral-200 bg-neutral-50 shadow-inner">
+                                    <iframe
+                                        title={content.title}
+                                        src={storageUrl(content.file_path)}
+                                        className="h-[70vh] min-h-[500px] w-full bg-white md:h-[600px]"
+                                    />
+                                </div>
+                                <div className="flex justify-center">
+                                    <DownloadLink path={content.file_path} label="Buka PDF di Tab Baru" />
+                                </div>
+                            </div>
+                        )}
+                        {content.type === 'file' && (
+                            <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-300 bg-neutral-50 py-16 text-center">
+                                <div className="mb-4 flex size-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg">
+                                    <Download className="size-10" />
+                                </div>
+                                <p className="mb-6 text-lg font-semibold text-neutral-700">File siap diunduh</p>
+                                <DownloadLink path={content.file_path} label="Unduh File" />
+                            </div>
+                        )}
                     </div>
-                )}
-                {content.type === 'file' && (
-                    <div className="text-center py-8">
-                        <FileText className="size-12 mx-auto text-neutral-400 mb-3" />
-                        <DownloadLink path={content.file_path} label="Unduh File" />
-                    </div>
-                )}
+                </div>
             </div>
         </div>
     );
@@ -1564,30 +1625,22 @@ function QuizFullscreen({
         {
             bg: 'bg-emerald-600 hover:bg-emerald-700',
             selected: 'bg-emerald-700 ring-4 ring-emerald-300',
-            shape: (
-                <svg viewBox="0 0 24 24" className="size-7 fill-white"><polygon points="12,3 22,21 2,21" /></svg>
-            ),
+            shape: <Triangle className="size-7 text-white" fill="currentColor" />,
         },
         {
             bg: 'bg-teal-600 hover:bg-teal-700',
             selected: 'bg-teal-700 ring-4 ring-teal-300',
-            shape: (
-                <svg viewBox="0 0 24 24" className="size-7 fill-white"><polygon points="12,2 22,12 12,22 2,12" /></svg>
-            ),
+            shape: <Diamond className="size-7 text-white" fill="currentColor" />,
         },
         {
             bg: 'bg-green-600 hover:bg-green-700',
             selected: 'bg-green-700 ring-4 ring-green-300',
-            shape: (
-                <svg viewBox="0 0 24 24" className="size-7 fill-white"><circle cx="12" cy="12" r="10" /></svg>
-            ),
+            shape: <Circle className="size-7 text-white" fill="currentColor" />,
         },
         {
             bg: 'bg-cyan-600 hover:bg-cyan-700',
             selected: 'bg-cyan-700 ring-4 ring-cyan-300',
-            shape: (
-                <svg viewBox="0 0 24 24" className="size-7 fill-white"><rect x="3" y="3" width="18" height="18" rx="2" /></svg>
-            ),
+            shape: <Square className="size-7 text-white" fill="currentColor" />,
         },
     ];
 

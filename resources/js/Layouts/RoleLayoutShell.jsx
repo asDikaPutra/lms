@@ -4,6 +4,8 @@ import { LogOut, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react';
 
 import FlashMessages from '@/components/FlashMessages';
 import AtmosphericBackground from '@/components/shared/AtmosphericBackground';
+import { NavIcon, BrandIcon as AppBrandIcon } from '@/components/shared/AppIcon';
+import ThemeToggle from '@/components/shared/ThemeToggle';
 import { Button } from '@/components/ui/button';
 
 export default function RoleLayoutShell({
@@ -20,9 +22,7 @@ export default function RoleLayoutShell({
 
     useEffect(() => {
         const saved = window.localStorage.getItem(storageKey);
-        if (saved !== null) {
-            setIsSidebarExpanded(saved === 'true');
-        }
+        if (saved !== null) setIsSidebarExpanded(saved === 'true');
     }, [storageKey]);
 
     const toggleSidebar = () => {
@@ -33,45 +33,51 @@ export default function RoleLayoutShell({
         });
     };
 
-    const logout = () => {
-        router.post('/logout');
-    };
+    const logout = () => router.post('/logout');
 
     const desktopSidebarWidth = isSidebarExpanded ? 'lg:w-[248px]' : 'lg:w-[80px]';
     const desktopContentMargin = isSidebarExpanded ? 'lg:ml-[248px]' : 'lg:ml-[80px]';
 
     return (
-        <div className="min-h-screen text-sb-text-black tracking-[-0.01em]">
+        <div className="min-h-screen tracking-[-0.01em] text-neutral-900 dark:text-white">
             <AtmosphericBackground />
             <FlashMessages />
+
             <a
                 href="#main-content"
-                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-[8px] focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:shadow"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-[8px] focus:bg-emerald-500 focus:px-4 focus:py-2 focus:text-sm focus:text-white focus:shadow"
             >
                 Lewati navigasi
             </a>
 
+            {/* Mobile overlay */}
             {isMobileMenuOpen && (
                 <div
-                    className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+                    className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden dark:bg-black/70"
                     onClick={() => setIsMobileMenuOpen(false)}
                     aria-hidden="true"
                 />
             )}
 
+            {/* ── Sidebar ──────────────────────────────────────────────── */}
             <aside
-                className={`fixed inset-y-0 left-0 z-50 flex w-[264px] flex-col border-r border-white/40 bg-white/85 backdrop-blur-xl transition-[width,transform,box-shadow] duration-300 lg:translate-x-0 ${desktopSidebarWidth} ${
-                    isMobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:shadow-[1px_0_3px_rgba(0,0,0,0.1)]'
-                }`}
+                className={`fixed inset-y-0 left-0 z-50 flex w-[264px] flex-col border-r transition-[width,transform,box-shadow] duration-300 lg:translate-x-0
+                    border-neutral-200/70 bg-white/90 backdrop-blur-xl
+                    dark:border-white/[0.06] dark:bg-[#0d1410]/95 dark:backdrop-blur-xl
+                    ${desktopSidebarWidth}
+                    ${isMobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:shadow-[1px_0_0_rgba(0,0,0,0.06)] dark:lg:shadow-[1px_0_0_rgba(255,255,255,0.04)]'}
+                `}
             >
-                <div className={`relative flex h-[64px] items-center border-b border-white/40 px-4 ${isSidebarExpanded ? 'lg:justify-between' : 'lg:justify-center'}`}>
+                {/* Brand header */}
+                <div className={`relative flex h-[64px] items-center border-b px-4
+                    border-neutral-200/70 dark:border-white/[0.06]
+                    ${isSidebarExpanded ? 'lg:justify-between' : 'lg:justify-center'}
+                `}>
                     <div className="flex min-w-0 items-center gap-3">
-                        <div className="flex size-[36px] shrink-0 items-center justify-center rounded-full bg-sb-green text-white shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)]">
-                            <BrandIcon className="size-[18px]" aria-hidden="true" />
-                        </div>
+                        <AppBrandIcon icon={BrandIcon} />
                         <div className={`min-w-0 ${isSidebarExpanded ? 'lg:block' : 'lg:hidden'}`}>
-                            <p className="truncate text-[13px] font-bold text-sb-green">LMS Fakultas</p>
-                            <p className="truncate text-[11px] text-sb-text-soft">{title}</p>
+                            <p className="truncate text-[13px] font-bold text-emerald-700 dark:text-emerald-400">LMS Fakultas</p>
+                            <p className="truncate text-[11px] text-neutral-500 dark:text-white/40">{title}</p>
                         </div>
                     </div>
 
@@ -80,13 +86,16 @@ export default function RoleLayoutShell({
                         onClick={toggleSidebar}
                         aria-label={isSidebarExpanded ? 'Sembunyikan nama menu' : 'Tampilkan nama menu'}
                         title={isSidebarExpanded ? 'Sembunyikan nama menu' : 'Tampilkan nama menu'}
-                        className={`hidden size-8 items-center justify-center rounded-full border border-neutral-200 bg-white text-sb-text-soft shadow-sm transition hover:text-sb-green lg:flex ${isSidebarExpanded ? '' : 'absolute -right-4 top-4'}`}
+                        className={`hidden size-8 items-center justify-center rounded-full border shadow-sm transition lg:flex
+                            border-neutral-200 bg-white text-neutral-400 hover:text-emerald-600
+                            dark:border-white/10 dark:bg-white/5 dark:text-white/40 dark:hover:border-emerald-500/40 dark:hover:text-emerald-400
+                            ${isSidebarExpanded ? '' : 'absolute -right-4 top-4'}
+                        `}
                     >
-                        {isSidebarExpanded ? (
-                            <PanelLeftClose className="size-4" aria-hidden="true" />
-                        ) : (
-                            <PanelLeftOpen className="size-4" aria-hidden="true" />
-                        )}
+                        {isSidebarExpanded
+                            ? <PanelLeftClose className="size-4" aria-hidden="true" />
+                            : <PanelLeftOpen className="size-4" aria-hidden="true" />
+                        }
                     </button>
 
                     {isMobileMenuOpen && (
@@ -101,7 +110,10 @@ export default function RoleLayoutShell({
                     )}
                 </div>
 
-                <nav className={`flex flex-1 flex-col gap-2 overflow-y-auto py-6 ${isSidebarExpanded ? 'px-4' : 'px-4 lg:items-center lg:px-3'}`}>
+                {/* Nav items */}
+                <nav className={`flex flex-1 flex-col gap-1.5 overflow-y-auto py-5
+                    ${isSidebarExpanded ? 'px-3' : 'px-3 lg:items-center lg:px-3'}
+                `}>
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const active = window.location.pathname.startsWith(item.href);
@@ -112,56 +124,86 @@ export default function RoleLayoutShell({
                                 href={item.href}
                                 title={item.label}
                                 aria-label={item.label}
-                                className={`flex h-[44px] items-center rounded-[10px] text-[13px] font-semibold transition-all ${
-                                    isSidebarExpanded ? 'w-full justify-start gap-3 px-3' : 'w-full justify-start gap-3 px-3 lg:w-[44px] lg:justify-center lg:gap-0 lg:px-0'
-                                } ${
-                                    active
-                                        ? 'bg-sb-light text-sb-green shadow-[0_1px_2px_rgba(0,0,0,0.05)]'
-                                        : 'text-sb-text-soft hover:bg-[#f9f9f9] hover:text-sb-text-black'
-                                }`}
+                                className={`group flex h-[44px] items-center rounded-[12px] text-[13px] font-semibold transition-all duration-200
+                                    ${isSidebarExpanded ? 'w-full justify-start gap-3 px-2' : 'w-full justify-start gap-3 px-2 lg:w-[44px] lg:justify-center lg:gap-0 lg:px-0'}
+                                    ${active
+                                        ? 'text-emerald-700 dark:text-emerald-400'
+                                        : 'text-neutral-500 hover:text-neutral-900 dark:text-white/40 dark:hover:text-white/80'
+                                    }
+                                `}
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
-                                <Icon className="size-[20px] shrink-0" aria-hidden="true" />
+                                <NavIcon icon={Icon} active={active} />
                                 <span className={`truncate ${isSidebarExpanded ? 'block' : 'lg:hidden'}`}>{item.label}</span>
                             </Link>
                         );
                     })}
                 </nav>
+
+                {/* Bottom user strip */}
+                <div className={`border-t p-3 border-neutral-200/70 dark:border-white/[0.06] ${isSidebarExpanded ? '' : 'lg:flex lg:justify-center'}`}>
+                    <div className={`flex items-center gap-2.5 ${isSidebarExpanded ? '' : 'lg:justify-center'}`}>
+                        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-[11px] font-bold text-white shadow-[0_0_12px_rgba(16,185,129,0.35)]">
+                            {auth?.user?.name?.slice(0, 2).toUpperCase() ?? fallbackInitials}
+                        </div>
+                        <div className={`min-w-0 flex-1 ${isSidebarExpanded ? 'block' : 'lg:hidden'}`}>
+                            <p className="truncate text-[12px] font-semibold text-neutral-800 dark:text-white/80">{auth?.user?.name}</p>
+                            <p className="truncate text-[10px] text-neutral-400 dark:text-white/35">{auth?.user?.email}</p>
+                        </div>
+                    </div>
+                </div>
             </aside>
 
+            {/* ── Main content ─────────────────────────────────────────── */}
             <div className={`flex flex-col transition-[margin] duration-300 ${desktopContentMargin}`}>
-                <header className="sticky top-0 z-30 flex h-[64px] items-center justify-between border-b border-white/40 bg-white/80 px-4 shadow-[0_1px_2px_rgba(0,0,0,0.05)] backdrop-blur-xl lg:px-6">
+
+                {/* Top header */}
+                <header className="sticky top-0 z-30 flex h-[64px] items-center justify-between border-b px-4 backdrop-blur-xl lg:px-6
+                    border-neutral-200/70 bg-white/80 shadow-[0_1px_2px_rgba(0,0,0,0.05)]
+                    dark:border-white/[0.06] dark:bg-[#0a0f0d]/80 dark:shadow-none
+                ">
                     <div className="flex items-center gap-4">
                         <button
                             type="button"
                             aria-label="Buka menu"
-                            className="text-sb-text-soft hover:text-sb-text-black lg:hidden"
+                            className="text-neutral-500 hover:text-neutral-900 transition-colors dark:text-white/40 dark:hover:text-white/80 lg:hidden"
                             onClick={() => setIsMobileMenuOpen(true)}
                         >
                             <Menu className="size-5" />
                         </button>
-                        <h2 className="text-[16px] font-semibold text-sb-green tracking-[-0.16px] lg:text-[18px]">{title}</h2>
+                        <h2 className="text-[16px] font-semibold tracking-[-0.16px] text-emerald-700 dark:text-white/90 lg:text-[18px]">
+                            {title}
+                        </h2>
                     </div>
 
-                    <div className="flex items-center gap-3 lg:gap-4">
+                    <div className="flex items-center gap-2 lg:gap-3">
+                        {/* User info */}
                         <div className="hidden text-right sm:block">
-                            <p className="text-[13px] font-semibold text-sb-text-black">{auth?.user?.name}</p>
-                            <p className="text-[12px] text-sb-text-soft">{auth?.user?.email}</p>
+                            <p className="text-[13px] font-semibold text-neutral-800 dark:text-white/80">{auth?.user?.name}</p>
+                            <p className="text-[12px] text-neutral-400 dark:text-white/35">{auth?.user?.email}</p>
                         </div>
-                        <div className="flex size-[36px] items-center justify-center rounded-full bg-sb-green text-[12px] font-semibold text-white shadow-sm">
+
+                        {/* Avatar */}
+                        <div className="flex size-[36px] items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-[12px] font-bold text-white shadow-[0_0_14px_rgba(16,185,129,0.35)]">
                             {auth?.user?.name?.slice(0, 2).toUpperCase() ?? fallbackInitials}
                         </div>
-                        <Button
+
+                        {/* Theme toggle */}
+                        <ThemeToggle />
+
+                        {/* Logout */}
+                        <button
                             type="button"
-                            variant="outline"
-                            size="icon"
                             aria-label="Keluar"
                             title="Keluar"
                             onClick={logout}
-                            className="size-[36px] rounded-full border-sb-text-soft bg-transparent text-sb-text-black transition-all hover:bg-slate-50 hover:text-sb-green active:scale-95"
+                            className="flex size-[36px] items-center justify-center rounded-full border transition-all active:scale-95
+                                border-neutral-200 bg-white text-neutral-500 hover:border-red-300 hover:bg-red-50 hover:text-red-500
+                                dark:border-white/10 dark:bg-white/5 dark:text-white/40 dark:hover:border-red-500/40 dark:hover:bg-red-500/10 dark:hover:text-red-400
+                            "
                         >
                             <LogOut className="size-[16px]" aria-hidden="true" />
-                        </Button>
+                        </button>
                     </div>
                 </header>
 
