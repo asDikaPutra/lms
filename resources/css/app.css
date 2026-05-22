@@ -163,3 +163,27 @@
         @apply h-10 w-full rounded-lg border border-slate-300 px-3 text-sm outline-none transition focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15;
     }
 }
+
+/* Optimized animations for background - GPU accelerated */
+@keyframes float-slow {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(30px, -40px);
+    }
+}
+
+@layer utilities {
+    .animate-float-slow {
+        animation: float-slow 20s ease-in-out infinite;
+        will-change: transform;
+    }
+    
+    /* Reduce motion for accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        .animate-float-slow {
+            animation: none;
+        }
+    }
+}
