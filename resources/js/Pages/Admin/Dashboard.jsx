@@ -13,12 +13,12 @@ const statConfig = [
 ];
 
 const toneClasses = {
-    blue: 'bg-[#f4f7fa] text-[#0051c3]',
-    emerald: 'bg-sb-light text-sb-green',
-    teal: 'bg-[#eef8f6] text-[#007b6a]',
-    orange: 'bg-[#fff6e5] text-[#b35200]',
-    sky: 'bg-[#f0f8ff] text-[#006bd6]',
-    violet: 'bg-[#f6f2fb] text-[#5e2b97]',
+    blue: 'from-blue-400 via-blue-500 to-indigo-600 shadow-[0_4px_12px_rgba(99,102,241,0.28)]',
+    emerald: 'from-emerald-400 via-emerald-500 to-teal-600 shadow-[0_4px_12px_rgba(5,150,105,0.32)]',
+    teal: 'from-teal-400 via-teal-500 to-cyan-600 shadow-[0_4px_12px_rgba(20,184,166,0.30)]',
+    orange: 'from-orange-400 via-orange-500 to-amber-600 shadow-[0_4px_12px_rgba(249,115,22,0.28)]',
+    sky: 'from-sky-400 via-sky-500 to-blue-500 shadow-[0_4px_12px_rgba(14,165,233,0.28)]',
+    violet: 'from-violet-400 via-violet-500 to-purple-600 shadow-[0_4px_12px_rgba(139,92,246,0.28)]',
 };
 
 export default function Dashboard({ stats, recentUsers, recentCourses }) {
@@ -36,9 +36,9 @@ export default function Dashboard({ stats, recentUsers, recentCourses }) {
                         return (
                             <article key={item.key} className="rounded-[10px] bg-white p-4 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)] transition-all hover:shadow-[0_1px_3px_rgba(0,0,0,0.1),_0_2px_2px_rgba(0,0,0,0.06),_0_0_2px_rgba(0,0,0,0.07)]">
                                 <div className="flex items-center gap-3">
-                                    <div className={`flex size-10 shrink-0 items-center justify-center rounded-[8px] ${toneClasses[item.tone]}`}>
-                                        <Icon className="size-5" aria-hidden="true" />
-                                    </div>
+                                    <span className={`inline-flex size-10 shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br text-white ${toneClasses[item.tone]}`}>
+                                        <Icon className="size-5" strokeWidth={1.75} aria-hidden="true" />
+                                    </span>
                                     <div>
                                         <p className="text-[20px] font-semibold text-sb-text-black tracking-[-0.16px] leading-tight">{stats[item.key]}</p>
                                         <p className="text-[12px] text-sb-text-soft">{item.label}</p>

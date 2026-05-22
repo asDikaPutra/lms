@@ -14,10 +14,10 @@ const statsConfig = [
 ];
 
 const iconToneClasses = {
-    emerald: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-    amber: 'border-amber-200 bg-amber-50 text-amber-700',
-    blue: 'border-sky-200 bg-sky-50 text-sky-700',
-    slate: 'border-slate-200 bg-slate-50 text-slate-700',
+    emerald: 'from-emerald-400 via-emerald-500 to-teal-600 shadow-[0_4px_12px_rgba(5,150,105,0.32)]',
+    amber: 'from-amber-400 via-amber-500 to-orange-500 shadow-[0_4px_12px_rgba(245,158,11,0.28)]',
+    blue: 'from-blue-400 via-blue-500 to-indigo-600 shadow-[0_4px_12px_rgba(99,102,241,0.28)]',
+    slate: 'from-slate-400 via-slate-500 to-slate-600 shadow-[0_4px_12px_rgba(100,116,139,0.28)]',
 };
 
 export default function Dashboard({ stats, courses, pendingEnrollments, recentDiscussions }) {
@@ -91,8 +91,8 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                         </motion.p>
                                         <p className="mt-1.5 text-xs font-semibold text-neutral-600">{item.label}</p>
                                     </div>
-                                    <div className={`flex size-11 items-center justify-center rounded-[10px] border ${iconToneClasses[item.tone]}`}>
-                                        <Icon className="size-5" aria-hidden="true" />
+                                    <div className={`flex size-11 items-center justify-center rounded-[13px] bg-gradient-to-br text-white ${iconToneClasses[item.tone]}`}>
+                                        <Icon className="size-5" strokeWidth={1.75} aria-hidden="true" />
                                     </div>
                                 </div>
                             </motion.article>
@@ -112,7 +112,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 <div className="flex items-center justify-between mb-6">
                                     <div>
                                         <h2 className="text-xl font-bold text-neutral-900 flex items-center gap-2.5">
-                                            <BookOpen className="size-5 text-emerald-700" aria-hidden="true" />
+                                            <BookOpen className="size-5 text-emerald-600" strokeWidth={1.75} aria-hidden="true" />
                                             Kursus Saya
                                         </h2>
                                         <p className="mt-1 text-xs text-neutral-600">Kelola dan pantau kursus Anda</p>
@@ -151,11 +151,9 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 
                                 <div className="relative">
                                     <div className="flex items-center gap-2.5 mb-6">
-                                        <div
-                                            className="flex size-10 items-center justify-center rounded-[10px] border border-amber-200 bg-amber-50 text-amber-700"
-                                        >
-                                            <Clock className="size-5" aria-hidden="true" />
-                                        </div>
+                                        <span className="inline-flex size-10 items-center justify-center rounded-[12px] bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500 text-white shadow-[0_4px_12px_rgba(245,158,11,0.28)]">
+                                            <Clock className="size-5" strokeWidth={1.75} aria-hidden="true" />
+                                        </span>
                                         <div>
                                             <h2 className="text-xl font-bold text-neutral-900">Pengajuan Enrollment</h2>
                                             <p className="text-xs text-neutral-600">Perlu persetujuan Anda</p>
@@ -186,9 +184,9 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 
                                 <div className="relative">
                                     <div className="flex items-center gap-2.5 mb-6">
-                                        <div className="flex size-10 items-center justify-center rounded-[10px] border border-sky-200 bg-sky-50 text-sky-700">
-                                            <MessageSquare className="size-5" />
-                                        </div>
+                                        <span className="inline-flex size-10 items-center justify-center rounded-[12px] bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-600 text-white shadow-[0_4px_12px_rgba(99,102,241,0.28)]">
+                                            <MessageSquare className="size-5" strokeWidth={1.75} />
+                                        </span>
                                         <div>
                                             <h2 className="text-xl font-bold text-neutral-900">Diskusi Terbaru</h2>
                                             <p className="text-xs text-neutral-600">Aktivitas mahasiswa</p>

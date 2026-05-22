@@ -1,5 +1,5 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { BookOpen, CheckCircle2, Clock, GraduationCap, Search, TrendingUp } from 'lucide-react';
+import { BookOpen, CheckCircle2, Clock, GraduationCap, Search, Sparkles, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
@@ -43,10 +43,12 @@ export default function CoursesIndex({ courses }) {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.1 }}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-100/80 backdrop-blur-sm border border-emerald-200/60"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-sm border
+                                bg-emerald-100/80 border-emerald-200/60
+                                dark:bg-emerald-500/15 dark:border-emerald-500/30"
                         >
-                            <BookOpen className="size-3.5 text-emerald-700" />
-                            <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">
+                            <BookOpen className="size-3.5 text-emerald-700 dark:text-emerald-400" />
+                            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
                                 Katalog Kursus
                             </span>
                         </motion.div>
@@ -57,7 +59,7 @@ export default function CoursesIndex({ courses }) {
                             transition={{ delay: 0.2 }}
                             className="text-3xl md:text-4xl font-bold tracking-tight leading-[1.1]"
                         >
-                            <span className="bg-gradient-to-r from-emerald-700 via-teal-600 to-emerald-600 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-emerald-700 via-teal-600 to-emerald-600 bg-clip-text text-transparent dark:from-emerald-300 dark:via-teal-300 dark:to-emerald-400">
                                 Kursus Tersedia
                             </span>
                         </motion.h1>
@@ -66,7 +68,7 @@ export default function CoursesIndex({ courses }) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="max-w-2xl text-sm leading-relaxed text-neutral-600"
+                            className="max-w-2xl text-sm leading-relaxed text-neutral-600 dark:text-white/45"
                         >
                             Jelajahi semua kursus yang tersedia dan bergabung untuk memulai pembelajaran.
                         </motion.p>
@@ -89,7 +91,7 @@ export default function CoursesIndex({ courses }) {
                             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                                 filter === 'all'
                                     ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
-                                    : 'bg-white text-neutral-600 border border-neutral-200 hover:border-emerald-300'
+                                    : 'bg-white dark:bg-white/8 text-neutral-600 dark:text-white/60 border border-neutral-200 dark:border-white/10 hover:border-emerald-300 dark:hover:border-emerald-500/40 dark:hover:bg-white/12'
                             }`}
                         >
                             Semua Kursus
@@ -101,7 +103,7 @@ export default function CoursesIndex({ courses }) {
                             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                                 filter === 'enrolled'
                                     ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
-                                    : 'bg-white text-neutral-600 border border-neutral-200 hover:border-emerald-300'
+                                    : 'bg-white dark:bg-white/8 text-neutral-600 dark:text-white/60 border border-neutral-200 dark:border-white/10 hover:border-emerald-300 dark:hover:border-emerald-500/40 dark:hover:bg-white/12'
                             }`}
                         >
                             Kursus Saya
@@ -110,13 +112,17 @@ export default function CoursesIndex({ courses }) {
 
                     {/* Search Bar */}
                     <form onSubmit={handleSearch} className="relative w-full sm:w-80">
-                        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+                        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
                         <motion.input
                             whileFocus={{ scale: 1.01 }}
                             value={searchForm.data.search}
                             onChange={(event) => searchForm.setData('search', event.target.value)}
                             placeholder="Cari kursus..."
-                            className="h-11 w-full rounded-xl border-2 border-neutral-200 pl-10 pr-4 text-sm outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 bg-white/90 backdrop-blur-sm shadow-sm"
+                            className="h-11 w-full rounded-xl border-2 pl-10 pr-4 text-sm outline-none transition-all shadow-sm
+                                border-neutral-200 bg-white/90 backdrop-blur-sm text-neutral-900 placeholder:text-neutral-400
+                                focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10
+                                dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25
+                                dark:focus:border-emerald-500/60 dark:focus:ring-emerald-500/15"
                         />
                     </form>
                 </motion.div>
@@ -127,14 +133,16 @@ export default function CoursesIndex({ courses }) {
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="col-span-full rounded-2xl border-2 border-dashed border-neutral-200 p-12 text-center bg-white/60 backdrop-blur-sm"
+                            className="col-span-full rounded-2xl border-2 border-dashed p-12 text-center backdrop-blur-sm
+                                border-neutral-200 bg-white/60
+                                dark:border-white/10 dark:bg-white/5"
                         >
                             <span className="text-5xl mb-4 block">📚</span>
-                            <p className="text-sm text-neutral-600 font-medium">
+                            <p className="text-sm text-neutral-600 dark:text-white/45 font-medium">
                                 {filter === 'enrolled' ? 'Belum ada kursus yang diikuti.' : 'Tidak ada kursus yang tersedia.'}
                             </p>
                             {filter === 'enrolled' && (
-                                <p className="text-xs text-neutral-500 mt-2">Gunakan kode enroll dari dosen untuk bergabung ke kursus.</p>
+                                <p className="text-xs text-neutral-500 dark:text-white/30 mt-2">Gunakan kode enroll dari dosen untuk bergabung ke kursus.</p>
                             )}
                         </motion.div>
                     )}
@@ -211,7 +219,9 @@ function CourseCard({ course, delay }) {
             <div className="absolute -inset-[2px] bg-gradient-to-br from-emerald-400 via-teal-400 to-green-500 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 rounded-3xl" />
             
             {/* Glass card container with backdrop blur */}
-            <div className="relative bg-white/70 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/40">
+            <div className="relative backdrop-blur-xl rounded-3xl overflow-hidden border
+                bg-white/70 border-white/40
+                dark:bg-[#111a15]/90 dark:border-white/[0.08]">
                 {/* Decorative Islamic geometric header */}
                 <div className="relative h-36 bg-gradient-to-br from-emerald-500/90 via-teal-500/90 to-emerald-600/90 backdrop-blur-sm overflow-hidden">
                     {/* Layered Islamic patterns */}
@@ -232,10 +242,7 @@ function CourseCard({ course, delay }) {
                         transition={{ delay: delay + 0.2, duration: 0.6 }}
                         className="absolute top-3 right-3"
                     >
-                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="opacity-40 drop-shadow-lg">
-                            <path d="M24 4L28 16L40 20L28 24L24 36L20 24L8 20L20 16L24 4Z" fill="white" />
-                            <circle cx="24" cy="20" r="3" fill="white" fillOpacity="0.7" />
-                        </svg>
+                        <Sparkles className="size-12 text-white/40 drop-shadow-lg" />
                     </motion.div>
                     
                     {/* Enrollment status badge */}
@@ -277,11 +284,13 @@ function CourseCard({ course, delay }) {
                     </motion.div>
                     
                     {/* Decorative bottom wave with glass effect */}
-                    <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/30 to-transparent backdrop-blur-sm" />
+                    <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/30 dark:from-[#111a15]/60 to-transparent backdrop-blur-sm" />
                 </div>
 
                 {/* Content section with glass background */}
-                <div className="relative p-6 space-y-5 bg-gradient-to-b from-white/50 to-white/70 backdrop-blur-md">
+                <div className="relative p-6 space-y-5 backdrop-blur-md
+                    bg-gradient-to-b from-white/50 to-white/70
+                    dark:bg-gradient-to-b dark:from-[#111a15] dark:to-[#0d1610]">
                     {/* Decorative top border accent */}
                     <div className="absolute top-0 left-6 right-6 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent" />
                     
@@ -291,28 +300,33 @@ function CourseCard({ course, delay }) {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: delay + 0.3 }}
-                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/60 backdrop-blur-sm border border-emerald-200/60"
+                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full backdrop-blur-sm border
+                                bg-emerald-100/60 border-emerald-200/60
+                                dark:bg-emerald-500/15 dark:border-emerald-500/30"
                         >
                             <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse shadow-lg shadow-emerald-500/50" />
-                            <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-[0.1em] font-mono">
+                            <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-[0.1em] font-mono">
                                 {course.code}
                             </span>
                         </motion.div>
                         
                         {/* Course title with better typography */}
-                        <h3 className="text-lg font-bold text-neutral-900 leading-tight line-clamp-2 tracking-tight drop-shadow-sm">
+                        <h3 className="text-lg font-bold leading-tight line-clamp-2 tracking-tight drop-shadow-sm
+                            text-neutral-900 dark:text-white/90">
                             {course.name}
                         </h3>
                         
                         {/* Instructor with glass avatar */}
-                        <div className="flex items-center gap-2 text-xs text-neutral-700">
+                        <div className="flex items-center gap-2 text-xs text-neutral-700 dark:text-white/45">
                             <div className="flex items-center gap-1.5">
-                                <div className="size-6 rounded-full bg-gradient-to-br from-emerald-200/80 to-teal-200/80 backdrop-blur-sm flex items-center justify-center border border-emerald-300/60 shadow-sm">
-                                    <span className="text-[10px] font-bold text-emerald-800">
+                                <div className="size-6 rounded-full backdrop-blur-sm flex items-center justify-center shadow-sm border
+                                    bg-gradient-to-br from-emerald-200/80 to-teal-200/80 border-emerald-300/60
+                                    dark:from-emerald-600/30 dark:to-teal-600/30 dark:border-emerald-500/20">
+                                    <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-400">
                                         {course.instructor?.name?.charAt(0) ?? 'D'}
                                     </span>
                                 </div>
-                                <span className="font-medium drop-shadow-sm">
+                                <span className="font-medium drop-shadow-sm dark:text-white/50">
                                     {course.instructor?.name ?? 'Dosen belum tersedia'}
                                 </span>
                             </div>
@@ -321,9 +335,11 @@ function CourseCard({ course, delay }) {
 
                     {/* Progress section with glass effect */}
                     {course.enrollment_status === 'active' && (
-                        <div className="space-y-2.5 p-3 rounded-xl bg-white/40 backdrop-blur-sm border border-white/60">
+                        <div className="space-y-2.5 p-3 rounded-xl backdrop-blur-sm border
+                            bg-white/40 border-white/60
+                            dark:bg-white/5 dark:border-white/[0.07]">
                             <div className="flex justify-between items-center">
-                                <span className="text-xs font-semibold text-neutral-800 flex items-center gap-1.5">
+                                <span className="text-xs font-semibold flex items-center gap-1.5 text-neutral-800 dark:text-white/70">
                                     <TrendingUp className="size-3.5 text-emerald-600" />
                                     Progress Pembelajaran
                                 </span>
@@ -331,7 +347,7 @@ function CourseCard({ course, delay }) {
                                     initial={{ opacity: 0, scale: 0.5 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: delay + 0.5, type: 'spring' }}
-                                    className="text-sm font-bold text-emerald-600 tabular-nums drop-shadow-sm"
+                                    className="text-sm font-bold tabular-nums drop-shadow-sm text-emerald-600 dark:text-emerald-400"
                                 >
                                     {course.progress}%
                                 </motion.span>
@@ -340,7 +356,9 @@ function CourseCard({ course, delay }) {
                             {/* Sophisticated progress bar with glass design */}
                             <div className="relative">
                                 {/* Background track with glass effect */}
-                                <div className="h-3 rounded-full bg-white/60 backdrop-blur-sm shadow-inner overflow-hidden border border-white/80">
+                                <div className="h-3 rounded-full backdrop-blur-sm shadow-inner overflow-hidden border
+                                    bg-white/60 border-white/80
+                                    dark:bg-white/10 dark:border-white/10">
                                     {/* Animated progress fill with multiple layers */}
                                     <motion.div
                                         initial={{ width: 0 }}
@@ -433,10 +451,14 @@ function CourseCard({ course, delay }) {
                                     value={enrollForm.data.enroll_code}
                                     onChange={(event) => enrollForm.setData('enroll_code', event.target.value)}
                                     placeholder="Masukkan kode enroll"
-                                    className="h-10 w-full rounded-xl border-2 border-neutral-200 bg-white/80 px-3 text-xs font-semibold uppercase tracking-wider text-neutral-900 outline-none transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                                    className="h-10 w-full rounded-xl border-2 px-3 text-xs font-semibold uppercase tracking-wider outline-none transition-all
+                                        border-neutral-200 bg-white/80 text-neutral-900 placeholder:text-neutral-400
+                                        focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+                                        dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25
+                                        dark:focus:border-blue-500/60 dark:focus:ring-blue-500/15"
                                 />
                                 {enrollForm.errors.enroll_code && (
-                                    <p className="mt-1.5 text-xs font-medium text-red-600">
+                                    <p className="mt-1.5 text-xs font-medium text-red-600 dark:text-red-400">
                                         {enrollForm.errors.enroll_code}
                                     </p>
                                 )}
@@ -473,9 +495,11 @@ function CourseCard({ course, delay }) {
                     )}
 
                     {cardAction.type === 'status' && (
-                        <div className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-amber-100/60 backdrop-blur-sm border border-amber-200/60">
-                            <Clock className="size-4 text-amber-700" />
-                            <span className="text-sm font-semibold text-amber-800 drop-shadow-sm">{cardAction.label}</span>
+                        <div className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl backdrop-blur-sm border
+                            bg-amber-100/60 border-amber-200/60
+                            dark:bg-amber-500/15 dark:border-amber-500/30">
+                            <Clock className="size-4 text-amber-700 dark:text-amber-400" />
+                            <span className="text-sm font-semibold drop-shadow-sm text-amber-800 dark:text-amber-300">{cardAction.label}</span>
                         </div>
                     )}
                 </div>
@@ -488,17 +512,17 @@ function EnrollmentBadge({ status }) {
     const config = {
         active: {
             label: 'Terdaftar',
-            className: 'bg-emerald-100/80 backdrop-blur-sm text-emerald-800 border-emerald-300/70',
+            className: 'bg-emerald-100/80 backdrop-blur-sm text-emerald-800 border-emerald-300/70 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40',
             icon: <CheckCircle2 className="size-3" />,
         },
         pending: {
             label: 'Pending',
-            className: 'bg-amber-100/80 backdrop-blur-sm text-amber-800 border-amber-300/70',
+            className: 'bg-amber-100/80 backdrop-blur-sm text-amber-800 border-amber-300/70 dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500/40',
             icon: <Clock className="size-3" />,
         },
         rejected: {
             label: 'Ditolak',
-            className: 'bg-red-100/80 backdrop-blur-sm text-red-800 border-red-300/70',
+            className: 'bg-red-100/80 backdrop-blur-sm text-red-800 border-red-300/70 dark:bg-red-500/20 dark:text-red-300 dark:border-red-500/40',
             icon: null,
         },
     };
