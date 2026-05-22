@@ -84,8 +84,8 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900">Kuis</h2>
-                            <p className="text-sm text-neutral-600 mt-1">Kelola semua kuis pada kursus ini.</p>
+                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Kuis</h2>
+                            <p className="text-sm mt-1 text-neutral-600 dark:text-white/45">Kelola semua kuis pada kursus ini.</p>
                         </div>
                         <Button 
                             onClick={() => openModal()} 
@@ -106,18 +106,18 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                     {/* Filters */}
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative flex-1 max-w-sm">
-                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
                             <input
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
                                 placeholder="Cari kuis..."
-                                className="h-10 w-full rounded-lg border border-neutral-200 pl-10 pr-4 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                                className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
                             />
                         </div>
                         <select
                             value={filterData.status}
                             onChange={(e) => setFilterData(prev => ({ ...prev, status: e.target.value }))}
-                            className="h-10 rounded-lg border border-neutral-200 px-3 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                            className="h-10 rounded-lg border px-3 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Status</option>
                             <option value="published">Aktif</option>
@@ -126,7 +126,7 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                         <select
                             value={filterData.module_id}
                             onChange={(e) => setFilterData(prev => ({ ...prev, module_id: e.target.value }))}
-                            className="h-10 rounded-lg border border-neutral-200 px-3 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                            className="h-10 rounded-lg border px-3 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Modul</option>
                             {course.modules?.map((module) => (
@@ -142,50 +142,50 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden"
+                            className="rounded-xl shadow-sm border overflow-hidden bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
                         >
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[900px]">
                                     <thead>
-                                        <tr className="border-b border-neutral-100 bg-neutral-50/50">
-                                            <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Kuis</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Modul</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Soal</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Durasi</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Peserta</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Rata-rata</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Status</th>
-                                            <th className="text-right py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Aksi</th>
+                                        <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Kuis</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Modul</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Soal</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Durasi</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Peserta</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Rata-rata</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Status</th>
+                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-neutral-100">
+                                    <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                                         {quizzes.map((quiz) => (
-                                            <tr key={quiz.id} className="hover:bg-neutral-50/50 transition-colors">
+                                            <tr key={quiz.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
                                                 <td className="py-3 px-4">
                                                     <div className="flex items-center gap-3">
                                                         <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-100">
                                                             <HelpCircle className="size-4 text-emerald-600" />
                                                         </div>
                                                         <div>
-                                                            <p className="font-medium text-neutral-900">{quiz.title}</p>
-                                                            <p className="text-xs text-neutral-500">Tingkat {getQuizLevel(quiz)}</p>
+                                                            <p className="font-medium text-neutral-900 dark:text-white/80">{quiz.title}</p>
+                                                            <p className="text-xs text-neutral-500 dark:text-white/40">Tingkat {getQuizLevel(quiz)}</p>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="py-3 px-4">
-                                                    <span className="text-sm text-neutral-600">{getModuleName(quiz)}</span>
+                                                    <span className="text-sm text-neutral-600 dark:text-white/50">{getModuleName(quiz)}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm font-medium text-neutral-900">{quiz.questions?.length ?? 0}</span>
+                                                    <span className="text-sm font-medium text-neutral-900 dark:text-white/80">{quiz.questions?.length ?? 0}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm text-neutral-600">{quiz.duration ? `${quiz.duration} menit` : '-'}</span>
+                                                    <span className="text-sm text-neutral-600 dark:text-white/50">{quiz.duration ? `${quiz.duration} menit` : '-'}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm text-neutral-600">{quiz.completed_attempts_count ?? 0}</span>
+                                                    <span className="text-sm text-neutral-600 dark:text-white/50">{quiz.completed_attempts_count ?? 0}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm font-medium text-neutral-900">
+                                                    <span className="text-sm font-medium text-neutral-900 dark:text-white/80">
                                                         {quiz.attempts_avg_score ? Math.round(quiz.attempts_avg_score) : '-'}
                                                     </span>
                                                 </td>
@@ -249,15 +249,15 @@ function StatCard({ label, value, icon: Icon, color, suffix = '' }) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4"
+            className="rounded-xl shadow-sm border p-4 bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex items-center gap-3">
                 <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
                     <Icon className="size-5 text-white" />
                 </div>
                 <div>
-                    <p className="text-2xl font-bold text-neutral-900">{value}{suffix}</p>
-                    <p className="text-xs text-neutral-500">{label}</p>
+                    <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}{suffix}</p>
+                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
                 </div>
             </div>
         </motion.div>
@@ -292,24 +292,20 @@ function ActionDropdown({ quiz, isOpen, onToggle, onEdit, onTogglePublish, onDel
                 <MoreHorizontal className="size-4" />
             </button>
             {isOpen && (
-                <div className="absolute right-0 top-full mt-1 w-40 rounded-lg bg-white shadow-lg border border-neutral-200 py-1 z-10">
-                    <button
-                        onClick={() => { onEdit(); onToggle({ stopPropagation: () => {} }); }}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
-                    >
+                <div className="absolute right-0 top-full mt-1 w-40 rounded-lg shadow-lg border py-1 z-10
+                bg-white border-neutral-200
+                dark:bg-[#111a15] dark:border-white/[0.07]">
+                    <button onClick={() => { onEdit(); onToggle({ stopPropagation: () => {} }); }}
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-white/70 hover:bg-neutral-50 dark:hover:bg-white/8">
                         <Edit2 className="size-4" /> Edit
                     </button>
-                    <button
-                        onClick={() => { onTogglePublish(); onToggle({ stopPropagation: () => {} }); }}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
-                    >
+                    <button onClick={() => { onTogglePublish(); onToggle({ stopPropagation: () => {} }); }}
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-white/70 hover:bg-neutral-50 dark:hover:bg-white/8">
                         <Eye className="size-4" /> {quiz.is_published ? 'Unpublish' : 'Publish'}
                     </button>
-                    <hr className="my-1 border-neutral-100" />
-                    <button
-                        onClick={() => { onDelete(); onToggle({ stopPropagation: () => {} }); }}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-                    >
+                    <hr className="my-1 border-neutral-100 dark:border-white/[0.07]" />
+                    <button onClick={() => { onDelete(); onToggle({ stopPropagation: () => {} }); }}
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10">
                         <Trash2 className="size-4" /> Hapus
                     </button>
                 </div>
@@ -323,15 +319,15 @@ function EmptyState({ onCreateClick }) {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-12 text-center"
+            className="rounded-xl shadow-sm border p-12 text-center bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex justify-center mb-6">
                 <div className="flex size-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 border border-emerald-200">
                     <HelpCircle className="size-10 text-emerald-600" />
                 </div>
             </div>
-            <h3 className="text-xl font-bold text-neutral-900 mb-2">Belum Ada Kuis</h3>
-            <p className="text-neutral-600 mb-6 max-w-md mx-auto">
+            <h3 className="text-xl font-bold mb-2 text-neutral-900 dark:text-white/90">Belum Ada Kuis</h3>
+            <p className="mb-6 max-w-md mx-auto text-neutral-600 dark:text-white/45">
                 Buat kuis pertama untuk menguji pemahaman mahasiswa terhadap materi pembelajaran.
             </p>
             <Button 
@@ -343,3 +339,5 @@ function EmptyState({ onCreateClick }) {
         </motion.div>
     );
 }
+
+

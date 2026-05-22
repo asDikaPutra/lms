@@ -33,8 +33,8 @@ export default function Progress({ course, studentProgress, moduleProgress, stat
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900">Progres</h2>
-                            <p className="text-sm text-neutral-600 mt-1">Pantau perkembangan belajar mahasiswa pada kursus ini.</p>
+                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Progres</h2>
+                            <p className="text-sm mt-1 text-neutral-600 dark:text-white/45">Pantau perkembangan belajar mahasiswa pada kursus ini.</p>
                         </div>
                     </div>
 
@@ -59,8 +59,8 @@ export default function Progress({ course, studentProgress, moduleProgress, stat
                     </div>
 
                     {/* Tabs */}
-                    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden">
-                        <div className="border-b border-neutral-100">
+                    <div className="rounded-xl shadow-sm border overflow-hidden bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]">
+                        <div className="border-b border-neutral-100 dark:border-white/[0.07]">
                             <nav className="flex gap-1 p-1.5">
                                 {tabs.map((t) => {
                                     const Icon = t.icon;
@@ -71,14 +71,14 @@ export default function Progress({ course, studentProgress, moduleProgress, stat
                                             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
                                                 activeTab === t.id
                                                     ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/25'
-                                                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                                                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80'
                                             }`}
                                         >
                                             <Icon className="size-4" />
                                             {t.label}
                                             {t.count > 0 && (
                                                 <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${
-                                                    activeTab === t.id ? 'bg-white/20 text-white' : 'bg-red-100 text-red-700'
+                                                    activeTab === t.id ? 'bg-white/20 text-white' : 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300'
                                                 }`}>
                                                     {t.count}
                                                 </span>
@@ -106,8 +106,8 @@ function StudentProgressTab({ data }) {
         return (
             <div className="text-center py-12">
                 <Users className="size-12 text-neutral-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-neutral-900 mb-2">Belum Ada Data</h3>
-                <p className="text-neutral-500">Data progres akan muncul setelah mahasiswa mulai belajar.</p>
+                <h3 className="text-lg font-medium mb-2 text-neutral-900 dark:text-white/90">Belum Ada Data</h3>
+                <p className="text-neutral-500 dark:text-white/35">Data progres akan muncul setelah mahasiswa mulai belajar.</p>
             </div>
         );
     }
@@ -131,34 +131,34 @@ function StudentProgressTab({ data }) {
         <div className="overflow-x-auto">
             <table className="w-full min-w-[800px]">
                 <thead>
-                    <tr className="border-b border-neutral-100 bg-neutral-50/50">
-                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Mahasiswa</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Progres</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Modul</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Tugas</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Kuis</th>
-                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Aktivitas Terakhir</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Status</th>
+                    <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Mahasiswa</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Progres</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Modul</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Tugas</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Kuis</th>
+                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aktivitas Terakhir</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Status</th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-100">
+                <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                     {data.map((item, index) => (
-                        <tr key={index} className="hover:bg-neutral-50/50 transition-colors">
+                        <tr key={index} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
                             <td className="py-3 px-4">
                                 <div className="flex items-center gap-3">
                                     <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-medium text-sm">
                                         {item.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
                                     </div>
                                     <div>
-                                        <p className="font-medium text-neutral-900">{item.user?.name ?? '-'}</p>
-                                        <p className="text-xs text-neutral-500">{item.user?.nim ?? '-'}</p>
+                                        <p className="font-medium text-neutral-900 dark:text-white/80">{item.user?.name ?? '-'}</p>
+                                        <p className="text-xs text-neutral-500 dark:text-white/40">{item.user?.nim ?? '-'}</p>
                                     </div>
                                 </div>
                             </td>
                             <td className="py-3 px-4">
                                 <div className="flex flex-col items-center gap-1">
-                                    <span className="text-sm font-medium text-neutral-900">{item.progress}%</span>
-                                    <div className="w-20 h-1.5 bg-neutral-200 rounded-full overflow-hidden">
+                                    <span className="text-sm font-medium text-neutral-900 dark:text-white/80">{item.progress}%</span>
+                                    <div className="w-20 h-1.5 rounded-full overflow-hidden bg-neutral-200 dark:bg-white/10">
                                         <div 
                                             className={`h-full rounded-full ${getProgressColor(item.progress)}`}
                                             style={{ width: `${item.progress}%` }}
@@ -167,16 +167,16 @@ function StudentProgressTab({ data }) {
                                 </div>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600">{item.modules_completed}/{item.total_modules}</span>
+                                <span className="text-sm text-neutral-600 dark:text-white/50">{item.modules_completed}/{item.total_modules}</span>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600">{item.assignments_submitted}/{item.total_assignments}</span>
+                                <span className="text-sm text-neutral-600 dark:text-white/50">{item.assignments_submitted}/{item.total_assignments}</span>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600">{item.quizzes_completed}/{item.total_quizzes}</span>
+                                <span className="text-sm text-neutral-600 dark:text-white/50">{item.quizzes_completed}/{item.total_quizzes}</span>
                             </td>
                             <td className="py-3 px-4">
-                                <span className="text-sm text-neutral-500">{formatDate(item.last_activity)}</span>
+                                <span className="text-sm text-neutral-500 dark:text-white/35">{formatDate(item.last_activity)}</span>
                             </td>
                             <td className="py-3 px-4 text-center">
                                 <StatusBadge isAtRisk={item.is_at_risk} />
@@ -195,8 +195,8 @@ function ModuleProgressTab({ data }) {
         return (
             <div className="text-center py-12">
                 <Layers3 className="size-12 text-neutral-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-neutral-900 mb-2">Belum Ada Modul</h3>
-                <p className="text-neutral-500">Buat modul di Struktur Kurikulum untuk melihat progres per modul.</p>
+                <h3 className="text-lg font-medium mb-2 text-neutral-900 dark:text-white/90">Belum Ada Modul</h3>
+                <p className="text-neutral-500 dark:text-white/35">Buat modul di Struktur Kurikulum untuk melihat progres per modul.</p>
             </div>
         );
     }
@@ -205,40 +205,40 @@ function ModuleProgressTab({ data }) {
         <div className="overflow-x-auto">
             <table className="w-full min-w-[600px]">
                 <thead>
-                    <tr className="border-b border-neutral-100 bg-neutral-50/50">
-                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Modul</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Materi Selesai</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Tugas Submit</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Kuis Selesai</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Progres Rata-rata</th>
+                    <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Modul</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Materi Selesai</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Tugas Submit</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Kuis Selesai</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Progres Rata-rata</th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-100">
+                <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                     {data.map((module) => (
-                        <tr key={module.id} className="hover:bg-neutral-50/50 transition-colors">
+                        <tr key={module.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
                             <td className="py-3 px-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="flex size-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 font-bold text-sm">
+                                    <div className="flex size-8 items-center justify-center rounded-lg font-bold text-sm bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
                                         {module.order}
                                     </div>
-                                    <span className="font-medium text-neutral-900">{module.title}</span>
+                                    <span className="font-medium text-neutral-900 dark:text-white/80">{module.title}</span>
                                 </div>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600">
+                                <span className="text-sm text-neutral-600 dark:text-white/50">
                                     {module.content_completions}/{module.max_content_completions}
                                 </span>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600">{module.assignment_submissions}</span>
+                                <span className="text-sm text-neutral-600 dark:text-white/50">{module.assignment_submissions}</span>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600">{module.quiz_completions}</span>
+                                <span className="text-sm text-neutral-600 dark:text-white/50">{module.quiz_completions}</span>
                             </td>
                             <td className="py-3 px-4">
                                 <div className="flex flex-col items-center gap-1">
-                                    <span className="text-sm font-medium text-neutral-900">{module.avg_progress}%</span>
-                                    <div className="w-20 h-1.5 bg-neutral-200 rounded-full overflow-hidden">
+                                    <span className="text-sm font-medium text-neutral-900 dark:text-white/80">{module.avg_progress}%</span>
+                                    <div className="w-20 h-1.5 rounded-full overflow-hidden bg-neutral-200 dark:bg-white/10">
                                         <div 
                                             className={`h-full rounded-full ${getProgressColor(module.avg_progress)}`}
                                             style={{ width: `${module.avg_progress}%` }}
@@ -259,20 +259,20 @@ function AtRiskTab({ data }) {
         return (
             <div className="text-center py-12">
                 <CheckCircle2 className="size-12 text-emerald-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-neutral-900 mb-2">Tidak Ada Mahasiswa Berisiko</h3>
-                <p className="text-neutral-500">Semua mahasiswa memiliki progres yang baik.</p>
+                <h3 className="text-lg font-medium mb-2 text-neutral-900 dark:text-white/90">Tidak Ada Mahasiswa Berisiko</h3>
+                <p className="text-neutral-500 dark:text-white/35">Semua mahasiswa memiliki progres yang baik.</p>
             </div>
         );
     }
 
     return (
         <div className="space-y-4">
-            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+            <div className="rounded-xl border p-4 bg-red-50 border-red-200 dark:bg-red-500/10 dark:border-red-500/30">
                 <div className="flex items-start gap-3">
-                    <AlertTriangle className="size-5 text-red-600 mt-0.5" />
+                    <AlertTriangle className="size-5 mt-0.5 text-red-600 dark:text-red-400" />
                     <div>
-                        <h4 className="font-medium text-red-900">Perhatian</h4>
-                        <p className="text-sm text-red-700 mt-1">
+                        <h4 className="font-medium text-red-900 dark:text-red-300">Perhatian</h4>
+                        <p className="text-sm mt-1 text-red-700 dark:text-red-400/80">
                             Mahasiswa berikut memiliki progres di bawah 30% dan mungkin memerlukan perhatian khusus.
                         </p>
                     </div>
@@ -281,22 +281,22 @@ function AtRiskTab({ data }) {
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {data.map((item, index) => (
-                    <div key={index} className="bg-white border border-neutral-200 rounded-xl p-4">
+                    <div key={index} className="rounded-xl border p-4 bg-white border-neutral-200 dark:bg-[#111a15] dark:border-white/[0.07]">
                         <div className="flex items-center gap-3 mb-3">
                             <div className="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-red-400 to-rose-500 text-white font-medium">
                                 {item.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
                             </div>
                             <div>
-                                <p className="font-medium text-neutral-900">{item.user?.name ?? '-'}</p>
-                                <p className="text-xs text-neutral-500">{item.user?.nim ?? '-'}</p>
+                                <p className="font-medium text-neutral-900 dark:text-white/80">{item.user?.name ?? '-'}</p>
+                                <p className="text-xs text-neutral-500 dark:text-white/40">{item.user?.nim ?? '-'}</p>
                             </div>
                         </div>
                         <div className="space-y-2">
                             <div className="flex justify-between text-sm">
-                                <span className="text-neutral-500">Progres</span>
+                                <span className="text-neutral-500 dark:text-white/35">Progres</span>
                                 <span className="font-medium text-red-600">{item.progress}%</span>
                             </div>
-                            <div className="w-full h-2 bg-neutral-200 rounded-full overflow-hidden">
+                            <div className="w-full h-2 rounded-full overflow-hidden bg-neutral-200 dark:bg-white/10">
                                 <div 
                                     className="h-full rounded-full bg-red-500"
                                     style={{ width: `${item.progress}%` }}
@@ -350,7 +350,7 @@ function StatCard({ label, value, icon: Icon, color, suffix = '', isText = false
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4"
+            className="rounded-xl shadow-sm border p-4 bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex items-center gap-3">
                 <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
@@ -360,11 +360,15 @@ function StatCard({ label, value, icon: Icon, color, suffix = '', isText = false
                     {isText ? (
                         <p className="text-sm font-bold text-neutral-900 truncate">{value}</p>
                     ) : (
-                        <p className="text-2xl font-bold text-neutral-900">{value}{suffix}</p>
+                        <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}{suffix}</p>
                     )}
-                    <p className="text-xs text-neutral-500">{label}</p>
+                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
                 </div>
             </div>
         </motion.div>
     );
 }
+
+
+
+

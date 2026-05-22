@@ -213,17 +213,17 @@ export default function Curriculum({ course }) {
 
             <CourseWorkspaceLayout course={course}>
                 <div className="w-full tracking-[-0.01em]">
-                    <section aria-labelledby="builder-title" className="rounded-[10px] bg-white p-4 lg:p-5 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)]">
-                        <div className="flex items-center justify-between border-b border-[#edebe9] pb-4">
+                    <section aria-labelledby="builder-title" className="rounded-[10px] p-4 lg:p-5 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)] bg-white dark:bg-[#111a15] dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]">
+                        <div className="flex items-center justify-between border-b pb-4 border-[#edebe9] dark:border-white/[0.07]">
                             <div className="flex items-center gap-3">
-                                <div className="flex size-[36px] items-center justify-center rounded-[8px] bg-sb-light text-sb-green">
+                                <div className="flex size-[36px] items-center justify-center rounded-[8px] bg-sb-light text-sb-green dark:bg-emerald-500/20 dark:text-emerald-400">
                                     <Layers3 className="size-5" aria-hidden="true" />
                                 </div>
                                 <div>
-                                    <h2 id="builder-title" className="text-[16px] font-semibold text-sb-text-black tracking-[-0.16px]">
+                                    <h2 id="builder-title" className="text-[16px] font-semibold tracking-[-0.16px] text-sb-text-black dark:text-white/90">
                                         Struktur Kurikulum
                                     </h2>
-                                    <p className="text-[12px] text-sb-text-soft">Kelola modul, materi, dan konten pembelajaran.</p>
+                                    <p className="text-[12px] text-sb-text-soft dark:text-white/40">Kelola modul, materi, dan konten pembelajaran.</p>
                                 </div>
                             </div>
                             <Button onClick={() => openModal('module')} size="sm" className="h-[36px]">
@@ -232,7 +232,7 @@ export default function Curriculum({ course }) {
                         </div>
 
                         <div className="mt-5 space-y-5">
-                            {course.modules.length === 0 && <p className="rounded-[8px] border border-dashed border-[#d6dbde] p-5 text-center text-[13px] text-sb-text-soft">Belum ada modul yang dibuat.</p>}
+                            {course.modules.length === 0 && <p className="rounded-[8px] border border-dashed p-5 text-center text-[13px] border-[#d6dbde] text-sb-text-soft dark:border-white/15 dark:text-white/35">Belum ada modul yang dibuat.</p>}
                             {course.modules.map((module) => (
                                 <ModuleItem
                                     key={module.id}
@@ -285,12 +285,12 @@ export default function Curriculum({ course }) {
 
 function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, toggleMaterial, openModal, getContentTypeIcon }) {
     return (
-        <article className="rounded-[8px] border border-[#edebe9] bg-white overflow-hidden transition-all hover:border-[#d6dbde]">
-            <div className="flex flex-col gap-3 p-4 md:flex-row md:items-start md:justify-between bg-[#f9f9f9]">
+        <article className="rounded-[8px] border overflow-hidden transition-all border-[#edebe9] bg-white hover:border-[#d6dbde] dark:border-white/[0.07] dark:bg-[#111a15] dark:hover:border-white/15">
+            <div className="flex flex-col gap-3 p-4 md:flex-row md:items-start md:justify-between bg-[#f9f9f9] dark:bg-white/5">
                 <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-sb-text-soft">Modul {module.order}</p>
-                    <h3 className="text-[15px] font-semibold text-sb-text-black">{module.title}</h3>
-                    <p className="mt-0.5 text-[13px] text-sb-text-soft">{module.description ?? 'Tanpa deskripsi'}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-sb-text-soft dark:text-white/35">Modul {module.order}</p>
+                    <h3 className="text-[15px] font-semibold text-sb-text-black dark:text-white/90">{module.title}</h3>
+                    <p className="mt-0.5 text-[13px] text-sb-text-soft dark:text-white/40">{module.description ?? 'Tanpa deskripsi'}</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                     <Button type="button" variant="outline" size="sm" className="h-[28px] w-[28px] p-0 border-[#edebe9] text-sb-text-soft hover:text-sb-text-black" onClick={() => toggleModule(module.id)}>
@@ -325,11 +325,11 @@ function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, 
             ))}
 
             {/* Materials */}
-            <div className={`flex flex-col border-t border-[#edebe9] divide-y divide-[#edebe9] ${expandedModules.has(module.id) ? '' : 'hidden'}`}>
+            <div className={`flex flex-col border-t divide-y border-[#edebe9] divide-[#edebe9] dark:border-white/[0.07] dark:divide-white/[0.06] ${expandedModules.has(module.id) ? '' : 'hidden'}`}>
                 {module.materials.length === 0 && (
-                    <div className="relative p-4 pl-[48px] pr-4 bg-white">
-                        <div className="absolute left-[24px] top-0 h-full w-[2px] bg-[#edebe9]"></div>
-                        <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9]"></div>
+                    <div className="relative p-4 pl-[48px] pr-4 bg-white dark:bg-[#111a15]">
+                        <div className="absolute left-[24px] top-0 h-full w-[2px] bg-[#edebe9] dark:bg-white/10"></div>
+                        <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9] dark:bg-white/10"></div>
                         <p className="text-[12px] text-sb-text-soft italic">Belum ada materi di modul ini.</p>
                     </div>
                 )}
@@ -345,7 +345,7 @@ function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, 
                         getContentTypeIcon={getContentTypeIcon}
                     />
                 ))}
-                <div className="relative p-3 pl-[48px] pr-4 bg-white">
+                <div className="relative p-3 pl-[48px] pr-4 bg-white dark:bg-[#111a15]">
                     <div className="absolute left-[24px] top-0 h-[30px] w-[2px] bg-[#edebe9]"></div>
                     <div className="absolute left-[24px] top-[30px] w-[16px] h-[2px] bg-[#edebe9]"></div>
                     <Button onClick={() => openModal('material', module.id)} variant="outline" size="sm" className="w-full border-dashed text-sb-text-soft hover:text-sb-text-black hover:border-[#d6dbde] hover:bg-[#f9f9f9] relative z-10">
@@ -360,13 +360,13 @@ function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, 
 
 function QuizItem({ quiz, parentId, parentKind, expanded, openModal }) {
     return (
-        <div className={`bg-white relative border-b border-[#edebe9] ${expanded ? '' : 'hidden'}`}>
-            <div className="absolute left-[24px] top-0 h-full w-[2px] bg-[#edebe9]"></div>
+        <div className={`relative border-b bg-white border-[#edebe9] dark:bg-[#111a15] dark:border-white/[0.07] ${expanded ? '' : 'hidden'}`}>
+            <div className="absolute left-[24px] top-0 h-full w-[2px] bg-[#edebe9] dark:bg-white/10"></div>
             <div className="relative flex flex-col gap-2 py-3 pl-[48px] pr-4 md:flex-row md:items-center md:justify-between">
-                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9]"></div>
+                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9] dark:bg-white/10"></div>
                 <div className="flex items-center gap-2">
                     <HelpCircle className="size-4 text-sb-green" />
-                    <p className="text-[14px] font-medium text-sb-text-black">{quiz.title} <span className="text-[11px] font-normal text-sb-text-soft uppercase tracking-wider ml-1">(Quiz Tingkat {parentKind === 'module' ? 'Modul' : 'Materi'})</span></p>
+                    <p className="text-[14px] font-medium text-sb-text-black dark:text-white/80">{quiz.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">(Quiz Tingkat {parentKind === 'module' ? 'Modul' : 'Materi'})</span></p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 relative z-10">
                     <Link href={`/instructor/quizzes/${quiz.id}/edit`} className="inline-flex h-[28px] items-center justify-center rounded-[6px] border border-sb-green bg-sb-light/30 px-2.5 text-[11px] font-semibold text-sb-green hover:bg-sb-light transition-colors">
@@ -389,13 +389,13 @@ function QuizItem({ quiz, parentId, parentKind, expanded, openModal }) {
 
 function AssignmentItem({ assignment, parentId, parentKind, expanded, openModal }) {
     return (
-        <div className={`bg-white relative border-b border-[#edebe9] ${expanded ? '' : 'hidden'}`}>
-            <div className="absolute left-[24px] top-0 h-full w-[2px] bg-[#edebe9]"></div>
+        <div className={`relative border-b bg-white border-[#edebe9] dark:bg-[#111a15] dark:border-white/[0.07] ${expanded ? '' : 'hidden'}`}>
+            <div className="absolute left-[24px] top-0 h-full w-[2px] bg-[#edebe9] dark:bg-white/10"></div>
             <div className="relative flex flex-col gap-2 py-3 pl-[48px] pr-4 md:flex-row md:items-center md:justify-between">
-                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9]"></div>
+                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9] dark:bg-white/10"></div>
                 <div className="flex items-center gap-2">
                     <ClipboardList className="size-4 text-sb-green" />
-                    <p className="text-[14px] font-medium text-sb-text-black">{assignment.title} <span className="text-[11px] font-normal text-sb-text-soft uppercase tracking-wider ml-1">(Tugas Tingkat {parentKind === 'module' ? 'Modul' : 'Materi'})</span></p>
+                    <p className="text-[14px] font-medium text-sb-text-black dark:text-white/80">{assignment.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">(Tugas Tingkat {parentKind === 'module' ? 'Modul' : 'Materi'})</span></p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 relative z-10">
                     <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal('assignment', parentId, assignment, parentKind)}>
@@ -416,13 +416,13 @@ function AssignmentItem({ assignment, parentId, parentKind, expanded, openModal 
 
 function MaterialItem({ material, moduleId, expandedModules, expandedMaterials, toggleMaterial, openModal, getContentTypeIcon }) {
     return (
-        <div className="bg-white relative">
+        <div className="relative bg-white dark:bg-[#111a15]">
             <div className={`absolute left-[24px] top-0 w-[2px] bg-[#edebe9] ${expandedModules.has(moduleId) ? 'h-full' : 'h-0'}`}></div>
             <div className="relative flex flex-col gap-2 py-3 pl-[48px] pr-4 md:flex-row md:items-center md:justify-between">
-                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9]"></div>
+                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9] dark:bg-white/10"></div>
                 <div>
-                    <p className="text-[14px] font-medium text-sb-text-black">{material.title}</p>
-                    <p className="text-[12px] text-sb-text-soft">{material.contents.length} konten dilampirkan</p>
+                    <p className="text-[14px] font-medium text-sb-text-black dark:text-white/80">{material.title}</p>
+                    <p className="text-[12px] text-sb-text-soft dark:text-white/40">{material.contents.length} konten dilampirkan</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 relative z-10">
                     <Button type="button" variant="outline" size="sm" className="h-[28px] w-[28px] p-0 border-[#edebe9] text-sb-text-soft hover:text-sb-text-black" onClick={() => toggleMaterial(material.id)}>
@@ -445,7 +445,7 @@ function MaterialItem({ material, moduleId, expandedModules, expandedMaterials, 
                     </Button>
                 </div>
             </div>
-            <div className={`bg-[#f9f9f9] border-t border-[#edebe9] ${expandedMaterials.has(material.id) ? '' : 'hidden'}`}>
+            <div className={`border-t bg-[#f9f9f9] border-[#edebe9] dark:bg-white/5 dark:border-white/[0.07] ${expandedMaterials.has(material.id) ? '' : 'hidden'}`}>
                 <ol className="flex flex-col divide-y divide-[#edebe9]">
                     {material.contents.map((content, cIdx) => {
                         const hasQuizzes = material.quizzes && material.quizzes.length > 0;
@@ -468,12 +468,12 @@ function MaterialItem({ material, moduleId, expandedModules, expandedMaterials, 
                             <MaterialAssignmentItem key={`assignment-${assignment.id}`} assignment={assignment} materialId={material.id} isLast={isLast} openModal={openModal} />
                         );
                     })}
-                    <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 bg-[#f9f9f9] hover:bg-[#f1f1f1] transition-colors cursor-pointer" onClick={() => openModal('discussion', material.id, material)}>
+                    <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors cursor-pointer bg-[#f9f9f9] hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5" onClick={() => openModal('discussion', material.id, material)}>
                         <div className="absolute left-[56px] top-0 h-[18px] w-[2px] bg-[#edebe9]"></div>
                         <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-[#edebe9]"></div>
                         <div className="flex items-center gap-2 relative z-10">
                             <MessageSquare className="size-4 text-blue-600" />
-                            <span className="text-[13px] font-medium text-sb-text-black">Diskusi Materi <span className="text-[11px] font-normal text-sb-text-soft uppercase tracking-wider ml-1">({material.discussions?.length || 0} post)</span></span>
+                            <span className="text-[13px] font-medium text-sb-text-black dark:text-white/80">Diskusi Materi <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">({material.discussions?.length || 0} post)</span></span>
                         </div>
                         <div className="flex items-center gap-2 relative z-10">
                             <span className="text-[11px] text-blue-600 font-semibold">Lihat diskusi →</span>
@@ -495,12 +495,12 @@ function MaterialItem({ material, moduleId, expandedModules, expandedMaterials, 
 
 function ContentItem({ content, materialId, isLast, openModal, getContentTypeIcon }) {
     return (
-        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 bg-[#f9f9f9] hover:bg-[#f1f1f1] transition-colors">
+        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors bg-[#f9f9f9] hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5">
             <div className={`absolute left-[56px] top-0 w-[2px] bg-[#edebe9] ${isLast ? 'h-[18px]' : 'h-full'}`}></div>
             <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-[#edebe9]"></div>
             <div className="flex items-center gap-2 relative z-10">
                 {getContentTypeIcon(content.type)}
-                <span className="text-[13px] font-medium text-sb-text-black">{content.title} <span className="text-[11px] font-normal text-sb-text-soft uppercase tracking-wider ml-1">({content.type})</span></span>
+                <span className="text-[13px] font-medium text-sb-text-black dark:text-white/80">{content.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">({content.type})</span></span>
             </div>
             <div className="flex items-center gap-2 relative z-10">
                 <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal('content', materialId, content)}>
@@ -516,12 +516,12 @@ function ContentItem({ content, materialId, isLast, openModal, getContentTypeIco
 
 function MaterialQuizItem({ quiz, materialId, isLast, openModal }) {
     return (
-        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 bg-[#f9f9f9] hover:bg-[#f1f1f1] transition-colors">
+        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors bg-[#f9f9f9] hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5">
             <div className={`absolute left-[56px] top-0 w-[2px] bg-[#edebe9] ${isLast ? 'h-[18px]' : 'h-full'}`}></div>
             <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-[#edebe9]"></div>
             <div className="flex items-center gap-2 relative z-10">
                 <HelpCircle className="size-4 text-sb-green" />
-                <span className="text-[13px] font-medium text-sb-text-black">{quiz.title} <span className="text-[11px] font-normal text-sb-text-soft uppercase tracking-wider ml-1">(Quiz)</span></span>
+                <span className="text-[13px] font-medium text-sb-text-black dark:text-white/80">{quiz.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">(Quiz)</span></span>
             </div>
             <div className="flex items-center gap-2 relative z-10">
                 <Link href={`/instructor/quizzes/${quiz.id}/edit`} className="inline-flex h-[28px] items-center justify-center rounded-[6px] border border-sb-green bg-sb-light/30 px-2.5 text-[11px] font-semibold text-sb-green hover:bg-sb-light transition-colors">
@@ -543,12 +543,12 @@ function MaterialQuizItem({ quiz, materialId, isLast, openModal }) {
 
 function MaterialAssignmentItem({ assignment, materialId, isLast, openModal }) {
     return (
-        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 bg-[#f9f9f9] hover:bg-[#f1f1f1] transition-colors">
+        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors bg-[#f9f9f9] hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5">
             <div className={`absolute left-[56px] top-0 w-[2px] bg-[#edebe9] ${isLast ? 'h-[18px]' : 'h-full'}`}></div>
             <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-[#edebe9]"></div>
             <div className="flex items-center gap-2 relative z-10">
                 <ClipboardList className="size-4 text-sb-green" />
-                <span className="text-[13px] font-medium text-sb-text-black">{assignment.title} <span className="text-[11px] font-normal text-sb-text-soft uppercase tracking-wider ml-1">(Tugas)</span></span>
+                <span className="text-[13px] font-medium text-sb-text-black dark:text-white/80">{assignment.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">(Tugas)</span></span>
             </div>
             <div className="flex items-center gap-2 relative z-10">
                 <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal('assignment', materialId, assignment, 'material')}>
@@ -568,16 +568,16 @@ function MaterialAssignmentItem({ assignment, materialId, isLast, openModal }) {
 function ModalOverlay({ modalState, closeModal, editId, course, moduleForm, materialForm, contentForm, quizForm, storeModule, storeMaterial, storeContent, storeQuiz }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-[2px] tracking-[-0.01em]">
-            <div className={`w-full rounded-[12px] bg-white shadow-xl ring-1 ring-black/5 animate-in fade-in zoom-in-95 duration-200 ${modalState.type === 'content' ? 'max-w-2xl' : 'max-w-md'}`} role="dialog" aria-modal="true">
-                <div className="flex items-center justify-between border-b border-[#edebe9] px-5 py-4">
-                    <h3 className="text-[16px] font-semibold text-sb-text-black">
+            <div className={`w-full rounded-[12px] shadow-xl ring-1 animate-in fade-in zoom-in-95 duration-200 bg-white ring-black/5 dark:bg-[#111a15] dark:ring-white/10 ${modalState.type === 'content' ? 'max-w-2xl' : 'max-w-md'}`} role="dialog" aria-modal="true">
+                <div className="flex items-center justify-between border-b px-5 py-4 border-[#edebe9] dark:border-white/[0.07]">
+                    <h3 className="text-[16px] font-semibold text-sb-text-black dark:text-white/90">
                         {modalState.type === 'module' && (editId ? 'Edit Modul' : 'Tambah Modul Baru')}
                         {modalState.type === 'material' && (editId ? 'Edit Materi' : 'Tambah Materi Baru')}
                         {modalState.type === 'content' && (editId ? 'Edit Konten' : 'Tambah Konten Pembelajaran')}
                         {modalState.type === 'quiz' && (editId ? 'Edit Quiz' : 'Tambah Quiz')}
                         {modalState.type === 'discussion' && 'Diskusi Materi'}
                     </h3>
-                    <button onClick={closeModal} className="rounded-full p-1 text-sb-text-soft hover:bg-[#f9f9f9] hover:text-sb-text-black transition-colors">
+                    <button onClick={closeModal} className="rounded-full p-1 transition-colors text-sb-text-soft hover:bg-[#f9f9f9] hover:text-sb-text-black dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80">
                         <X className="size-5" />
                     </button>
                 </div>
@@ -607,10 +607,10 @@ function ModuleForm({ form, onSubmit, onCancel, editId }) {
     return (
         <form onSubmit={onSubmit} className="space-y-4">
             <Field label="Judul Modul" id="module-title" error={form.errors.title}>
-                <input id="module-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent" placeholder="Contoh: Pengantar Algoritma" />
+                <input id="module-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Pengantar Algoritma" />
             </Field>
             <Field label="Deskripsi (Opsional)" id="module-description" error={form.errors.description}>
-                <textarea id="module-description" rows="3" value={form.data.description} onChange={(e) => form.setData('description', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent" placeholder="Penjelasan singkat modul" />
+                <textarea id="module-description" rows="3" value={form.data.description} onChange={(e) => form.setData('description', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Penjelasan singkat modul" />
             </Field>
             <div className="flex justify-end gap-3 pt-2">
                 <Button type="button" variant="outline" onClick={onCancel}>Batal</Button>
@@ -628,7 +628,7 @@ function MaterialForm({ form, onSubmit, onCancel, editId, course, parentId }) {
         <form onSubmit={onSubmit} className="space-y-4">
             {!parentId && (
                 <Field label="Pilih Modul" id="material-module" error={form.errors.module_id}>
-                    <select id="material-module" value={form.data.module_id} onChange={(e) => form.setData('module_id', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent">
+                    <select id="material-module" value={form.data.module_id} onChange={(e) => form.setData('module_id', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60">
                         <option value="">-- Pilih modul --</option>
                         {course.modules.map((module) => (
                             <option key={module.id} value={module.id}>{module.title}</option>
@@ -637,7 +637,7 @@ function MaterialForm({ form, onSubmit, onCancel, editId, course, parentId }) {
                 </Field>
             )}
             <Field label="Judul Materi" id="material-title" error={form.errors.title}>
-                <input id="material-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent" placeholder="Contoh: Konsep Dasar Array" />
+                <input id="material-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Konsep Dasar Array" />
             </Field>
             <div className="flex justify-end gap-3 pt-2">
                 <Button type="button" variant="outline" onClick={onCancel}>Batal</Button>
@@ -662,7 +662,7 @@ function ContentForm({ form, onSubmit, onCancel, editId }) {
                 </select>
             </Field>
             <Field label="Judul Konten" id="content-title" error={form.errors.title}>
-                <input id="content-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent" />
+                <input id="content-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
             </Field>
             {form.data.type === 'artikel' && (
                 <Field label="Isi Artikel" id="content-body" error={form.errors.body}>
@@ -672,7 +672,7 @@ function ContentForm({ form, onSubmit, onCancel, editId }) {
             {form.data.type === 'video' && (
                 <div>
                     <Field label="Tautan Video YouTube" id="content-url" error={form.errors.url}>
-                        <input id="content-url" type="url" value={form.data.url} onChange={(e) => form.setData('url', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent" placeholder="https://youtube.com/watch?v=... atau https://youtu.be/..." />
+                        <input id="content-url" type="url" value={form.data.url} onChange={(e) => form.setData('url', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="https://youtube.com/watch?v=... atau https://youtu.be/..." />
                     </Field>
                     {form.data.url && <VideoUrlPreview url={form.data.url} className="mt-2" />}
                 </div>
@@ -703,22 +703,22 @@ function QuizForm({ form, onSubmit, onCancel, editId }) {
     return (
         <form onSubmit={onSubmit} className="space-y-4">
             <Field label="Judul Quiz" id="quiz-title" error={form.errors.title}>
-                <input id="quiz-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent" />
+                <input id="quiz-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
             </Field>
             <div className="grid gap-3 sm:grid-cols-2">
                 <Field label="Durasi (menit)" id="quiz-duration" error={form.errors.duration}>
-                    <input id="quiz-duration" type="number" min="1" max="600" value={form.data.duration} onChange={(e) => form.setData('duration', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent" />
+                    <input id="quiz-duration" type="number" min="1" max="600" value={form.data.duration} onChange={(e) => form.setData('duration', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
                 </Field>
                 <Field label="Passing Score" id="quiz-passing-score" error={form.errors.passing_score}>
-                    <input id="quiz-passing-score" type="number" min="0" max="100" value={form.data.passing_score} onChange={(e) => form.setData('passing_score', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent" />
+                    <input id="quiz-passing-score" type="number" min="0" max="100" value={form.data.passing_score} onChange={(e) => form.setData('passing_score', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
                 </Field>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
                 <Field label="Maks. Percobaan" id="quiz-max-attempts" error={form.errors.max_attempts}>
-                    <input id="quiz-max-attempts" type="number" min="1" max="10" value={form.data.max_attempts} onChange={(e) => form.setData('max_attempts', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent" />
+                    <input id="quiz-max-attempts" type="number" min="1" max="10" value={form.data.max_attempts} onChange={(e) => form.setData('max_attempts', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
                 </Field>
                 <Field label="Mode Hasil" id="quiz-result-mode" error={form.errors.result_mode}>
-                    <select id="quiz-result-mode" value={form.data.result_mode} onChange={(e) => form.setData('result_mode', e.target.value)} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent">
+                    <select id="quiz-result-mode" value={form.data.result_mode} onChange={(e) => form.setData('result_mode', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60">
                         <option value="immediate">Langsung tampil</option>
                         <option value="delayed">Ditunda</option>
                         <option value="custom">Setelah dinilai</option>
@@ -778,20 +778,20 @@ function InstructorDiscussionSection({ materialId, discussions }) {
 
     return (
         <div>
-            <div className="flex items-center gap-2 border-b border-[#edebe9] pb-3">
+            <div className="flex items-center gap-2 border-b pb-3 border-[#edebe9] dark:border-white/[0.07]">
                 <MessageSquare className="size-4 text-sb-green" aria-hidden="true" />
-                <h5 className="text-[14px] font-semibold text-sb-text-black">Diskusi Materi</h5>
-                <span className="ml-auto text-[12px] text-sb-text-soft">{discussions.length} diskusi</span>
+                <h5 className="text-[14px] font-semibold text-sb-text-black dark:text-white/90">Diskusi Materi</h5>
+                <span className="ml-auto text-[12px] text-sb-text-soft dark:text-white/35">{discussions.length} diskusi</span>
             </div>
 
             <form onSubmit={submitDiscussion} className="mt-4 space-y-3">
                 {replyingTo && (
-                    <div className="flex items-center justify-between rounded-[6px] bg-sb-light px-3 py-2 text-[12px] text-sb-green">
+                    <div className="flex items-center justify-between rounded-[6px] px-3 py-2 text-[12px] bg-sb-light text-sb-green dark:bg-emerald-500/15 dark:text-emerald-400">
                         <span>Membalas diskusi...</span>
                         <button type="button" onClick={cancelReply} className="text-sb-text-black hover:text-sb-text-soft">Batal</button>
                     </div>
                 )}
-                <textarea value={form.data.body} onChange={(e) => form.setData('body', e.target.value)} rows="3" placeholder={replyingTo ? 'Tulis balasan...' : 'Jawab pertanyaan mahasiswa atau beri komentar...'} className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent" />
+                <textarea value={form.data.body} onChange={(e) => form.setData('body', e.target.value)} rows="3" placeholder={replyingTo ? 'Tulis balasan...' : 'Jawab pertanyaan mahasiswa atau beri komentar...'} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
                 {form.errors.body && <p role="alert" className="text-[12px] text-red-600">{form.errors.body}</p>}
                 <Button type="submit" size="sm" disabled={form.processing}>
                     <Send className="mr-1.5 size-3.5" />Kirim
@@ -800,19 +800,19 @@ function InstructorDiscussionSection({ materialId, discussions }) {
 
             <div className="mt-5 space-y-4">
                 {discussions.length === 0 && (
-                    <p className="text-center text-[12px] text-sb-text-soft">Belum ada diskusi di materi ini.</p>
+                    <p className="text-center text-[12px] text-sb-text-soft dark:text-white/35">Belum ada diskusi di materi ini.</p>
                 )}
                 {discussions.map((discussion) => (
-                    <article key={discussion.id} className="rounded-[8px] border border-[#edebe9] bg-[#f9f9f9] p-3">
+                    <article key={discussion.id} className="rounded-[8px] border p-3 border-[#edebe9] bg-[#f9f9f9] dark:border-white/[0.07] dark:bg-white/5">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex items-start gap-3">
-                                <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-[11px] font-semibold text-blue-700">
+                                <div className="flex size-7 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300">
                                     {discussion.user?.name?.slice(0, 2).toUpperCase() ?? 'U'}
                                 </div>
                                 <div>
-                                    <p className="text-[13px] font-semibold text-sb-text-black">{discussion.user?.name ?? 'User'}</p>
-                                    <p className="mt-1 whitespace-pre-line text-[13px] leading-6 text-sb-text-soft">{discussion.body}</p>
-                                    <div className="mt-2 flex items-center gap-3 text-[11px] text-sb-text-soft">
+                                    <p className="text-[13px] font-semibold text-sb-text-black dark:text-white/80">{discussion.user?.name ?? 'User'}</p>
+                                    <p className="mt-1 whitespace-pre-line text-[13px] leading-6 text-sb-text-soft dark:text-white/45">{discussion.body}</p>
+                                    <div className="mt-2 flex items-center gap-3 text-[11px] text-sb-text-soft dark:text-white/30">
                                         <span>{new Date(discussion.created_at).toLocaleString('id-ID')}</span>
                                         <button type="button" onClick={() => startReply(discussion.id)} className="font-semibold text-sb-green hover:text-sb-accent">Balas</button>
                                         <button type="button" onClick={() => handleDelete(discussion.id)} className="font-semibold text-red-600 hover:text-red-700">Hapus</button>
@@ -823,15 +823,15 @@ function InstructorDiscussionSection({ materialId, discussions }) {
                         {discussion.replies?.length > 0 && (
                             <div className="ml-10 mt-3 space-y-2 border-l-2 border-[#edebe9] pl-3">
                                 {discussion.replies.map((reply) => (
-                                    <div key={reply.id} className="rounded-[6px] bg-white p-3">
+                                    <div key={reply.id} className="rounded-[6px] p-3 bg-white dark:bg-white/5">
                                         <div className="flex items-start gap-2">
-                                            <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[10px] font-semibold text-slate-700">
+                                            <div className="flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-white/60">
                                                 {reply.user?.name?.slice(0, 2).toUpperCase() ?? 'U'}
                                             </div>
                                             <div className="flex-1">
-                                                <p className="text-[12px] font-semibold text-sb-text-black">{reply.user?.name ?? 'User'}</p>
-                                                <p className="mt-1 whitespace-pre-line text-[12px] leading-5 text-sb-text-soft">{reply.body}</p>
-                                                <div className="mt-2 flex items-center gap-3 text-[10px] text-sb-text-soft">
+                                                <p className="text-[12px] font-semibold text-sb-text-black dark:text-white/80">{reply.user?.name ?? 'User'}</p>
+                                                <p className="mt-1 whitespace-pre-line text-[12px] leading-5 text-sb-text-soft dark:text-white/45">{reply.body}</p>
+                                                <div className="mt-2 flex items-center gap-3 text-[10px] text-sb-text-soft dark:text-white/30">
                                                     <span>{new Date(reply.created_at).toLocaleString('id-ID')}</span>
                                                     <button type="button" onClick={() => handleDelete(reply.id)} className="font-semibold text-red-600 hover:text-red-700">Hapus</button>
                                                 </div>
@@ -852,7 +852,7 @@ function Field({ label, id, error, children }) {
     const describedBy = error ? `${id}-error` : undefined;
     return (
         <div>
-            <label htmlFor={id} className="text-[12px] font-semibold text-sb-text-black mb-1.5 block">{label}</label>
+            <label htmlFor={id} className="text-[12px] font-semibold mb-1.5 block text-sb-text-black dark:text-white/70">{label}</label>
             <div>
                 {cloneElement(children, { 'aria-describedby': describedBy, 'aria-invalid': Boolean(error) })}
             </div>
@@ -860,3 +860,5 @@ function Field({ label, id, error, children }) {
         </div>
     );
 }
+
+

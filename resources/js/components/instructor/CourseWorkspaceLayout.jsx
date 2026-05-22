@@ -109,7 +109,9 @@ export default function CourseWorkspaceLayout({ course, children, activeTab = ''
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
-                className="bg-white rounded-xl shadow-sm border border-neutral-100 p-1.5 overflow-x-auto"
+                className="rounded-xl border p-1.5 overflow-x-auto shadow-sm
+                    bg-white border-neutral-100
+                    dark:bg-[#111a15] dark:border-white/[0.07]"
             >
                 <nav className="flex gap-1 min-w-max">
                     {navItems.map((item) => {
@@ -126,7 +128,7 @@ export default function CourseWorkspaceLayout({ course, children, activeTab = ''
                                 className={`flex items-center gap-2 px-3.5 py-2 rounded-[10px] text-sm font-medium transition-all ${
                                     isActive
                                         ? 'bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-white shadow-[0_4px_12px_rgba(5,150,105,0.32)]'
-                                        : 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900'
+                                        : 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80'
                                 }`}
                             >
                                 <Icon className="size-4 shrink-0" strokeWidth={1.75} />

@@ -133,22 +133,27 @@ export default function QuizFormModal({
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-[2px]">
             <div
-                className="w-full max-w-lg rounded-xl bg-white shadow-xl ring-1 ring-black/5"
+                className="w-full max-w-lg rounded-xl shadow-xl ring-1
+                    bg-white ring-black/5
+                    dark:bg-[#111a15] dark:ring-white/10"
                 role="dialog"
                 aria-modal="true"
             >
-                <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4">
+                <div className="flex items-center justify-between border-b px-5 py-4
+                    border-neutral-200 dark:border-white/[0.07]">
                     <div className="flex items-center gap-2">
-                        <div className="flex size-8 items-center justify-center rounded-lg bg-emerald-100">
-                            <HelpCircle className="size-4 text-emerald-600" />
+                        <div className="flex size-8 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-500/20">
+                            <HelpCircle className="size-4 text-emerald-600 dark:text-emerald-400" />
                         </div>
-                        <h3 className="text-lg font-semibold text-neutral-900">
+                        <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">
                             {isEditing ? 'Edit Kuis' : 'Buat Kuis Baru'}
                         </h3>
                     </div>
                     <button 
                         onClick={onClose} 
-                        className="rounded-full p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-colors"
+                        className="rounded-full p-1 transition-colors
+                            text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600
+                            dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/70"
                     >
                         <X className="size-5" />
                     </button>
@@ -156,17 +161,18 @@ export default function QuizFormModal({
 
                 <div className="p-5 max-h-[75vh] overflow-y-auto">
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        {/* Parent Selection */}
                         {showParentSelect && (
                             <div>
-                                <label htmlFor="quiz-parent" className="text-sm font-medium text-neutral-700 mb-1.5 block">
+                                <label htmlFor="quiz-parent" className="text-sm font-medium mb-1.5 block text-neutral-700 dark:text-white/70">
                                     Tingkat Kuis <span className="text-red-500">*</span>
                                 </label>
                                 <select
                                     id="quiz-parent"
                                     value={getCurrentValue()}
                                     onChange={handleParentChange}
-                                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                                    className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                        border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                        dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60"
                                 >
                                     <option value="">-- Pilih Modul atau Materi --</option>
                                     {parentOptions.map((option) => (
@@ -179,7 +185,7 @@ export default function QuizFormModal({
                                         </option>
                                     ))}
                                 </select>
-                                <p className="mt-1 text-xs text-neutral-500">
+                                <p className="mt-1 text-xs text-neutral-500 dark:text-white/35">
                                     Pilih modul untuk kuis tingkat modul, atau materi untuk kuis tingkat materi.
                                 </p>
                                 {(form.errors.quizzable_id || form.errors.quizzable_type) && (
@@ -188,66 +194,44 @@ export default function QuizFormModal({
                             </div>
                         )}
 
-                        {/* Title */}
                         <Field label="Judul Kuis" id="quiz-title" error={form.errors.title} required>
-                            <input
-                                id="quiz-title"
-                                value={form.data.title}
-                                onChange={(e) => form.setData('title', e.target.value)}
-                                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                                placeholder="Contoh: Kuis Pengantar Tafsir"
-                            />
+                            <input id="quiz-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)}
+                                className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                    border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                    dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
+                                placeholder="Contoh: Kuis Pengantar Tafsir" />
                         </Field>
 
-                        {/* Duration and Passing Score */}
                         <div className="grid gap-4 sm:grid-cols-2">
                             <Field label="Durasi (menit)" id="quiz-duration" error={form.errors.duration}>
-                                <input
-                                    id="quiz-duration"
-                                    type="number"
-                                    min="1"
-                                    max="600"
-                                    value={form.data.duration}
-                                    onChange={(e) => form.setData('duration', e.target.value)}
-                                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                                    placeholder="30"
-                                />
+                                <input id="quiz-duration" type="number" min="1" max="600" value={form.data.duration} onChange={(e) => form.setData('duration', e.target.value)}
+                                    className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                        border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                        dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60"
+                                    placeholder="30" />
                             </Field>
                             <Field label="Nilai Minimum Lulus" id="quiz-passing-score" error={form.errors.passing_score} required>
-                                <input
-                                    id="quiz-passing-score"
-                                    type="number"
-                                    min="0"
-                                    max="100"
-                                    value={form.data.passing_score}
-                                    onChange={(e) => form.setData('passing_score', e.target.value)}
-                                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                                    placeholder="70"
-                                />
+                                <input id="quiz-passing-score" type="number" min="0" max="100" value={form.data.passing_score} onChange={(e) => form.setData('passing_score', e.target.value)}
+                                    className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                        border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                        dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60"
+                                    placeholder="70" />
                             </Field>
                         </div>
 
-                        {/* Max Attempts and Result Mode */}
                         <div className="grid gap-4 sm:grid-cols-2">
                             <Field label="Maksimal Percobaan" id="quiz-max-attempts" error={form.errors.max_attempts} required>
-                                <input
-                                    id="quiz-max-attempts"
-                                    type="number"
-                                    min="1"
-                                    max="10"
-                                    value={form.data.max_attempts}
-                                    onChange={(e) => form.setData('max_attempts', e.target.value)}
-                                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                                    placeholder="1"
-                                />
+                                <input id="quiz-max-attempts" type="number" min="1" max="10" value={form.data.max_attempts} onChange={(e) => form.setData('max_attempts', e.target.value)}
+                                    className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                        border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                        dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60"
+                                    placeholder="1" />
                             </Field>
                             <Field label="Mode Hasil" id="quiz-result-mode" error={form.errors.result_mode} required>
-                                <select
-                                    id="quiz-result-mode"
-                                    value={form.data.result_mode}
-                                    onChange={(e) => form.setData('result_mode', e.target.value)}
-                                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                                >
+                                <select id="quiz-result-mode" value={form.data.result_mode} onChange={(e) => form.setData('result_mode', e.target.value)}
+                                    className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                        border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                        dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60">
                                     <option value="immediate">Langsung tampil</option>
                                     <option value="delayed">Ditunda</option>
                                     <option value="custom">Setelah dinilai</option>
@@ -255,21 +239,14 @@ export default function QuizFormModal({
                             </Field>
                         </div>
 
-                        {/* Publish Status */}
                         <div className="flex items-center gap-2 pt-2">
-                            <label className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    checked={form.data.is_published}
-                                    onChange={(e) => form.setData('is_published', e.target.checked)}
-                                    className="size-4 rounded border-neutral-300 text-emerald-600 focus:ring-emerald-500"
-                                />
+                            <label className="flex items-center gap-2 text-sm cursor-pointer text-neutral-700 dark:text-white/60">
+                                <input type="checkbox" checked={form.data.is_published} onChange={(e) => form.setData('is_published', e.target.checked)} className="size-4 rounded border-neutral-300 text-emerald-600 focus:ring-emerald-500" />
                                 Publish kuis (langsung terlihat oleh mahasiswa)
                             </label>
                         </div>
 
-                        {/* Actions */}
-                        <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200">
+                        <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-white/[0.07]">
                             <Button type="button" variant="outline" onClick={onClose}>
                                 Batal
                             </Button>
@@ -293,7 +270,7 @@ function Field({ label, id, error, required, children }) {
     const describedBy = error ? `${id}-error` : undefined;
     return (
         <div>
-            <label htmlFor={id} className="text-sm font-medium text-neutral-700 mb-1.5 block">
+            <label htmlFor={id} className="text-sm font-medium mb-1.5 block text-neutral-700 dark:text-white/70">
                 {label} {required && <span className="text-red-500">*</span>}
             </label>
             <div>

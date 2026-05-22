@@ -74,9 +74,9 @@ export default function Settings({ course, settings, stats }) {
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900">Pengaturan</h2>
-                            <p className="text-sm text-neutral-600 mt-1">Atur konfigurasi kursus ini.</p>
-                            <div className="flex items-center gap-2 mt-2 text-xs text-neutral-500">
+                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Pengaturan</h2>
+                            <p className="text-sm text-neutral-600 dark:text-white/45 mt-1">Atur konfigurasi kursus ini.</p>
+                            <div className="flex items-center gap-2 mt-2 text-xs text-neutral-500 dark:text-white/35">
                                 <span className="font-medium">{course.name}</span>
                                 <span>·</span>
                                 <span className="font-mono">{course.code}</span>
@@ -93,7 +93,9 @@ export default function Settings({ course, settings, stats }) {
                     </div>
 
                     {/* Quick Navigation */}
-                    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-1.5 overflow-x-auto">
+                    <div className="rounded-xl shadow-sm border p-1.5 overflow-x-auto
+                        bg-white border-neutral-100
+                        dark:bg-[#111a15] dark:border-white/[0.07]">
                         <nav className="flex gap-1 min-w-max">
                             {sections.map((section) => {
                                 const Icon = section.icon;
@@ -109,8 +111,8 @@ export default function Settings({ course, settings, stats }) {
                                             isActive
                                                 ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/25'
                                                 : section.id === 'danger'
-                                                ? 'text-red-600 hover:bg-red-50'
-                                                : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                                                ? 'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10'
+                                                : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80'
                                         }`}
                                     >
                                         <Icon className="size-4" />
@@ -211,8 +213,8 @@ function StatusBadge({ status }) {
 
 function SectionCard({ id, title, description, icon: Icon, children, expanded, onToggle, variant = 'default' }) {
     const variants = {
-        default: 'border-neutral-100',
-        danger: 'border-red-200 bg-red-50/30',
+        default: 'border-neutral-100 dark:border-white/[0.07]',
+        danger: 'border-red-200 bg-red-50/30 dark:border-red-500/30 dark:bg-red-500/5',
     };
 
     return (
@@ -220,36 +222,39 @@ function SectionCard({ id, title, description, icon: Icon, children, expanded, o
             id={`section-${id}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`bg-white rounded-xl shadow-sm border overflow-hidden scroll-mt-6 ${variants[variant]}`}
+            className={`rounded-xl shadow-sm border overflow-hidden scroll-mt-6
+                bg-white dark:bg-[#111a15]
+                ${variants[variant]}`}
         >
             <button
                 onClick={onToggle}
                 className={`w-full flex items-center justify-between p-5 text-left transition-colors ${
-                    variant === 'danger' ? 'hover:bg-red-50' : 'hover:bg-neutral-50'
+                    variant === 'danger'
+                        ? 'hover:bg-red-50 dark:hover:bg-red-500/8'
+                        : 'hover:bg-neutral-50 dark:hover:bg-white/5'
                 }`}
             >
                 <div className="flex items-center gap-4">
                     <div className={`flex size-10 items-center justify-center rounded-xl ${
                         variant === 'danger' 
-                            ? 'bg-red-100 text-red-600' 
-                            : 'bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-600'
+                            ? 'bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400' 
+                            : 'bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-600 dark:from-emerald-500/20 dark:to-teal-500/20 dark:text-emerald-400'
                     }`}>
                         <Icon className="size-5" />
                     </div>
                     <div>
-                        <h3 className={`text-lg font-semibold ${variant === 'danger' ? 'text-red-900' : 'text-neutral-900'}`}>
+                        <h3 className={`text-lg font-semibold ${variant === 'danger' ? 'text-red-900 dark:text-red-300' : 'text-neutral-900 dark:text-white/90'}`}>
                             {title}
                         </h3>
-                        <p className={`text-sm ${variant === 'danger' ? 'text-red-600' : 'text-neutral-500'}`}>
+                        <p className={`text-sm ${variant === 'danger' ? 'text-red-600 dark:text-red-400/70' : 'text-neutral-500 dark:text-white/40'}`}>
                             {description}
                         </p>
                     </div>
                 </div>
-                {expanded ? (
-                    <ChevronUp className="size-5 text-neutral-400" />
-                ) : (
-                    <ChevronDown className="size-5 text-neutral-400" />
-                )}
+                {expanded
+                    ? <ChevronUp className="size-5 text-neutral-400 dark:text-white/30" />
+                    : <ChevronDown className="size-5 text-neutral-400 dark:text-white/30" />
+                }
             </button>
             <AnimatePresence>
                 {expanded && (
@@ -260,7 +265,7 @@ function SectionCard({ id, title, description, icon: Icon, children, expanded, o
                         transition={{ duration: 0.2 }}
                         className="overflow-hidden"
                     >
-                        <div className="px-5 pb-5 pt-0 border-t border-neutral-100">
+                        <div className="px-5 pb-5 pt-0 border-t border-neutral-100 dark:border-white/[0.07]">
                             {children}
                         </div>
                     </motion.div>
@@ -273,10 +278,10 @@ function SectionCard({ id, title, description, icon: Icon, children, expanded, o
 function FormField({ label, description, children, error }) {
     return (
         <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-neutral-700">{label}</label>
-            {description && <p className="text-xs text-neutral-500">{description}</p>}
+            <label className="block text-sm font-medium text-neutral-700 dark:text-white/70">{label}</label>
+            {description && <p className="text-xs text-neutral-500 dark:text-white/35">{description}</p>}
             {children}
-            {error && <p className="text-xs text-red-600">{error}</p>}
+            {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
         </div>
     );
 }
@@ -288,10 +293,11 @@ function TextInput({ value, onChange, placeholder, error, ...props }) {
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
-            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors ${
+            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors
+                dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 ${
                 error 
-                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
-                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500/40' 
+                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:focus:border-emerald-500/60'
             }`}
             {...props}
         />
@@ -305,10 +311,11 @@ function TextArea({ value, onChange, placeholder, rows = 3, error }) {
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
             rows={rows}
-            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors resize-none ${
+            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors resize-none
+                dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 ${
                 error 
-                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
-                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500/40' 
+                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:focus:border-emerald-500/60'
             }`}
         />
     );
@@ -319,10 +326,11 @@ function SelectInput({ value, onChange, options, error }) {
         <select
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors ${
+            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors
+                dark:bg-white/8 dark:text-white/90 ${
                 error 
-                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
-                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500/40' 
+                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:focus:border-emerald-500/60'
             }`}
         >
             {options.map((opt) => (
@@ -340,10 +348,11 @@ function NumberInput({ value, onChange, min, max, error, ...props }) {
             onChange={(e) => onChange(parseInt(e.target.value) || 0)}
             min={min}
             max={max}
-            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors ${
+            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors
+                dark:bg-white/8 dark:text-white/90 ${
                 error 
-                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
-                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500/40' 
+                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:focus:border-emerald-500/60'
             }`}
             {...props}
         />
@@ -354,18 +363,13 @@ function Toggle({ checked, onChange, label, description }) {
     return (
         <label className="flex items-start gap-3 cursor-pointer group">
             <div className="relative mt-0.5">
-                <input
-                    type="checkbox"
-                    checked={checked}
-                    onChange={(e) => onChange(e.target.checked)}
-                    className="sr-only peer"
-                />
-                <div className="w-10 h-6 bg-neutral-200 rounded-full peer-checked:bg-emerald-500 transition-colors" />
+                <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only peer" />
+                <div className="w-10 h-6 rounded-full transition-colors bg-neutral-200 peer-checked:bg-emerald-500 dark:bg-white/15 dark:peer-checked:bg-emerald-500" />
                 <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform peer-checked:translate-x-4" />
             </div>
             <div className="flex-1">
-                <span className="text-sm font-medium text-neutral-700 group-hover:text-neutral-900">{label}</span>
-                {description && <p className="text-xs text-neutral-500 mt-0.5">{description}</p>}
+                <span className="text-sm font-medium text-neutral-700 dark:text-white/70 group-hover:text-neutral-900 dark:group-hover:text-white/90">{label}</span>
+                {description && <p className="text-xs text-neutral-500 dark:text-white/35 mt-0.5">{description}</p>}
             </div>
         </label>
     );
@@ -554,11 +558,13 @@ function VisibilitySection({ course, expanded, onToggle }) {
                     </FormField>
                 </div>
 
-                <div className="p-4 bg-neutral-50 rounded-lg border border-neutral-200">
+                <div className="p-4 rounded-lg border
+                    bg-neutral-50 border-neutral-200
+                    dark:bg-white/5 dark:border-white/[0.07]">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm font-medium text-neutral-700">Kode Enrollment</p>
-                            <p className="text-2xl font-mono font-bold text-emerald-600 mt-1">{course.enroll_code}</p>
+                            <p className="text-sm font-medium text-neutral-700 dark:text-white/70">Kode Enrollment</p>
+                            <p className="text-2xl font-mono font-bold text-emerald-600 dark:text-emerald-400 mt-1">{course.enroll_code}</p>
                         </div>
                         <Button type="button" variant="outline" onClick={regenerateCode} className="gap-2">
                             <RefreshCw className="size-4" />
@@ -584,7 +590,9 @@ function VisibilitySection({ course, expanded, onToggle }) {
                             type="date"
                             value={form.data.start_date}
                             onChange={(e) => form.setData('start_date', e.target.value)}
-                            className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                            className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60"
                         />
                     </FormField>
                     <FormField 
@@ -596,7 +604,9 @@ function VisibilitySection({ course, expanded, onToggle }) {
                             type="date"
                             value={form.data.end_date}
                             onChange={(e) => form.setData('end_date', e.target.value)}
-                            className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                            className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60"
                         />
                     </FormField>
                 </div>
@@ -747,10 +757,12 @@ function AssignmentsSection({ course, settings, expanded, onToggle }) {
             onToggle={onToggle}
         >
             <form onSubmit={handleSubmit} className="space-y-4 pt-4">
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="p-3 rounded-lg border
+                    bg-blue-50 border-blue-200
+                    dark:bg-blue-500/10 dark:border-blue-500/30">
                     <div className="flex items-start gap-2">
-                        <Info className="size-4 text-blue-600 mt-0.5" />
-                        <p className="text-xs text-blue-700">
+                        <Info className="size-4 text-blue-600 dark:text-blue-400 mt-0.5" />
+                        <p className="text-xs text-blue-700 dark:text-blue-300">
                             Pengaturan ini adalah default untuk semua tugas baru. Setiap tugas dapat memiliki pengaturan berbeda.
                         </p>
                     </div>
@@ -873,10 +885,12 @@ function QuizzesSection({ course, settings, expanded, onToggle }) {
             onToggle={onToggle}
         >
             <form onSubmit={handleSubmit} className="space-y-4 pt-4">
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="p-3 rounded-lg border
+                    bg-blue-50 border-blue-200
+                    dark:bg-blue-500/10 dark:border-blue-500/30">
                     <div className="flex items-start gap-2">
-                        <Info className="size-4 text-blue-600 mt-0.5" />
-                        <p className="text-xs text-blue-700">
+                        <Info className="size-4 text-blue-600 dark:text-blue-400 mt-0.5" />
+                        <p className="text-xs text-blue-700 dark:text-blue-300">
                             Pengaturan ini adalah default untuk semua kuis baru. Setiap kuis dapat memiliki pengaturan berbeda.
                         </p>
                     </div>
@@ -1057,7 +1071,7 @@ function GradesSection({ course, settings, expanded, onToggle }) {
                 {/* Grade Weights */}
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-medium text-neutral-700">Bobot Nilai</h4>
+                        <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60">Bobot Nilai</h4>
                         <span className={`text-sm font-bold ${isWeightValid ? 'text-emerald-600' : 'text-red-600'}`}>
                             Total: {totalWeight}%
                         </span>
@@ -1093,7 +1107,7 @@ function GradesSection({ course, settings, expanded, onToggle }) {
 
                 {/* Certificate Criteria */}
                 <div className="space-y-3 pt-4 border-t border-neutral-100">
-                    <h4 className="text-sm font-medium text-neutral-700">Kriteria Sertifikat</h4>
+                    <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60">Kriteria Sertifikat</h4>
                     <div className="grid gap-4 md:grid-cols-2">
                         <FormField 
                             label="Progres Minimum (%)" 
@@ -1373,14 +1387,16 @@ function IslamicSection({ course, settings, expanded, onToggle }) {
             onToggle={onToggle}
         >
             <form onSubmit={handleSubmit} className="space-y-4 pt-4">
-                <div className="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl">
+                <div className="p-4 rounded-xl border
+                    bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-200
+                    dark:from-emerald-500/10 dark:to-teal-500/10 dark:border-emerald-500/30">
                     <div className="flex items-start gap-3">
-                        <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-100">
-                            <Moon className="size-5 text-emerald-600" />
+                        <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-500/20">
+                            <Moon className="size-5 text-emerald-600 dark:text-emerald-400" />
                         </div>
                         <div>
-                            <h4 className="font-medium text-emerald-900">Fitur Islamic LMS</h4>
-                            <p className="text-sm text-emerald-700 mt-1">
+                            <h4 className="font-medium text-emerald-900 dark:text-emerald-300">Fitur Islamic LMS</h4>
+                            <p className="text-sm text-emerald-700 dark:text-emerald-400/80 mt-1">
                                 Aktifkan fitur-fitur khusus untuk mendukung pembelajaran berbasis nilai-nilai Islam.
                             </p>
                         </div>
@@ -1388,7 +1404,7 @@ function IslamicSection({ course, settings, expanded, onToggle }) {
                 </div>
 
                 <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-neutral-700 pt-2">Tampilan & Konten</h4>
+                    <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60 pt-2">Tampilan & Konten</h4>
                     <Toggle
                         checked={form.data.settings.islamic.show_learning_dua}
                         onChange={(v) => updateIslamic('show_learning_dua', v)}
@@ -1416,7 +1432,7 @@ function IslamicSection({ course, settings, expanded, onToggle }) {
                 </div>
 
                 <div className="space-y-3 pt-4 border-t border-neutral-100">
-                    <h4 className="text-sm font-medium text-neutral-700">Validasi & Review</h4>
+                    <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60">Validasi & Review</h4>
                     <Toggle
                         checked={form.data.settings.islamic.require_islamic_references}
                         onChange={(v) => updateIslamic('require_islamic_references', v)}
@@ -1432,7 +1448,7 @@ function IslamicSection({ course, settings, expanded, onToggle }) {
                 </div>
 
                 <div className="space-y-3 pt-4 border-t border-neutral-100">
-                    <h4 className="text-sm font-medium text-neutral-700">Diskusi & Aktivitas</h4>
+                    <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60">Diskusi & Aktivitas</h4>
                     <Toggle
                         checked={form.data.settings.islamic.show_adab_discussion}
                         onChange={(v) => updateIslamic('show_adab_discussion', v)}
@@ -1582,19 +1598,20 @@ function DangerZoneSection({
                             initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.95, opacity: 0 }}
-                            className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6"
+                            className="rounded-2xl shadow-xl max-w-md w-full p-6
+                                bg-white dark:bg-[#111a15]"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex items-center gap-4 mb-4">
-                                <div className="flex size-12 items-center justify-center rounded-full bg-amber-100">
-                                    <Archive className="size-6 text-amber-600" />
+                                <div className="flex size-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/20">
+                                    <Archive className="size-6 text-amber-600 dark:text-amber-400" />
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-semibold text-neutral-900">Arsipkan Kursus?</h3>
-                                    <p className="text-sm text-neutral-500">Kursus akan dinonaktifkan</p>
+                                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">Arsipkan Kursus?</h3>
+                                    <p className="text-sm text-neutral-500 dark:text-white/40">Kursus akan dinonaktifkan</p>
                                 </div>
                             </div>
-                            <p className="text-sm text-neutral-600 mb-6">
+                            <p className="text-sm text-neutral-600 dark:text-white/50 mb-6">
                                 Kursus <strong>{course.name}</strong> akan diarsipkan. Mahasiswa tidak akan dapat mengakses kursus ini, 
                                 tetapi semua data tetap tersimpan dan dapat diaktifkan kembali.
                             </p>
@@ -1631,25 +1648,26 @@ function DangerZoneSection({
                             initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.95, opacity: 0 }}
-                            className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6"
+                            className="rounded-2xl shadow-xl max-w-md w-full p-6
+                                bg-white dark:bg-[#111a15]"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex items-center gap-4 mb-4">
-                                <div className="flex size-12 items-center justify-center rounded-full bg-red-100">
-                                    <Trash2 className="size-6 text-red-600" />
+                                <div className="flex size-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/20">
+                                    <Trash2 className="size-6 text-red-600 dark:text-red-400" />
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-semibold text-neutral-900">Hapus Kursus?</h3>
-                                    <p className="text-sm text-neutral-500">Tindakan ini tidak dapat dibatalkan</p>
+                                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">Hapus Kursus?</h3>
+                                    <p className="text-sm text-neutral-500 dark:text-white/40">Tindakan ini tidak dapat dibatalkan</p>
                                 </div>
                             </div>
-                            <div className="p-4 bg-red-50 border border-red-200 rounded-xl mb-4">
-                                <p className="text-sm text-red-800">
+                            <div className="p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-xl mb-4">
+                                <p className="text-sm text-red-800 dark:text-red-300">
                                     <strong>Peringatan:</strong> Semua data kursus termasuk modul, materi, tugas, kuis, 
                                     submission, dan nilai akan dihapus secara permanen.
                                 </p>
                             </div>
-                            <p className="text-sm text-neutral-600 mb-4">
+                            <p className="text-sm text-neutral-600 dark:text-white/50 mb-4">
                                 Untuk mengkonfirmasi, ketik kode kursus <strong className="font-mono">{course.code}</strong> di bawah ini:
                             </p>
                             <input
@@ -1657,7 +1675,9 @@ function DangerZoneSection({
                                 value={deleteConfirmText}
                                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                                 placeholder={course.code}
-                                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 font-mono mb-4"
+                                className="w-full rounded-lg border px-3 py-2 text-sm outline-none font-mono mb-4
+                                    border-neutral-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20
+                                    dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25"
                             />
                             <div className="flex gap-3 justify-end">
                                 <Button 

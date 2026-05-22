@@ -82,8 +82,8 @@ export default function Assignments({ course, assignments, stats, filters }) {
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900">Tugas</h2>
-                            <p className="text-sm text-neutral-600 mt-1">Kelola semua tugas pada kursus ini.</p>
+                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Tugas</h2>
+                            <p className="text-sm text-neutral-600 dark:text-white/45 mt-1">Kelola semua tugas pada kursus ini.</p>
                         </div>
                         <Button 
                             onClick={() => openModal()} 
@@ -104,18 +104,22 @@ export default function Assignments({ course, assignments, stats, filters }) {
                     {/* Filters */}
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative flex-1 max-w-sm">
-                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
                             <input
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
                                 placeholder="Cari tugas..."
-                                className="h-10 w-full rounded-lg border border-neutral-200 pl-10 pr-4 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                                className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none
+                                    border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                    dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
                             />
                         </div>
                         <select
                             value={filterData.status}
                             onChange={(e) => setFilterData(prev => ({ ...prev, status: e.target.value }))}
-                            className="h-10 rounded-lg border border-neutral-200 px-3 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                            className="h-10 rounded-lg border px-3 text-sm outline-none
+                                border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Status</option>
                             <option value="published">Aktif</option>
@@ -125,7 +129,9 @@ export default function Assignments({ course, assignments, stats, filters }) {
                         <select
                             value={filterData.module_id}
                             onChange={(e) => setFilterData(prev => ({ ...prev, module_id: e.target.value }))}
-                            className="h-10 rounded-lg border border-neutral-200 px-3 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                            className="h-10 rounded-lg border px-3 text-sm outline-none
+                                border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Modul</option>
                             {course.modules?.map((module) => (
@@ -141,31 +147,32 @@ export default function Assignments({ course, assignments, stats, filters }) {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden"
+                            className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden
+                                dark:bg-[#111a15] dark:border-white/[0.07]"
                         >
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[800px]">
                                     <thead>
-                                        <tr className="border-b border-neutral-100 bg-neutral-50/50">
-                                            <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Tugas</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Lokasi</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Deadline</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Submission</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Perlu Dinilai</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Status</th>
-                                            <th className="text-right py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Aksi</th>
+                                        <tr className="border-b border-neutral-100 dark:border-white/[0.07] bg-neutral-50/50 dark:bg-white/5">
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Tugas</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Lokasi</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Deadline</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Submission</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Perlu Dinilai</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Status</th>
+                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-neutral-100">
+                                    <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                                         {assignments.map((assignment) => (
-                                            <tr key={assignment.id} className="hover:bg-neutral-50/50 transition-colors">
+                                            <tr key={assignment.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
                                                 <td className="py-3 px-4">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                                                        <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                                                             <ClipboardList className="size-4" />
                                                         </div>
                                                         <div>
-                                                            <p className="font-medium text-neutral-900 text-sm">{assignment.title}</p>
+                                                            <p className="font-medium text-sm text-neutral-900 dark:text-white/80">{assignment.title}</p>
                                                             <div className="flex items-center gap-2 mt-0.5">
                                                                 {assignment.allow_file && (
                                                                     <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500">
@@ -281,15 +288,17 @@ function StatCard({ label, value, icon: Icon, color }) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4"
+            className="rounded-xl shadow-sm border p-4
+                bg-white border-neutral-100
+                dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex items-center gap-3">
                 <div className={`flex size-10 items-center justify-center rounded-lg bg-gradient-to-br ${colorClasses[color]} shadow-lg`}>
                     <Icon className="size-5 text-white" />
                 </div>
                 <div>
-                    <p className="text-2xl font-bold text-neutral-900">{value}</p>
-                    <p className="text-xs text-neutral-500">{label}</p>
+                    <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}</p>
+                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
                 </div>
             </div>
         </motion.div>
@@ -320,32 +329,17 @@ function StatusBadge({ isPublished, isOverdue }) {
 
 function DropdownMenu({ assignment, onEdit, onToggle, onDelete }) {
     return (
-        <div className="absolute right-0 top-full mt-1 w-40 rounded-lg bg-white shadow-lg border border-neutral-200 py-1 z-50">
-            <button
-                onClick={onEdit}
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
-            >
+        <div className="absolute right-0 top-full mt-1 w-40 rounded-lg shadow-lg border py-1 z-50
+            bg-white border-neutral-200
+            dark:bg-[#111a15] dark:border-white/[0.07]">
+            <button onClick={onEdit} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-white/70 hover:bg-neutral-50 dark:hover:bg-white/8">
                 <Edit2 className="size-4" /> Edit
             </button>
-            <button
-                onClick={onToggle}
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
-            >
-                {assignment.is_published ? (
-                    <>
-                        <X className="size-4" /> Unpublish
-                    </>
-                ) : (
-                    <>
-                        <CheckCircle2 className="size-4" /> Publish
-                    </>
-                )}
+            <button onClick={onToggle} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-white/70 hover:bg-neutral-50 dark:hover:bg-white/8">
+                {assignment.is_published ? (<><X className="size-4" /> Unpublish</>) : (<><CheckCircle2 className="size-4" /> Publish</>)}
             </button>
-            <hr className="my-1 border-neutral-100" />
-            <button
-                onClick={onDelete}
-                className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-            >
+            <hr className="my-1 border-neutral-100 dark:border-white/[0.07]" />
+            <button onClick={onDelete} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10">
                 <Trash2 className="size-4" /> Hapus
             </button>
         </div>
@@ -357,15 +351,17 @@ function EmptyState({ onCreateClick }) {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-12 text-center"
+            className="rounded-xl shadow-sm border p-12 text-center
+                bg-white border-neutral-100
+                dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex justify-center mb-6">
-                <div className="flex size-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 border border-emerald-200">
-                    <ClipboardList className="size-10 text-emerald-600" />
+                <div className="flex size-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-500/20 dark:to-teal-500/20 border border-emerald-200 dark:border-emerald-500/30">
+                    <ClipboardList className="size-10 text-emerald-600 dark:text-emerald-400" />
                 </div>
             </div>
-            <h3 className="text-xl font-bold text-neutral-900 mb-2">Belum ada tugas</h3>
-            <p className="text-neutral-600 mb-6 max-w-md mx-auto">
+            <h3 className="text-xl font-bold mb-2 text-neutral-900 dark:text-white/90">Belum ada tugas</h3>
+            <p className="mb-6 max-w-md mx-auto text-neutral-600 dark:text-white/45">
                 Tambahkan tugas untuk modul agar mahasiswa dapat mengumpulkan pekerjaan mereka.
             </p>
             <Button 

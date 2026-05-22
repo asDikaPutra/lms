@@ -35,8 +35,8 @@ export default function Grades({ course, gradebook, needsGrading, stats, tab }) 
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900">Nilai</h2>
-                            <p className="text-sm text-neutral-600 mt-1">Kelola nilai dan rekap penilaian kursus ini.</p>
+                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Nilai</h2>
+                            <p className="text-sm mt-1 text-neutral-600 dark:text-white/45">Kelola nilai dan rekap penilaian kursus ini.</p>
                         </div>
                         <div className="flex gap-2">
                             <Button variant="outline" className="gap-2">
@@ -55,8 +55,8 @@ export default function Grades({ course, gradebook, needsGrading, stats, tab }) 
                     </div>
 
                     {/* Tabs */}
-                    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden">
-                        <div className="border-b border-neutral-100">
+                    <div className="rounded-xl shadow-sm border overflow-hidden bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]">
+                        <div className="border-b border-neutral-100 dark:border-white/[0.07]">
                             <nav className="flex gap-1 p-1.5">
                                 {tabs.map((t) => {
                                     const Icon = t.icon;
@@ -67,7 +67,7 @@ export default function Grades({ course, gradebook, needsGrading, stats, tab }) 
                                             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
                                                 activeTab === t.id
                                                     ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/25'
-                                                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                                                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80'
                                             }`}
                                         >
                                             <Icon className="size-4" />
@@ -103,8 +103,8 @@ function GradebookTab({ gradebook }) {
         return (
             <div className="text-center py-12">
                 <BarChart3 className="size-12 text-neutral-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-neutral-900 mb-2">Belum Ada Data Nilai</h3>
-                <p className="text-neutral-500">Data nilai akan muncul setelah mahasiswa mengerjakan tugas dan kuis.</p>
+                <h3 className="text-lg font-medium mb-2 text-neutral-900 dark:text-white/90">Belum Ada Data Nilai</h3>
+                <p className="text-neutral-500 dark:text-white/35">Data nilai akan muncul setelah mahasiswa mengerjakan tugas dan kuis.</p>
             </div>
         );
     }
@@ -113,25 +113,25 @@ function GradebookTab({ gradebook }) {
         <div className="overflow-x-auto">
             <table className="w-full min-w-[700px]">
                 <thead>
-                    <tr className="border-b border-neutral-100 bg-neutral-50/50">
-                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Mahasiswa</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Tugas</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Kuis</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Nilai Akhir</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Status</th>
+                    <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Mahasiswa</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Tugas</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Kuis</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Nilai Akhir</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Status</th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-100">
+                <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                     {gradebook.map((item, index) => (
-                        <tr key={index} className="hover:bg-neutral-50/50 transition-colors">
+                        <tr key={index} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
                             <td className="py-3 px-4">
                                 <div className="flex items-center gap-3">
                                     <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-medium text-sm">
                                         {item.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
                                     </div>
                                     <div>
-                                        <p className="font-medium text-neutral-900">{item.user?.name ?? '-'}</p>
-                                        <p className="text-xs text-neutral-500">{item.user?.nim ?? '-'}</p>
+                                        <p className="font-medium text-neutral-900 dark:text-white/80">{item.user?.name ?? '-'}</p>
+                                        <p className="text-xs text-neutral-500 dark:text-white/40">{item.user?.nim ?? '-'}</p>
                                     </div>
                                 </div>
                             </td>
@@ -171,8 +171,8 @@ function NeedsGradingTab({ items, courseId }) {
         return (
             <div className="text-center py-12">
                 <CheckCircle2 className="size-12 text-emerald-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-neutral-900 mb-2">Semua Sudah Dinilai</h3>
-                <p className="text-neutral-500">Tidak ada submission yang perlu dinilai saat ini.</p>
+                <h3 className="text-lg font-medium mb-2 text-neutral-900 dark:text-white/90">Semua Sudah Dinilai</h3>
+                <p className="text-neutral-500 dark:text-white/35">Tidak ada submission yang perlu dinilai saat ini.</p>
             </div>
         );
     }
@@ -192,32 +192,32 @@ function NeedsGradingTab({ items, courseId }) {
         <div className="overflow-x-auto">
             <table className="w-full min-w-[600px]">
                 <thead>
-                    <tr className="border-b border-neutral-100 bg-neutral-50/50">
-                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Item</th>
-                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Mahasiswa</th>
-                        <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Submit</th>
-                        <th className="text-right py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Aksi</th>
+                    <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Item</th>
+                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Mahasiswa</th>
+                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Submit</th>
+                        <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aksi</th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-100">
+                <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                     {items.map((item) => (
-                        <tr key={item.id} className="hover:bg-neutral-50/50 transition-colors">
+                        <tr key={item.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
                             <td className="py-3 px-4">
                                 <div className="flex items-center gap-3">
                                     <div className="flex size-8 items-center justify-center rounded-lg bg-amber-100">
                                         <FileText className="size-4 text-amber-600" />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-neutral-900">{item.assignment?.title ?? '-'}</p>
-                                        <p className="text-xs text-neutral-500">Tugas</p>
+                                        <p className="font-medium text-neutral-900 dark:text-white/80">{item.assignment?.title ?? '-'}</p>
+                                        <p className="text-xs text-neutral-500 dark:text-white/40">Tugas</p>
                                     </div>
                                 </div>
                             </td>
                             <td className="py-3 px-4">
-                                <span className="text-sm text-neutral-600">{item.user?.name ?? '-'}</span>
+                                <span className="text-sm text-neutral-600 dark:text-white/50">{item.user?.name ?? '-'}</span>
                             </td>
                             <td className="py-3 px-4">
-                                <span className="text-sm text-neutral-500">{formatDate(item.submitted_at)}</span>
+                                <span className="text-sm text-neutral-500 dark:text-white/35">{formatDate(item.submitted_at)}</span>
                             </td>
                             <td className="py-3 px-4">
                                 <div className="flex justify-end">
@@ -239,19 +239,21 @@ function WeightsTab() {
         <div className="max-w-md mx-auto py-8">
             <div className="text-center mb-6">
                 <Settings className="size-12 text-neutral-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-neutral-900 mb-2">Bobot Nilai</h3>
+                <h3 className="text-lg font-medium mb-2 text-neutral-900 dark:text-white/90">Bobot Nilai</h3>
                 <p className="text-neutral-500 text-sm">Atur bobot penilaian untuk setiap komponen.</p>
             </div>
-            <div className="space-y-4 bg-neutral-50 rounded-xl p-6 border border-neutral-200">
+            <div className="space-y-4 rounded-xl p-6 border
+                bg-neutral-50 border-neutral-200
+                dark:bg-white/5 dark:border-white/[0.07]">
                 <WeightItem label="Tugas" value={30} />
                 <WeightItem label="Kuis" value={20} />
                 <WeightItem label="Diskusi" value={10} />
                 <WeightItem label="UTS" value={20} />
                 <WeightItem label="UAS" value={20} />
-                <div className="pt-4 border-t border-neutral-200">
+                <div className="pt-4 border-t border-neutral-200 dark:border-white/[0.07]">
                     <div className="flex justify-between items-center">
-                        <span className="font-semibold text-neutral-900">Total</span>
-                        <span className="font-bold text-emerald-600">100%</span>
+                        <span className="font-semibold text-neutral-900 dark:text-white/90">Total</span>
+                        <span className="font-bold text-emerald-600 dark:text-emerald-400">100%</span>
                     </div>
                 </div>
             </div>
@@ -265,8 +267,8 @@ function WeightsTab() {
 function WeightItem({ label, value }) {
     return (
         <div className="flex justify-between items-center">
-            <span className="text-neutral-700">{label}</span>
-            <span className="font-medium text-neutral-900">{value}%</span>
+            <span className="text-neutral-700 dark:text-white/60">{label}</span>
+            <span className="font-medium text-neutral-900 dark:text-white/80">{value}%</span>
         </div>
     );
 }
@@ -275,7 +277,7 @@ function ExportTab() {
     return (
         <div className="text-center py-12">
             <Download className="size-12 text-neutral-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-neutral-900 mb-2">Export Nilai</h3>
+            <h3 className="text-lg font-medium mb-2 text-neutral-900 dark:text-white/90">Export Nilai</h3>
             <p className="text-neutral-500 mb-6">Unduh rekap nilai dalam berbagai format.</p>
             <div className="flex justify-center gap-3">
                 <Button variant="outline" className="gap-2">
@@ -298,7 +300,7 @@ function ExportTab() {
 
 function GradeCell({ value }) {
     if (value === null || value === undefined) {
-        return <span className="text-neutral-400">-</span>;
+        return <span className="text-neutral-400 dark:text-white/25">-</span>;
     }
     return <span className={`font-medium ${getGradeColor(value)}`}>{value}</span>;
 }
@@ -323,17 +325,21 @@ function StatCard({ label, value, icon: Icon, color }) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4"
+            className="rounded-xl shadow-sm border p-4 bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex items-center gap-3">
                 <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
                     <Icon className="size-5 text-white" />
                 </div>
                 <div>
-                    <p className="text-2xl font-bold text-neutral-900">{value}</p>
-                    <p className="text-xs text-neutral-500">{label}</p>
+                    <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}</p>
+                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
                 </div>
             </div>
         </motion.div>
     );
 }
+
+
+
+

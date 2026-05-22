@@ -133,9 +133,11 @@ export default function Overview({ course }) {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6"
+                        className="rounded-xl shadow-sm border p-6
+                            bg-white border-neutral-100
+                            dark:bg-[#111a15] dark:border-white/[0.07]"
                     >
-                        <h2 className="text-lg font-semibold text-neutral-900 mb-4">Informasi Kursus</h2>
+                        <h2 className="text-lg font-semibold mb-4 text-neutral-900 dark:text-white/90">Informasi Kursus</h2>
                         
                         <div className="grid gap-4 md:grid-cols-2">
                             <InfoRow label="Kode Kursus" value={course.code} />
@@ -147,19 +149,19 @@ export default function Overview({ course }) {
                         </div>
 
                         {course.description && (
-                            <div className="mt-4 pt-4 border-t border-neutral-100">
-                                <p className="text-sm font-medium text-neutral-500 mb-1">Deskripsi</p>
-                                <p className="text-sm text-neutral-700">{course.description}</p>
+                            <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-white/[0.07]">
+                                <p className="text-sm font-medium mb-1 text-neutral-500 dark:text-white/40">Deskripsi</p>
+                                <p className="text-sm text-neutral-700 dark:text-white/60">{course.description}</p>
                             </div>
                         )}
 
-                        <div className="mt-4 pt-4 border-t border-neutral-100">
-                            <p className="text-sm font-medium text-neutral-500 mb-2">Kriteria Sertifikat</p>
+                        <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-white/[0.07]">
+                            <p className="text-sm font-medium mb-2 text-neutral-500 dark:text-white/40">Kriteria Sertifikat</p>
                             <div className="flex gap-4 text-sm">
-                                <span className="text-neutral-700">
+                                <span className="text-neutral-700 dark:text-white/60">
                                     Min. Progress: <strong>{course.certificate_criteria?.min_progress ?? 100}%</strong>
                                 </span>
-                                <span className="text-neutral-700">
+                                <span className="text-neutral-700 dark:text-white/60">
                                     Min. Nilai Kuis: <strong>{course.certificate_criteria?.min_score ?? 70}</strong>
                                 </span>
                             </div>
@@ -172,19 +174,21 @@ export default function Overview({ course }) {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="bg-amber-50 rounded-xl border border-amber-200 p-6"
+                            className="rounded-xl border p-6
+                                bg-amber-50 border-amber-200
+                                dark:bg-amber-500/10 dark:border-amber-500/30"
                         >
                             <div className="flex items-center gap-3 mb-3">
-                                <div className="flex size-10 items-center justify-center rounded-lg bg-amber-100">
-                                    <ClipboardCheck className="size-5 text-amber-600" />
+                                <div className="flex size-10 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-500/20">
+                                    <ClipboardCheck className="size-5 text-amber-600 dark:text-amber-400" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-amber-900">Pendaftaran Menunggu Persetujuan</h3>
-                                    <p className="text-sm text-amber-700">{course.pending_enrollments_count} mahasiswa menunggu persetujuan</p>
+                                    <h3 className="font-semibold text-amber-900 dark:text-amber-300">Pendaftaran Menunggu Persetujuan</h3>
+                                    <p className="text-sm text-amber-700 dark:text-amber-400/80">{course.pending_enrollments_count} mahasiswa menunggu persetujuan</p>
                                 </div>
                             </div>
                             <Link href={`/instructor/courses/${course.id}/students`}>
-                                <Button variant="outline" size="sm" className="border-amber-300 text-amber-700 hover:bg-amber-100">
+                                <Button variant="outline" size="sm" className="border-amber-300 text-amber-700 hover:bg-amber-100 dark:border-amber-500/40 dark:text-amber-400 dark:hover:bg-amber-500/15">
                                     Kelola Pendaftaran
                                 </Button>
                             </Link>
@@ -196,7 +200,9 @@ export default function Overview({ course }) {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl border border-emerald-200 p-6"
+                        className="rounded-xl border p-6
+                            bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200
+                            dark:from-emerald-500/10 dark:to-teal-500/10 dark:border-emerald-500/30"
                     >
                         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                             <div className="flex items-center gap-3">
@@ -204,8 +210,8 @@ export default function Overview({ course }) {
                                     <Layers3 className="size-6 text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-neutral-900">Struktur Kurikulum</h3>
-                                    <p className="text-sm text-neutral-600">Kelola modul, materi, konten, kuis, dan tugas</p>
+                                    <h3 className="font-semibold text-neutral-900 dark:text-white/90">Struktur Kurikulum</h3>
+                                    <p className="text-sm text-neutral-600 dark:text-white/45">Kelola modul, materi, konten, kuis, dan tugas</p>
                                 </div>
                             </div>
                             <Link href={`/instructor/courses/${course.id}/curriculum`}>
@@ -222,12 +228,18 @@ export default function Overview({ course }) {
             {/* Edit Modal */}
             {isEditModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-[2px]">
-                    <div className="w-full max-w-lg rounded-xl bg-white shadow-xl ring-1 ring-black/5 animate-in fade-in zoom-in-95 duration-200" role="dialog" aria-modal="true">
-                        <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4">
-                            <h3 className="text-lg font-semibold text-neutral-900">
+                    <div className="w-full max-w-lg rounded-xl shadow-xl ring-1 animate-in fade-in zoom-in-95 duration-200
+                        bg-white ring-black/5
+                        dark:bg-[#111a15] dark:ring-white/10"
+                        role="dialog" aria-modal="true">
+                        <div className="flex items-center justify-between border-b px-5 py-4
+                            border-neutral-200 dark:border-white/[0.07]">
+                            <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">
                                 Edit Informasi Kursus
                             </h3>
-                            <button onClick={closeEditModal} className="rounded-full p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-colors">
+                            <button onClick={closeEditModal} className="rounded-full p-1 transition-colors
+                                text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600
+                                dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/70">
                                 <X className="size-5" />
                             </button>
                         </div>
@@ -235,64 +247,66 @@ export default function Overview({ course }) {
                             <form onSubmit={submitEdit} className="space-y-4">
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <Field label="Kode Kursus" id="code" error={form.errors.code}>
-                                        <input id="code" value={form.data.code} onChange={(e) => form.setData('code', e.target.value)} className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20" placeholder="Contoh: IF101" />
+                                        <input id="code" value={form.data.code} onChange={(e) => form.setData('code', e.target.value)} className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                            border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                            dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: IF101" />
                                     </Field>
                                     <Field label="Semester" id="semester" error={form.errors.semester}>
-                                        <input id="semester" value={form.data.semester} onChange={(e) => form.setData('semester', e.target.value)} className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20" placeholder="Contoh: Genap 2026" />
+                                        <input id="semester" value={form.data.semester} onChange={(e) => form.setData('semester', e.target.value)} className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                            border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                            dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Genap 2026" />
                                     </Field>
                                 </div>
 
                                 <Field label="Nama Kursus" id="name" error={form.errors.name}>
-                                    <input id="name" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20" placeholder="Contoh: Pengantar Informatika" />
+                                    <input id="name" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                        border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                        dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Pengantar Informatika" />
                                 </Field>
 
                                 <Field label="Deskripsi" id="description" error={form.errors.description}>
-                                    <textarea id="description" rows="3" value={form.data.description} onChange={(e) => form.setData('description', e.target.value)} className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20" placeholder="Penjelasan singkat mengenai kursus ini" />
+                                    <textarea id="description" rows="3" value={form.data.description} onChange={(e) => form.setData('description', e.target.value)} className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                        border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                        dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Penjelasan singkat mengenai kursus ini" />
                                 </Field>
 
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <Field label="Mode Enrollment" id="enrollment-type" error={form.errors.enrollment_type}>
-                                        <select id="enrollment-type" value={form.data.enrollment_type} onChange={(e) => form.setData('enrollment_type', e.target.value)} className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20">
+                                        <select id="enrollment-type" value={form.data.enrollment_type} onChange={(e) => form.setData('enrollment_type', e.target.value)} className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                            border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                            dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60">
                                             <option value="auto">Otomatis (Auto)</option>
                                             <option value="manual">Manual (Approval)</option>
                                         </select>
                                     </Field>
                                     <div className="flex flex-col justify-end pb-2 gap-2">
-                                        <label className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer">
+                                        <label className="flex items-center gap-2 text-sm cursor-pointer text-neutral-700 dark:text-white/60">
                                             <input type="checkbox" checked={form.data.leaderboard_enabled} onChange={(e) => form.setData('leaderboard_enabled', e.target.checked)} className="size-4 rounded border-neutral-300 text-emerald-600 focus:ring-emerald-500" />
                                             Leaderboard aktif
                                         </label>
-                                        <label className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer">
+                                        <label className="flex items-center gap-2 text-sm cursor-pointer text-neutral-700 dark:text-white/60">
                                             <input type="checkbox" checked={form.data.is_active} onChange={(e) => form.setData('is_active', e.target.checked)} className="size-4 rounded border-neutral-300 text-emerald-600 focus:ring-emerald-500" />
                                             Kursus aktif
                                         </label>
                                     </div>
                                 </div>
 
-                                <div className="rounded-lg bg-neutral-50 p-4 border border-neutral-200">
-                                    <p className="text-sm font-semibold text-neutral-700 mb-3">Kriteria Sertifikat</p>
+                                <div className="rounded-lg p-4 border
+                                    bg-neutral-50 border-neutral-200
+                                    dark:bg-white/5 dark:border-white/[0.07]">
+                                    <p className="text-sm font-semibold mb-3 text-neutral-700 dark:text-white/70">Kriteria Sertifikat</p>
                                     <div className="grid gap-4 sm:grid-cols-2">
                                         <Field label="Min. Progress (%)" id="min-progress" error={form.errors['certificate_criteria.min_progress']}>
-                                            <input
-                                                id="min-progress"
-                                                type="number"
-                                                min="0"
-                                                max="100"
-                                                value={form.data.certificate_criteria.min_progress}
-                                                onChange={(e) => form.setData('certificate_criteria', { ...form.data.certificate_criteria, min_progress: e.target.value })}
-                                                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                                            />
+                                            <input id="min-progress" type="number" min="0" max="100" value={form.data.certificate_criteria.min_progress} onChange={(e) => form.setData('certificate_criteria', { ...form.data.certificate_criteria, min_progress: e.target.value })}
+                                                className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                                    border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                                    dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60" />
                                         </Field>
                                         <Field label="Min. Nilai Kuis" id="min-score" error={form.errors['certificate_criteria.min_score']}>
-                                            <input
-                                                id="min-score"
-                                                type="number"
-                                                min="0"
-                                                max="100"
-                                                value={form.data.certificate_criteria.min_score}
-                                                onChange={(e) => form.setData('certificate_criteria', { ...form.data.certificate_criteria, min_score: e.target.value })}
-                                                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                                            />
+                                            <input id="min-score" type="number" min="0" max="100" value={form.data.certificate_criteria.min_score} onChange={(e) => form.setData('certificate_criteria', { ...form.data.certificate_criteria, min_score: e.target.value })}
+                                                className="w-full rounded-lg border px-3 py-2 text-sm outline-none
+                                                    border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                                    dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60" />
                                         </Field>
                                     </div>
                                 </div>
@@ -324,15 +338,17 @@ function StatCard({ icon: Icon, label, value, color }) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-5"
+            className="rounded-xl shadow-sm border p-5
+                bg-white border-neutral-100
+                dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex items-center gap-4">
                 <div className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${colorClasses[color]} shadow-lg`}>
                     <Icon className="size-6 text-white" />
                 </div>
                 <div>
-                    <p className="text-2xl font-bold text-neutral-900">{value}</p>
-                    <p className="text-sm text-neutral-500">{label}</p>
+                    <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}</p>
+                    <p className="text-sm text-neutral-500 dark:text-white/40">{label}</p>
                 </div>
             </div>
         </motion.div>
@@ -342,31 +358,23 @@ function StatCard({ icon: Icon, label, value, color }) {
 function InfoRow({ label, value, mono = false }) {
     return (
         <div>
-            <p className="text-sm font-medium text-neutral-500">{label}</p>
-            <p className={`text-sm text-neutral-900 ${mono ? 'font-mono' : ''}`}>{value}</p>
+            <p className="text-sm font-medium text-neutral-500 dark:text-white/40">{label}</p>
+            <p className={`text-sm text-neutral-900 dark:text-white/80 ${mono ? 'font-mono' : ''}`}>{value}</p>
         </div>
     );
 }
 
 function Field({ label, id, error, children }) {
     const describedBy = error ? `${id}-error` : undefined;
-
     return (
         <div>
-            <label htmlFor={id} className="text-sm font-medium text-neutral-700 mb-1.5 block">
+            <label htmlFor={id} className="text-sm font-medium mb-1.5 block text-neutral-700 dark:text-white/70">
                 {label}
             </label>
             <div>
-                {cloneElement(children, {
-                    'aria-describedby': describedBy,
-                    'aria-invalid': Boolean(error),
-                })}
+                {cloneElement(children, { 'aria-describedby': describedBy, 'aria-invalid': Boolean(error) })}
             </div>
-            {error && (
-                <p id={describedBy} role="alert" className="mt-1.5 text-xs text-red-600">
-                    {error}
-                </p>
-            )}
+            {error && <p id={describedBy} role="alert" className="mt-1.5 text-xs text-red-600 dark:text-red-400">{error}</p>}
         </div>
     );
 }

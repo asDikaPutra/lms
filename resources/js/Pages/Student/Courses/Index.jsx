@@ -252,36 +252,13 @@ function CourseCard({ course, delay }) {
                         </div>
                     )}
                     
-                    {/* Animated gradient orb */}
-                    <motion.div
-                        animate={{ 
-                            scale: [1, 1.2, 1],
-                            opacity: [0.3, 0.5, 0.3],
-                        }}
-                        transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: 'easeInOut',
-                        }}
-                        className="absolute -bottom-12 -left-12 w-40 h-40 bg-white/20 rounded-full blur-2xl"
-                    />
+                    {/* Gradient orb — static, no animation */}
+                    <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-white/20 rounded-full blur-2xl" />
                     
-                    {/* Floating book icon with glass effect */}
-                    <motion.div
-                        animate={{ 
-                            y: [0, -8, 0],
-                            rotateY: [0, 10, 0],
-                        }}
-                        transition={{
-                            duration: 5,
-                            repeat: Infinity,
-                            ease: 'easeInOut',
-                        }}
-                        className="absolute bottom-4 right-4 flex size-16 items-center justify-center rounded-2xl bg-white/30 backdrop-blur-xl shadow-2xl border border-white/50"
-                        style={{ transformStyle: 'preserve-3d' }}
-                    >
+                    {/* Book icon — static, no floating animation */}
+                    <div className="absolute bottom-4 right-4 flex size-16 items-center justify-center rounded-2xl bg-white/30 backdrop-blur-xl shadow-2xl border border-white/50">
                         <GraduationCap className="size-8 text-white drop-shadow-lg" />
-                    </motion.div>
+                    </div>
                     
                     {/* Decorative bottom wave with glass effect */}
                     <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/30 dark:from-[#111a15]/60 to-transparent backdrop-blur-sm" />
@@ -353,87 +330,35 @@ function CourseCard({ course, delay }) {
                                 </motion.span>
                             </div>
                             
-                            {/* Sophisticated progress bar with glass design */}
+                            {/* Progress bar */}
                             <div className="relative">
-                                {/* Background track with glass effect */}
-                                <div className="h-3 rounded-full backdrop-blur-sm shadow-inner overflow-hidden border
+                                <div className="h-3 rounded-full shadow-inner overflow-hidden border
                                     bg-white/60 border-white/80
                                     dark:bg-white/10 dark:border-white/10">
-                                    {/* Animated progress fill with multiple layers */}
                                     <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: `${course.progress}%` }}
                                         transition={{ duration: 1.2, delay: delay + 0.4, ease: [0.23, 1, 0.32, 1] }}
                                         className="relative h-3 rounded-full overflow-hidden"
                                     >
-                                        {/* Base gradient with transparency */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/90 via-teal-500/90 to-emerald-600/90 backdrop-blur-sm" />
-                                        
-                                        {/* Shimmer effect */}
-                                        <motion.div
-                                            animate={{
-                                                x: ['-100%', '200%'],
-                                            }}
-                                            transition={{
-                                                duration: 2,
-                                                repeat: Infinity,
-                                                ease: 'linear',
-                                                repeatDelay: 1,
-                                            }}
-                                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
-                                            style={{ width: '50%' }}
-                                        />
-                                        
-                                        {/* Top highlight */}
-                                        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600" />
+                                        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
                                     </motion.div>
                                 </div>
-                                
-                                {/* Glow effect under progress bar */}
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: course.progress > 0 ? 0.6 : 0 }}
-                                    transition={{ delay: delay + 0.6 }}
-                                    className="absolute -bottom-1 left-0 h-2 bg-gradient-to-r from-emerald-500/40 to-teal-500/40 blur-md rounded-full"
-                                    style={{ width: `${course.progress}%` }}
-                                />
                             </div>
                         </div>
                     )}
 
-                    {/* Action button with glass styling */}
                     {cardAction.type === 'continue' && (
                         <Link href={cardAction.href}>
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="relative w-full h-11 rounded-xl overflow-hidden group/btn shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300"
+                                className="relative w-full h-11 rounded-xl overflow-hidden shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300"
                             >
-                                {/* Glass gradient background */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/95 via-teal-600/95 to-emerald-600/95 backdrop-blur-sm group-hover/btn:from-emerald-700/95 group-hover/btn:via-teal-700/95 group-hover/btn:to-emerald-700/95 transition-all duration-300" />
-                                
-                                {/* Shine effect on hover */}
-                                <motion.div
-                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover/btn:opacity-100"
-                                    animate={{
-                                        x: ['-100%', '200%'],
-                                    }}
-                                    transition={{
-                                        duration: 1.5,
-                                        repeat: Infinity,
-                                        repeatDelay: 0.5,
-                                    }}
-                                />
-                                
-                                {/* Button text */}
-                                <span className="relative flex items-center justify-center gap-2 text-sm font-bold text-white tracking-wide drop-shadow-lg">
-                                    {cardAction.label}
-                                    <motion.span
-                                        animate={{ x: [0, 4, 0] }}
-                                        transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                                    >
-                                        →
-                                    </motion.span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-700 hover:via-teal-700 hover:to-emerald-700 transition-all duration-300" />
+                                <span className="relative flex items-center justify-center gap-2 text-sm font-bold text-white tracking-wide">
+                                    {cardAction.label} →
                                 </span>
                             </motion.button>
                         </Link>
@@ -468,26 +393,10 @@ function CourseCard({ course, delay }) {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 disabled={cardAction.disabled}
-                                className="relative w-full h-11 rounded-xl overflow-hidden group/btn shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="relative w-full h-11 rounded-xl overflow-hidden shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {/* Glass gradient background */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/95 via-cyan-600/95 to-blue-600/95 backdrop-blur-sm group-hover/btn:from-blue-700/95 group-hover/btn:via-cyan-700/95 group-hover/btn:to-blue-700/95 transition-all duration-300" />
-
-                                {/* Shine effect on hover */}
-                                <motion.div
-                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover/btn:opacity-100"
-                                    animate={{
-                                        x: ['-100%', '200%'],
-                                    }}
-                                    transition={{
-                                        duration: 1.5,
-                                        repeat: Infinity,
-                                        repeatDelay: 0.5,
-                                    }}
-                                />
-
-                                {/* Button text */}
-                                <span className="relative flex items-center justify-center gap-2 text-sm font-bold text-white tracking-wide drop-shadow-lg">
+                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 hover:from-blue-700 hover:via-cyan-700 hover:to-blue-700 transition-all duration-300" />
+                                <span className="relative flex items-center justify-center gap-2 text-sm font-bold text-white tracking-wide">
                                     {cardAction.disabled ? 'Memproses...' : cardAction.label}
                                 </span>
                             </motion.button>

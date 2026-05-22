@@ -11,11 +11,11 @@ const buttonVariants = cva(
       variant: {
         default: "bg-sb-accent text-white hover:bg-sb-green shadow-none",
         outline:
-          "border-sb-text-soft bg-transparent text-sb-text-black hover:border-sb-green hover:text-sb-green",
+          "border-sb-text-soft bg-transparent text-sb-text-black hover:border-sb-green hover:text-sb-green dark:border-white/25 dark:text-white/70 dark:hover:border-emerald-400 dark:hover:text-emerald-400",
         secondary:
-          "bg-sb-light text-sb-green hover:bg-[#d9ede2]",
+          "bg-sb-light text-sb-green hover:bg-[#d9ede2] dark:bg-emerald-500/15 dark:text-emerald-400 dark:hover:bg-emerald-500/25",
         ghost:
-          "hover:bg-slate-100 hover:text-sb-green text-sb-text-black",
+          "hover:bg-slate-100 hover:text-sb-green text-sb-text-black dark:text-white/60 dark:hover:bg-white/8 dark:hover:text-emerald-400",
         destructive:
           "bg-red-500 text-white hover:bg-red-600",
         link: "text-sb-accent underline-offset-4 hover:underline",

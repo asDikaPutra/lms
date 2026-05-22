@@ -10,21 +10,21 @@ import { fadeUp } from '@/lib/animations';
 const statsConfig = [
     { key: 'active_courses',   label: 'Kursus Aktif',   icon: BookOpen,      tone: 'emerald' },
     { key: 'overall_progress', label: 'Progress',        icon: CheckCircle2,  tone: 'blue',   suffix: '%' },
-    { key: 'assignments_due',  label: 'Tugas Mendatang', icon: CalendarClock, tone: 'amber' },
+    { key: 'assignments_due',  label: 'Tugas Mendatang', icon: CalendarClock, tone: 'teal' },
     { key: 'certificates',     label: 'Sertifikat',      icon: BadgeCheck,    tone: 'violet' },
 ];
 
 const iconToneClasses = {
     emerald: 'from-emerald-400 via-emerald-500 to-teal-600 shadow-[0_4px_16px_rgba(16,185,129,0.38)]',
     blue:    'from-blue-400 via-blue-500 to-indigo-600 shadow-[0_4px_16px_rgba(99,102,241,0.35)]',
-    amber:   'from-amber-400 via-amber-500 to-orange-500 shadow-[0_4px_16px_rgba(245,158,11,0.35)]',
+    teal:    'from-teal-400 via-teal-500 to-cyan-600 shadow-[0_4px_16px_rgba(20,184,166,0.35)]',
     violet:  'from-violet-400 via-violet-500 to-purple-600 shadow-[0_4px_16px_rgba(139,92,246,0.35)]',
 };
 
 const statCardHover = {
     emerald: 'hover:border-emerald-300 hover:shadow-[0_8px_28px_rgba(16,185,129,0.14)] dark:hover:border-emerald-500/30 dark:hover:shadow-[0_8px_28px_rgba(16,185,129,0.18)]',
     blue:    'hover:border-blue-300 hover:shadow-[0_8px_28px_rgba(99,102,241,0.14)] dark:hover:border-indigo-500/30 dark:hover:shadow-[0_8px_28px_rgba(99,102,241,0.18)]',
-    amber:   'hover:border-amber-300 hover:shadow-[0_8px_28px_rgba(245,158,11,0.14)] dark:hover:border-amber-500/30 dark:hover:shadow-[0_8px_28px_rgba(245,158,11,0.18)]',
+    teal:    'hover:border-teal-300 hover:shadow-[0_8px_28px_rgba(20,184,166,0.14)] dark:hover:border-teal-500/30 dark:hover:shadow-[0_8px_28px_rgba(20,184,166,0.18)]',
     violet:  'hover:border-violet-300 hover:shadow-[0_8px_28px_rgba(139,92,246,0.14)] dark:hover:border-violet-500/30 dark:hover:shadow-[0_8px_28px_rgba(139,92,246,0.18)]',
 };
 
@@ -238,38 +238,73 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                         </motion.div>
                     </FadeInWhenVisible>
 
-                    {/* Assignments Section */}
+                    {/* Assignments Section — redesigned as deadline timeline */}
                     <FadeInWhenVisible>
                         <motion.div whileHover={{ y: -2 }}
-                            className="relative overflow-hidden rounded-2xl border p-6 shadow-sm transition-shadow duration-300 h-full
+                            className="relative overflow-hidden rounded-2xl border shadow-sm transition-shadow duration-300 h-full flex flex-col
                                 border-neutral-200/70 bg-white/90 backdrop-blur-xl hover:shadow-lg
                                 dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                         >
-                            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neutral-200/80 to-transparent dark:via-white/8" />
-                            <div className="mb-6 flex items-center gap-3">
-                                <span className="inline-flex size-10 items-center justify-center rounded-[12px] bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500 text-white shadow-[0_4px_14px_rgba(245,158,11,0.35)]">
-                                    <CalendarClock className="size-5" strokeWidth={1.75} aria-hidden="true" />
-                                </span>
-                                <div>
-                                    <h2 className="text-lg font-bold text-neutral-900 dark:text-white/90">Tugas Mendatang</h2>
-                                    <p className="text-xs text-neutral-500 dark:text-white/35">Deadline yang perlu diperhatikan</p>
+                            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-300/60 to-transparent dark:via-teal-500/20" />
+
+                            {/* Section header — compact */}
+                            <div className="flex items-center justify-between px-5 pt-5 pb-4">
+                                <div className="flex items-center gap-2.5">
+                                    <span className="inline-flex size-8 items-center justify-center rounded-[10px] bg-gradient-to-br from-teal-400 via-teal-500 to-emerald-600 text-white shadow-[0_3px_10px_rgba(20,184,166,0.32)]">
+                                        <CalendarClock className="size-4" strokeWidth={1.75} aria-hidden="true" />
+                                    </span>
+                                    <div>
+                                        <h2 className="text-sm font-bold text-neutral-900 dark:text-white/90">Tugas Mendatang</h2>
+                                        <p className="text-[10px] text-neutral-400 dark:text-white/30">Deadline terdekat</p>
+                                    </div>
                                 </div>
+                                <Link
+                                    href="/student/courses"
+                                    className="text-[11px] font-semibold transition-colors text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+                                >
+                                    Lihat semua →
+                                </Link>
                             </div>
-                            <div className="space-y-2.5">
+
+                            {/* Divider */}
+                            <div className="mx-5 h-px bg-neutral-100 dark:bg-white/[0.06]" />
+
+                            {/* Task list */}
+                            <div className="flex-1 px-4 py-3 space-y-1.5">
                                 {upcomingAssignments.length === 0 && (
                                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                                        className="rounded-xl border-2 border-dashed py-8 text-center
-                                            border-neutral-200 bg-neutral-50/50
-                                            dark:border-white/10 dark:bg-transparent"
+                                        className="flex flex-col items-center justify-center py-10 text-center"
                                     >
-                                        <CheckCircle2 className="mx-auto mb-3 size-8 text-neutral-300 dark:text-white/20" aria-hidden="true" />
-                                        <p className="text-xs font-medium text-neutral-400 dark:text-white/30">Belum ada tugas mendatang.</p>
+                                        <div className="mb-3 flex size-12 items-center justify-center rounded-2xl border
+                                            border-neutral-200 bg-neutral-50
+                                            dark:border-white/8 dark:bg-white/5">
+                                            <CheckCircle2 className="size-5 text-emerald-500 dark:text-emerald-400" aria-hidden="true" />
+                                        </div>
+                                        <p className="text-xs font-semibold text-neutral-500 dark:text-white/40">Semua tugas selesai!</p>
+                                        <p className="mt-1 text-[10px] text-neutral-400 dark:text-white/25">Tidak ada deadline yang mendekat.</p>
                                     </motion.div>
                                 )}
                                 {upcomingAssignments.map((assignment, index) => (
-                                    <AssignmentCard key={assignment.id} assignment={assignment} delay={index * 0.08} />
+                                    <AssignmentCard key={assignment.id} assignment={assignment} delay={index * 0.06} />
                                 ))}
                             </div>
+
+                            {/* Footer CTA */}
+                            {upcomingAssignments.length > 0 && (
+                                <div className="px-4 pb-4 pt-2">
+                                    <Link href="/student/courses">
+                                        <motion.button
+                                            whileHover={{ scale: 1.01 }}
+                                            whileTap={{ scale: 0.99 }}
+                                            className="w-full rounded-xl py-2.5 text-xs font-bold transition-all
+                                                border border-teal-200 bg-teal-50/60 text-teal-700 hover:bg-teal-100/80
+                                                dark:border-teal-500/25 dark:bg-teal-500/8 dark:text-teal-300 dark:hover:bg-teal-500/15"
+                                        >
+                                            Kerjakan Tugas →
+                                        </motion.button>
+                                    </Link>
+                                </div>
+                            )}
                         </motion.div>
                     </FadeInWhenVisible>
                 </div>
@@ -290,16 +325,18 @@ function CourseCard({ enrollment, delay }) {
                 border-neutral-200 bg-white hover:border-emerald-200 hover:shadow-md
                 dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-emerald-500/25 dark:hover:shadow-[0_6px_24px_rgba(16,185,129,0.12)]"
         >
-            {/* Banner */}
-            <div className="relative h-24 overflow-hidden bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-700">
-                <div className="absolute inset-0 opacity-[0.1]"
+            {/* Banner — sama dengan Courses Index */}
+            <div className="relative h-36 overflow-hidden bg-gradient-to-br from-emerald-500/90 via-teal-500/90 to-emerald-600/90 backdrop-blur-sm">
+                <div className="absolute inset-0 opacity-[0.2]"
                     style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
                 <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-emerald-400/20 blur-2xl" />
                 <div className="absolute top-3 left-3"><StatusBadge status={enrollment.status} /></div>
-                <div className="absolute bottom-3 right-3 flex size-9 items-center justify-center rounded-[10px] border border-white/20 bg-white/10 text-white backdrop-blur-sm">
-                    <BookOpen className="size-4" strokeWidth={1.75} aria-hidden="true" />
+                <div className="absolute bottom-4 right-4 flex size-12 items-center justify-center rounded-2xl border border-white/30 bg-white/20 backdrop-blur-xl shadow-xl">
+                    <BookOpen className="size-6 text-white" strokeWidth={1.75} aria-hidden="true" />
                 </div>
+                <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/10 to-transparent" />
             </div>
 
             {/* Content */}
@@ -377,24 +414,85 @@ function CourseCard({ enrollment, delay }) {
     );
 }
 
-// ─── AssignmentCard ───────────────────────────────────────────────────────────
+// ─── AssignmentCard — redesigned as deadline timeline item ───────────────────
+function getUrgency(deadlineStr) {
+    if (!deadlineStr) return { label: 'Tidak ada', color: 'neutral', daysLeft: null };
+    const now = new Date();
+    const deadline = new Date(deadlineStr);
+    const diffMs = deadline - now;
+    const diffHours = diffMs / (1000 * 60 * 60);
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffMs < 0) return { label: 'Terlambat', color: 'red', daysLeft: -1 };
+    if (diffHours < 24) return { label: 'Hari ini', color: 'red', daysLeft: 0 };
+    if (diffDays === 1) return { label: 'Besok', color: 'orange', daysLeft: 1 };
+    if (diffDays <= 3) return { label: `${diffDays} hari lagi`, color: 'amber', daysLeft: diffDays };
+    if (diffDays <= 7) return { label: `${diffDays} hari lagi`, color: 'yellow', daysLeft: diffDays };
+    return { label: `${diffDays} hari lagi`, color: 'teal', daysLeft: diffDays };
+}
+
+const urgencyStyles = {
+    red:     { badge: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-500/20 dark:text-red-300 dark:border-red-500/30', bar: 'bg-red-500', dot: 'bg-red-500' },
+    orange:  { badge: 'bg-rose-100 text-rose-700 border-rose-200 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/30', bar: 'bg-rose-500', dot: 'bg-rose-500' },
+    amber:   { badge: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500/30', bar: 'bg-amber-400', dot: 'bg-amber-400' },
+    yellow:  { badge: 'bg-sky-100 text-sky-700 border-sky-200 dark:bg-sky-500/20 dark:text-sky-300 dark:border-sky-500/30', bar: 'bg-sky-400', dot: 'bg-sky-400' },
+    teal:    { badge: 'bg-teal-100 text-teal-700 border-teal-200 dark:bg-teal-500/20 dark:text-teal-300 dark:border-teal-500/30', bar: 'bg-teal-500', dot: 'bg-teal-500' },
+    neutral: { badge: 'bg-neutral-100 text-neutral-600 border-neutral-200 dark:bg-white/8 dark:text-white/40 dark:border-white/10', bar: 'bg-neutral-400', dot: 'bg-neutral-400' },
+};
+
 function AssignmentCard({ assignment, delay }) {
+    const urgency = getUrgency(assignment.deadline);
+    const style = urgencyStyles[urgency.color];
+
+    const formattedDeadline = assignment.deadline
+        ? new Date(assignment.deadline).toLocaleDateString('id-ID', {
+            day: 'numeric', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit',
+          })
+        : 'Tidak ada deadline';
+
     return (
         <motion.article
-            initial={{ opacity: 0, x: -16 }}
+            initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay, duration: 0.35 }}
-            whileHover={{ y: -2, transition: { duration: 0.15 } }}
-            className="flex items-start gap-3 rounded-[12px] border p-3 shadow-sm transition-all
-                border-amber-200 bg-white hover:border-amber-300 hover:bg-amber-50/30
-                dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-amber-500/25 dark:hover:bg-amber-500/5"
+            transition={{ delay, duration: 0.3 }}
+            whileHover={{ x: 2, transition: { duration: 0.15 } }}
+            className="group relative flex items-start gap-3 rounded-xl border px-3.5 py-3 transition-all cursor-pointer
+                border-neutral-100 bg-white/60 hover:border-neutral-200 hover:bg-white hover:shadow-sm
+                dark:border-white/[0.06] dark:bg-white/[0.03] dark:hover:border-white/10 dark:hover:bg-white/[0.06]"
         >
-            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500 text-white shadow-[0_3px_10px_rgba(245,158,11,0.32)]">
-                <CalendarClock className="size-4" strokeWidth={1.75} aria-hidden="true" />
-            </span>
+            {/* Left urgency bar */}
+            <div className={`absolute left-0 top-3 bottom-3 w-[3px] rounded-full ${style.bar}`} />
+
+            {/* Urgency dot */}
+            <div className="mt-0.5 shrink-0">
+                <span className={`inline-flex size-2 rounded-full ${style.dot}`} />
+            </div>
+
+            {/* Content */}
             <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-bold leading-snug text-neutral-900 dark:text-white/80">{assignment.title}</p>
-                <p className="mt-0.5 text-[10px] font-medium text-neutral-500 dark:text-white/35">{assignment.deadline}</p>
+                {/* Course code + urgency badge */}
+                <div className="mb-1 flex items-center gap-1.5 flex-wrap">
+                    {assignment.course_code && (
+                        <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                            {assignment.course_code}
+                        </span>
+                    )}
+                    <span className={`inline-flex items-center rounded-full border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${style.badge}`}>
+                        {urgency.label}
+                    </span>
+                </div>
+
+                {/* Title */}
+                <p className="truncate text-xs font-semibold leading-snug text-neutral-900 dark:text-white/85">
+                    {assignment.title}
+                </p>
+
+                {/* Deadline */}
+                <p className="mt-0.5 flex items-center gap-1 text-[10px] text-neutral-400 dark:text-white/30">
+                    <CalendarClock className="size-3 shrink-0" />
+                    {formattedDeadline}
+                </p>
             </div>
         </motion.article>
     );

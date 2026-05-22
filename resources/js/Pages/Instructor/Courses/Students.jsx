@@ -78,8 +78,8 @@ export default function Students({ course, enrollments, stats, filters }) {
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900">Peserta</h2>
-                            <p className="text-sm text-neutral-600 mt-1">Lihat dan kelola peserta pada kursus ini.</p>
+                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Peserta</h2>
+                            <p className="text-sm mt-1 text-neutral-600 dark:text-white/45">Lihat dan kelola peserta pada kursus ini.</p>
                         </div>
                     </div>
 
@@ -95,18 +95,18 @@ export default function Students({ course, enrollments, stats, filters }) {
                     {/* Filters */}
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative flex-1 max-w-sm">
-                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
                             <input
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
                                 placeholder="Cari nama, NIM, atau email..."
-                                className="h-10 w-full rounded-lg border border-neutral-200 pl-10 pr-4 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                                className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
                             />
                         </div>
                         <select
                             value={filterData.status}
                             onChange={(e) => setFilterData(prev => ({ ...prev, status: e.target.value }))}
-                            className="h-10 rounded-lg border border-neutral-200 px-3 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                            className="h-10 rounded-lg border px-3 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Status</option>
                             <option value="active">Aktif</option>
@@ -121,33 +121,33 @@ export default function Students({ course, enrollments, stats, filters }) {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden"
+                            className="rounded-xl shadow-sm border overflow-hidden bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
                         >
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[1000px]">
                                     <thead>
-                                        <tr className="border-b border-neutral-100 bg-neutral-50/50">
-                                            <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Mahasiswa</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">NIM</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Progres</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Tugas</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Kuis</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Aktivitas Terakhir</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Status</th>
-                                            <th className="text-right py-3 px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider">Aksi</th>
+                                        <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Mahasiswa</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">NIM</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Progres</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Tugas</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Kuis</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aktivitas Terakhir</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Status</th>
+                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-neutral-100">
+                                    <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                                         {enrollments.map((enrollment) => (
-                                            <tr key={enrollment.id} className="hover:bg-neutral-50/50 transition-colors">
+                                            <tr key={enrollment.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
                                                 <td className="py-3 px-4">
                                                     <div className="flex items-center gap-3">
                                                         <div className="flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-medium text-sm">
                                                             {enrollment.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
                                                         </div>
                                                         <div>
-                                                            <p className="font-medium text-neutral-900">{enrollment.user?.name ?? '-'}</p>
-                                                            <p className="text-xs text-neutral-500">{enrollment.user?.email ?? '-'}</p>
+                                                            <p className="font-medium text-neutral-900 dark:text-white/80">{enrollment.user?.name ?? '-'}</p>
+                                                            <p className="text-xs text-neutral-500 dark:text-white/40">{enrollment.user?.email ?? '-'}</p>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -156,8 +156,8 @@ export default function Students({ course, enrollments, stats, filters }) {
                                                 </td>
                                                 <td className="py-3 px-4">
                                                     <div className="flex flex-col items-center gap-1">
-                                                        <span className="text-sm font-medium text-neutral-900">{enrollment.progress ?? 0}%</span>
-                                                        <div className="w-16 h-1.5 bg-neutral-200 rounded-full overflow-hidden">
+                                                        <span className="text-sm font-medium text-neutral-900 dark:text-white/80">{enrollment.progress ?? 0}%</span>
+                                                        <div className="w-16 h-1.5 rounded-full overflow-hidden bg-neutral-200 dark:bg-white/10">
                                                             <div 
                                                                 className={`h-full rounded-full ${enrollment.progress >= 70 ? 'bg-emerald-500' : enrollment.progress >= 30 ? 'bg-amber-500' : 'bg-red-500'}`}
                                                                 style={{ width: `${enrollment.progress ?? 0}%` }}
@@ -166,17 +166,17 @@ export default function Students({ course, enrollments, stats, filters }) {
                                                     </div>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm text-neutral-600">
+                                                    <span className="text-sm text-neutral-600 dark:text-white/50">
                                                         {enrollment.submitted_assignments ?? 0}/{enrollment.total_assignments ?? 0}
                                                     </span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm text-neutral-600">
+                                                    <span className="text-sm text-neutral-600 dark:text-white/50">
                                                         {enrollment.completed_quizzes ?? 0}/{enrollment.total_quizzes ?? 0}
                                                     </span>
                                                 </td>
                                                 <td className="py-3 px-4">
-                                                    <span className="text-sm text-neutral-500">{getTimeSince(enrollment.updated_at)}</span>
+                                                    <span className="text-sm text-neutral-500 dark:text-white/35">{getTimeSince(enrollment.updated_at)}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
                                                     <StatusBadge status={enrollment.status} isAtRisk={enrollment.is_at_risk} />
@@ -239,15 +239,15 @@ function StatCard({ label, value, icon: Icon, color, suffix = '' }) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4"
+            className="rounded-xl shadow-sm border p-4 bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex items-center gap-3">
                 <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
                     <Icon className="size-5 text-white" />
                 </div>
                 <div>
-                    <p className="text-2xl font-bold text-neutral-900">{value}{suffix}</p>
-                    <p className="text-xs text-neutral-500">{label}</p>
+                    <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}{suffix}</p>
+                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
                 </div>
             </div>
         </motion.div>
@@ -284,17 +284,19 @@ function EmptyState() {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-sm border border-neutral-100 p-12 text-center"
+            className="rounded-xl shadow-sm border p-12 text-center bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex justify-center mb-6">
                 <div className="flex size-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 border border-emerald-200">
                     <Users className="size-10 text-emerald-600" />
                 </div>
             </div>
-            <h3 className="text-xl font-bold text-neutral-900 mb-2">Belum Ada Peserta</h3>
-            <p className="text-neutral-600 mb-6 max-w-md mx-auto">
+            <h3 className="text-xl font-bold mb-2 text-neutral-900 dark:text-white/90">Belum Ada Peserta</h3>
+            <p className="mb-6 max-w-md mx-auto text-neutral-600 dark:text-white/45">
                 Bagikan kode enroll kursus kepada mahasiswa untuk mendaftarkan mereka ke kursus ini.
             </p>
         </motion.div>
     );
 }
+
+

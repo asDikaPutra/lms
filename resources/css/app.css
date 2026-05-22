@@ -167,23 +167,27 @@
 /* Optimized animations for background - GPU accelerated */
 @keyframes float-slow {
     0%, 100% {
-        transform: translate(0, 0);
+        transform: translate3d(0, 0, 0);
     }
     50% {
-        transform: translate(30px, -40px);
+        transform: translate3d(24px, -32px, 0);
     }
 }
 
 @layer utilities {
     .animate-float-slow {
-        animation: float-slow 20s ease-in-out infinite;
+        animation: float-slow 22s ease-in-out infinite;
         will-change: transform;
+        /* Force GPU compositing layer */
+        transform: translateZ(0);
+        backface-visibility: hidden;
     }
-    
-    /* Reduce motion for accessibility */
+
+    /* Disable all background animations on low-power / reduced-motion */
     @media (prefers-reduced-motion: reduce) {
         .animate-float-slow {
             animation: none;
+            will-change: auto;
         }
     }
 }
