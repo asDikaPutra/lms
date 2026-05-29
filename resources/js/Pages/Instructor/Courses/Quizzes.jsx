@@ -111,6 +111,7 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                             <input
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
+                                aria-label="Cari kuis"
                                 placeholder="Cari kuis..."
                                 className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
                             />
@@ -245,15 +246,15 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
 function StatusBadge({ isPublished }) {
     if (isPublished) {
         return (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 border border-emerald-200">
-                <span className="size-1.5 rounded-full bg-emerald-500" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40">
+                <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Aktif
             </span>
         );
     }
     return (
-        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-surface-muted text-content-secondary border border-line">
-            <span className="size-1.5 rounded-full bg-neutral-400" />
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/10 dark:text-slate-400 dark:border-slate-500/25">
+            <span className="size-1.5 rounded-full bg-slate-400" />
             Draft
         </span>
     );
@@ -274,17 +275,17 @@ function ActionDropdown({ quiz, isOpen, onToggle, onEdit, onTogglePublish, onDel
             {isOpen && (
                 <div className="absolute right-0 top-full mt-1 w-40 rounded-lg shadow-lg border py-1 z-10
                 bg-surface border-line
-                dark:bg-[#111a15] dark:border-white/[0.07]">
-                    <button onClick={() => { onEdit(); onToggle({ stopPropagation: () => {} }); }}
+                dark:bg-[#081616] dark:border-white/[0.07]">
+                    <button type="button" onClick={() => { onEdit(); onToggle({ stopPropagation: () => {} }); }}
                         className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-surface-muted dark:hover:bg-white/8">
                         <Edit2 className="size-4" /> Edit
                     </button>
-                    <button onClick={() => { onTogglePublish(); onToggle({ stopPropagation: () => {} }); }}
+                    <button type="button" onClick={() => { onTogglePublish(); onToggle({ stopPropagation: () => {} }); }}
                         className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-surface-muted dark:hover:bg-white/8">
                         <Eye className="size-4" /> {quiz.is_published ? 'Unpublish' : 'Publish'}
                     </button>
                     <hr className="my-1 border-line-subtle" />
-                    <button onClick={() => { onDelete(); onToggle({ stopPropagation: () => {} }); }}
+                    <button type="button" onClick={() => { onDelete(); onToggle({ stopPropagation: () => {} }); }}
                         className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10">
                         <Trash2 className="size-4" /> Hapus
                     </button>
@@ -293,3 +294,4 @@ function ActionDropdown({ quiz, isOpen, onToggle, onEdit, onTogglePublish, onDel
         </div>
     );
 }
+

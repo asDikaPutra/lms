@@ -57,6 +57,7 @@ export function Modal({ open, onClose, title, children, className, maxWidth = "m
                   {title}
                 </h3>
                 <button
+                  type="button"
                   onClick={onClose}
                   className="rounded-full p-1 transition-colors text-content-muted hover:bg-surface-muted hover:text-content-primary"
                   aria-label="Tutup"
@@ -145,6 +146,7 @@ export function ConfirmDialog({
         </div>
         <div className="flex justify-end gap-3 pt-4 border-t border-line-subtle">
           <button
+            type="button"
             onClick={onClose}
             disabled={loading}
             className="inline-flex items-center justify-center gap-2 rounded-pill border bg-clip-padding px-6 py-3 text-[16px] font-semibold whitespace-nowrap transition-all duration-150 outline-none select-none border-line-strong bg-transparent text-content-primary hover:bg-surface-muted disabled:pointer-events-none disabled:opacity-50"
@@ -152,6 +154,7 @@ export function ConfirmDialog({
             {cancelLabel}
           </button>
           <button
+            type="button"
             onClick={onConfirm}
             disabled={loading}
             className={cn(

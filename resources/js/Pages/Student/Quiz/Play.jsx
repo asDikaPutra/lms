@@ -10,7 +10,7 @@ const ANSWER_STYLES = [
         glow: 'shadow-rose-500/40',
         border: 'border-rose-400/50',
         icon: (
-            <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white/80">
+            <svg viewBox="0 0 24 24" className="size-6 fill-white/80">
                 <polygon points="12,2 22,22 2,22" />
             </svg>
         ),
@@ -20,7 +20,7 @@ const ANSWER_STYLES = [
         glow: 'shadow-sky-500/40',
         border: 'border-sky-400/50',
         icon: (
-            <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white/80">
+            <svg viewBox="0 0 24 24" className="size-6 fill-white/80">
                 <polygon points="12,2 22,12 12,22 2,12" />
             </svg>
         ),
@@ -30,7 +30,7 @@ const ANSWER_STYLES = [
         glow: 'shadow-amber-500/40',
         border: 'border-amber-400/50',
         icon: (
-            <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white/80">
+            <svg viewBox="0 0 24 24" className="size-6 fill-white/80">
                 <circle cx="12" cy="12" r="10" />
             </svg>
         ),
@@ -40,7 +40,7 @@ const ANSWER_STYLES = [
         glow: 'shadow-emerald-500/40',
         border: 'border-emerald-400/50',
         icon: (
-            <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white/80">
+            <svg viewBox="0 0 24 24" className="size-6 fill-white/80">
                 <rect x="2" y="2" width="20" height="20" rx="3" />
             </svg>
         ),
@@ -246,9 +246,9 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
                     <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                        className="w-12 h-12 rounded-full border-4 border-emerald-500/30 border-t-emerald-400"
+                        className="size-12 rounded-full border-4 border-emerald-500/30 border-t-emerald-400"
                     />
-                    <span className="text-emerald-300 font-medium">Memuat soal...</span>
+                    <span className="text-emerald-300 font-medium">Memuat soal…</span>
                 </motion.div>
             </div>
         );
@@ -262,20 +262,12 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
             <motion.div
                 animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.25, 0.15] }}
                 transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-emerald-500 rounded-full blur-3xl pointer-events-none"
+                className="absolute -top-40 -left-40 size-[500px] bg-emerald-500 rounded-full blur-3xl pointer-events-none"
             />
             <motion.div
                 animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
                 transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-                className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-teal-500 rounded-full blur-3xl pointer-events-none"
-            />
-
-            {/* Geometric pattern */}
-            <div
-                className="absolute inset-0 opacity-[0.03] pointer-events-none"
-                style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                }}
+                className="absolute -bottom-40 -right-40 size-[600px] bg-teal-500 rounded-full blur-3xl pointer-events-none"
             />
 
             {/* ── TOP BAR ── */}
@@ -300,7 +292,7 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
                 </div>
 
                 {/* Timer ring */}
-                <div className="relative flex items-center justify-center w-14 h-14 flex-shrink-0">
+                <div className="relative flex items-center justify-center size-14 flex-shrink-0">
                     <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 48 48">
                         <circle cx="24" cy="24" r="22" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3" />
                         <motion.circle
@@ -358,6 +350,7 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
                             {question?.type === 'essay' ? (
                                 <div className="flex-1 flex flex-col gap-3">
                                     <textarea
+                                        aria-label="Jawaban essay"
                                         value={essayAnswer}
                                         onChange={(e) => setEssayAnswer(e.target.value)}
                                         placeholder="Tulis jawaban essay Anda di sini..."
@@ -409,7 +402,7 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
 
                                             <div className="relative flex items-center gap-4">
                                                 {/* Shape icon */}
-                                                <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-black/20 rounded-xl">
+                                                <div className="flex-shrink-0 size-10 flex items-center justify-center bg-black/20 rounded-xl">
                                                     {style.icon}
                                                 </div>
                                                 <span className="text-white font-bold text-base sm:text-lg leading-snug">
@@ -495,7 +488,7 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
                                 <span className="relative">
                                     {currentQuestion < totalQuestions ? 'Soal Berikutnya' : 'Lihat Hasil'}
                                 </span>
-                                <ChevronRight className="relative w-5 h-5" />
+                                <ChevronRight className="relative size-5" />
                             </motion.button>
                         </motion.div>
                     )}

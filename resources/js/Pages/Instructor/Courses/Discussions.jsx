@@ -1,4 +1,4 @@
-import { Head, Link, router } from '@inertiajs/react';
+﻿import { Head, Link, router } from '@inertiajs/react';
 import { MessageSquare, Search, Users, MessageCircle, Bell, Eye } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -53,6 +53,7 @@ export default function Discussions({ course, discussions, stats, filters }) {
                             <input
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
+                                aria-label="Cari materi"
                                 placeholder="Cari materi..."
                                 className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
                             />
@@ -76,7 +77,7 @@ export default function Discussions({ course, discussions, stats, filters }) {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="rounded-xl shadow-sm border overflow-hidden bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]"
+                            className="rounded-xl shadow-sm border overflow-hidden bg-surface border-line dark:bg-[#081616] dark:border-white/[0.07]"
                         >
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[700px]">
@@ -176,7 +177,7 @@ function StatCard({ label, value, icon: Icon, color }) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-4 bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]"
+            className="rounded-xl shadow-sm border p-4 bg-surface border-line dark:bg-[#081616] dark:border-white/[0.07]"
         >
             <div className="flex items-center gap-3">
                 <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
@@ -196,7 +197,7 @@ function EmptyState() {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-12 text-center bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]"
+            className="rounded-xl shadow-sm border p-12 text-center bg-surface border-line dark:bg-[#081616] dark:border-white/[0.07]"
         >
             <div className="flex justify-center mb-6">
                 <div className="flex size-20 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 border border-blue-200">
@@ -210,5 +211,6 @@ function EmptyState() {
         </motion.div>
     );
 }
+
 
 

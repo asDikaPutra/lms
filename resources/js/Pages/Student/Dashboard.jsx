@@ -29,10 +29,10 @@ const statCardHover = {
 };
 
 const statCardTint = {
-    emerald: 'bg-gradient-to-br from-white to-emerald-50/80 dark:from-[#111a15] dark:to-[#111a15]',
-    blue:    'bg-gradient-to-br from-white to-blue-50/80 dark:from-[#111a15] dark:to-[#111a15]',
-    teal:    'bg-gradient-to-br from-white to-teal-50/80 dark:from-[#111a15] dark:to-[#111a15]',
-    violet:  'bg-gradient-to-br from-white to-violet-50/80 dark:from-[#111a15] dark:to-[#111a15]',
+    emerald: 'bg-gradient-to-br from-white to-emerald-50/80 dark:from-[#081616] dark:to-[#081616]',
+    blue:    'bg-gradient-to-br from-white to-blue-50/80 dark:from-[#081616] dark:to-[#081616]',
+    teal:    'bg-gradient-to-br from-white to-teal-50/80 dark:from-[#081616] dark:to-[#081616]',
+    violet:  'bg-gradient-to-br from-white to-violet-50/80 dark:from-[#081616] dark:to-[#081616]',
 };
 
 export default function DashboardAnimated({ filters, stats, enrollments, upcomingAssignments }) {
@@ -54,7 +54,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
             <Head title="Dashboard Mahasiswa" />
             <AnimatedPage>
 
-                {/* ── Hero ─────────────────────────────────────────────── */}
+                {/* â”€â”€ Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
                 <section className="mb-6">
                     <div className="grid gap-5 lg:grid-cols-[1fr_22rem]">
 
@@ -65,12 +65,9 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                             className="relative overflow-hidden rounded-2xl border p-7 shadow-md
                                 border-emerald-200 bg-gradient-to-br from-emerald-50 via-teal-50/80 to-white
-                                dark:border-white/[0.07] dark:bg-gradient-to-br dark:from-[#0d1f16] dark:via-[#0f1c14] dark:to-[#0a1510] dark:shadow-[0_2px_24px_rgba(0,0,0,0.5)]"
+                                dark:border-white/[0.07] dark:bg-gradient-to-br dark:from-[#081616] dark:via-[#0E2B29] dark:to-[#000100] dark:shadow-[0_2px_24px_rgba(0,0,0,0.5)]"
                         >
-                            {/* Pattern */}
-                            <div className="pointer-events-none absolute inset-0 opacity-[0.04] dark:opacity-[0.04]"
-                            />
-                            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/10" />
+                            <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/10" />
 
                             <div className="relative space-y-4">
                                 <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }}
@@ -108,7 +105,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                 whileHover={{ y: -4 }}
                                 className="relative overflow-hidden rounded-2xl border p-6 shadow-md transition-shadow duration-300
                                     border-line bg-surface hover:shadow-xl hover:border-emerald-200
-                                    dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_20px_rgba(0,0,0,0.45)]"
+                                    dark:border-white/[0.07] dark:bg-[#081616] dark:shadow-[0_2px_20px_rgba(0,0,0,0.45)]"
                             >
                                 <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
                                 <div className="space-y-5">
@@ -161,7 +158,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                     </div>
                 </section>
 
-                {/* ── Stats Cards ───────────────────────────────────────── */}
+                {/* â”€â”€ Stats Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
                 <StaggerContainer delay={0.35} className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     {statsConfig.map((item, index) => {
                         const Icon = item.icon;
@@ -197,7 +194,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                     })}
                 </StaggerContainer>
 
-                {/* ── Main Grid ─────────────────────────────────────────── */}
+                {/* â”€â”€ Main Grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
                 <div className="grid gap-5 xl:grid-cols-[1.4fr_1fr]">
 
                     {/* Courses Section */}
@@ -205,7 +202,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                         <motion.div whileHover={{ y: -2 }}
                             className="relative overflow-hidden rounded-2xl border p-6 shadow-md transition-shadow duration-300 h-full
                                 border-line bg-surface hover:shadow-xl hover:border-neutral-300
-                                dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
+                                dark:border-white/[0.07] dark:bg-[#081616] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                         >
                             <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
                             <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -243,16 +240,16 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                         </motion.div>
                     </FadeInWhenVisible>
 
-                    {/* Assignments Section — redesigned as deadline timeline */}
+                    {/* Assignments Section */}
                     <FadeInWhenVisible>
                         <motion.div whileHover={{ y: -2 }}
                             className="relative overflow-hidden rounded-2xl border shadow-md transition-shadow duration-300 h-full flex flex-col
                                 border-line bg-surface hover:shadow-xl hover:border-neutral-300
-                                dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
+                                dark:border-white/[0.07] dark:bg-[#081616] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                         >
                             <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
 
-                            {/* Section header — compact */}
+                            {/* Section header ― compact */}
                             <div className="flex items-center justify-between px-5 pt-5 pb-4">
                                 <div className="flex items-center gap-2.5">
                                     <span className="inline-flex size-8 items-center justify-center rounded-[10px] bg-gradient-to-br from-teal-400 via-teal-500 to-emerald-600 text-white shadow-[0_3px_10px_rgba(20,184,166,0.32)]">
@@ -263,12 +260,6 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                         <p className="text-[10px] text-content-muted">Deadline terdekat</p>
                                     </div>
                                 </div>
-                                <Link
-                                    href="/student/courses"
-                                    className="text-[11px] font-semibold transition-colors text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
-                                >
-                                    Lihat semua
-                                </Link>
                             </div>
 
                             {/* Divider */}
@@ -289,20 +280,22 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                     </motion.div>
                                 )}
                                 {upcomingAssignments.map((assignment, index) => (
-                                    <AssignmentCard key={assignment.id} assignment={assignment} delay={index * 0.06} />
+                                    <Link key={assignment.id} href={`/student/courses/${assignment.course_id}?view=assignment-${assignment.id}`} className="block">
+                                        <AssignmentCard assignment={assignment} delay={index * 0.06} />
+                                    </Link>
                                 ))}
                             </div>
 
                             {/* Footer CTA */}
                             {upcomingAssignments.length > 0 && (
                                 <div className="px-4 pb-4 pt-2">
-                                    <Link href="/student/courses">
+                                    <Link href="/student/assignments">
                                         <Button
-                                            variant="outline"
+                                            variant="success"
                                             size="sm"
-                                            className="w-full rounded-xl border-teal-200 text-teal-700 hover:bg-teal-100/80 dark:border-teal-500/25 dark:text-teal-300 dark:hover:bg-teal-500/15"
+                                            className="w-full h-9 rounded-[10px]"
                                         >
-                                            Kerjakan Tugas
+                                            Lihat Semua
                                         </Button>
                                     </Link>
                                 </div>
@@ -315,7 +308,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
     );
 }
 
-// ─── CourseCard ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ CourseCard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function CourseCard({ enrollment, delay }) {
     return (
         <motion.article
@@ -325,15 +318,12 @@ function CourseCard({ enrollment, delay }) {
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
             className="group relative overflow-hidden rounded-[14px] border shadow-md transition-all
                 border-line bg-surface hover:border-emerald-300 hover:shadow-[0_8px_24px_rgba(16,185,129,0.15)]
-                dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-emerald-500/25 dark:hover:shadow-[0_6px_24px_rgba(16,185,129,0.12)]"
+                dark:border-white/[0.07] dark:bg-[#081616] dark:hover:border-emerald-500/25 dark:hover:shadow-[0_6px_24px_rgba(16,185,129,0.12)]"
         >
-            {/* Banner — sama dengan Courses Index */}
+            {/* Banner â€” sama dengan Courses Index */}
             <div className="relative h-36 overflow-hidden bg-gradient-to-br from-emerald-500/90 via-teal-500/90 to-emerald-600/90 backdrop-blur-sm">
-                <div className="absolute inset-0 opacity-[0.2]"
-                    
-                />
                 <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
-                <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-emerald-400/20 blur-2xl" />
+                <div className="absolute -right-6 -top-6 size-24 rounded-full bg-emerald-400/20 blur-2xl" />
                 <div className="absolute top-3 left-3"><StatusBadge status={enrollment.status} /></div>
                 <div className="absolute bottom-4 right-4 flex size-12 items-center justify-center rounded-2xl border border-white/30 bg-white/20 backdrop-blur-xl shadow-xl">
                     <BookOpen className="size-6 text-white" strokeWidth={1.75} aria-hidden="true" />
@@ -416,7 +406,7 @@ function CourseCard({ enrollment, delay }) {
     );
 }
 
-// ─── AssignmentCard — redesigned as deadline timeline item ───────────────────
+// â”€â”€â”€ AssignmentCard â€” redesigned as deadline timeline item â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function getUrgency(deadlineStr) {
     if (!deadlineStr) return { label: 'Tidak ada', color: 'neutral', daysLeft: null };
     const now = new Date();
@@ -500,7 +490,7 @@ function AssignmentCard({ assignment, delay }) {
     );
 }
 
-// ─── StatusBadge ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ StatusBadge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function StatusBadge({ status }) {
     const config = {
         active:   { label: 'Aktif',   cls: 'bg-emerald-100/90 border-emerald-300/80 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300', dot: 'bg-emerald-500 dark:bg-emerald-400' },
@@ -516,3 +506,4 @@ function StatusBadge({ status }) {
         </span>
     );
 }
+

@@ -100,6 +100,7 @@ export default function Students({ course, enrollments, stats, filters }) {
                             <input
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
+                                aria-label="Cari peserta"
                                 placeholder="Cari nama, NIM, atau email..."
                                 className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
                             />

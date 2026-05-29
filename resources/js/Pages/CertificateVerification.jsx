@@ -3,6 +3,7 @@ import { BookOpenCheck, Search, ShieldCheck, XCircle, CheckCircle2, User, Hash, 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { validateVerifyCode } from '@/Pages/certificate-verification-utils';
 
 /**
  * Formats an ISO date string as a readable Indonesian date.
@@ -19,30 +20,6 @@ function formatIndonesianDate(isoString) {
         month: 'long',
         year: 'numeric',
     });
-}
-
-/**
- * Validates a certificate verification code.
- * Returns { valid: true } if the uppercased input matches /^[A-Z0-9]{12}$/,
- * otherwise returns { valid: false, message: '...' }.
- *
- * @param {string} input
- * @returns {{ valid: boolean, message?: string }}
- */
-export function validateVerifyCode(input) {
-    if (!input || input.trim() === '') {
-        return { valid: false, message: 'Kode verifikasi tidak boleh kosong.' };
-    }
-
-    const uppercased = input.toUpperCase();
-    if (/^[A-Z0-9]{12}$/.test(uppercased)) {
-        return { valid: true };
-    }
-
-    return {
-        valid: false,
-        message: 'Kode verifikasi harus terdiri dari 12 karakter alfanumerik.',
-    };
 }
 
 /**
@@ -199,27 +176,16 @@ export default function CertificateVerification({ certificate = null, error = nu
 
             {/* Full-page background */}
             <main className="relative min-h-screen overflow-hidden bg-gradient-to-br from-emerald-50 via-teal-50/50 to-green-50">
-                {/* Islamic geometric background pattern */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.04 }}
-                    transition={{ duration: 1.2 }}
-                    className="pointer-events-none absolute inset-0"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230B3D2E' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
-                />
-
                 {/* Floating ambient orbs */}
                 <motion.div
                     animate={{ y: [0, -24, 0], x: [0, 16, 0] }}
                     transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-                    className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-gradient-to-br from-emerald-400/15 to-teal-400/15 blur-3xl"
+                    className="pointer-events-none absolute -top-24 -left-24 size-96 rounded-full bg-gradient-to-br from-emerald-400/15 to-teal-400/15 blur-3xl"
                 />
                 <motion.div
                     animate={{ y: [0, 32, 0], x: [0, -24, 0] }}
                     transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-                    className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-gradient-to-br from-teal-400/15 to-green-400/15 blur-3xl"
+                    className="pointer-events-none absolute -bottom-24 -right-24 size-96 rounded-full bg-gradient-to-br from-teal-400/15 to-green-400/15 blur-3xl"
                 />
 
                 <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-12">
@@ -264,7 +230,7 @@ export default function CertificateVerification({ certificate = null, error = nu
                             <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#0B3D2E] via-[#5DCAA5] to-[#0B3D2E]" />
 
                             {/* Decorative corner orb */}
-                            <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-emerald-400/20 to-teal-400/20 blur-2xl" />
+                            <div className="pointer-events-none absolute -right-8 -top-8 size-32 rounded-full bg-gradient-to-br from-emerald-400/20 to-teal-400/20 blur-2xl" />
 
                             <form onSubmit={handleSubmit} className="space-y-5" noValidate>
                                 {/* Code input */}

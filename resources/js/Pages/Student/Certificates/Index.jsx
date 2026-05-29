@@ -7,7 +7,7 @@ import { AnimatedPage, StaggerContainer } from '@/components/animated/AnimatedPa
 import { fadeUp } from '@/lib/animations';
 
 export default function Index({ certificates }) {
-    const sorted = [...certificates].sort(
+    const sorted = certificates.toSorted(
         (a, b) => new Date(b.issued_at) - new Date(a.issued_at)
     );
 
@@ -16,7 +16,7 @@ export default function Index({ certificates }) {
             <Head title="Sertifikat Saya" />
 
             <AnimatedPage>
-                {/* Header — sama dengan halaman lain */}
+                {/* Header â€” sama dengan halaman lain */}
                 <section className="mb-6">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -113,17 +113,10 @@ function CertificateCard({ certificate }) {
                 href={`/student/certificates/${certificate.id}`}
                 className="relative block rounded-2xl overflow-hidden border
                     bg-white/90 border-white/40
-                    dark:bg-[#111a15] dark:border-white/[0.07]"
+                    dark:bg-[#081616] dark:border-white/[0.07]"
             >
-                {/* Header banner — sama dengan Courses Index */}
+                {/* Header banner â€” sama dengan Courses Index */}
                 <div className="relative h-36 bg-gradient-to-br from-emerald-500/90 via-teal-500/90 to-emerald-600/90 backdrop-blur-sm overflow-hidden">
-                    {/* Islamic pattern */}
-                    <div
-                        className="absolute inset-0 opacity-[0.2]"
-                        style={{
-                            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                        }}
-                    />
                     <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
 
                     {/* Sparkles corner */}
@@ -143,7 +136,7 @@ function CertificateCard({ certificate }) {
                 {/* Card body */}
                 <div className="relative p-5 space-y-3
                     bg-gradient-to-b from-white/60 to-white/80
-                    dark:bg-gradient-to-b dark:from-[#111a15] dark:to-[#0d1610]">
+                    dark:bg-none dark:bg-[#081616]">
                     {/* Top accent line */}
                     <div className="absolute top-0 left-5 right-5 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
 
@@ -181,3 +174,4 @@ function CertificateCard({ certificate }) {
         </motion.article>
     );
 }
+

@@ -183,6 +183,7 @@ function SubmissionCard({ submission }) {
                         </label>
                         <input
                             id={`grade-${submission.id}`}
+                            aria-label="Nilai (0-100)"
                             type="number"
                             min="0"
                             max="100"
@@ -199,6 +200,7 @@ function SubmissionCard({ submission }) {
                         </label>
                         <textarea
                             id={`feedback-${submission.id}`}
+                            aria-label="Feedback (opsional)"
                             rows="3"
                             value={form.data.feedback}
                             onChange={(e) => form.setData('feedback', e.target.value)}

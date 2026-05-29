@@ -23,7 +23,7 @@ class QuizAttemptController extends Controller
             ->where('user_id', $request->user()->id)
             ->count();
 
-        if ($attemptCount >= $quiz->max_attempts) {
+        if ($quiz->max_attempts !== null && $attemptCount >= $quiz->max_attempts) {
             return back()->with('error', "Anda sudah mencapai batas maksimal percobaan ({$quiz->max_attempts}x).");
         }
 

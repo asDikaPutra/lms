@@ -32,6 +32,7 @@ function TabsList({ className, children, ...props }) {
 function TabsTab({ value, active, onClick, className, children, ...props }) {
   return (
     <button
+      type="button"
       role="tab"
       aria-selected={active}
       onClick={() => onClick?.(value)}

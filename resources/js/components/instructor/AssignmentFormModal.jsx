@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import { TextField, TextArea, SelectField, CheckboxField } from '@/components/ui/text-field';
 
+const EMPTY_ARRAY = [];
+
 /**
  * Reusable Assignment Form Modal
  * Used in both Assignments page and Curriculum page
@@ -22,7 +24,7 @@ export default function AssignmentFormModal({
     isOpen,
     onClose,
     assignment = null,
-    modules = [],
+    modules = EMPTY_ARRAY,
     preselectedType = null,
     preselectedId = null,
     showParentSelect = true

@@ -28,20 +28,12 @@ export default function Result({ attempt, courseId }) {
                 <motion.div
                     animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
                     transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-                    className="fixed -top-40 -left-40 w-[500px] h-[500px] bg-emerald-500 rounded-full blur-3xl pointer-events-none"
+                    className="fixed -top-40 -left-40 size-[500px] bg-emerald-500 rounded-full blur-3xl pointer-events-none"
                 />
                 <motion.div
                     animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.2, 0.1] }}
                     transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-                    className="fixed -bottom-40 -right-40 w-[600px] h-[600px] bg-teal-500 rounded-full blur-3xl pointer-events-none"
-                />
-
-                {/* Geometric pattern */}
-                <div
-                    className="fixed inset-0 opacity-[0.03] pointer-events-none"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
+                    className="fixed -bottom-40 -right-40 size-[600px] bg-teal-500 rounded-full blur-3xl pointer-events-none"
                 />
 
                 <div className="relative z-10 min-h-full flex flex-col items-center justify-start py-10 px-4">
@@ -62,7 +54,7 @@ export default function Result({ attempt, courseId }) {
                                     initial={{ scale: 0, rotate: -180 }}
                                     animate={{ scale: 1, rotate: 0 }}
                                     transition={{ delay: 0.2, type: 'spring', stiffness: 150, damping: 15 }}
-                                    className="relative w-36 h-36 mb-6"
+                                    className="relative size-36 mb-6"
                                 >
                                     <svg className="w-full h-full -rotate-90" viewBox="0 0 128 128">
                                         {/* Track */}
@@ -141,19 +133,19 @@ export default function Result({ attempt, courseId }) {
                             <div className="grid grid-cols-3 divide-x divide-white/10 border-t border-white/10">
                                 {[
                                     {
-                                        icon: <CheckCircle className="w-5 h-5 text-emerald-400" />,
+                                        icon: <CheckCircle className="size-5 text-emerald-400" />,
                                         value: correctAnswers,
                                         label: 'Benar',
                                         color: 'text-emerald-300',
                                     },
                                     {
-                                        icon: <XCircle className="w-5 h-5 text-rose-400" />,
+                                        icon: <XCircle className="size-5 text-rose-400" />,
                                         value: totalQuestions - correctAnswers,
                                         label: 'Salah',
                                         color: 'text-rose-300',
                                     },
                                     {
-                                        icon: <Clock className="w-5 h-5 text-sky-400" />,
+                                        icon: <Clock className="size-5 text-sky-400" />,
                                         value: `${totalTime}s`,
                                         label: 'Waktu',
                                         color: 'text-sky-300',
@@ -184,7 +176,7 @@ export default function Result({ attempt, courseId }) {
                             className="bg-white/8 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden mb-5"
                         >
                             <div className="px-6 py-4 border-b border-white/10 flex items-center gap-2">
-                                <BookOpen className="w-4 h-4 text-emerald-400" />
+                                <BookOpen className="size-4 text-emerald-400" />
                                 <h3 className="font-bold text-white text-sm uppercase tracking-widest">
                                     Review Jawaban
                                 </h3>
@@ -243,7 +235,7 @@ export default function Result({ attempt, courseId }) {
 
                                             {/* Time taken */}
                                             <div className="flex-shrink-0 flex items-center gap-1 text-white/30 text-xs">
-                                                <Clock className="w-3 h-3" />
+                                                <Clock className="size-3" />
                                                 <span>{answer?.time_taken || 0}s</span>
                                             </div>
                                         </motion.div>
@@ -263,7 +255,7 @@ export default function Result({ attempt, courseId }) {
                                     variant="success"
                                     className="relative w-full h-14 rounded-2xl text-base shadow-xl shadow-emerald-500/30"
                                 >
-                                    <ArrowLeft className="w-5 h-5" />
+                                    <ArrowLeft className="size-5" />
                                     Kembali ke Pembelajaran
                                 </Button>
                             </Link>

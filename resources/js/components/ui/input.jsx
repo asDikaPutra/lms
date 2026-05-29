@@ -1,4 +1,3 @@
-import * as React from "react"
 import { cn } from "@/lib/utils"
 
 /**
@@ -20,52 +19,53 @@ const fieldBase =
   "disabled:cursor-not-allowed disabled:opacity-50 " +
   "aria-[invalid=true]:border-danger aria-[invalid=true]:focus:ring-danger/20"
 
-export const Input = React.forwardRef(({ className, type = "text", ...props }, ref) => (
-  <input ref={ref} type={type} className={cn(fieldBase, "h-10", className)} {...props} />
-))
-Input.displayName = "Input"
+export function Input({ className, type = "text", ref, ...props }) {
+  return <input ref={ref} type={type} className={cn(fieldBase, "h-10", className)} {...props} />
+}
 
-export const Textarea = React.forwardRef(({ className, ...props }, ref) => (
-  <textarea ref={ref} className={cn(fieldBase, "resize-y min-h-[80px]", className)} {...props} />
-))
-Textarea.displayName = "Textarea"
+export function Textarea({ className, ref, ...props }) {
+  return <textarea ref={ref} className={cn(fieldBase, "resize-y min-h-[80px]", className)} {...props} />
+}
 
-export const Select = React.forwardRef(({ className, children, ...props }, ref) => (
-  <select ref={ref} className={cn(fieldBase, "h-10 pr-8", className)} {...props}>
-    {children}
-  </select>
-))
-Select.displayName = "Select"
+export function Select({ className, children, ref, ...props }) {
+  return (
+    <select ref={ref} className={cn(fieldBase, "h-10 pr-8", className)} {...props}>
+      {children}
+    </select>
+  )
+}
 
-export const Checkbox = React.forwardRef(({ className, ...props }, ref) => (
-  <input
-    ref={ref}
-    type="checkbox"
-    className={cn(
-      "size-4 rounded border-line text-brand accent-brand",
-      "focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:ring-offset-1",
-      "disabled:cursor-not-allowed disabled:opacity-50",
-      className
-    )}
-    {...props}
-  />
-))
-Checkbox.displayName = "Checkbox"
+export function Checkbox({ className, ref, ...props }) {
+  return (
+    <input
+      ref={ref}
+      type="checkbox"
+      className={cn(
+        "size-4 rounded border-line text-brand accent-brand",
+        "focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:ring-offset-1",
+        "disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-export const Radio = React.forwardRef(({ className, ...props }, ref) => (
-  <input
-    ref={ref}
-    type="radio"
-    className={cn(
-      "size-4 border-line text-brand accent-brand",
-      "focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:ring-offset-1",
-      "disabled:cursor-not-allowed disabled:opacity-50",
-      className
-    )}
-    {...props}
-  />
-))
-Radio.displayName = "Radio"
+export function Radio({ className, ref, ...props }) {
+  return (
+    <input
+      ref={ref}
+      type="radio"
+      className={cn(
+        "size-4 border-line text-brand accent-brand",
+        "focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:ring-offset-1",
+        "disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
 /**
  * Switch — controlled toggle. Pass `checked` and `onCheckedChange` (or onChange).

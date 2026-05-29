@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react';
+﻿import { Head, router } from '@inertiajs/react';
 import { TrendingUp, Users, Layers3, AlertTriangle, Activity, CheckCircle2, Clock } from 'lucide-react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -59,13 +59,14 @@ export default function Progress({ course, studentProgress, moduleProgress, stat
                     </div>
 
                     {/* Tabs */}
-                    <div className="rounded-xl shadow-sm border overflow-hidden bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]">
+                    <div className="rounded-xl shadow-sm border overflow-hidden bg-surface border-line dark:bg-[#081616] dark:border-white/[0.07]">
                         <div className="border-b border-line-subtle">
                             <nav className="flex gap-1 p-1.5">
                                 {tabs.map((t) => {
                                     const Icon = t.icon;
                                     return (
                                         <button
+                                            type="button"
                                             key={t.id}
                                             onClick={() => handleTabChange(t.id)}
                                             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
@@ -281,7 +282,7 @@ function AtRiskTab({ data }) {
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {data.map((item, index) => (
-                    <div key={index} className="rounded-xl border p-4 bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]">
+                    <div key={index} className="rounded-xl border p-4 bg-surface border-line dark:bg-[#081616] dark:border-white/[0.07]">
                         <div className="flex items-center gap-3 mb-3">
                             <div className="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-red-400 to-rose-500 text-white font-medium">
                                 {item.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
@@ -350,7 +351,7 @@ function StatCard({ label, value, icon: Icon, color, suffix = '', isText = false
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-4 bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]"
+            className="rounded-xl shadow-sm border p-4 bg-surface border-line dark:bg-[#081616] dark:border-white/[0.07]"
         >
             <div className="flex items-center gap-3">
                 <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
@@ -368,6 +369,7 @@ function StatCard({ label, value, icon: Icon, color, suffix = '', isText = false
         </motion.div>
     );
 }
+
 
 
 

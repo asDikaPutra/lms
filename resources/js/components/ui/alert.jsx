@@ -1,4 +1,3 @@
-import * as React from "react"
 import { cn } from "@/lib/utils"
 
 /**
@@ -17,18 +16,19 @@ const toneMap = {
   neutral: "bg-surface-muted border-line text-content-secondary",
 }
 
-export const Alert = React.forwardRef(({ tone = "info", title, icon: Icon, className, children, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="alert"
-    className={cn("flex gap-3 rounded-lg border px-4 py-3 text-sm", toneMap[tone] ?? toneMap.info, className)}
-    {...props}
-  >
-    {Icon && <Icon className="size-4 mt-0.5 shrink-0" aria-hidden="true" />}
-    <div className="min-w-0">
-      {title && <p className="font-semibold">{title}</p>}
-      {children && <div className={cn(title && "mt-0.5", "text-current/90")}>{children}</div>}
+export function Alert({ tone = "info", title, icon: Icon, className, children, ref, ...props }) {
+  return (
+    <div
+      ref={ref}
+      role="alert"
+      className={cn("flex gap-3 rounded-lg border px-4 py-3 text-sm", toneMap[tone] ?? toneMap.info, className)}
+      {...props}
+    >
+      {Icon && <Icon className="size-4 mt-0.5 shrink-0" aria-hidden="true" />}
+      <div className="min-w-0">
+        {title && <p className="font-semibold">{title}</p>}
+        {children && <div className={cn(title && "mt-0.5", "text-current/90")}>{children}</div>}
+      </div>
     </div>
-  </div>
-))
-Alert.displayName = "Alert"
+  )
+}

@@ -210,9 +210,9 @@
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
+    --background: #081616;
     --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
+    --card: #081616;
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.205 0 0);
     --popover-foreground: oklch(0.985 0 0);
@@ -241,14 +241,14 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
-
+ 
     /* ── Semantic tokens — DARK ── */
-    /* Surfaces (green-tinted near-black, matching existing #111a15 cards) */
-    --surface-base: #0a0f0d;      /* app background */
-    --surface: #111a15;           /* cards, panels */
-    --surface-raised: #16211b;    /* elevated cards / modals */
-    --surface-muted: #1a2620;     /* subtle fills, table headers */
-    --surface-overlay: #16211b;   /* popovers, dropdowns, tooltips */
+    /* Surfaces (deep dark teal, based on #081616) */
+    --surface-base: #081616;      /* app background */
+    --surface: #081616;           /* cards, panels */
+    --surface-raised: #0e2626;    /* elevated cards / modals */
+    --surface-muted: #133030;     /* subtle fills, table headers */
+    --surface-overlay: #0e2626;   /* popovers, dropdowns, tooltips */
 
     /* Content */
     --content-primary: rgba(255, 255, 255, 0.90);

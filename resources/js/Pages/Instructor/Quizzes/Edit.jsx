@@ -79,7 +79,7 @@ export default function EditQuiz({ quiz, course_id }) {
         if (confirm('Apakah Anda yakin ingin menghapus soal ini?')) {
             router.delete(`/instructor/quiz-questions/${currentQuestion.id}`, {
                 preserveScroll: true,
-                onSuccess: () => { if (currentIndex > 0) setCurrentIndex(currentIndex - 1); }
+                onSuccess: () => { setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev)); }
             });
         }
     };
@@ -119,6 +119,7 @@ export default function EditQuiz({ quiz, course_id }) {
                             <div className="flex flex-wrap gap-2">
                                 {questions.map((q, idx) => (
                                     <button
+                                        type="button"
                                         key={q.id}
                                         onClick={() => setCurrentIndex(idx)}
                                         className={`size-9 rounded-[6px] text-[13px] font-semibold transition-colors flex items-center justify-center border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint focus-visible:ring-offset-1 ${
@@ -131,6 +132,7 @@ export default function EditQuiz({ quiz, course_id }) {
                                     </button>
                                 ))}
                                 <button
+                                    type="button"
                                     onClick={() => setCurrentIndex(questions.length)}
                                     title="Tambah Soal Baru"
                                     aria-label="Tambah soal baru"
@@ -183,9 +185,9 @@ export default function EditQuiz({ quiz, course_id }) {
                                     {/* Tipe & Poin */}
                                     <div className="grid gap-4 md:grid-cols-2">
                                         <div>
-                                            <label className={labelCls}>Tipe Soal</label>
+                                            <label htmlFor="quiz-question-type" className={labelCls}>Tipe Soal</label>
                                             <select
-                                                value={form.data.type}
+                                                id="quiz-question-type" value={form.data.type}
                                                 onChange={e => form.setData('type', e.target.value)}
                                                 className={inputCls}
                                             >
@@ -195,11 +197,11 @@ export default function EditQuiz({ quiz, course_id }) {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className={labelCls}>Bobot Poin</label>
+                                            <label htmlFor="quiz-question-points" className={labelCls}>Bobot Poin</label>
                                             <input
                                                 type="number"
                                                 min="1" max="100"
-                                                value={form.data.points}
+                                                id="quiz-question-points" value={form.data.points}
                                                 onChange={e => form.setData('points', e.target.value)}
                                                 className={inputCls}
                                             />
@@ -208,10 +210,10 @@ export default function EditQuiz({ quiz, course_id }) {
 
                                     {/* Pertanyaan */}
                                     <div>
-                                        <label className={labelCls}>Pertanyaan</label>
+                                        <label htmlFor="quiz-question-text" className={labelCls}>Pertanyaan</label>
                                         <textarea
                                             rows="4"
-                                            value={form.data.question}
+                                            id="quiz-question-text" value={form.data.question}
                                             onChange={e => form.setData('question', e.target.value)}
                                             placeholder="Tulis pertanyaan di sini..."
                                             className={inputCls}
@@ -226,7 +228,7 @@ export default function EditQuiz({ quiz, course_id }) {
                                             dark:bg-white/5 dark:border-white/[0.07]">
                                             <div className="flex items-center justify-between mb-4">
                                                 <div>
-                                                    <label className={labelCls}>Pilihan Jawaban</label>
+                                                    <label htmlFor="quiz-option-0" className={labelCls}>Pilihan Jawaban</label>
                                                     <p className="text-[12px] text-fg-secondary dark:text-white/35 mt-0.5">Berikan pilihan ganda untuk soal ini.</p>
                                                 </div>
                                             </div>
@@ -239,7 +241,8 @@ export default function EditQuiz({ quiz, course_id }) {
                                                         </div>
                                                         <input
                                                             type="text"
-                                                            value={opt}
+                                                            id={`quiz-option-${i}`} value={opt}
+                                                            aria-label={`Pilihan ${String.fromCharCode(65 + i)}`}
                                                             onChange={e => handleOptionChange(i, e.target.value)}
                                                             placeholder={`Pilihan ${String.fromCharCode(65 + i)}`}
                                                             className={`flex-1 rounded-[6px] border px-3 py-2 text-[14px] outline-none transition-colors
@@ -273,9 +276,9 @@ export default function EditQuiz({ quiz, course_id }) {
                                     {/* Kunci jawaban */}
                                     {form.data.type !== 'essay' && (
                                         <div>
-                                            <label className={labelCls}>Kunci Jawaban Benar</label>
+                                            <label htmlFor="quiz-correct-answer" className={labelCls}>Kunci Jawaban Benar</label>
                                             <select
-                                                value={form.data.correct_answer}
+                                                id="quiz-correct-answer" value={form.data.correct_answer}
                                                 onChange={e => form.setData('correct_answer', e.target.value)}
                                                 className="w-full rounded-[6px] border px-3 py-2 text-[14px] font-medium outline-none transition-colors
                                                     border-forest/30 bg-mint-light/30 text-forest focus:border-forest focus:ring-1 focus:ring-forest

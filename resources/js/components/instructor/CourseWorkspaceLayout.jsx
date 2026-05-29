@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+﻿import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Layers3, ClipboardList, HelpCircle, MessageSquare, Users, BarChart3, TrendingUp, Settings, ChevronLeft, Edit2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -42,14 +42,6 @@ export default function CourseWorkspaceLayout({ course, children, activeTab = ''
                 transition={{ duration: 0.5 }}
                 className="rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-600 p-6 text-white shadow-xl shadow-emerald-500/20 relative overflow-hidden"
             >
-                {/* Islamic pattern overlay */}
-                <div
-                    className="absolute inset-0 opacity-[0.1]"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
-                />
-
                 <div className="relative">
                     {/* Back link */}
                     <Link 
@@ -111,7 +103,7 @@ export default function CourseWorkspaceLayout({ course, children, activeTab = ''
                 transition={{ delay: 0.2, duration: 0.4 }}
                 className="rounded-xl border p-1.5 overflow-x-auto shadow-sm
                     bg-white border-neutral-100
-                    dark:bg-[#111a15] dark:border-white/[0.07]"
+                    dark:bg-[#081616] dark:border-white/[0.07]"
             >
                 <nav className="flex gap-1 min-w-max">
                     {navItems.map((item) => {
@@ -150,3 +142,4 @@ export default function CourseWorkspaceLayout({ course, children, activeTab = ''
         </div>
     );
 }
+

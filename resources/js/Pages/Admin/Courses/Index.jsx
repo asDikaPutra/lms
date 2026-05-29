@@ -188,7 +188,7 @@ export default function Index({ courses, filters, instructors }) {
                             </select>
                         </Field>
                         <Field label="Semester" id="semester" error={form.errors.semester}>
-                            <input id="semester" value={form.data.semester} onChange={(event) => form.setData('semester', event.target.value)} className="field" disabled={!editingCourse} />
+                            <input id="semester" value={form.data.semester} onChange={(event) => form.setData('semester', event.target.value)} className="field" disabled={!editingCourse} aria-label="Semester" />
                         </Field>
                         <label className="flex items-center gap-2 text-sm text-content-secondary">
                             <input

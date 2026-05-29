@@ -25,25 +25,17 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                 <motion.div
                     animate={{ x: [0, 60, 0], y: [0, -40, 0], scale: [1, 1.2, 1] }}
                     transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-                    className="absolute -top-32 -left-32 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl"
+                    className="absolute -top-32 -left-32 size-96 bg-emerald-500/20 rounded-full blur-3xl"
                 />
                 <motion.div
                     animate={{ x: [0, -50, 0], y: [0, 60, 0], scale: [1, 1.3, 1] }}
                     transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-                    className="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-teal-500/20 rounded-full blur-3xl"
+                    className="absolute -bottom-32 -right-32 size-[500px] bg-teal-500/20 rounded-full blur-3xl"
                 />
                 <motion.div
                     animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
                     transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                    className="absolute top-1/2 left-1/4 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl"
-                />
-
-                {/* Geometric pattern overlay */}
-                <div
-                    className="absolute inset-0 opacity-[0.04]"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
+                    className="absolute top-1/2 left-1/4 size-64 bg-emerald-400/10 rounded-full blur-3xl"
                 />
 
                 {/* Back button */}
@@ -60,7 +52,7 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                         className="flex items-center gap-2 text-white/70 hover:text-white hover:bg-white/10 border border-white/20 rounded-full"
                         aria-label="Kembali ke dashboard"
                     >
-                        <ArrowLeft className="w-4 h-4" />
+                        <ArrowLeft className="size-4" />
                         <span className="hidden sm:block">Kembali</span>
                     </Button>
                 </motion.div>
@@ -80,11 +72,11 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                                 initial={{ scale: 0, rotate: -180 }}
                                 animate={{ scale: 1, rotate: 0 }}
                                 transition={{ delay: 0.2, type: 'spring', stiffness: 200, damping: 15 }}
-                                className="relative inline-flex items-center justify-center w-24 h-24 mb-6"
+                                className="relative inline-flex items-center justify-center size-24 mb-6"
                             >
                                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-3xl rotate-6 opacity-60 blur-sm" />
-                                <div className="relative flex items-center justify-center w-24 h-24 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-3xl shadow-2xl shadow-emerald-500/40">
-                                    <BookOpen className="w-11 h-11 text-white" />
+                                <div className="relative flex items-center justify-center size-24 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-3xl shadow-2xl shadow-emerald-500/40">
+                                    <BookOpen className="size-11 text-white" />
                                 </div>
                                 {/* Sparkle */}
                                 <motion.div
@@ -92,7 +84,7 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                                     transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
                                     className="absolute -top-2 -right-2"
                                 >
-                                    <Sparkles className="w-5 h-5 text-amber-300" />
+                                    <Sparkles className="size-5 text-amber-300" />
                                 </motion.div>
                             </motion.div>
 
@@ -102,7 +94,7 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                                 transition={{ delay: 0.3 }}
                                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 mb-4"
                             >
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
                                 <span className="text-xs font-bold text-emerald-300 uppercase tracking-widest">Quiz</span>
                             </motion.div>
 
@@ -133,8 +125,8 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                             className="grid grid-cols-2 gap-3 mb-6"
                         >
                             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl px-5 py-4">
-                                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-500/30">
-                                    <ListChecks className="w-5 h-5 text-emerald-300" />
+                                <div className="flex items-center justify-center size-10 rounded-xl bg-emerald-500/30">
+                                    <ListChecks className="size-5 text-emerald-300" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold text-white">{totalQuestions}</div>
@@ -143,8 +135,8 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                             </div>
 
                             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl px-5 py-4">
-                                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-teal-500/30">
-                                    <Clock className="w-5 h-5 text-teal-300" />
+                                <div className="flex items-center justify-center size-10 rounded-xl bg-teal-500/30">
+                                    <Clock className="size-5 text-teal-300" />
                                 </div>
                                 <div>
                                     <div className="text-2xl font-bold text-white">{quiz.duration ?? '—'}</div>
@@ -161,7 +153,7 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                                 transition={{ delay: 0.5 }}
                                 className="flex items-center gap-2 bg-amber-500/15 border border-amber-400/25 rounded-xl px-4 py-3 mb-6"
                             >
-                                <Shield className="w-4 h-4 text-amber-300 flex-shrink-0" />
+                                <Shield className="size-4 text-amber-300 flex-shrink-0" />
                                 <span className="text-sm text-amber-200">
                                     Percobaan: <span className="font-bold text-amber-300">{userAttempts} / {quiz.max_attempts}</span>
                                 </span>
@@ -189,7 +181,7 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                                         transition={{ delay: 0.6 + i * 0.08 }}
                                         className="flex items-start gap-2.5 text-sm text-white/70"
                                     >
-                                        <span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
+                                        <span className="mt-1 size-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
                                         {item}
                                     </motion.li>
                                 ))}
@@ -233,11 +225,11 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                                                 animate={{ opacity: [1, 0.5, 1] }}
                                                 transition={{ duration: 1, repeat: Infinity }}
                                             >
-                                                Memulai...
+                                                Memulai…
                                             </motion.span>
                                         ) : (
                                             <>
-                                                <Play className="w-5 h-5 fill-white" />
+                                                <Play className="size-5 fill-white" />
                                                 Mulai Quiz
                                             </>
                                         )}

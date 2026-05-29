@@ -5,13 +5,70 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
 use App\Models\Submission;
+use App\Models\Enrollment;
+use App\Models\Material;
+use App\Models\Module;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rules\File;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AssignmentController extends Controller
 {
+    public function index(Request $request): Response
+    {
+        $student = $request->user();
+
+        $activeCourseIds = Enrollment::query()
+            ->where('user_id', $student->id)
+            ->where('status', 'active')
+            ->pluck('course_id')
+            ->values();
+
+        $assignments = Assignment::query()
+            ->published()
+            ->where(function ($query) use ($activeCourseIds): void {
+                $query->whereHasMorph('assignable', [Module::class], fn ($query) => $query->whereIn('course_id', $activeCourseIds)->published())
+                    ->orWhereHasMorph('assignable', [Material::class], fn ($query) => $query->published()->whereHas('module', fn ($query) => $query->whereIn('course_id', $activeCourseIds)->published()));
+            })
+            ->with([
+                'assignable' => fn (MorphTo $morphTo) => $morphTo->morphWith([
+                    Module::class => ['course:id,name,code'],
+                    Material::class => ['module.course:id,name,code'],
+                ]),
+                'submissions' => fn ($query) => $query->where('user_id', $student->id),
+            ])
+            ->orderBy('deadline')
+            ->get()
+            ->map(function (Assignment $assignment) {
+                $course = null;
+                if ($assignment->assignable instanceof Module) {
+                    $course = $assignment->assignable->course;
+                } elseif ($assignment->assignable instanceof Material) {
+                    $course = $assignment->assignable->module?->course;
+                }
+
+                return [
+                    'id' => $assignment->id,
+                    'title' => $assignment->title,
+                    'deadline' => $assignment->deadline?->toIso8601String(),
+                    'deadline_formatted' => $assignment->deadline?->format('d M Y, H:i'),
+                    'course_name' => $course?->name,
+                    'course_code' => $course?->code,
+                    'course_id' => $course?->id,
+                    'has_submitted' => $assignment->submissions->isNotEmpty(),
+                    'submission_status' => $assignment->submissions->first()?->status,
+                ];
+            });
+
+        return Inertia::render('Student/Assignments/Index', [
+            'assignments' => $assignments,
+        ]);
+    }
+
     public function store(Request $request, Assignment $assignment): RedirectResponse
     {
         Gate::authorize('submit', $assignment);

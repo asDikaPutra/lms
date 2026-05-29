@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import { ChevronLeft, CheckCircle2, User, Calendar, Award, Copy, Check, ExternalLink, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -75,7 +75,7 @@ export default function Show({ certificate }) {
     );
 }
 
-/* ── CertificateDocument ─────────────────────────────────────────────────── */
+/* â”€â”€ CertificateDocument â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 function CertificateDocument({ certificate }) {
     const formattedDate = formatIndonesianDate(certificate.issued_at);
@@ -88,13 +88,6 @@ function CertificateDocument({ certificate }) {
         >
             {/* Forest Green header */}
             <div className="relative bg-[#0B3D2E] overflow-hidden px-8 pt-10 pb-12">
-                <div
-                    className="absolute inset-0 opacity-[0.06]"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
-                    aria-hidden="true"
-                />
                 <div
                     className="absolute inset-0 opacity-20"
                     style={{ background: 'radial-gradient(ellipse at 60% 50%, #5DCAA5 0%, transparent 70%)' }}
@@ -123,7 +116,7 @@ function CertificateDocument({ certificate }) {
             {/* Card body */}
             <div className="px-8 py-7 space-y-5
                 bg-white/95 backdrop-blur-sm
-                dark:bg-[#111a15]">
+                dark:bg-[#081616]">
                 <p className="text-sm font-medium text-content-secondary">
                     atas keberhasilan menyelesaikan kursus
                 </p>
@@ -176,7 +169,7 @@ function CertificateDocument({ certificate }) {
     );
 }
 
-/* ── AchievementSeal ─────────────────────────────────────────────────────── */
+/* â”€â”€ AchievementSeal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 function AchievementSeal() {
     return (
@@ -190,7 +183,7 @@ function AchievementSeal() {
     );
 }
 
-/* ── CriteriaMetList ─────────────────────────────────────────────────────── */
+/* â”€â”€ CriteriaMetList â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 const CRITERIA_CONFIG = [
     { key: 'min_progress', label: 'Progress Materi', unit: '%', description: 'Persentase materi yang telah diselesaikan' },
@@ -208,7 +201,7 @@ function CriteriaMetList({ criteria }) {
         <section
             className="rounded-2xl overflow-hidden border shadow-lg backdrop-blur-sm
                 bg-white/90 border-line/60
-                dark:bg-[#111a15] dark:border-white/[0.07]"
+                dark:bg-[#081616] dark:border-white/[0.07]"
             aria-label="Kriteria yang Dipenuhi"
         >
             <div className="px-6 py-4 border-b flex items-center gap-2.5
@@ -240,7 +233,7 @@ function CriteriaMetList({ criteria }) {
                         </div>
                         <div className="shrink-0 flex items-center gap-2">
                             <span className="text-sm font-bold text-content-secondary">
-                                ≥ {criteria[config.key]}{config.unit}
+                                â‰¥ {criteria[config.key]}{config.unit}
                             </span>
                             <div className="flex size-6 items-center justify-center rounded-full bg-[#5DCAA5]/15 border border-[#5DCAA5]/40">
                                 <CheckCircle2 className="size-3.5 text-[#5DCAA5]" />
@@ -253,7 +246,7 @@ function CriteriaMetList({ criteria }) {
     );
 }
 
-/* ── VerifyCodeCopyWidget ────────────────────────────────────────────────── */
+/* â”€â”€ VerifyCodeCopyWidget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 function VerifyCodeCopyWidget({ verifyCode, certificateId }) {
     const [copyStatus, setCopyStatus] = useState(null);
@@ -282,7 +275,7 @@ function VerifyCodeCopyWidget({ verifyCode, certificateId }) {
         <section
             className="rounded-2xl overflow-hidden border shadow-lg backdrop-blur-sm
                 bg-white/90 border-line/60
-                dark:bg-[#111a15] dark:border-white/[0.07]"
+                dark:bg-[#081616] dark:border-white/[0.07]"
             aria-label="Kode Verifikasi"
         >
             <div className="px-6 py-4 border-b flex items-center gap-2.5
@@ -372,3 +365,4 @@ function VerifyCodeCopyWidget({ verifyCode, certificateId }) {
         </section>
     );
 }
+

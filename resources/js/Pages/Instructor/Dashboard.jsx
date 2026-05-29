@@ -82,7 +82,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                                 className="group relative overflow-hidden rounded-xl p-5 shadow-lg border backdrop-blur-sm transition-all
                                     bg-white/90 border-line/60 hover:shadow-2xl hover:border-emerald-200/60
-                                    dark:bg-[#111a15] dark:border-white/[0.07] dark:hover:border-emerald-500/25 dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]"
+                                    dark:bg-[#081616] dark:border-white/[0.07] dark:hover:border-emerald-500/25 dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]"
                             >
                                 <div className="relative flex items-start justify-between">
                                     <div>
@@ -113,7 +113,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                             whileHover={{ y: -2 }}
                             className="relative overflow-hidden rounded-2xl p-6 shadow-xl border backdrop-blur-xl transition-shadow h-full
                                 bg-white/90 border-line/60
-                                dark:bg-[#111a15] dark:border-white/[0.07] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
+                                dark:bg-[#081616] dark:border-white/[0.07] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                         >
                             <div className="relative">
                                 <div className="flex items-center justify-between mb-6">
@@ -157,7 +157,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 whileHover={{ y: -2 }}
                                 className="relative overflow-hidden rounded-2xl p-6 shadow-xl border backdrop-blur-xl
                                     bg-white/90 border-line/60
-                                    dark:bg-[#111a15] dark:border-white/[0.07] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
+                                    dark:bg-[#081616] dark:border-white/[0.07] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                             >
                                 
                                 <div className="relative">
@@ -193,7 +193,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 whileHover={{ y: -2 }}
                                 className="relative overflow-hidden rounded-2xl p-6 shadow-xl border backdrop-blur-xl
                                     bg-white/90 border-line/60
-                                    dark:bg-[#111a15] dark:border-white/[0.07] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
+                                    dark:bg-[#081616] dark:border-white/[0.07] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                             >
                                 
                                 <div className="relative">
@@ -238,16 +238,10 @@ function CourseCard({ course, delay }) {
             whileHover={{ y: -3, transition: { duration: 0.2 } }}
             className="rounded-[12px] border shadow-sm transition-all overflow-hidden
                 border-line bg-surface hover:border-emerald-200 hover:shadow-md
-                dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-emerald-500/25"
+                dark:border-white/[0.07] dark:bg-[#081616] dark:hover:border-emerald-500/25"
         >
             {/* Header banner */}
             <div className="relative h-20 bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-600 overflow-hidden">
-                <div
-                    className="absolute inset-0 opacity-[0.15]"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
-                />
                 {/* Status badge */}
                 <div className="absolute top-2.5 left-3">
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border backdrop-blur-sm ${
@@ -323,7 +317,7 @@ function EnrollmentCard({ enrollment, delay }) {
             whileHover={{ y: -2 }}
             className="rounded-[12px] border p-3 shadow-sm transition-all
                 border-line bg-surface hover:border-amber-200 hover:bg-amber-50/30
-                dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-amber-500/25 dark:hover:bg-amber-500/5"
+                dark:border-white/[0.07] dark:bg-[#081616] dark:hover:border-amber-500/25 dark:hover:bg-amber-500/5"
         >
             <div className="flex items-start gap-2">
                 <div className="size-8 rounded-full flex items-center justify-center border shrink-0
@@ -372,7 +366,7 @@ function DiscussionCard({ discussion, delay }) {
             whileHover={{ y: -2 }}
             className="rounded-[12px] border p-3 shadow-sm transition-all
                 border-line bg-surface hover:border-blue-200 hover:bg-sky-50/30
-                dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-emerald-500/25 dark:hover:bg-emerald-500/5"
+                dark:border-white/[0.07] dark:bg-[#081616] dark:hover:border-emerald-500/25 dark:hover:bg-emerald-500/5"
         >
             <div className="flex items-start gap-2">
                 <div className="size-8 rounded-full flex items-center justify-center border shrink-0
@@ -407,3 +401,4 @@ function DiscussionCard({ discussion, delay }) {
         </motion.article>
     );
 }
+

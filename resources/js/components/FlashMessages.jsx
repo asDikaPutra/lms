@@ -33,8 +33,9 @@ export default function FlashMessages() {
     // Sync incoming flash props into visible messages state
     useEffect(() => {
         const incoming = Object.entries(flash)
-            .filter(([, message]) => Boolean(message))
-            .map(([type, message]) => ({ id: `${type}-${Date.now()}`, type, message }));
+            .flatMap(([type, message]) =>
+                message ? [{ id: `${type}-${Date.now()}`, type, message }] : []
+            );
 
         if (incoming.length > 0) {
             setVisibleMessages((prev) => [...prev, ...incoming]);

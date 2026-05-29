@@ -201,13 +201,13 @@ export default function Index({ users, filters, stats }) {
                     <CardContent>
                     <form onSubmit={submitUser} className="space-y-4">
                         <Field label="Nama" id="name" error={form.errors.name}>
-                            <input id="name" value={form.data.name} onChange={(event) => form.setData('name', event.target.value)} className="field" />
+                            <input id="name" value={form.data.name} onChange={(event) => form.setData('name', event.target.value)} className="field" aria-label="Nama" />
                         </Field>
                         <Field label="Email" id="email-form" error={form.errors.email}>
-                            <input id="email-form" type="email" value={form.data.email} onChange={(event) => form.setData('email', event.target.value)} className="field" />
+                            <input id="email-form" type="email" value={form.data.email} onChange={(event) => form.setData('email', event.target.value)} className="field" aria-label="Email" />
                         </Field>
                         <Field label={editingUser ? 'Password Baru' : 'Password'} id="password-form" error={form.errors.password}>
-                            <input id="password-form" type="password" value={form.data.password} onChange={(event) => form.setData('password', event.target.value)} className="field" autoComplete="new-password" />
+                            <input id="password-form" type="password" value={form.data.password} onChange={(event) => form.setData('password', event.target.value)} className="field" autoComplete="new-password" aria-label={editingUser ? 'Password Baru' : 'Password'} />
                         </Field>
                         <Field label="Role" id="role-form" error={form.errors.role}>
                             <select id="role-form" value={form.data.role} onChange={(event) => form.setData('role', event.target.value)} className="field">
@@ -218,12 +218,12 @@ export default function Index({ users, filters, stats }) {
                         </Field>
                         {form.data.role === 'student' && (
                             <Field label="NIM" id="nim" error={form.errors.nim}>
-                                <input id="nim" value={form.data.nim} onChange={(event) => form.setData('nim', event.target.value)} className="field" />
+                                <input id="nim" value={form.data.nim} onChange={(event) => form.setData('nim', event.target.value)} className="field" aria-label="NIM" />
                             </Field>
                         )}
                         {form.data.role === 'instructor' && (
                             <Field label="NIDN" id="nidn" error={form.errors.nidn}>
-                                <input id="nidn" value={form.data.nidn} onChange={(event) => form.setData('nidn', event.target.value)} className="field" />
+                                <input id="nidn" value={form.data.nidn} onChange={(event) => form.setData('nidn', event.target.value)} className="field" aria-label="NIDN" />
                             </Field>
                         )}
                         <label className="flex items-center gap-2 text-sm text-content-secondary">
@@ -261,6 +261,7 @@ export default function Index({ users, filters, stats }) {
                         <Field label="File CSV" id="student-import" error={importForm.errors.file}>
                             <input
                                 id="student-import"
+                                aria-label="File CSV"
                                 type="file"
                                 accept=".csv,text/csv,text/plain"
                                 onChange={(event) => importForm.setData('file', event.target.files?.[0] ?? null)}

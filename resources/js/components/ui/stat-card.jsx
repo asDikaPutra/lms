@@ -1,8 +1,8 @@
-import { motion } from "framer-motion"
+﻿import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 /**
- * StatCard — Reusable statistics card for dashboards.
+ * StatCard â€” Reusable statistics card for dashboards.
  *
  * Usage:
  *   <StatCard label="Total Kuis" value={42} icon={HelpCircle} color="emerald" />
@@ -42,7 +42,7 @@ export function StatCard({
       className={cn(
         "rounded-xl border p-4 shadow-sm",
         "bg-white border-neutral-100",
-        "dark:bg-[#111a15] dark:border-white/[0.07]",
+        "dark:bg-[#081616] dark:border-white/[0.07]",
         className
       )}
     >
@@ -68,3 +68,4 @@ export function StatCard({
     </motion.div>
   )
 }
+

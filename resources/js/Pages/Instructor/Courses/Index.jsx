@@ -178,7 +178,7 @@ export default function Index({ courses, filters }) {
                                 border-line bg-surface/60
                                 dark:border-white/10 dark:bg-white/5"
                         >
-                            <span className="text-5xl mb-4 block">📚</span>
+                            <span className="text-5xl mb-4 block">ðŸ“š</span>
                             <p className="text-sm text-content-secondary font-medium">
                                 Belum ada kursus yang dibuat.
                             </p>
@@ -221,14 +221,14 @@ export default function Index({ courses, filters }) {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-[2px] tracking-[-0.01em]">
                     <div className="w-full max-w-lg rounded-[12px] shadow-xl ring-1 animate-in fade-in zoom-in-95 duration-200
                         bg-surface ring-line
-                        dark:bg-[#111a15] dark:ring-white/10"
+                        dark:bg-[#081616] dark:ring-white/10"
                         role="dialog" aria-modal="true">
                         <div className="flex items-center justify-between border-b px-5 py-4
                             border-gray-300 dark:border-white/[0.07]">
                             <h3 className="text-[16px] font-semibold text-fg-primary dark:text-white/90">
                                 Buat Kursus Baru
                             </h3>
-                            <button onClick={closeModal} className="rounded-full p-1 transition-colors
+                            <button type="button" onClick={closeModal} className="rounded-full p-1 transition-colors
                                 text-fg-secondary hover:bg-slate-50 hover:text-fg-primary
                                 dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80"
                                 aria-label="Tutup modal">
@@ -239,25 +239,25 @@ export default function Index({ courses, filters }) {
                             <form onSubmit={submitCourse} className="space-y-4">
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <Field label="Kode Kursus" id="code" error={form.errors.code}>
-                                <input id="code" value={form.data.code} onChange={(event) => form.setData('code', event.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
+                                <input id="code" value={form.data.code} onChange={(event) => form.setData('code', event.target.value)} aria-label="Kode Kursus" className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
                                     border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint
                                     dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: IF101" />
                                     </Field>
                                     <Field label="Semester" id="semester" error={form.errors.semester}>
-                                <input id="semester" value={form.data.semester} onChange={(event) => form.setData('semester', event.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
+                                <input id="semester" value={form.data.semester} onChange={(event) => form.setData('semester', event.target.value)} aria-label="Semester" className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
                                     border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint
                                     dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Genap 2026" />
                                     </Field>
                                 </div>
 
                                 <Field label="Nama Kursus" id="name" error={form.errors.name}>
-                                <input id="name" value={form.data.name} onChange={(event) => form.setData('name', event.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
+                                <input id="name" value={form.data.name} onChange={(event) => form.setData('name', event.target.value)} aria-label="Nama Kursus" className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
                                     border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint
                                     dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Pengantar Informatika" />
                                 </Field>
 
                                 <Field label="Deskripsi" id="description" error={form.errors.description}>
-                                <textarea id="description" rows="3" value={form.data.description} onChange={(event) => form.setData('description', event.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
+                                <textarea id="description" rows="3" value={form.data.description} onChange={(event) => form.setData('description', event.target.value)} aria-label="Deskripsi" className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
                                     border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint
                                     dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Penjelasan singkat mengenai kursus ini" />
                                 </Field>
@@ -287,6 +287,7 @@ export default function Index({ courses, filters }) {
                                         <Field label="Min. Progress (%)" id="min-progress" error={form.errors['certificate_criteria.min_progress']}>
                                             <input
                                                 id="min-progress"
+                                                aria-label="Min. Progress (%)"
                                                 type="number"
                                                 min="0"
                                                 max="100"
@@ -298,6 +299,7 @@ export default function Index({ courses, filters }) {
                                         <Field label="Min. Nilai Kuis" id="min-score" error={form.errors['certificate_criteria.min_score']}>
                                             <input
                                                 id="min-score"
+                                                aria-label="Min. Nilai Kuis"
                                                 type="number"
                                                 min="0"
                                                 max="100"
@@ -326,16 +328,32 @@ export default function Index({ courses, filters }) {
 
 function CourseCard({ course, delay }) {
     const getStatusConfig = () => {
-        if (course.is_active) {
-            return {
+        const status = course.status || (course.is_active ? 'active' : 'archived');
+        
+        const configs = {
+            draft: {
+                label: 'Draft',
+                className: 'bg-slate-100/90 text-slate-700 border-slate-300/80 dark:bg-slate-500/10 dark:text-slate-400 dark:border-slate-500/25',
+                dot: 'bg-slate-400',
+            },
+            active: {
                 label: 'Aktif',
-                className: 'bg-emerald-100/80 text-emerald-800 border-emerald-300/70',
-            };
-        }
-        return {
-            label: 'Arsip',
-            className: 'bg-surface-muted/80 text-content-secondary border-line/70',
+                className: 'bg-emerald-100/90 text-emerald-800 border-emerald-300/80 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40',
+                dot: 'bg-emerald-500 dark:bg-emerald-400',
+            },
+            closed: {
+                label: 'Selesai',
+                className: 'bg-rose-100/90 text-rose-800 border-rose-300/80 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/40',
+                dot: null,
+            },
+            archived: {
+                label: 'Arsip',
+                className: 'bg-slate-100/90 text-slate-600 border-slate-300/80 dark:bg-slate-800/60 dark:text-slate-400 dark:border-slate-700/60',
+                dot: null,
+            },
         };
+
+        return configs[status] || configs.draft;
     };
 
     const status = getStatusConfig();
@@ -352,29 +370,18 @@ function CourseCard({ course, delay }) {
             {/* Card container */}
             <div className="relative rounded-2xl overflow-hidden border
                 bg-surface border-line
-                dark:bg-[#111a15] dark:border-white/[0.07]">
+                dark:bg-[#081616] dark:border-white/[0.07]">
                 {/* Header with gradient */}
                 <div className="relative h-28 bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-600 overflow-hidden">
-                    {/* Islamic pattern overlay */}
-                    <div
-                        className="absolute inset-0 opacity-[0.15]"
-                        style={{
-                            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                        }}
-                    />
-                    
                     {/* Status badge */}
                     <div className="absolute top-3 left-3">
-                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border shadow-sm backdrop-blur-sm ${
-                            course.is_active
-                                ? 'bg-emerald-100/80 text-emerald-800 border-emerald-300/70 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40'
-                                : 'bg-surface-muted/80 text-content-secondary border-line/70 dark:bg-white/10 dark:text-white/50 dark:border-white/20'
-                        }`}>
+                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border shadow-sm backdrop-blur-sm ${status.className}`}>
+                            {status.dot && <span className={`size-1.5 rounded-full ${status.dot} ${status.label === 'Aktif' ? 'animate-pulse' : ''}`} />}
                             {status.label}
                         </div>
                     </div>
 
-                    {/* Course icon — static */}
+                    {/* Course icon â€” static */}
                     <div className="absolute bottom-3 right-3 flex size-12 items-center justify-center rounded-xl bg-white/25 backdrop-blur-sm border border-white/40">
                         <BookOpen className="size-6 text-white" />
                     </div>
@@ -463,3 +470,4 @@ function Field({ label, id, error, children }) {
         </div>
     );
 }
+

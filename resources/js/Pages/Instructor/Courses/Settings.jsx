@@ -81,15 +81,15 @@ export default function Settings({ course, settings, stats }) {
                             <p className="text-sm text-content-secondary mt-1">Atur konfigurasi kursus ini.</p>
                             <div className="flex items-center gap-2 mt-2 text-xs text-content-secondary">
                                 <span className="font-medium">{course.name}</span>
-                                <span>·</span>
+                                <span>Â·</span>
                                 <span className="font-mono">{course.code}</span>
                                 {course.semester && (
                                     <>
-                                        <span>·</span>
+                                        <span>Â·</span>
                                         <span>{course.semester}</span>
                                     </>
                                 )}
-                                <span>·</span>
+                                <span>Â·</span>
                                 <StatusBadge status={course.status || (course.is_active ? 'active' : 'archived')} />
                             </div>
                         </div>
@@ -98,7 +98,7 @@ export default function Settings({ course, settings, stats }) {
                     {/* Quick Navigation */}
                     <div className="rounded-xl shadow-sm border p-1.5 overflow-x-auto
                         bg-surface border-line
-                        dark:bg-[#111a15] dark:border-white/[0.07]">
+                        dark:bg-[#081616] dark:border-white/[0.07]">
                         <nav className="flex gap-1 min-w-max">
                             {sections.map((section) => {
                                 const Icon = section.icon;
@@ -199,14 +199,31 @@ export default function Settings({ course, settings, stats }) {
 
 function StatusBadge({ status }) {
     const configs = {
-        draft: { label: 'Draft', className: 'bg-surface-muted text-content-secondary border-line' },
-        active: { label: 'Aktif', className: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
-        closed: { label: 'Selesai', className: 'bg-amber-100 text-amber-700 border-amber-200' },
-        archived: { label: 'Arsip', className: 'bg-surface-muted text-content-secondary border-line' },
+        draft: { 
+            label: 'Draft', 
+            className: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/10 dark:text-slate-400 dark:border-slate-500/25', 
+            dot: 'bg-slate-400' 
+        },
+        active: { 
+            label: 'Aktif', 
+            className: 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40', 
+            dot: 'bg-emerald-500 dark:bg-emerald-400' 
+        },
+        closed: { 
+            label: 'Selesai', 
+            className: 'bg-rose-100 text-rose-700 border-rose-200 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/40', 
+            dot: null 
+        },
+        archived: { 
+            label: 'Arsip', 
+            className: 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800/60 dark:text-slate-400 dark:border-slate-700/60', 
+            dot: null 
+        },
     };
     const config = configs[status] || configs.draft;
     return (
-        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${config.className}`}>
+        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${config.className}`}>
+            {config.dot && <span className={`size-1.5 rounded-full ${config.dot} ${config.label === 'Aktif' ? 'animate-pulse' : ''}`} />}
             {config.label}
         </span>
     );
@@ -228,6 +245,7 @@ function SectionCard({ id, title, description, icon: Icon, children, expanded, o
                 ${variants[variant]}`}
         >
             <button
+                type="button"
                 onClick={onToggle}
                 className={`w-full flex items-center justify-between p-5 text-left transition-colors ${
                     variant === 'danger'
@@ -282,7 +300,7 @@ function Toggle({ checked, onChange, label, description }) {
             <div className="relative mt-0.5">
                 <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only peer" />
                 <div className="w-10 h-6 rounded-full transition-colors bg-neutral-200 peer-checked:bg-emerald-500 dark:bg-white/15 dark:peer-checked:bg-emerald-500" />
-                <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform peer-checked:translate-x-4" />
+                <div className="absolute left-1 top-1 size-4 bg-white rounded-full shadow-sm transition-transform peer-checked:translate-x-4" />
             </div>
             <div className="flex-1">
                 <span className="text-sm font-medium text-content-primary group-hover:text-content-primary dark:group-hover:text-white/90">{label}</span>
@@ -1415,13 +1433,13 @@ function DangerZoneSection({
                                 <div className="mt-3 p-3 bg-red-100 rounded-lg">
                                     <p className="text-xs font-medium text-red-800 mb-2">Data yang akan dihapus:</p>
                                     <div className="grid grid-cols-2 gap-2 text-xs text-red-700">
-                                        <span>• {stats.modules_count} Modul</span>
-                                        <span>• {stats.materials_count} Materi</span>
-                                        <span>• {stats.assignments_count} Tugas</span>
-                                        <span>• {stats.quizzes_count} Kuis</span>
-                                        <span>• {stats.submissions_count} Submission</span>
-                                        <span>• {stats.quiz_attempts_count} Percobaan Kuis</span>
-                                        <span>• {course.active_enrollments_count} Peserta Aktif</span>
+                                        <span>â€¢ {stats.modules_count} Modul</span>
+                                        <span>â€¢ {stats.materials_count} Materi</span>
+                                        <span>â€¢ {stats.assignments_count} Tugas</span>
+                                        <span>â€¢ {stats.quizzes_count} Kuis</span>
+                                        <span>â€¢ {stats.submissions_count} Submission</span>
+                                        <span>â€¢ {stats.quiz_attempts_count} Percobaan Kuis</span>
+                                        <span>â€¢ {course.active_enrollments_count} Peserta Aktif</span>
                                     </div>
                                 </div>
                             )}
@@ -1473,3 +1491,4 @@ function DangerZoneSection({
         </SectionCard>
     );
 }
+

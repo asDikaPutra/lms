@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import { TextField, SelectField, CheckboxField } from '@/components/ui/text-field';
 
+const EMPTY_ARRAY = [];
+
 /**
  * Reusable Quiz Form Modal
  * Used in both Quizzes page and Curriculum page
@@ -22,7 +24,7 @@ export default function QuizFormModal({
     isOpen,
     onClose,
     quiz = null,
-    modules = [],
+    modules = EMPTY_ARRAY,
     preselectedType = null,
     preselectedId = null,
     showParentSelect = true

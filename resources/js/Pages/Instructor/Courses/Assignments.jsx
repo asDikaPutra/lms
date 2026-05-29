@@ -107,6 +107,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
                         <div className="relative flex-1 max-w-sm">
                             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-content-muted" />
                             <input
+                                aria-label="Cari tugas"
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
                                 placeholder="Cari tugas..."
@@ -286,20 +287,22 @@ export default function Assignments({ course, assignments, stats, filters }) {
 function StatusBadge({ isPublished, isOverdue }) {
     if (!isPublished) {
         return (
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-surface-muted text-content-secondary border border-line">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-500/10 dark:text-slate-400 dark:border-slate-500/25">
+                <span className="size-1.5 rounded-full bg-slate-400" />
                 Draft
             </span>
         );
     }
     if (isOverdue) {
         return (
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-red-50 text-red-700 border border-red-200">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border bg-rose-100 text-rose-700 border-rose-200 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-500/40">
                 Selesai
             </span>
         );
     }
     return (
-        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40">
+            <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Aktif
         </span>
     );
@@ -309,17 +312,18 @@ function DropdownMenu({ assignment, onEdit, onToggle, onDelete }) {
     return (
         <div className="absolute right-0 top-full mt-1 w-40 rounded-lg shadow-lg border py-1 z-50
             bg-surface border-line
-            dark:bg-[#111a15] dark:border-white/[0.07]">
-            <button onClick={onEdit} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-surface-muted dark:hover:bg-white/8">
+            dark:bg-[#081616] dark:border-white/[0.07]">
+            <button type="button" onClick={onEdit} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-surface-muted dark:hover:bg-white/8">
                 <Edit2 className="size-4" /> Edit
             </button>
-            <button onClick={onToggle} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-surface-muted dark:hover:bg-white/8">
+            <button type="button" onClick={onToggle} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-surface-muted dark:hover:bg-white/8">
                 {assignment.is_published ? (<><X className="size-4" /> Unpublish</>) : (<><CheckCircle2 className="size-4" /> Publish</>)}
             </button>
             <hr className="my-1 border-line-subtle" />
-            <button onClick={onDelete} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10">
+            <button type="button" onClick={onDelete} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10">
                 <Trash2 className="size-4" /> Hapus
             </button>
         </div>
     );
 }
+

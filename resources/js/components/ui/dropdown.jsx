@@ -21,6 +21,7 @@ export function DropdownItem({
 
   return (
     <button
+      type="button"
       className={cn(
         "flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors rounded-lg",
         variantClasses[variant],
@@ -43,6 +44,7 @@ export function DropdownItem({
 export function CloseButton({ className, ...props }) {
   return (
     <button
+      type="button"
       className={cn(
         "rounded-full p-1 transition-colors text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/70",
         className

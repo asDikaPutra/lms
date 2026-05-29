@@ -63,7 +63,7 @@ export default function RoleLayoutShell({
             <aside
                 className={`fixed inset-y-0 left-0 z-50 flex w-[264px] flex-col border-r transition-[width,transform,box-shadow] duration-300 lg:translate-x-0
                     border-neutral-200/70 bg-white/90 backdrop-blur-xl
-                    dark:border-white/[0.06] dark:bg-[#0d1410]/95 dark:backdrop-blur-xl
+                    dark:border-white/[0.06] dark:bg-[#081616]/95 dark:backdrop-blur-xl
                     ${desktopSidebarWidth}
                     ${isMobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:shadow-[1px_0_0_rgba(0,0,0,0.06)] dark:lg:shadow-[1px_0_0_rgba(255,255,255,0.04)]'}
                 `}
@@ -160,7 +160,7 @@ export default function RoleLayoutShell({
                 {/* Top header */}
                 <header className="sticky top-0 z-30 flex h-[64px] items-center justify-between border-b px-4 backdrop-blur-xl lg:px-6
                     border-neutral-200/70 bg-white/80 shadow-[0_1px_2px_rgba(0,0,0,0.05)]
-                    dark:border-white/[0.06] dark:bg-[#0a0f0d]/80 dark:shadow-none
+                    dark:border-white/[0.06] dark:bg-[#081616]/80 dark:shadow-none
                 ">
                     <div className="flex items-center gap-4">
                         <button

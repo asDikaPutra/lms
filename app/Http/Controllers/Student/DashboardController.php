@@ -10,6 +10,7 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Material;
 use App\Models\Module;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -70,15 +71,31 @@ class DashboardController extends Controller
                 ],
             ]),
             'upcomingAssignments' => $this->upcomingAssignmentsQuery($activeCourseIds)
-                ->with('assignable')
+                ->with([
+                    'assignable' => fn (MorphTo $morphTo) => $morphTo->morphWith([
+                        Module::class => ['course:id,name,code'],
+                        Material::class => ['module.course:id,name,code'],
+                    ])
+                ])
                 ->orderBy('deadline')
                 ->limit(5)
-                ->get(['id', 'title', 'deadline', 'assignable_id', 'assignable_type'])
-                ->map(fn (Assignment $assignment) => [
-                    'id' => $assignment->id,
-                    'title' => $assignment->title,
-                    'deadline' => $assignment->deadline?->format('d M Y, H:i'),
-                ]),
+                ->get()
+                ->map(function (Assignment $assignment) {
+                    $course = null;
+                    if ($assignment->assignable instanceof Module) {
+                        $course = $assignment->assignable->course;
+                    } elseif ($assignment->assignable instanceof Material) {
+                        $course = $assignment->assignable->module?->course;
+                    }
+
+                    return [
+                        'id' => $assignment->id,
+                        'title' => $assignment->title,
+                        'deadline' => $assignment->deadline?->toIso8601String(), // return raw ISO for getUrgency in JS
+                        'course_code' => $course?->code,
+                        'course_id' => $course?->id,
+                    ];
+                }),
         ]);
     }
 
@@ -112,7 +129,6 @@ class DashboardController extends Controller
     {
         return Assignment::query()
             ->published()
-            ->where('deadline', '>=', now())
             ->where(function ($query) use ($activeCourseIds): void {
                 $query->whereHasMorph('assignable', [Module::class], fn ($query) => $query->whereIn('course_id', $activeCourseIds)->published())
                     ->orWhereHasMorph('assignable', [Material::class], fn ($query) => $query->published()->whereHas('module', fn ($query) => $query->whereIn('course_id', $activeCourseIds)->published()));

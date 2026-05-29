@@ -11,10 +11,49 @@ import VideoPlayer from '@/components/shared/VideoPlayer';
 
 export default function Show({ course, completedContentIds, attemptsByQuizId, submissionsByAssignmentId, progress }) {
     const completed = new Set(completedContentIds);
-    const [currentView, setCurrentView] = useState('overview'); // 'overview' or material/quiz/assignment/discussion id
+    const [currentView, setCurrentView] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('view') || 'overview';
+        }
+        return 'overview';
+    });
     const [showSidebar, setShowSidebar] = useState(false);
     const [expandedModules, setExpandedModules] = useState({});
     const [direction, setDirection] = useState(0);
+
+    // Auto-expand module containing current view
+    useEffect(() => {
+        if (currentView && currentView !== 'overview') {
+            const parts = currentView.split('-');
+            if (parts.length === 2) {
+                const [type, id] = parts;
+                const numericId = parseInt(id, 10);
+                
+                const foundModule = course.modules.find(m => {
+                    if (type === 'quiz' && m.quizzes?.some(q => q.id === numericId)) return true;
+                    if (type === 'assignment' && m.assignments?.some(a => a.id === numericId)) return true;
+                    if (type === 'material') {
+                        if (m.materials?.some(mat => mat.id === numericId)) return true;
+                    }
+                    if (m.materials) {
+                        for (const mat of m.materials) {
+                            if (type === 'quiz' && mat.quizzes?.some(q => q.id === numericId)) return true;
+                            if (type === 'assignment' && mat.assignments?.some(a => a.id === numericId)) return true;
+                        }
+                    }
+                    return false;
+                });
+                
+                if (foundModule) {
+                    setExpandedModules(prev => ({
+                        ...prev,
+                        [foundModule.id]: true
+                    }));
+                }
+            }
+        }
+    }, [currentView, course.modules]);
 
     // Toggle module expansion
     const toggleModule = (moduleId) => {
@@ -67,22 +106,24 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
         <StudentLayout title="Belajar">
             <Head title={`${course.name} - Belajar`} />
 
-            {/* Background � handled by AtmosphericBackground in layout */}
+            {/* Background ï¿½ handled by AtmosphericBackground in layout */}
 
-            {/* Course Header - Same as Instructor */}
+            {/* Course Header - Match Student Dashboard Greeting Banner */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-600 p-6 text-white shadow-xl shadow-emerald-500/20 relative overflow-hidden"
+                className="rounded-2xl border p-6 shadow-md relative overflow-hidden
+                    border-emerald-200 bg-gradient-to-br from-emerald-50 via-teal-50/80 to-white
+                    dark:border-white/[0.07] dark:bg-gradient-to-br dark:from-[#081616] dark:via-[#0E2B29] dark:to-[#000100] dark:shadow-[0_2px_24px_rgba(0,0,0,0.5)]"
             >
-           
+                <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/10" />
 
                 <div className="relative">
                     {/* Back link */}
                     <Link
                         href="/student/courses"
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-white/80 hover:text-white transition-colors mb-4"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors mb-4"
                     >
                         <ChevronLeft className="size-4" />
                         Kembali ke Kursus Saya
@@ -92,19 +133,19 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                         <div className="space-y-2">
                             {/* Course code and semester */}
                             <div className="flex items-center gap-3">
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-                                    <span className="size-1.5 rounded-full bg-white" />
-                                    <span className="text-xs font-bold uppercase tracking-wider font-mono">
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-200 bg-emerald-100/80 dark:border-emerald-500/25 dark:bg-emerald-500/10">
+                                    <span className="size-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+                                    <span className="text-xs font-bold uppercase tracking-wider font-mono text-emerald-700 dark:text-emerald-400">
                                         {course.code}
                                     </span>
                                 </span>
                                 {course.semester && (
-                                    <span className="text-sm font-medium text-white/80">
+                                    <span className="text-sm font-medium text-content-secondary">
                                         {course.semester}
                                     </span>
                                 )}
                                 {course.instructor?.name && (
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 text-xs font-semibold text-white/90">
+                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-emerald-200 bg-emerald-100/50 text-xs font-semibold text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-500/5 dark:text-emerald-400">
                                         <Users className="size-3.5" />
                                         {course.instructor.name}
                                     </span>
@@ -112,18 +153,18 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                             </div>
 
                             {/* Course name */}
-                            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+                            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-content-primary">
                                 {course.name}
                             </h1>
 
                             {/* Course info */}
-                            <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-content-secondary">
                                 <span className="flex items-center gap-1.5">
-                                    <Layers3 className="size-4" />
+                                    <Layers3 className="size-4 text-emerald-600 dark:text-emerald-400" />
                                     {course.modules?.length ?? 0} Modul
                                 </span>
                                 <span className="flex items-center gap-1.5">
-                                    <BookOpen className="size-4" />
+                                    <BookOpen className="size-4 text-emerald-600 dark:text-emerald-400" />
                                     Belajar Mandiri
                                 </span>
                             </div>
@@ -134,7 +175,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                     {course.has_certificate ? (
                                         <Link
                                             href={`/student/certificates/${course.certificate_id}`}
-                                            className="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/20 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                                            className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-100/80 px-4 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-200/80 transition-colors dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-400 dark:hover:bg-emerald-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                                         >
                                             <Award className="size-3.5" />
                                             Lihat Sertifikat
@@ -143,7 +184,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                         <button
                                             type="button"
                                             onClick={() => router.post(`/student/courses/${course.id}/certificates/request`)}
-                                            className="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/20 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                                            className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-100/80 px-4 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-200/80 transition-colors dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-400 dark:hover:bg-emerald-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                                         >
                                             <Award className="size-3.5" />
                                             Minta Sertifikat
@@ -153,25 +194,25 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                             )}
                         </div>
 
-                        <div className="flex flex-col gap-3 md:max-w-sm">
-                            <div className="flex items-center gap-3 rounded-xl border border-white/20 bg-white/10 px-4 py-3 backdrop-blur-sm sm:rounded-2xl sm:px-5">
+                        <div className="flex flex-col gap-3 md:max-w-sm w-full md:w-auto">
+                            <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-100/40 px-4 py-3 backdrop-blur-sm sm:rounded-2xl sm:px-5 dark:border-white/10 dark:bg-white/5">
                                 <div className="shrink-0">
-                                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/80">Progress</p>
-                                    <p className="text-2xl font-bold leading-none text-white sm:text-[28px]">{progress}%</p>
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400/80">Progress</p>
+                                    <p className="text-2xl font-bold leading-none text-emerald-800 dark:text-white sm:text-[28px]">{progress}%</p>
                                 </div>
-                                <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-white/25">
+                                <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-emerald-200/50 dark:bg-white/20">
                                     <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: `${progress}%` }}
                                         transition={{ duration: 1, ease: 'easeOut' }}
-                                        className="h-2 rounded-full bg-white"
+                                        className="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600"
                                     />
                                 </div>
                             </div>
                             <button
                                 type="button"
                                 onClick={() => setShowSidebar(true)}
-                                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 text-sm font-semibold text-white transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-white text-emerald-700 font-semibold px-4 text-sm transition-all hover:bg-emerald-50/50 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
                             >
                                 <List className="size-4" />
                                 Daftar Materi
@@ -242,6 +283,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                             <div className="sticky top-0 border-b p-4 flex items-center justify-between bg-surface border-line">
                                 <h2 className="text-lg font-bold text-content-primary">Daftar Materi</h2>
                                 <button
+                                    type="button"
                                     onClick={() => setShowSidebar(false)}
                                     className="p-1.5 rounded-lg transition-colors hover:bg-surface-muted dark:hover:bg-white/8 text-content-secondary"
                                 >
@@ -252,6 +294,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                             <div className="p-4 space-y-2">
                                 {/* Overview Button */}
                                 <button
+                                    type="button"
                                     onClick={() => navigateTo('overview')}
                                     className={`w-full text-left p-3 rounded-lg border-2 transition-all ${
                                         currentView === 'overview'
@@ -270,6 +313,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                     <div key={module.id} className="space-y-1.5">
                                         {/* Module Header */}
                                         <button
+                                            type="button"
                                             onClick={() => toggleModule(module.id)}
                                             className="w-full text-left p-2.5 rounded-lg transition-colors bg-surface-muted hover:bg-surface-muted dark:hover:bg-white/12"
                                         >
@@ -289,6 +333,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                 {/* Module-level Quizzes */}
                                                 {module.quizzes?.map((quiz) => (
                                                     <button
+                                                        type="button"
                                                         key={`quiz-${quiz.id}`}
                                                         onClick={() => navigateTo(`quiz-${quiz.id}`)}
                                                         className={`w-full text-left p-2 rounded-lg border transition-all ${
@@ -304,6 +349,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                 {/* Module-level Assignments */}
                                                 {module.assignments?.map((assignment) => (
                                                     <button
+                                                        type="button"
                                                         key={`assignment-${assignment.id}`}
                                                         onClick={() => navigateTo(`assignment-${assignment.id}`)}
                                                         className={`w-full text-left p-2 rounded-lg border transition-all ${
@@ -319,6 +365,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                 {/* Materials */}
                                                 {module.materials?.map((material) => (
                                                     <button
+                                                        type="button"
                                                         key={`material-${material.id}`}
                                                         onClick={() => navigateTo(`material-${material.id}`)}
                                                         className={`w-full text-left p-2 rounded-lg border transition-all ${
@@ -379,7 +426,7 @@ function OverviewPage({ course, expandedModules, toggleModule, navigateTo, compl
                         <button
                             onClick={() => toggleModule(module.id)}
                             type="button"
-                            className="w-full border-b-2 border-line bg-gradient-to-br from-white to-neutral-50/50 dark:from-[#111a15] dark:to-[#0d1610] p-4 text-left transition-colors hover:from-emerald-50/30 hover:to-teal-50/30 dark:hover:from-blue-500/5 dark:hover:to-cyan-500/5 sm:p-5 md:p-6"
+                            className="w-full border-b-2 border-line bg-gradient-to-br from-white to-neutral-50/50 hover:from-emerald-50/30 hover:to-teal-50/30 dark:bg-none dark:bg-[#081616] dark:hover:bg-[#0e2626] p-4 text-left transition-all sm:p-5 md:p-6"
                         >
                             <div className="flex items-start justify-between gap-4">
                                 <div className="min-w-0 flex-1">
@@ -406,7 +453,7 @@ function OverviewPage({ course, expandedModules, toggleModule, navigateTo, compl
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
                                     transition={{ duration: 0.3 }}
-                                    className="bg-gradient-to-br from-neutral-50/50 to-white dark:from-[#0d1610] dark:to-[#111a15]"
+                                    className="bg-gradient-to-br from-neutral-50/50 to-white dark:bg-none dark:bg-[#081616]"
                                 >
                                     <div className="space-y-3 p-4 sm:p-5 md:p-6">
                                         {/* Module-level Quizzes */}
@@ -483,7 +530,7 @@ function OverviewPage({ course, expandedModules, toggleModule, navigateTo, compl
     );
 }
 
-// CriterionRow sub-component � single criterion display row
+// CriterionRow sub-component ï¿½ single criterion display row
 function CriterionRow({ label, currentValue, threshold, met }) {
     return (
         <div className="flex items-center gap-3 rounded-[10px] border border-line-subtle bg-surface-muted px-4 py-3">
@@ -652,7 +699,7 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
 
             {/* Action Button */}
             {has_certificate ? (
-                /* View Certificate � already has one */
+                /* View Certificate ï¿½ already has one */
                 <div className="border-t border-line-subtle px-4 pb-4 pt-3 md:px-5 md:pb-5">
                     <Link
                         href={`/student/certificates/${certificate_id}`}
@@ -663,7 +710,7 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
                     </Link>
                 </div>
             ) : eligible ? (
-                /* Request Certificate � eligible but no certificate yet */
+                /* Request Certificate ï¿½ eligible but no certificate yet */
                 <div className="border-t border-line px-4 pb-4 pt-3 md:px-5 md:pb-5">
                     <form onSubmit={handleRequestCertificate}>
                         <Button
@@ -679,7 +726,7 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
                         </Button>
                     </form>
                 </div>
-            ) : null /* Not eligible � criteria rows explain what's missing */}
+            ) : null /* Not eligible ï¿½ criteria rows explain what's missing */}
         </div>
     );
 }
@@ -688,19 +735,19 @@ function LearningItemButton({ tone, title, eyebrow, meta, status, onClick }) {
     const tones = {
         blue: {
             accent: 'bg-blue-500',
-            hover: 'hover:border-blue-300 hover:bg-blue-50 hover:shadow-md',
+            hover: 'hover:border-blue-300 hover:bg-blue-50 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/5 hover:shadow-md',
             eyebrow: 'text-blue-700',
             icon: 'bg-blue-100 text-blue-600',
         },
         amber: {
             accent: 'bg-amber-500',
-            hover: 'hover:border-amber-300 hover:bg-amber-50 hover:shadow-md',
+            hover: 'hover:border-amber-300 hover:bg-amber-50 dark:hover:border-amber-500/30 dark:hover:bg-amber-500/5 hover:shadow-md',
             eyebrow: 'text-amber-700',
             icon: 'bg-amber-100 text-amber-600',
         },
         emerald: {
             accent: 'bg-emerald-500',
-            hover: 'hover:border-emerald-300 hover:bg-emerald-50 hover:shadow-md',
+            hover: 'hover:border-emerald-300 hover:bg-emerald-50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/5 hover:shadow-md',
             eyebrow: 'text-emerald-700',
             icon: 'bg-emerald-100 text-emerald-600',
         },
@@ -720,7 +767,7 @@ function LearningItemButton({ tone, title, eyebrow, meta, status, onClick }) {
             <span className={`absolute inset-y-0 left-0 w-1 ${selectedTone.accent}`} />
 
             <div className="flex items-start gap-4 pl-3">
-                {/* Icon badge � rounded-square app icon style */}
+                {/* Icon badge ï¿½ rounded-square app icon style */}
                 <span className={`inline-flex size-10 shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br text-white shadow-[0_4px_12px_rgba(5,150,105,0.28)] ${
                     eyebrow === 'Quiz'
                         ? 'from-blue-400 via-blue-500 to-indigo-600 shadow-[0_4px_12px_rgba(99,102,241,0.28)]'
@@ -837,9 +884,10 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
 
     if (!currentItem) {
         return (
-            <div className="rounded-3xl bg-white/90 dark:bg-[#111a15] backdrop-blur-xl p-8 shadow-2xl border border-line/60 dark:border-white/[0.07] text-center">
+            <div className="rounded-3xl bg-white/90 dark:bg-[#081616] backdrop-blur-xl p-8 shadow-2xl border border-line/60 dark:border-white/[0.07] text-center">
                 <p className="text-content-secondary">Item tidak ditemukan</p>
                 <button
+                    type="button"
                     onClick={() => navigateTo('overview')}
                     className="mt-4 px-6 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-semibold"
                 >
@@ -853,6 +901,7 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
         <div className="space-y-4">
             {/* Back Button */}
             <button
+                type="button"
                 onClick={() => navigateTo('overview')}
                 className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 font-semibold text-sm transition-colors"
             >
@@ -1055,7 +1104,7 @@ function ContentView({ content, completed }) {
             {/* Card Konten - Separate card wrapper */}
             <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-lg md:rounded-[24px]">
                 {/* Header */}
-                <div className="border-b border-line bg-gradient-to-br from-emerald-50 via-teal-50/30 to-white dark:from-emerald-500/8 dark:via-teal-500/5 dark:to-[#111a15] p-5 sm:p-6 md:p-8">
+                <div className="border-b border-line bg-gradient-to-br from-emerald-50 via-teal-50/30 to-white dark:from-emerald-500/8 dark:via-teal-500/5 dark:to-[#081616] p-5 sm:p-6 md:p-8">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div className="flex-1">
                             {/* Title only - clean and simple */}
@@ -1103,14 +1152,14 @@ function ContentView({ content, completed }) {
                             </div>
                         )}
                         {content.type === 'audio' && (
-                            <div className="flex items-center justify-center rounded-2xl border-2 border-line bg-gradient-to-br from-neutral-50 to-white dark:from-white/5 dark:to-[#111a15] p-8 md:p-12">
+                            <div className="flex items-center justify-center rounded-2xl border-2 border-line bg-gradient-to-br from-neutral-50 to-white dark:from-white/5 dark:to-[#081616] p-8 md:p-12">
                                 <div className="w-full max-w-2xl space-y-4">
                                     <div className="flex items-center justify-center">
                                         <div className="flex size-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg">
                                             <PlayCircle className="size-8" />
                                         </div>
                                     </div>
-                                    <audio controls className="w-full" src={storageUrl(content.file_path)} />
+                                    <audio aria-label="Pemutar audio materi" controls className="w-full" src={storageUrl(content.file_path)} />
                                 </div>
                             </div>
                         )}
@@ -1158,9 +1207,9 @@ function QuizView({ quiz, attempt }) {
     
     // Check if user can still attempt
     const attemptCount = attempt?.attempt_count || 0;
-    const canAttempt = attemptCount < quiz.max_attempts;
+    const canAttempt = quiz.max_attempts === null || attemptCount < quiz.max_attempts;
     const hasAttempted = attemptCount > 0;
-    const remainingAttempts = Math.max((quiz.max_attempts ?? 0) - attemptCount, 0);
+    const remainingAttempts = quiz.max_attempts === null ? '∞' : Math.max(quiz.max_attempts - attemptCount, 0);
 
     useEffect(() => {
         latestFormData.current = form.data;
@@ -1175,13 +1224,22 @@ function QuizView({ quiz, attempt }) {
             started_at: latestFormData.current.started_at,
         }, {
             preserveScroll: true,
+            onSuccess: () => {
+                setQuizStarted(false);
+                setStartTime(null);
+                setElapsedSeconds(0);
+                setTimeExpired(false);
+                setCurrentQuestionIndex(0);
+                form.setData({ answers: {}, started_at: null });
+                hasSubmitted.current = false;
+            },
             onError: () => {
                 hasSubmitted.current = false;
             },
         });
     };
 
-    // Timer effect — runs whenever a quiz is actively being taken
+    // Timer effect â€” runs whenever a quiz is actively being taken
     // (including a re-take, where a prior attempt still exists).
     useEffect(() => {
         if (!quizStarted || !startTime || timeExpired) return;
@@ -1283,7 +1341,7 @@ function QuizView({ quiz, attempt }) {
     // Quiz Start Screen (before starting)
     if (!quizStarted && canAttempt) {
         return (
-            <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 shadow-2xl">
+            <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-xl dark:border-white/[0.07] dark:bg-[#081616]">
                 {/* Header */}
                 <div className="relative px-6 pb-5 pt-6 sm:px-8 sm:pt-8">
                     <div className="flex items-start gap-4">
@@ -1291,7 +1349,7 @@ function QuizView({ quiz, attempt }) {
                             initial={{ scale: 0, rotate: -90 }}
                             animate={{ scale: 1, rotate: 0 }}
                             transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                            className="flex size-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/30"
+                            className="flex size-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/25"
                         >
                             <HelpCircle className="size-7 text-white" />
                         </motion.div>
@@ -1300,16 +1358,16 @@ function QuizView({ quiz, attempt }) {
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.1 }}
-                                className="mb-1 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-300"
+                                className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-100/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-700 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-400"
                             >
-                                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                <span className="size-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
                                 Quiz
                             </motion.div>
                             <motion.h2
                                 initial={{ opacity: 0, y: 5 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.15 }}
-                                className="break-words text-xl font-bold leading-snug text-white sm:text-2xl"
+                                className="break-words text-xl font-bold leading-snug text-content-primary sm:text-2xl"
                             >
                                 {quiz.title}
                             </motion.h2>
@@ -1318,15 +1376,65 @@ function QuizView({ quiz, attempt }) {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ delay: 0.2 }}
-                                    className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-500/20 px-2.5 py-1 text-xs font-semibold text-amber-300"
+                                    className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/15 dark:text-amber-400"
                                 >
                                     <AlertTriangle className="size-3.5" />
-                                    Percobaan ke-{attemptCount + 1} dari {quiz.max_attempts}
+                                    {quiz.max_attempts === null
+                                        ? `Percobaan ke-${attemptCount + 1} (Tanpa Batasan)`
+                                        : `Percobaan ke-${attemptCount + 1} dari ${quiz.max_attempts}`}
                                 </motion.p>
                             )}
                         </div>
                     </div>
                 </div>
+
+                {/* Last Attempt Info (if has attempted before) */}
+                {hasAttempted && attempt && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.22 }}
+                        className={`mx-4 mb-4 rounded-xl border p-4 sm:mx-6 ${
+                            attempt.status === 'graded'
+                                ? Number(attempt.score) >= Number(quiz.passing_score)
+                                    ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-500/20 dark:bg-emerald-500/10'
+                                    : 'border-amber-200 bg-amber-50/50 dark:border-amber-500/20 dark:bg-amber-500/10'
+                                : 'border-blue-200 bg-blue-50/50 dark:border-blue-500/20 dark:bg-blue-500/10'
+                        }`}
+                    >
+                        <div className="flex items-center justify-between gap-4">
+                            <div className="text-left">
+                                <p className="text-xs font-semibold text-content-secondary">Nilai Percobaan Terakhir</p>
+                                <div className="mt-1">
+                                    {attempt.status === 'graded' ? (
+                                        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                                            Number(attempt.score) >= Number(quiz.passing_score)
+                                                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300'
+                                                : 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300'
+                                        }`}>
+                                            {Number(attempt.score) >= Number(quiz.passing_score) ? 'Lulus' : 'Belum Lulus'}
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-center gap-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-300 px-2.5 py-0.5 text-[10px] font-bold">
+                                            Menunggu Penilaian
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                            {attempt.status === 'graded' && attempt.score !== null && (
+                                <div className="text-right">
+                                    <p className={`text-3xl font-extrabold tabular-nums ${
+                                        Number(attempt.score) >= Number(quiz.passing_score)
+                                            ? 'text-emerald-600 dark:text-emerald-400'
+                                            : 'text-amber-600 dark:text-amber-400'
+                                    }`}>
+                                        {attempt.score}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    </motion.div>
+                )}
 
                 {/* Stats row */}
                 <motion.div
@@ -1336,22 +1444,22 @@ function QuizView({ quiz, attempt }) {
                     className="relative mx-4 mb-4 grid grid-cols-2 gap-2 sm:mx-6 sm:grid-cols-4 sm:gap-3"
                 >
                     {[
-                        { icon: <FileText className="size-4" />, value: `${quiz.questions.length}`, label: 'Soal', color: 'text-emerald-300' },
-                        { icon: <Clock className="size-4" />, value: quiz.duration ? `${quiz.duration}` : '∞', label: 'Menit', color: 'text-teal-300' },
-                        { icon: <CheckCircle2 className="size-4" />, value: `${quiz.passing_score}`, label: 'Passing', color: 'text-green-300' },
-                        { icon: <HelpCircle className="size-4" />, value: `${remainingAttempts}`, label: 'Sisa Coba', color: 'text-cyan-300' },
+                        { icon: <FileText className="size-4" />, value: `${quiz.questions.length}`, label: 'Soal', color: 'text-emerald-600 dark:text-emerald-400' },
+                        { icon: <Clock className="size-4" />, value: quiz.duration ? `${quiz.duration}` : '∞', label: 'Menit', color: 'text-teal-600 dark:text-teal-400' },
+                        { icon: <CheckCircle2 className="size-4" />, value: `${quiz.passing_score}`, label: 'Passing', color: 'text-green-600 dark:text-green-400' },
+                        { icon: <HelpCircle className="size-4" />, value: `${remainingAttempts}`, label: 'Sisa Coba', color: 'text-cyan-600 dark:text-cyan-400' },
                     ].map((stat, i) => (
                         <motion.div
                             key={i}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.25 + i * 0.05 }}
-                            className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur"
+                            className="flex items-center gap-3 rounded-xl border border-line bg-surface-muted px-4 py-3 backdrop-blur dark:border-white/[0.07] dark:bg-white/5"
                         >
                             <span className={stat.color}>{stat.icon}</span>
                             <div>
                                 <p className={`text-lg font-bold tabular-nums ${stat.color}`}>{stat.value}</p>
-                                <p className="text-[10px] text-white/40">{stat.label}</p>
+                                <p className="text-[10px] text-content-secondary dark:text-white/40">{stat.label}</p>
                             </div>
                         </motion.div>
                     ))}
@@ -1362,18 +1470,20 @@ function QuizView({ quiz, attempt }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.35 }}
-                    className="relative mx-4 mb-5 rounded-xl border border-white/10 bg-white/5 px-5 py-4 sm:mx-6"
+                    className="relative mx-4 mb-5 rounded-xl border border-line bg-surface-muted px-5 py-4 sm:mx-6 dark:border-white/[0.07] dark:bg-white/5"
                 >
-                    <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-emerald-300">Instruksi</p>
+                    <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">Instruksi</p>
                     <ul className="space-y-2">
                         {[
                             'Pastikan koneksi internet Anda stabil sebelum memulai',
-                            `Anda memiliki ${quiz.max_attempts} kesempatan mengerjakan quiz ini`,
+                            quiz.max_attempts === null
+                                ? 'Anda memiliki kesempatan mengerjakan quiz ini tanpa batasan'
+                                : `Anda memiliki ${quiz.max_attempts} kesempatan mengerjakan quiz ini`,
                             quiz.duration ? `Waktu berjalan setelah klik "Mulai" — quiz otomatis berakhir jika waktu habis` : null,
                             'Jawaban tidak dapat diubah setelah dikonfirmasi',
                         ].filter(Boolean).map((item, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm text-white/60">
-                                <span className="mt-1.5 size-1.5 flex-shrink-0 rounded-full bg-emerald-400" />
+                            <li key={i} className="flex items-start gap-2 text-sm text-content-secondary dark:text-white/70">
+                                <span className="mt-1.5 size-1.5 flex-shrink-0 rounded-full bg-emerald-600 dark:bg-emerald-400" />
                                 {item}
                             </li>
                         ))}
@@ -1392,7 +1502,7 @@ function QuizView({ quiz, attempt }) {
                         onClick={startQuiz}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.97 }}
-                        className="relative flex h-13 w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-400 to-teal-400 py-3.5 text-base font-bold text-emerald-950 shadow-xl shadow-emerald-500/30"
+                        className="relative flex h-13 w-full items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 py-3.5 text-base font-bold text-white shadow-xl shadow-emerald-500/25"
                     >
                         <motion.div
                             className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
@@ -1407,20 +1517,19 @@ function QuizView({ quiz, attempt }) {
         );
     }
 
-    // Max attempts reached
     if (!canAttempt) {
         const passed = canShowScore && Number(attempt.score) >= Number(quiz.passing_score);
         return (
-            <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 shadow-2xl">
+            <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-xl dark:border-white/[0.07] dark:bg-[#081616]">
                 <div className="relative px-6 py-6 sm:px-8 sm:py-8">
                     {/* Title */}
                     <div className="mb-5 flex items-start gap-4">
-                        <div className="flex size-12 flex-shrink-0 items-center justify-center rounded-2xl bg-white/10 backdrop-blur">
-                            <Ban className="size-6 text-white/60" />
+                        <div className="flex size-12 flex-shrink-0 items-center justify-center rounded-2xl border border-line bg-surface-muted dark:border-white/[0.07] dark:bg-white/5">
+                            <Ban className="size-6 text-content-secondary" />
                         </div>
                         <div>
-                            <p className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-white/40">Quiz</p>
-                            <h2 className="text-xl font-bold text-white">{quiz.title}</h2>
+                            <p className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-content-secondary dark:text-white/40">Quiz</p>
+                            <h2 className="text-xl font-bold text-content-primary">{quiz.title}</h2>
                         </div>
                     </div>
 
@@ -1432,16 +1541,16 @@ function QuizView({ quiz, attempt }) {
                             transition={{ delay: 0.1 }}
                             className={`mb-4 rounded-2xl border p-5 text-center ${
                                 passed
-                                    ? 'border-emerald-400/30 bg-emerald-500/15'
-                                    : 'border-amber-400/30 bg-amber-500/15'
+                                    ? 'border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10'
+                                    : 'border-amber-200 bg-amber-50 dark:border-amber-500/20 dark:bg-amber-500/10'
                             }`}
                         >
-                            <p className={`text-4xl font-bold tabular-nums ${passed ? 'text-emerald-300' : 'text-amber-300'}`}>
+                            <p className={`text-4xl font-bold tabular-nums ${passed ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
                                 {attempt.score}
                             </p>
-                            <p className="mt-1 text-sm font-semibold text-white/60">Nilai Terakhir</p>
+                            <p className="mt-1 text-sm font-semibold text-content-secondary">Nilai Terakhir</p>
                             <div className={`mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
-                                passed ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                                passed ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-500/20 dark:text-amber-300'
                             }`}>
                                 {passed ? 'Lulus' : 'Belum Lulus'}
                             </div>
@@ -1449,9 +1558,9 @@ function QuizView({ quiz, attempt }) {
                     )}
 
                     {/* Info */}
-                    <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-center">
-                        <p className="text-sm text-white/50">
-                            Semua <span className="font-bold text-white/70">{quiz.max_attempts}</span> percobaan telah digunakan
+                    <div className="rounded-xl border border-line bg-surface-muted px-4 py-3 text-center dark:border-white/[0.07] dark:bg-white/5">
+                        <p className="text-sm text-content-secondary">
+                            Semua <span className="font-bold text-content-primary">{quiz.max_attempts}</span> percobaan telah digunakan
                         </p>
                     </div>
                 </div>
@@ -1459,36 +1568,36 @@ function QuizView({ quiz, attempt }) {
         );
     }
 
-    // Quiz already attempted (show result summary, NOT fullscreen) —
+    // Quiz already attempted (show result summary, NOT fullscreen) â€”
     // but only when the student is NOT currently re-taking the quiz.
     if (attempt && !quizStarted) {
         const passed = canShowScore && Number(attempt.score) >= Number(quiz.passing_score);
         return (
-            <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 shadow-2xl">
+            <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-xl dark:border-white/[0.07] dark:bg-[#081616]">
                 <div className="relative px-6 py-6 sm:px-8 sm:py-8">
                     {/* Title row */}
                     <div className="mb-5 flex items-start justify-between gap-3">
                         <div className="flex items-start gap-4">
-                            <div className="flex size-12 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/30">
+                            <div className="flex size-12 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/25">
                                 <HelpCircle className="size-6 text-white" />
                             </div>
                             <div>
-                                <p className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-white/40">Quiz</p>
-                                <h2 className="text-xl font-bold text-white">{quiz.title}</h2>
+                                <p className="mb-0.5 text-[10px] font-bold uppercase tracking-widest text-content-secondary dark:text-white/40">Quiz</p>
+                                <h2 className="text-xl font-bold text-content-primary">{quiz.title}</h2>
                                 <div className="mt-2 flex flex-wrap gap-1.5">
-                                    <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-300">
+                                    <span className="rounded-full border border-emerald-200 bg-emerald-100/60 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400">
                                         {quiz.questions.length} Soal
                                     </span>
-                                    <span className="rounded-full bg-teal-500/20 px-2.5 py-0.5 text-[10px] font-semibold text-teal-300">
+                                    <span className="rounded-full border border-teal-200 bg-teal-100/60 px-2.5 py-0.5 text-[10px] font-semibold text-teal-800 dark:border-teal-500/20 dark:bg-teal-500/10 dark:text-teal-400">
                                         Passing: {quiz.passing_score}
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <span className={`flex-shrink-0 rounded-full px-3 py-1 text-xs font-bold ${
+                        <span className={`flex-shrink-0 rounded-full border px-3 py-1 text-xs font-bold ${
                             attempt.status === 'graded'
-                                ? 'bg-emerald-500/20 text-emerald-300'
-                                : 'bg-amber-500/20 text-amber-300'
+                                ? 'border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-500/15 dark:text-emerald-400'
+                                : 'border-amber-200 bg-amber-100 text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/15 dark:text-amber-400'
                         }`}>
                             {attempt.status === 'graded' ? 'Selesai' : 'Menunggu Penilaian'}
                         </span>
@@ -1502,16 +1611,18 @@ function QuizView({ quiz, attempt }) {
                             transition={{ delay: 0.1 }}
                             className={`rounded-2xl border p-5 text-center ${
                                 passed
-                                    ? 'border-emerald-400/30 bg-emerald-500/15'
-                                    : 'border-amber-400/30 bg-amber-500/15'
+                                    ? 'border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10'
+                                    : 'border-amber-200 bg-amber-50 dark:border-amber-500/20 dark:bg-amber-500/10'
                             }`}
                         >
-                            <p className={`text-5xl font-bold tabular-nums ${passed ? 'text-emerald-300' : 'text-amber-300'}`}>
+                            <p className={`text-5xl font-bold tabular-nums ${passed ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
                                 {attempt.score}
                             </p>
-                            <p className="mt-1 text-sm text-white/50">Nilai Kamu</p>
-                            <div className={`mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
-                                passed ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                            <p className="mt-1 text-sm text-content-secondary">Nilai Kamu</p>
+                            <div className={`mt-3 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold ${
+                                passed 
+                                    ? 'border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300' 
+                                    : 'border-amber-200 bg-amber-100 text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-300'
                             }`}>
                                 {passed ? 'Selamat, kamu lulus!' : 'Belum lulus, pelajari lagi'}
                             </div>
@@ -1519,8 +1630,8 @@ function QuizView({ quiz, attempt }) {
                     )}
 
                     {!canShowScore && attempt.status !== 'graded' && (
-                        <div className="rounded-xl border border-amber-400/20 bg-amber-500/10 px-4 py-3 text-center">
-                            <p className="text-sm text-amber-300">Jawaban kamu sedang dinilai oleh instruktur</p>
+                        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center dark:border-amber-500/20 dark:bg-amber-500/10">
+                            <p className="text-sm text-amber-800 dark:text-amber-400">Jawaban kamu sedang dinilai oleh instruktur</p>
                         </div>
                     )}
                 </div>
@@ -1528,7 +1639,7 @@ function QuizView({ quiz, attempt }) {
         );
     }
 
-    // Quiz Active — FULLSCREEN Quizizz/Wayground style (rendered via portal to escape layout)
+    // Quiz Active â€” FULLSCREEN Quizizz/Wayground style (rendered via portal to escape layout)
     return createPortal(
         <QuizFullscreen
             quiz={quiz}
@@ -1626,29 +1737,54 @@ function QuizFullscreen({
     const timerOffset = timerCircumference * (1 - timerProgress);
 
     return (
-        <div className="fixed inset-0 z-[100] overflow-hidden bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950">
-            {/* Ambient orbs */}
-            <motion.div
-                animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.3, 0.2] }}
-                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-                className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-emerald-500 blur-3xl"
-            />
-            <motion.div
-                animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-                transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-                className="pointer-events-none absolute -bottom-40 -right-40 h-[600px] w-[600px] rounded-full bg-teal-500 blur-3xl"
-            />
-
-            {/* Geometric pattern */}
+        <div className="fixed inset-0 z-[100] overflow-hidden bg-[#081616]">
+            {/* Base gradient and atmospheric background of normal pages */}
             <div
-                className="pointer-events-none absolute inset-0 opacity-[0.04]"
-                style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                }}
-            />
+                className="absolute inset-0 pointer-events-none animate-fade-in"
+                style={{ contain: 'layout paint' }}
+            >
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        background: `
+                            radial-gradient(ellipse 75% 55% at 0% 0%,   #0E2B29 0%, transparent 58%),
+                            radial-gradient(ellipse 65% 50% at 100% 0%, #234244 0%, transparent 52%),
+                            linear-gradient(145deg, #081616 0%, #000100 50%, #081616 100%)
+                        `,
+                    }}
+                />
+
+                {/* 1 animated orb — GPU layer */}
+                <div
+                    className="absolute -top-48 -left-48 size-[560px] rounded-full blur-[70px] animate-float-slow"
+                    style={{
+                        background: 'radial-gradient(circle, rgba(35,66,68,0.26) 0%, rgba(14,43,41,0.12) 55%, transparent 75%)',
+                        willChange: 'transform',
+                    }}
+                />
+
+                {/* 2 static orbs */}
+                <div
+                    className="absolute -top-24 -right-36 size-[440px] rounded-full blur-[60px]"
+                    style={{ background: 'radial-gradient(circle, rgba(35,66,68,0.20) 0%, rgba(8,22,22,0.12) 55%, transparent 75%)' }}
+                />
+
+                <div
+                    className="absolute -bottom-32 -right-24 size-[400px] rounded-full blur-[60px]"
+                    style={{ background: 'radial-gradient(circle, rgba(35,66,68,0.15) 0%, rgba(14,43,41,0.08) 55%, transparent 75%)' }}
+                />
+
+                {/* Vignette */}
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                        background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 50%, rgba(0,0,0,0.12) 100%)',
+                    }}
+                />
+            </div>
 
             <div className="relative flex h-full flex-col">
-                {/* ── TOP BAR ── */}
+                {/* â”€â”€ TOP BAR â”€â”€ */}
                 <header className="flex flex-shrink-0 items-center gap-3 px-4 py-4 sm:gap-5 sm:px-8 sm:py-5">
                     {/* Exit */}
                     <button
@@ -1678,7 +1814,7 @@ function QuizFullscreen({
                             />
                         </div>
                         <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-white/40 sm:hidden">
-                            Soal {currentQuestionIndex + 1}/{totalQuestions} • {answeredCount} terjawab
+                            Soal {currentQuestionIndex + 1}/{totalQuestions} â€¢ {answeredCount} terjawab
                         </p>
                     </div>
 
@@ -1769,152 +1905,165 @@ function QuizFullscreen({
                 </AnimatePresence>
 
                 {/* ── MAIN ── */}
-                <main className="flex flex-1 flex-col overflow-y-auto px-4 pb-4 sm:px-8 sm:pb-6">
-                    <AnimatePresence mode="wait">
-                        {activeQuestion ? (
-                            <motion.div
-                                key={activeQuestion.id}
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -30, scale: 0.97 }}
-                                transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
-                                className="mx-auto flex w-full max-w-5xl flex-1 flex-col"
-                            >
-                                {/* Question card */}
-                                <motion.div
-                                    initial={{ scale: 0.96 }}
-                                    animate={{ scale: 1 }}
-                                    transition={{ delay: 0.05, duration: 0.35 }}
-                                    className="relative mb-5 flex min-h-[140px] flex-shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-white/95 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl sm:min-h-[180px] sm:p-10"
-                                >
-                                    {/* Top accent */}
-                                    <div className="absolute left-10 right-10 top-0 h-[2px] rounded-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent" />
-
-                                    {/* Type badge */}
-                                    <div className="absolute left-5 top-4 inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-700">
-                                        <span className="size-1.5 rounded-full bg-emerald-500" />
-                                        {activeQuestion.type === 'essay' ? 'Essay' : activeQuestion.type === 'true_false' ? 'Benar / Salah' : 'Pilihan Ganda'}
-                                    </div>
-
-                                    {/* Question number badge */}
-                                    <div className="absolute right-5 top-4 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold tabular-nums text-emerald-700">
-                                        {currentQuestionIndex + 1} / {totalQuestions}
-                                    </div>
-
-                                    <h2 className="mt-4 break-words text-center text-xl font-bold leading-snug text-content-primary sm:text-2xl md:text-3xl">
-                                        {activeQuestion.question}
-                                    </h2>
-                                </motion.div>
-
-                                {/* Answers */}
-                                {activeQuestion.type === 'multiple_choice' && (
-                                    <div className="grid flex-1 gap-3 content-start sm:grid-cols-2 sm:gap-4">
-                                        {activeQuestion.options?.map((option, i) => {
-                                            const style = answerStyles[i % answerStyles.length];
-                                            const selected = activeAnswer === option;
-                                            return (
-                                                <motion.button
-                                                    key={option}
-                                                    type="button"
-                                                    onClick={() => setAnswer(activeQuestion.id, option)}
-                                                    disabled={processing || timeExpired}
-                                                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                    transition={{ delay: 0.1 + i * 0.06, type: 'spring', stiffness: 300, damping: 22 }}
-                                                    whileHover={{ scale: 1.02, y: -2 }}
-                                                    whileTap={{ scale: 0.97 }}
-                                                    className={`group relative overflow-hidden rounded-2xl p-5 text-left text-white shadow-xl transition-all sm:p-6 ${
-                                                        selected ? style.selected : style.bg
-                                                    } disabled:cursor-not-allowed disabled:opacity-60`}
-                                                >
-                                                    {/* Shine */}
-                                                    <motion.div
-                                                        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100"
-                                                        animate={{ x: ['-100%', '200%'] }}
-                                                        transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0.5 }}
-                                                    />
-                                                    <div className="absolute inset-x-0 top-0 h-[1px] bg-white/30" />
-
-                                                    <div className="relative flex items-center gap-4">
-                                                        <div className="flex size-12 flex-shrink-0 items-center justify-center rounded-xl bg-black/25">
-                                                            {style.shape}
-                                                        </div>
-                                                        <span className="flex-1 break-words text-base font-bold leading-snug sm:text-lg">
-                                                            {option}
-                                                        </span>
-                                                        {selected && (
-                                                            <motion.div
-                                                                initial={{ scale: 0 }}
-                                                                animate={{ scale: 1 }}
-                                                                className="flex size-7 flex-shrink-0 items-center justify-center rounded-full bg-white text-current"
-                                                            >
-                                                                <CheckCircle2 className="size-5" />
-                                                            </motion.div>
-                                                        )}
-                                                    </div>
-                                                </motion.button>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-
-                                {activeQuestion.type === 'true_false' && (
-                                    <div className="grid flex-1 gap-3 content-start sm:grid-cols-2 sm:gap-4">
-                                        {[
-                                            ['true', 'Benar'],
-                                            ['false', 'Salah'],
-                                        ].map(([val, label], i) => {
-                                            const style = answerStyles[i === 0 ? 3 : 0];
-                                            const selected = activeAnswer === val;
-                                            return (
-                                                <motion.button
-                                                    key={val}
-                                                    type="button"
-                                                    onClick={() => setAnswer(activeQuestion.id, val)}
-                                                    disabled={processing || timeExpired}
-                                                    initial={{ opacity: 0, scale: 0.9 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    transition={{ delay: 0.1 + i * 0.1, type: 'spring' }}
-                                                    whileHover={{ scale: 1.02 }}
-                                                    whileTap={{ scale: 0.97 }}
-                                                    className={`flex min-h-[120px] items-center justify-center gap-4 rounded-2xl p-6 text-2xl font-black text-white shadow-xl transition-all ${
-                                                        selected ? style.selected : style.bg
-                                                    } disabled:cursor-not-allowed disabled:opacity-60`}
-                                                >
-                                                    <div className="flex size-14 items-center justify-center rounded-xl bg-black/25">
-                                                        {style.shape}
-                                                    </div>
-                                                    {label}
-                                                </motion.button>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-
-                                {activeQuestion.type === 'essay' && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.15 }}
-                                        className="flex-1"
-                                    >
-                                        <textarea
-                                            value={answers[activeQuestion.id] ?? ''}
-                                            onChange={(e) => setAnswer(activeQuestion.id, e.target.value)}
-                                            rows="8"
-                                            placeholder="Tulis jawaban Anda di sini..."
-                                            disabled={processing || timeExpired}
-                                            className="min-h-[200px] w-full rounded-2xl border-2 border-white/15 bg-white/95 px-5 py-4 text-base leading-relaxed text-content-primary outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-400/20"
-                                        />
-                                    </motion.div>
-                                )}
-                            </motion.div>
-                        ) : (
-                            <div className="m-auto rounded-2xl border border-amber-300/30 bg-amber-500/10 p-6 text-center text-amber-200">
-                                Quiz ini belum memiliki soal.
+                <main className="flex flex-1 overflow-hidden px-4 pb-4 sm:px-8 sm:pb-6">
+                    <div className="mx-auto flex w-full max-w-7xl flex-1 gap-6 overflow-hidden">
+                        {/* Paginator Sidebar (Left Column) */}
+                        <div className="hidden lg:flex w-full lg:w-1/4 shrink-0 flex-col rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm h-full overflow-y-auto">
+                            <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
+                                <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">Daftar Soal</p>
+                                <p className="text-xs text-white/50">{answeredCount}/{totalQuestions} Terjawab</p>
                             </div>
-                        )}
-                    </AnimatePresence>
+                            <div className="grid grid-cols-4 gap-2">
+                                {quiz.questions.map((q, i) => {
+                                    const filled = answers[q.id] !== undefined && String(answers[q.id]).trim() !== '';
+                                    const isActive = i === currentQuestionIndex;
+                                    return (
+                                        <button
+                                            key={q.id}
+                                            type="button"
+                                            onClick={() => goToQuestion(i)}
+                                            className={`flex aspect-square items-center justify-center rounded-xl text-sm font-bold transition-all duration-150 ${
+                                                isActive
+                                                    ? 'bg-emerald-400 text-emerald-950 shadow-lg shadow-emerald-500/40 scale-105'
+                                                    : filled
+                                                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/35'
+                                                    : 'bg-white/5 text-white/55 border border-white/10 hover:bg-white/10 hover:text-white'
+                                            }`}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Question & Answers (Right Column) */}
+                        <div className="flex lg:w-3/4 flex-1 flex-col overflow-y-auto pr-1">
+                            <AnimatePresence mode="wait">
+                                {activeQuestion ? (
+                                    <motion.div
+                                        key={activeQuestion.id}
+                                        initial={{ opacity: 0, y: 30 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -30, scale: 0.97 }}
+                                        transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+                                        className="flex flex-col flex-1"
+                                    >
+                                        {/* Question card */}
+                                        <motion.div
+                                            initial={{ scale: 0.96 }}
+                                            animate={{ scale: 1 }}
+                                            transition={{ delay: 0.05, duration: 0.35 }}
+                                            className="relative mb-5 flex min-h-[140px] flex-shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-[#0e2626]/80 border border-emerald-500/20 p-6 shadow-2xl shadow-black/30 backdrop-blur-xl sm:min-h-[180px] sm:p-10"
+                                        >
+                                            {/* Top accent */}
+                                            <div className="absolute left-10 right-10 top-0 h-[2px] rounded-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent" />
+
+                                            {/* Type badge */}
+                                            <div className="absolute left-5 top-4 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-400">
+                                                <span className="size-1.5 rounded-full bg-emerald-500" />
+                                                {activeQuestion.type === 'essay' ? 'Essay' : activeQuestion.type === 'true_false' ? 'Benar / Salah' : 'Pilihan Ganda'}
+                                            </div>
+
+                                            {/* Question number badge */}
+                                            <div className="absolute right-5 top-4 rounded-full bg-white/5 border border-white/10 px-3 py-1 text-xs font-bold tabular-nums text-emerald-300">
+                                                {currentQuestionIndex + 1} / {totalQuestions}
+                                            </div>
+
+                                            <h2 className="mt-4 break-words text-center text-xl font-bold leading-snug text-white sm:text-2xl md:text-3xl">
+                                                {activeQuestion.question}
+                                            </h2>
+                                        </motion.div>
+
+                                        {/* Answers */}
+                                        {activeQuestion.type === 'multiple_choice' && (
+                                            <div className="grid flex-1 gap-3 content-start sm:grid-cols-2 sm:gap-4">
+                                                {activeQuestion.options?.map((option, i) => {
+                                                    const selected = activeAnswer === option;
+                                                    return (
+                                                        <motion.button
+                                                            key={option}
+                                                            type="button"
+                                                            onClick={() => setAnswer(activeQuestion.id, option)}
+                                                            disabled={processing || timeExpired}
+                                                            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                            transition={{ delay: 0.1 + i * 0.06, type: 'spring', stiffness: 300, damping: 22 }}
+                                                            whileHover={{ scale: 1.015, y: -1 }}
+                                                            whileTap={{ scale: 0.985 }}
+                                                            className={`group relative overflow-hidden rounded-2xl p-5 text-left border transition-all duration-150 sm:p-6 ${
+                                                                selected
+                                                                    ? 'bg-emerald-500/15 border-emerald-400 text-emerald-400 shadow-lg shadow-emerald-500/10'
+                                                                    : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:border-white/20 hover:text-white'
+                                                            } disabled:cursor-not-allowed disabled:opacity-50`}
+                                                        >
+                                                            <span className="break-words text-base font-medium leading-snug sm:text-lg">
+                                                                {option}
+                                                            </span>
+                                                        </motion.button>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+
+                                        {activeQuestion.type === 'true_false' && (
+                                            <div className="grid flex-1 gap-3 content-start sm:grid-cols-2 sm:gap-4">
+                                                {[
+                                                    ['true', 'Benar'],
+                                                    ['false', 'Salah'],
+                                                ].map(([val, label], i) => {
+                                                    const selected = activeAnswer === val;
+                                                    return (
+                                                        <motion.button
+                                                            key={val}
+                                                            type="button"
+                                                            onClick={() => setAnswer(activeQuestion.id, val)}
+                                                            disabled={processing || timeExpired}
+                                                            initial={{ opacity: 0, scale: 0.9 }}
+                                                            animate={{ opacity: 1, scale: 1 }}
+                                                            transition={{ delay: 0.1 + i * 0.1, type: 'spring' }}
+                                                            whileHover={{ scale: 1.015 }}
+                                                            whileTap={{ scale: 0.985 }}
+                                                            className={`flex min-h-[100px] items-center justify-center rounded-2xl p-6 text-xl font-bold border transition-all duration-150 ${
+                                                                selected
+                                                                    ? 'bg-emerald-500/15 border-emerald-400 text-emerald-400 shadow-lg shadow-emerald-500/10'
+                                                                    : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:border-white/20 hover:text-white'
+                                                            } disabled:cursor-not-allowed disabled:opacity-60`}
+                                                        >
+                                                            {label}
+                                                        </motion.button>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+
+                                        {activeQuestion.type === 'essay' && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: 0.15 }}
+                                                className="flex-1"
+                                            >
+                                                <textarea
+                                                    aria-label="Jawaban esai"
+                                                    value={answers[activeQuestion.id] ?? ''}
+                                                    onChange={(e) => setAnswer(activeQuestion.id, e.target.value)}
+                                                    rows="8"
+                                                    placeholder="Tulis jawaban Anda di sini..."
+                                                    disabled={processing || timeExpired}
+                                                    className="min-h-[200px] w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-base leading-relaxed text-white outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-400/20 placeholder:text-white/40"
+                                                />
+                                            </motion.div>
+                                        )}
+                                    </motion.div>
+                                ) : (
+                                    <div className="m-auto rounded-2xl border border-amber-300/30 bg-amber-500/10 p-6 text-center text-amber-200">
+                                        Quiz ini belum memiliki soal.
+                                    </div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                    </div>
                 </main>
 
                 {/* ── BOTTOM BAR ── */}
@@ -1991,7 +2140,7 @@ function QuizFullscreen({
                                 <Clock className="size-8 text-rose-400" />
                             </div>
                             <h3 className="text-xl font-bold text-white">Waktu Habis</h3>
-                            <p className="mt-2 text-sm text-white/60">Mengirim jawabanmu otomatis...</p>
+                            <p className="mt-2 text-sm text-white/60">Mengirim jawabanmu otomatisâ€¦</p>
                         </motion.div>
                     </motion.div>
                 )}
@@ -2093,7 +2242,7 @@ function AssignmentView({ assignment, submission }) {
                             ? 'bg-rose-100 text-rose-700'
                             : 'bg-teal-100 text-teal-700'
                     }`}>
-                        {isGraded ? `Nilai: ${submission.grade ?? '—'}` : submission.status === 'late' ? 'Terlambat' : 'Dikumpulkan'}
+                        {isGraded ? `Nilai: ${submission.grade ?? 'â€”'}` : submission.status === 'late' ? 'Terlambat' : 'Dikumpulkan'}
                     </span>
                 )}
             </div>
@@ -2142,6 +2291,7 @@ function AssignmentView({ assignment, submission }) {
                                 </label>
                                 <input
                                     id={`file-${assignment.id}`}
+                                    aria-label="Upload File"
                                     type="file"
                                     onChange={(e) => form.setData('file', e.target.files?.[0] ?? null)}
                                     className="w-full cursor-pointer text-sm text-content-secondary file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-100 file:px-4 file:py-2 file:text-sm file:font-bold file:text-emerald-700 hover:file:bg-emerald-200 transition-colors"
@@ -2159,6 +2309,7 @@ function AssignmentView({ assignment, submission }) {
                                 </label>
                                 <input
                                     id={`link-${assignment.id}`}
+                                    aria-label="Link URL"
                                     type="url"
                                     value={form.data.link_url}
                                     onChange={(e) => form.setData('link_url', e.target.value)}
@@ -2251,13 +2402,14 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
             <form onSubmit={submitDiscussion} className="space-y-3">
                 {replyingTo && (
                     <div className="flex items-center justify-between rounded-lg bg-emerald-100 px-4 py-2 text-sm text-emerald-700 font-semibold">
-                        <span>Membalas diskusi...</span>
+                        <span>Membalas diskusiâ€¦</span>
                         <button type="button" onClick={cancelReply} className="text-emerald-900 hover:text-emerald-950 font-bold text-xs">
                             Batal
                         </button>
                     </div>
                 )}
                 <textarea
+                    aria-label="Tulis diskusi"
                     value={form.data.body}
                     onChange={(e) => form.setData('body', e.target.value)}
                     rows="3"
@@ -2391,3 +2543,4 @@ function youtubeEmbed(url) {
     }
     return null;
 }
+

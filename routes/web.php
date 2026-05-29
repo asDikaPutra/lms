@@ -127,6 +127,7 @@ Route::middleware(['auth', 'role:instructor'])->prefix('instructor')->name('inst
 
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function (): void {
     Route::get('/dashboard', StudentDashboardController::class)->name('dashboard');
+    Route::get('/assignments', [StudentAssignmentController::class, 'index'])->name('assignments.index');
     Route::post('/enrollments', [StudentEnrollmentController::class, 'store'])->name('enrollments.store');
     Route::get('/courses', [StudentCourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/{course}', [StudentCourseController::class, 'show'])->name('courses.show');

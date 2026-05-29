@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { test as fcTest, fc } from '@fast-check/vitest';
-import { validateVerifyCode } from '@/pages/CertificateVerification';
+import { validateVerifyCode } from '@/pages/certificate-verification-utils';
 import CertificateVerification from '@/pages/CertificateVerification';
 
 // ---------------------------------------------------------------------------
