@@ -10,6 +10,7 @@ use App\Models\QuizAttempt;
 use App\Models\QuizQuestion;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -17,8 +18,12 @@ class QuizController extends Controller
 {
     public function show(Quiz $quiz): Response
     {
-        $quiz->load('questions');
-        
+        abort_unless($quiz->is_published, 403);
+        abort_unless(Gate::allows('attempt', $quiz), 403);
+
+        // Only the question count is needed here — never ship correct_answer/options to the client.
+        $quiz->load(['questions' => fn ($query) => $query->select('id', 'quiz_id')]);
+
         $userAttempts = QuizAttempt::where('quiz_id', $quiz->id)
             ->where('user_id', auth()->id())
             ->count();
@@ -32,6 +37,14 @@ class QuizController extends Controller
 
     public function start(Quiz $quiz)
     {
+        abort_unless($quiz->is_published, 403);
+
+        $user = auth()->user();
+        abort_unless($user && $user->isStudent(), 403);
+
+        // Check enrollment via policy
+        abort_unless(Gate::allows('attempt', $quiz), 403);
+
         $userAttempts = QuizAttempt::where('quiz_id', $quiz->id)
             ->where('user_id', auth()->id())
             ->count();
@@ -61,7 +74,7 @@ class QuizController extends Controller
         }
 
         // If this is a page load (not AJAX), render Inertia page
-        if (!$request->wantsJson()) {
+        if (! $request->wantsJson()) {
             return Inertia::render('Student/Quiz/QuizPlay', [
                 'attemptId' => $attempt->id,
                 'questionNumber' => $questionNumber,
@@ -73,7 +86,7 @@ class QuizController extends Controller
             ->skip($questionNumber - 1)
             ->first();
 
-        if (!$question) {
+        if (! $question) {
             return response()->json(['message' => 'Question not found'], 404);
         }
 
@@ -113,22 +126,22 @@ class QuizController extends Controller
             ->skip($questionNumber - 1)
             ->first();
 
-        if (!$question) {
+        if (! $question) {
             return response()->json(['message' => 'Question not found'], 404);
         }
 
         // Check if answer is correct
         $isCorrect = $this->checkAnswer($question, $validated['answer']);
-        
+
         // Calculate points based on speed (Quizizz style)
         $points = 0;
         if ($isCorrect) {
             $timeLimit = $question->time_limit;
             $timeTaken = $validated['time_taken'];
-            
+
             // Base points
             $basePoints = $question->points;
-            
+
             // Speed bonus: 0-50% bonus based on speed
             // If answered in first 25% of time: 50% bonus
             // If answered in first 50% of time: 25% bonus
@@ -139,7 +152,7 @@ class QuizController extends Controller
             } elseif ($timeTaken <= $timeLimit * 0.5) {
                 $speedBonus = $basePoints * 0.25;
             }
-            
+
             $points = (int) ($basePoints + $speedBonus);
         }
 
@@ -151,11 +164,17 @@ class QuizController extends Controller
             $points
         );
 
-        return response()->json([
+        $payload = [
             'is_correct' => $isCorrect,
             'points' => $points,
-            'correct_answer' => $question->correct_answer,
-        ]);
+        ];
+
+        // Only reveal the correct answer mid-quiz when the quiz is configured for immediate feedback.
+        if ($attempt->quiz->result_mode === 'immediate') {
+            $payload['correct_answer'] = $question->correct_answer;
+        }
+
+        return response()->json($payload);
     }
 
     public function finish(QuizAttempt $attempt): JsonResponse
@@ -168,8 +187,13 @@ class QuizController extends Controller
             return response()->json(['message' => 'Quiz not in progress'], 400);
         }
 
-        $score = $attempt->calculateScore();
-        
+        $rawScore = $attempt->calculateScore();
+
+        // Normalize to percentage: find total possible points for this quiz
+        $quiz = $attempt->quiz()->with('questions')->first();
+        $totalPoints = $quiz->questions->sum('points');
+        $score = $totalPoints > 0 ? round(($rawScore / $totalPoints) * 100, 2) : 0;
+
         $attempt->update([
             'status' => 'completed',
             'score' => $score,
@@ -189,7 +213,7 @@ class QuizController extends Controller
         }
 
         $attempt->load(['quiz.questions', 'quiz.quizzable']);
-        
+
         // Get course_id from Material -> Module -> Course
         $courseId = null;
         if ($attempt->quiz->quizzable_type === 'App\\Models\\Material') {
@@ -208,7 +232,7 @@ class QuizController extends Controller
     private function checkAnswer(QuizQuestion $question, mixed $answer): bool
     {
         if ($question->type === 'multiple_choice' || $question->type === 'true_false') {
-            return $answer === $question->correct_answer;
+            return mb_strtolower(trim((string) $answer)) === mb_strtolower(trim((string) $question->correct_answer));
         }
 
         // For essay, we'll need manual grading

@@ -18,6 +18,7 @@ use App\Http\Controllers\Instructor\QuizController as InstructorQuizController;
 use App\Http\Controllers\Instructor\QuizQuestionController as InstructorQuizQuestionController;
 use App\Http\Controllers\Instructor\SubmissionController as InstructorSubmissionController;
 use App\Http\Controllers\Student\AssignmentController as StudentAssignmentController;
+use App\Http\Controllers\Student\CertificateController;
 use App\Http\Controllers\Student\ContentProgressController as StudentContentProgressController;
 use App\Http\Controllers\Student\CourseController as StudentCourseController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
@@ -63,7 +64,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
 Route::middleware(['auth', 'role:instructor'])->prefix('instructor')->name('instructor.')->group(function (): void {
     Route::get('/dashboard', InstructorDashboardController::class)->name('dashboard');
-    
+
     // Course management
     Route::get('/courses', [InstructorCourseController::class, 'index'])->name('courses.index');
     Route::post('/courses', [InstructorCourseController::class, 'store'])->name('courses.store');
@@ -72,7 +73,7 @@ Route::middleware(['auth', 'role:instructor'])->prefix('instructor')->name('inst
     Route::patch('/courses/{course}/regenerate-code', [InstructorCourseController::class, 'regenerateCode'])->name('courses.regenerate-code');
     Route::patch('/courses/{course}/toggle', [InstructorCourseController::class, 'toggle'])->name('courses.toggle');
     Route::delete('/courses/{course}', [InstructorCourseController::class, 'destroy'])->name('courses.destroy');
-    
+
     // Course workspace pages
     Route::get('/courses/{course}/curriculum', [InstructorCourseController::class, 'curriculum'])->name('courses.curriculum');
     Route::get('/courses/{course}/assignments', [InstructorCourseController::class, 'assignments'])->name('courses.assignments');
@@ -130,7 +131,7 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::get('/courses', [StudentCourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/{course}', [StudentCourseController::class, 'show'])->name('courses.show');
     Route::patch('/contents/{content}/complete', [StudentContentProgressController::class, 'complete'])->name('contents.complete');
-    
+
     // Quiz play flow (Quizizz-style)
     Route::get('/quizzes/{quiz}', [StudentQuizController::class, 'show'])->name('quizzes.show');
     Route::post('/quizzes/{quiz}/start', [StudentQuizController::class, 'start'])->name('quizzes.start');
@@ -138,19 +139,18 @@ Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')
     Route::post('/quiz-attempts/{attempt}/questions/{questionNumber}/submit', [StudentQuizController::class, 'submitAnswer'])->name('quizzes.submit-answer');
     Route::post('/quiz-attempts/{attempt}/finish', [StudentQuizController::class, 'finish'])->name('quizzes.finish');
     Route::get('/quiz-attempts/{attempt}/result', [StudentQuizController::class, 'result'])->name('quizzes.result');
-    
+
     Route::post('/quizzes/{quiz}/attempts', [StudentQuizAttemptController::class, 'store'])->name('quiz-attempts.store');
     Route::post('/assignments/{assignment}/submit', [StudentAssignmentController::class, 'store'])->name('assignments.submit');
-    
+
     // Certificates
-    Route::get('/certificates', [\App\Http\Controllers\Student\CertificateController::class, 'index'])->name('certificates.index');
-    Route::get('/certificates/{certificate}', [\App\Http\Controllers\Student\CertificateController::class, 'show'])->name('certificates.show');
-    Route::get('/certificates/{certificate}/download', [\App\Http\Controllers\Student\CertificateController::class, 'download'])->name('certificates.download');
-    Route::post('/courses/{course}/certificates/request', [\App\Http\Controllers\Student\CertificateController::class, 'request'])->name('certificates.request');
-    
+    Route::get('/certificates', [CertificateController::class, 'index'])->name('certificates.index');
+    Route::get('/certificates/{certificate}', [CertificateController::class, 'show'])->name('certificates.show');
+    Route::get('/certificates/{certificate}/download', [CertificateController::class, 'download'])->name('certificates.download');
+    Route::post('/courses/{course}/certificates/request', [CertificateController::class, 'request'])->name('certificates.request');
+
     // Leaderboard
     Route::get('/leaderboard', [StudentLeaderboardController::class, 'index'])->name('leaderboard');
-    Route::get('/courses/{course}/leaderboard', [\App\Http\Controllers\Student\LeaderboardController::class, 'show'])->name('leaderboard.show');
 });
 
 // Public certificate verification

@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -93,13 +94,22 @@ class UserController extends Controller
                 continue;
             }
 
+            $nim = blank($data['nim'] ?? null) ? null : trim($data['nim']);
+
+            // Never fall back to a shared literal password. Prefer an explicit CSV password,
+            // otherwise seed the initial password from the student's NIM, or a random secret.
+            $initialPassword = $data['password'] ?? null;
+            if (blank($initialPassword)) {
+                $initialPassword = $nim ?? Str::password(12);
+            }
+
             User::query()->updateOrCreate(
                 ['email' => trim($data['email'])],
                 [
                     'name' => trim($data['name']),
-                    'password' => $data['password'] ?? 'password',
+                    'password' => $initialPassword,
                     'role' => 'student',
-                    'nim' => $data['nim'] ?? null,
+                    'nim' => $nim,
                     'nidn' => null,
                     'is_active' => true,
                 ],

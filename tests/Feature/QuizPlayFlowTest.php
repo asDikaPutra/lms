@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\Material;
 use App\Models\Module;
 use App\Models\Quiz;
@@ -19,8 +20,11 @@ class QuizPlayFlowTest extends TestCase
     use RefreshDatabase;
 
     private User $student;
+
     private Quiz $quiz;
+
     private QuizQuestion $question1;
+
     private QuizQuestion $question2;
 
     protected function setUp(): void
@@ -28,17 +32,24 @@ class QuizPlayFlowTest extends TestCase
         parent::setUp();
 
         $this->student = User::factory()->create(['role' => 'student']);
-        
+
         $instructor = User::factory()->create(['role' => 'instructor']);
         $course = Course::factory()->create(['instructor_id' => $instructor->id]);
-        
+
+        Enrollment::create([
+            'user_id' => $this->student->id,
+            'course_id' => $course->id,
+            'status' => 'active',
+            'enrolled_at' => now(),
+        ]);
+
         $module = Module::create([
             'course_id' => $course->id,
             'title' => 'Test Module',
             'order' => 1,
             'is_published' => true,
         ]);
-        
+
         $material = Material::create([
             'module_id' => $module->id,
             'title' => 'Test Material',
@@ -95,10 +106,10 @@ class QuizPlayFlowTest extends TestCase
     public function test_student_can_start_quiz(): void
     {
         $response = $this->actingAs($this->student)
-            ->postJson(route('student.quizzes.start', $this->quiz));
+            ->post(route('student.quizzes.start', $this->quiz));
 
-        $response->assertOk();
-        $response->assertJsonStructure(['attempt_id']);
+        // start() redirects into the first question of the new attempt (Inertia flow).
+        $response->assertRedirect();
 
         $this->assertDatabaseHas('quiz_attempts', [
             'quiz_id' => $this->quiz->id,
@@ -120,9 +131,11 @@ class QuizPlayFlowTest extends TestCase
         }
 
         $response = $this->actingAs($this->student)
-            ->postJson(route('student.quizzes.start', $this->quiz));
+            ->from(route('student.quizzes.show', $this->quiz))
+            ->post(route('student.quizzes.start', $this->quiz));
 
-        $response->assertForbidden();
+        $response->assertRedirect();
+        $response->assertSessionHas('error');
     }
 
     public function test_student_can_get_question(): void
@@ -254,13 +267,13 @@ class QuizPlayFlowTest extends TestCase
 
         $response->assertOk();
         $response->assertJson([
-            'score' => 275,
+            'score' => 137.5,
             'attempt_id' => $attempt->id,
         ]);
 
         $attempt->refresh();
         $this->assertEquals('completed', $attempt->status);
-        $this->assertEquals(275, $attempt->score);
+        $this->assertEquals(137.5, $attempt->score);
         $this->assertNotNull($attempt->finished_at);
     }
 
