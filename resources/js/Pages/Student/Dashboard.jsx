@@ -91,11 +91,11 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                         Selamat belajar
                                     </span>
                                     <br />
-                                    <span className="text-neutral-800 dark:text-white/90">hari ini.</span>
+                                    <span className="text-content-primary">hari ini.</span>
                                 </motion.h1>
 
                                 <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.28 }}
-                                    className="max-w-xl text-sm leading-relaxed text-neutral-600 dark:text-white/45"
+                                    className="max-w-xl text-sm leading-relaxed text-content-secondary"
                                 >
                                     Pantau kursus aktif, lanjutkan materi, dan masuk ke kelas baru dengan kode enroll dari dosen.
                                 </motion.p>
@@ -107,7 +107,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                             <motion.div
                                 whileHover={{ y: -4 }}
                                 className="relative overflow-hidden rounded-2xl border p-6 shadow-md transition-shadow duration-300
-                                    border-neutral-200 bg-white hover:shadow-xl hover:border-emerald-200
+                                    border-line bg-surface hover:shadow-xl hover:border-emerald-200
                                     dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_20px_rgba(0,0,0,0.45)]"
                             >
                                 <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
@@ -117,13 +117,13 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                             <KeyRound className="size-5" strokeWidth={1.75} aria-hidden="true" />
                                         </span>
                                         <div>
-                                            <h2 className="text-sm font-bold text-neutral-900 dark:text-white/90">Join Kursus</h2>
-                                            <p className="text-xs text-neutral-500 dark:text-white/35">Masukkan kode dari dosen</p>
+                                            <h2 className="text-sm font-bold text-content-primary">Join Kursus</h2>
+                                            <p className="text-xs text-content-secondary">Masukkan kode dari dosen</p>
                                         </div>
                                     </div>
                                     <form onSubmit={joinCourse} className="space-y-3">
                                         <div>
-                                            <label htmlFor="enroll-code" className="mb-1.5 block text-xs font-semibold text-neutral-600 dark:text-white/50">
+                                            <label htmlFor="enroll-code" className="mb-1.5 block text-xs font-semibold text-content-secondary">
                                                 Kode Enroll
                                             </label>
                                             <motion.input
@@ -132,8 +132,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                                 value={enrollForm.data.enroll_code}
                                                 onChange={(e) => enrollForm.setData('enroll_code', e.target.value)}
                                                 className="h-10 w-full rounded-lg border-2 px-3 text-sm font-semibold uppercase tracking-wider outline-none transition-all
-                                                    border-neutral-200 bg-white/70 text-neutral-900 placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10
-                                                    dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/20 dark:focus:border-emerald-500/60 dark:focus:ring-emerald-500/20"
+                                                    border-line bg-surface text-content-primary placeholder:text-content-muted focus:border-brand focus:ring-4 focus:ring-brand/10"
                                                 placeholder="KODE123"
                                             />
                                             {enrollForm.errors.enroll_code && (
@@ -180,14 +179,14 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                 <div className="flex items-start justify-between">
                                     <div>
                                         <motion.p
-                                            className="text-3xl font-bold text-neutral-900 dark:text-white/90"
+                                            className="text-3xl font-bold text-content-primary"
                                             initial={{ scale: 0.6, opacity: 0 }}
                                             animate={{ scale: 1, opacity: 1 }}
                                             transition={{ delay: 0.45 + index * 0.08, type: 'spring', stiffness: 200 }}
                                         >
                                             {stats[item.key]}{item.suffix ?? ''}
                                         </motion.p>
-                                        <p className="mt-1.5 text-xs font-medium text-neutral-500 dark:text-white/40">{item.label}</p>
+                                        <p className="mt-1.5 text-xs font-medium text-content-secondary">{item.label}</p>
                                     </div>
                                     <div className={`flex size-11 items-center justify-center rounded-[13px] bg-gradient-to-br text-white ${iconToneClasses[item.tone]}`}>
                                         <Icon className="size-5" strokeWidth={1.75} aria-hidden="true" />
@@ -205,25 +204,24 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                     <FadeInWhenVisible>
                         <motion.div whileHover={{ y: -2 }}
                             className="relative overflow-hidden rounded-2xl border p-6 shadow-md transition-shadow duration-300 h-full
-                                border-neutral-200 bg-white hover:shadow-xl hover:border-neutral-300
+                                border-line bg-surface hover:shadow-xl hover:border-neutral-300
                                 dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                         >
                             <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
                             <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                                 <div>
-                                    <h2 className="text-lg font-bold text-neutral-900 dark:text-white/90">Kursus Saya</h2>
-                                    <p className="mt-0.5 text-xs text-neutral-500 dark:text-white/35">Status aktif, pending, dan rejected terlihat di sini.</p>
+                                    <h2 className="text-lg font-bold text-content-primary">Kursus Saya</h2>
+                                    <p className="mt-0.5 text-xs text-content-secondary">Status aktif, pending, dan rejected terlihat di sini.</p>
                                 </div>
                                 <form onSubmit={search} className="relative">
-                                    <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-neutral-400 dark:text-white/25" />
+                                    <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-content-muted" />
                                     <motion.input
                                         whileFocus={{ scale: 1.02 }}
                                         value={filterForm.data.search}
                                         onChange={(e) => filterForm.setData('search', e.target.value)}
                                         placeholder="Cari kursus/materi"
                                         className="h-9 w-full rounded-lg border-2 pl-9 pr-3 text-xs outline-none transition-all md:w-56
-                                            border-neutral-200 bg-white/70 text-neutral-900 placeholder:text-neutral-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10
-                                            dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/20 dark:focus:border-emerald-500/50 dark:focus:ring-emerald-500/15"
+                                            border-line bg-surface text-content-primary placeholder:text-content-muted focus:border-brand focus:ring-4 focus:ring-brand/10"
                                     />
                                 </form>
                             </div>
@@ -231,11 +229,11 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                 {enrollments.length === 0 && (
                                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                                         className="col-span-2 rounded-xl border-2 border-dashed p-8 text-center
-                                            border-neutral-200 bg-neutral-50/50
-                                            dark:border-white/10 dark:bg-transparent"
+                                            border-line bg-surface-muted
+                                            dark:bg-transparent"
                                     >
                                         <BookOpen className="mx-auto mb-3 size-8 text-neutral-300 dark:text-white/20" aria-hidden="true" />
-                                        <p className="text-xs font-medium text-neutral-400 dark:text-white/30">Belum ada kursus.</p>
+                                        <p className="text-xs font-medium text-content-muted">Belum ada kursus.</p>
                                     </motion.div>
                                 )}
                                 {enrollments.map((enrollment, index) => (
@@ -249,7 +247,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                     <FadeInWhenVisible>
                         <motion.div whileHover={{ y: -2 }}
                             className="relative overflow-hidden rounded-2xl border shadow-md transition-shadow duration-300 h-full flex flex-col
-                                border-neutral-200 bg-white hover:shadow-xl hover:border-neutral-300
+                                border-line bg-surface hover:shadow-xl hover:border-neutral-300
                                 dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                         >
                             <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
@@ -261,8 +259,8 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                         <CalendarClock className="size-4" strokeWidth={1.75} aria-hidden="true" />
                                     </span>
                                     <div>
-                                        <h2 className="text-sm font-bold text-neutral-900 dark:text-white/90">Tugas Mendatang</h2>
-                                        <p className="text-[10px] text-neutral-400 dark:text-white/30">Deadline terdekat</p>
+                                        <h2 className="text-sm font-bold text-content-primary">Tugas Mendatang</h2>
+                                        <p className="text-[10px] text-content-muted">Deadline terdekat</p>
                                     </div>
                                 </div>
                                 <Link
@@ -274,7 +272,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                             </div>
 
                             {/* Divider */}
-                            <div className="mx-5 h-px bg-neutral-100 dark:bg-white/[0.06]" />
+                            <div className="mx-5 h-px bg-line-subtle" />
 
                             {/* Task list */}
                             <div className="flex-1 px-4 py-3 space-y-1.5">
@@ -283,12 +281,11 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                         className="flex flex-col items-center justify-center py-10 text-center"
                                     >
                                         <div className="mb-3 flex size-12 items-center justify-center rounded-2xl border
-                                            border-neutral-200 bg-neutral-50
-                                            dark:border-white/8 dark:bg-white/5">
+                                            border-line bg-surface-muted">
                                             <CheckCircle2 className="size-5 text-emerald-500 dark:text-emerald-400" aria-hidden="true" />
                                         </div>
-                                        <p className="text-xs font-semibold text-neutral-500 dark:text-white/40">Semua tugas selesai!</p>
-                                        <p className="mt-1 text-[10px] text-neutral-400 dark:text-white/25">Tidak ada deadline yang mendekat.</p>
+                                        <p className="text-xs font-semibold text-content-secondary">Semua tugas selesai!</p>
+                                        <p className="mt-1 text-[10px] text-content-muted">Tidak ada deadline yang mendekat.</p>
                                     </motion.div>
                                 )}
                                 {upcomingAssignments.map((assignment, index) => (
@@ -327,7 +324,7 @@ function CourseCard({ enrollment, delay }) {
             transition={{ delay, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
             className="group relative overflow-hidden rounded-[14px] border shadow-md transition-all
-                border-neutral-200 bg-white hover:border-emerald-300 hover:shadow-[0_8px_24px_rgba(16,185,129,0.15)]
+                border-line bg-surface hover:border-emerald-300 hover:shadow-[0_8px_24px_rgba(16,185,129,0.15)]
                 dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-emerald-500/25 dark:hover:shadow-[0_6px_24px_rgba(16,185,129,0.12)]"
         >
             {/* Banner — sama dengan Courses Index */}
@@ -356,10 +353,10 @@ function CourseCard({ enrollment, delay }) {
                             {enrollment.course.code}
                         </span>
                     </div>
-                    <h3 className="line-clamp-2 text-sm font-bold leading-tight tracking-tight text-neutral-900 dark:text-white/90">
+                    <h3 className="line-clamp-2 text-sm font-bold leading-tight tracking-tight text-content-primary">
                         {enrollment.course.name}
                     </h3>
-                    <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-white/35">
+                    <div className="flex items-center gap-1.5 text-xs text-content-secondary">
                         <div className="flex size-5 items-center justify-center rounded-full border bg-gradient-to-br
                             from-emerald-100 to-teal-100 border-emerald-200/60
                             dark:from-emerald-600/30 dark:to-teal-600/30 dark:border-emerald-500/20"
@@ -375,7 +372,7 @@ function CourseCard({ enrollment, delay }) {
                 {/* Progress */}
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                        <span className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 dark:text-white/40">
+                        <span className="flex items-center gap-1 text-[11px] font-medium text-content-secondary">
                             <TrendingUp className="size-3 text-emerald-500" />
                             Progress
                         </span>
@@ -388,7 +385,7 @@ function CourseCard({ enrollment, delay }) {
                             {enrollment.course.progress}%
                         </motion.span>
                     </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-neutral-100 dark:bg-white/8">
+                    <div className="h-1.5 overflow-hidden rounded-full bg-surface-muted">
                         <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${enrollment.course.progress}%` }}
@@ -410,7 +407,7 @@ function CourseCard({ enrollment, delay }) {
                         </Button>
                     </Link>
                 ) : (
-                    <div className="py-1.5 text-center text-[11px] font-medium text-neutral-400 dark:text-white/25">
+                    <div className="py-1.5 text-center text-[11px] font-medium text-content-muted">
                         {enrollment.status === 'pending' ? 'Menunggu persetujuan dosen' : 'Pendaftaran ditolak'}
                     </div>
                 )}
@@ -489,12 +486,12 @@ function AssignmentCard({ assignment, delay }) {
                 </div>
 
                 {/* Title */}
-                <p className="truncate text-xs font-semibold leading-snug text-neutral-900 dark:text-white/85">
+                <p className="truncate text-xs font-semibold leading-snug text-content-primary">
                     {assignment.title}
                 </p>
 
                 {/* Deadline */}
-                <p className="mt-0.5 flex items-center gap-1 text-[10px] text-neutral-400 dark:text-white/30">
+                <p className="mt-0.5 flex items-center gap-1 text-[10px] text-content-muted">
                     <CalendarClock className="size-3 shrink-0" />
                     {formattedDeadline}
                 </p>
