@@ -7,6 +7,9 @@ import InstructorLayout from '@/Layouts/InstructorLayout';
 import CourseWorkspaceLayout from '@/components/instructor/CourseWorkspaceLayout';
 import QuizFormModal from '@/components/instructor/QuizFormModal';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { StatCard } from '@/components/ui/stat-card';
+import { EmptyState } from '@/components/ui/empty-state';
 
 export default function Quizzes({ course, quizzes, stats, filters }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,8 +105,6 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                         <StatCard label="Draft" value={stats.draft} icon={FileText} color="neutral" />
                         <StatCard label="Rata-rata Nilai" value={stats.avg_score} icon={Users} color="blue" suffix="%" />
                     </div>
-
-                    {/* Filters */}
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative flex-1 max-w-sm">
                             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
@@ -137,13 +138,18 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
 
                     {/* Quizzes Table */}
                     {quizzes.length === 0 ? (
-                        <EmptyState onCreateClick={() => openModal()} />
+                        <EmptyState
+                            icon={HelpCircle}
+                            title="Belum Ada Kuis"
+                            description="Buat kuis pertama untuk menguji pemahaman mahasiswa terhadap materi pembelajaran."
+                            action={
+                                <Button onClick={() => openModal()} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
+                                    <Plus className="mr-2 size-4" /> Buat Kuis Pertama
+                                </Button>
+                            }
+                        />
                     ) : (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="rounded-xl shadow-sm border overflow-hidden bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
-                        >
+                        <Card>
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[900px]">
                                     <thead>
@@ -218,7 +224,7 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                                     </tbody>
                                 </table>
                             </div>
-                        </motion.div>
+                        </Card>
                     )}
                 </div>
             </CourseWorkspaceLayout>
@@ -235,34 +241,6 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
     );
 }
 
-
-function StatCard({ label, value, icon: Icon, color, suffix = '' }) {
-    const colors = {
-        emerald: 'from-emerald-500 to-teal-500 shadow-emerald-500/25',
-        teal: 'from-teal-500 to-cyan-500 shadow-teal-500/25',
-        neutral: 'from-neutral-400 to-neutral-500 shadow-neutral-400/25',
-        blue: 'from-blue-500 to-indigo-500 shadow-blue-500/25',
-        amber: 'from-amber-500 to-orange-500 shadow-amber-500/25',
-    };
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-4 bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
-        >
-            <div className="flex items-center gap-3">
-                <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
-                    <Icon className="size-5 text-white" />
-                </div>
-                <div>
-                    <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}{suffix}</p>
-                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
-                </div>
-            </div>
-        </motion.div>
-    );
-}
 
 function StatusBadge({ isPublished }) {
     if (isPublished) {
@@ -285,12 +263,14 @@ function StatusBadge({ isPublished }) {
 function ActionDropdown({ quiz, isOpen, onToggle, onEdit, onTogglePublish, onDelete }) {
     return (
         <div className="relative">
-            <button
+            <Button
+                variant="outline"
+                size="icon-sm"
                 onClick={onToggle}
-                className="flex size-8 items-center justify-center rounded-lg border border-neutral-200 text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700 transition-colors"
+                aria-label="Aksi lainnya"
             >
                 <MoreHorizontal className="size-4" />
-            </button>
+            </Button>
             {isOpen && (
                 <div className="absolute right-0 top-full mt-1 w-40 rounded-lg shadow-lg border py-1 z-10
                 bg-white border-neutral-200
@@ -313,31 +293,3 @@ function ActionDropdown({ quiz, isOpen, onToggle, onEdit, onTogglePublish, onDel
         </div>
     );
 }
-
-function EmptyState({ onCreateClick }) {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-12 text-center bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
-        >
-            <div className="flex justify-center mb-6">
-                <div className="flex size-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 border border-emerald-200">
-                    <HelpCircle className="size-10 text-emerald-600" />
-                </div>
-            </div>
-            <h3 className="text-xl font-bold mb-2 text-neutral-900 dark:text-white/90">Belum Ada Kuis</h3>
-            <p className="mb-6 max-w-md mx-auto text-neutral-600 dark:text-white/45">
-                Buat kuis pertama untuk menguji pemahaman mahasiswa terhadap materi pembelajaran.
-            </p>
-            <Button 
-                onClick={onCreateClick}
-                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
-            >
-                <Plus className="mr-2 size-4" /> Buat Kuis Pertama
-            </Button>
-        </motion.div>
-    );
-}
-
-

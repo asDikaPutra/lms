@@ -15,6 +15,10 @@
 /auth.json
 /node_modules
 /.codex-tools/node_modules
+node_modules/
+/.claude
+/.agents
+skills-lock.json
 /public/build
 /public/hot
 /public/storage

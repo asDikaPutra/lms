@@ -199,10 +199,10 @@ export default function Curriculum({ course }) {
     const getContentTypeIcon = (type) => {
         switch (type) {
             case 'video': return <PlayCircle className="size-4 text-[#006bd6]" />;
-            case 'artikel': return <FileText className="size-4 text-sb-green" />;
+            case 'artikel': return <FileText className="size-4 text-forest" />;
             case 'audio': return <FileAudio className="size-4 text-[#5e2b97]" />;
             case 'pdf': return <File className="size-4 text-[#cc0000]" />;
-            default: return <File className="size-4 text-sb-text-soft" />;
+            default: return <File className="size-4 text-fg-secondary" />;
         }
     };
 
@@ -214,16 +214,16 @@ export default function Curriculum({ course }) {
             <CourseWorkspaceLayout course={course}>
                 <div className="w-full tracking-[-0.01em]">
                     <section aria-labelledby="builder-title" className="rounded-[10px] p-4 lg:p-5 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)] bg-white dark:bg-[#111a15] dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]">
-                        <div className="flex items-center justify-between border-b pb-4 border-[#edebe9] dark:border-white/[0.07]">
+                        <div className="flex items-center justify-between border-b pb-4 border-ceramic dark:border-white/[0.07]">
                             <div className="flex items-center gap-3">
-                                <div className="flex size-[36px] items-center justify-center rounded-[8px] bg-sb-light text-sb-green dark:bg-emerald-500/20 dark:text-emerald-400">
+                                <div className="flex size-[36px] items-center justify-center rounded-[8px] bg-mint-light text-forest dark:bg-emerald-500/20 dark:text-emerald-400">
                                     <Layers3 className="size-5" aria-hidden="true" />
                                 </div>
                                 <div>
-                                    <h2 id="builder-title" className="text-[16px] font-semibold tracking-[-0.16px] text-sb-text-black dark:text-white/90">
+                                    <h2 id="builder-title" className="text-[16px] font-semibold tracking-[-0.16px] text-fg-primary dark:text-white/90">
                                         Struktur Kurikulum
                                     </h2>
-                                    <p className="text-[12px] text-sb-text-soft dark:text-white/40">Kelola modul, materi, dan konten pembelajaran.</p>
+                                    <p className="text-[12px] text-fg-secondary dark:text-white/40">Kelola modul, materi, dan konten pembelajaran.</p>
                                 </div>
                             </div>
                             <Button onClick={() => openModal('module')} size="sm" className="h-[36px]">
@@ -232,7 +232,7 @@ export default function Curriculum({ course }) {
                         </div>
 
                         <div className="mt-5 space-y-5">
-                            {course.modules.length === 0 && <p className="rounded-[8px] border border-dashed p-5 text-center text-[13px] border-[#d6dbde] text-sb-text-soft dark:border-white/15 dark:text-white/35">Belum ada modul yang dibuat.</p>}
+                            {course.modules.length === 0 && <p className="rounded-[8px] border border-dashed p-5 text-center text-[13px] border-gray-300 text-fg-secondary dark:border-white/15 dark:text-white/35">Belum ada modul yang dibuat.</p>}
                             {course.modules.map((module) => (
                                 <ModuleItem
                                     key={module.id}
@@ -285,30 +285,30 @@ export default function Curriculum({ course }) {
 
 function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, toggleMaterial, openModal, getContentTypeIcon }) {
     return (
-        <article className="rounded-[8px] border overflow-hidden transition-all border-[#edebe9] bg-white hover:border-[#d6dbde] dark:border-white/[0.07] dark:bg-[#111a15] dark:hover:border-white/15">
-            <div className="flex flex-col gap-3 p-4 md:flex-row md:items-start md:justify-between bg-[#f9f9f9] dark:bg-white/5">
+        <article className="rounded-[8px] border overflow-hidden transition-all border-ceramic bg-white hover:border-gray-300 dark:border-white/[0.07] dark:bg-[#111a15] dark:hover:border-white/15">
+            <div className="flex flex-col gap-3 p-4 md:flex-row md:items-start md:justify-between bg-slate-50 dark:bg-white/5">
                 <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-sb-text-soft dark:text-white/35">Modul {module.order}</p>
-                    <h3 className="text-[15px] font-semibold text-sb-text-black dark:text-white/90">{module.title}</h3>
-                    <p className="mt-0.5 text-[13px] text-sb-text-soft dark:text-white/40">{module.description ?? 'Tanpa deskripsi'}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-fg-secondary dark:text-white/35">Modul {module.order}</p>
+                    <h3 className="text-[15px] font-semibold text-fg-primary dark:text-white/90">{module.title}</h3>
+                    <p className="mt-0.5 text-[13px] text-fg-secondary dark:text-white/40">{module.description ?? 'Tanpa deskripsi'}</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] w-[28px] p-0 border-[#edebe9] text-sb-text-soft hover:text-sb-text-black" onClick={() => toggleModule(module.id)}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] w-[28px] p-0 border-ceramic text-fg-secondary hover:text-fg-primary" onClick={() => toggleModule(module.id)}>
                         {expandedModules.has(module.id) ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal('module', null, module)}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-mint-light/30" onClick={() => openModal('module', null, module)}>
                         <Edit2 className="mr-1.5 size-3.5" />Edit
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-sb-green/30 text-sb-green hover:bg-sb-light" onClick={() => openModal('quiz', module.id, null, 'module')}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-forest/30 text-forest hover:bg-mint-light" onClick={() => openModal('quiz', module.id, null, 'module')}>
                         <HelpCircle className="mr-1.5 size-3.5" />Quiz
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-sb-green/30 text-sb-green hover:bg-sb-light" onClick={() => openModal('assignment', module.id, null, 'module')}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-forest/30 text-forest hover:bg-mint-light" onClick={() => openModal('assignment', module.id, null, 'module')}>
                         <ClipboardList className="mr-1.5 size-3.5" />Tugas
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] ${module.is_published ? 'border-orange-200 text-orange-600 hover:bg-orange-50' : 'border-sb-green/30 text-sb-green hover:bg-sb-light'}`} onClick={() => router.patch(`/instructor/modules/${module.id}/toggle`, {}, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] ${module.is_published ? 'border-orange-200 text-orange-600 hover:bg-orange-50' : 'border-forest/30 text-forest hover:bg-mint-light'}`} onClick={() => router.patch(`/instructor/modules/${module.id}/toggle`, {}, { preserveScroll: true })}>
                         {module.is_published ? 'Unpublish' : 'Publish'}
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/modules/${module.id}`, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/modules/${module.id}`, { preserveScroll: true })}>
                         <Trash2 className="mr-1.5 size-3.5" />Hapus
                     </Button>
                 </div>
@@ -325,12 +325,12 @@ function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, 
             ))}
 
             {/* Materials */}
-            <div className={`flex flex-col border-t divide-y border-[#edebe9] divide-[#edebe9] dark:border-white/[0.07] dark:divide-white/[0.06] ${expandedModules.has(module.id) ? '' : 'hidden'}`}>
+            <div className={`flex flex-col border-t divide-y border-ceramic divide-ceramic dark:border-white/[0.07] dark:divide-white/[0.06] ${expandedModules.has(module.id) ? '' : 'hidden'}`}>
                 {module.materials.length === 0 && (
                     <div className="relative p-4 pl-[48px] pr-4 bg-white dark:bg-[#111a15]">
-                        <div className="absolute left-[24px] top-0 h-full w-[2px] bg-[#edebe9] dark:bg-white/10"></div>
-                        <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9] dark:bg-white/10"></div>
-                        <p className="text-[12px] text-sb-text-soft italic">Belum ada materi di modul ini.</p>
+                        <div className="absolute left-[24px] top-0 h-full w-[2px] bg-ceramic dark:bg-white/10"></div>
+                        <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-ceramic dark:bg-white/10"></div>
+                        <p className="text-[12px] text-fg-secondary italic">Belum ada materi di modul ini.</p>
                     </div>
                 )}
                 {module.materials.map((material) => (
@@ -346,9 +346,9 @@ function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, 
                     />
                 ))}
                 <div className="relative p-3 pl-[48px] pr-4 bg-white dark:bg-[#111a15]">
-                    <div className="absolute left-[24px] top-0 h-[30px] w-[2px] bg-[#edebe9]"></div>
-                    <div className="absolute left-[24px] top-[30px] w-[16px] h-[2px] bg-[#edebe9]"></div>
-                    <Button onClick={() => openModal('material', module.id)} variant="outline" size="sm" className="w-full border-dashed text-sb-text-soft hover:text-sb-text-black hover:border-[#d6dbde] hover:bg-[#f9f9f9] relative z-10">
+                    <div className="absolute left-[24px] top-0 h-[30px] w-[2px] bg-ceramic"></div>
+                    <div className="absolute left-[24px] top-[30px] w-[16px] h-[2px] bg-ceramic"></div>
+                    <Button onClick={() => openModal('material', module.id)} variant="outline" size="sm" className="w-full border-dashed text-fg-secondary hover:text-fg-primary hover:border-gray-300 hover:bg-slate-50 relative z-10">
                         <Plus className="mr-1.5 size-4" /> Tambah Materi Baru
                     </Button>
                 </div>
@@ -360,25 +360,25 @@ function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, 
 
 function QuizItem({ quiz, parentId, parentKind, expanded, openModal }) {
     return (
-        <div className={`relative border-b bg-white border-[#edebe9] dark:bg-[#111a15] dark:border-white/[0.07] ${expanded ? '' : 'hidden'}`}>
-            <div className="absolute left-[24px] top-0 h-full w-[2px] bg-[#edebe9] dark:bg-white/10"></div>
+        <div className={`relative border-b bg-white border-ceramic dark:bg-[#111a15] dark:border-white/[0.07] ${expanded ? '' : 'hidden'}`}>
+            <div className="absolute left-[24px] top-0 h-full w-[2px] bg-ceramic dark:bg-white/10"></div>
             <div className="relative flex flex-col gap-2 py-3 pl-[48px] pr-4 md:flex-row md:items-center md:justify-between">
-                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9] dark:bg-white/10"></div>
+                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-ceramic dark:bg-white/10"></div>
                 <div className="flex items-center gap-2">
-                    <HelpCircle className="size-4 text-sb-green" />
-                    <p className="text-[14px] font-medium text-sb-text-black dark:text-white/80">{quiz.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">(Quiz Tingkat {parentKind === 'module' ? 'Modul' : 'Materi'})</span></p>
+                    <HelpCircle className="size-4 text-forest" />
+                    <p className="text-[14px] font-medium text-fg-primary dark:text-white/80">{quiz.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">(Quiz Tingkat {parentKind === 'module' ? 'Modul' : 'Materi'})</span></p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 relative z-10">
-                    <Link href={`/instructor/quizzes/${quiz.id}/edit`} className="inline-flex h-[28px] items-center justify-center rounded-[6px] border border-sb-green bg-sb-light/30 px-2.5 text-[11px] font-semibold text-sb-green hover:bg-sb-light transition-colors">
+                    <Link href={`/instructor/quizzes/${quiz.id}/edit`} className="inline-flex h-[28px] items-center justify-center rounded-[6px] border border-forest bg-mint-light/30 px-2.5 text-[11px] font-semibold text-forest hover:bg-mint-light transition-colors">
                         <Layers3 className="mr-1.5 size-3.5" /> Builder Soal
                     </Link>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal('quiz', parentId, quiz, parentKind)}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-mint-light/30" onClick={() => openModal('quiz', parentId, quiz, parentKind)}>
                         <Edit2 className="mr-1.5 size-3.5" />Edit
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] border-[#edebe9] ${quiz.is_published ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50' : 'text-sb-green hover:text-sb-green hover:bg-sb-light'}`} onClick={() => router.patch(`/instructor/quizzes/${quiz.id}/toggle`, {}, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] border-ceramic ${quiz.is_published ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50' : 'text-forest hover:text-forest hover:bg-mint-light'}`} onClick={() => router.patch(`/instructor/quizzes/${quiz.id}/toggle`, {}, { preserveScroll: true })}>
                         {quiz.is_published ? 'Unpublish' : 'Publish'}
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/quizzes/${quiz.id}`, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/quizzes/${quiz.id}`, { preserveScroll: true })}>
                         <Trash2 className="mr-1.5 size-3.5" />Hapus
                     </Button>
                 </div>
@@ -389,22 +389,22 @@ function QuizItem({ quiz, parentId, parentKind, expanded, openModal }) {
 
 function AssignmentItem({ assignment, parentId, parentKind, expanded, openModal }) {
     return (
-        <div className={`relative border-b bg-white border-[#edebe9] dark:bg-[#111a15] dark:border-white/[0.07] ${expanded ? '' : 'hidden'}`}>
-            <div className="absolute left-[24px] top-0 h-full w-[2px] bg-[#edebe9] dark:bg-white/10"></div>
+        <div className={`relative border-b bg-white border-ceramic dark:bg-[#111a15] dark:border-white/[0.07] ${expanded ? '' : 'hidden'}`}>
+            <div className="absolute left-[24px] top-0 h-full w-[2px] bg-ceramic dark:bg-white/10"></div>
             <div className="relative flex flex-col gap-2 py-3 pl-[48px] pr-4 md:flex-row md:items-center md:justify-between">
-                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9] dark:bg-white/10"></div>
+                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-ceramic dark:bg-white/10"></div>
                 <div className="flex items-center gap-2">
-                    <ClipboardList className="size-4 text-sb-green" />
-                    <p className="text-[14px] font-medium text-sb-text-black dark:text-white/80">{assignment.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">(Tugas Tingkat {parentKind === 'module' ? 'Modul' : 'Materi'})</span></p>
+                    <ClipboardList className="size-4 text-forest" />
+                    <p className="text-[14px] font-medium text-fg-primary dark:text-white/80">{assignment.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">(Tugas Tingkat {parentKind === 'module' ? 'Modul' : 'Materi'})</span></p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 relative z-10">
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal('assignment', parentId, assignment, parentKind)}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-mint-light/30" onClick={() => openModal('assignment', parentId, assignment, parentKind)}>
                         <Edit2 className="mr-1.5 size-3.5" />Edit
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] border-[#edebe9] ${assignment.is_published ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50' : 'text-sb-green hover:text-sb-green hover:bg-sb-light'}`} onClick={() => router.patch(`/instructor/assignments/${assignment.id}/toggle`, {}, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] border-ceramic ${assignment.is_published ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50' : 'text-forest hover:text-forest hover:bg-mint-light'}`} onClick={() => router.patch(`/instructor/assignments/${assignment.id}/toggle`, {}, { preserveScroll: true })}>
                         {assignment.is_published ? 'Unpublish' : 'Publish'}
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/assignments/${assignment.id}`, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/assignments/${assignment.id}`, { preserveScroll: true })}>
                         <Trash2 className="mr-1.5 size-3.5" />Hapus
                     </Button>
                 </div>
@@ -417,36 +417,36 @@ function AssignmentItem({ assignment, parentId, parentKind, expanded, openModal 
 function MaterialItem({ material, moduleId, expandedModules, expandedMaterials, toggleMaterial, openModal, getContentTypeIcon }) {
     return (
         <div className="relative bg-white dark:bg-[#111a15]">
-            <div className={`absolute left-[24px] top-0 w-[2px] bg-[#edebe9] ${expandedModules.has(moduleId) ? 'h-full' : 'h-0'}`}></div>
+            <div className={`absolute left-[24px] top-0 w-[2px] bg-ceramic ${expandedModules.has(moduleId) ? 'h-full' : 'h-0'}`}></div>
             <div className="relative flex flex-col gap-2 py-3 pl-[48px] pr-4 md:flex-row md:items-center md:justify-between">
-                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-[#edebe9] dark:bg-white/10"></div>
+                <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-ceramic dark:bg-white/10"></div>
                 <div>
-                    <p className="text-[14px] font-medium text-sb-text-black dark:text-white/80">{material.title}</p>
-                    <p className="text-[12px] text-sb-text-soft dark:text-white/40">{material.contents.length} konten dilampirkan</p>
+                    <p className="text-[14px] font-medium text-fg-primary dark:text-white/80">{material.title}</p>
+                    <p className="text-[12px] text-fg-secondary dark:text-white/40">{material.contents.length} konten dilampirkan</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 relative z-10">
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] w-[28px] p-0 border-[#edebe9] text-sb-text-soft hover:text-sb-text-black" onClick={() => toggleMaterial(material.id)}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] w-[28px] p-0 border-ceramic text-fg-secondary hover:text-fg-primary" onClick={() => toggleMaterial(material.id)}>
                         {expandedMaterials.has(material.id) ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal('material', moduleId, material)}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-mint-light/30" onClick={() => openModal('material', moduleId, material)}>
                         <Edit2 className="mr-1.5 size-3.5" />Edit
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] bg-sb-light/30 text-sb-green border-sb-green/30 hover:bg-sb-light hover:text-sb-green" onClick={() => openModal('content', material.id)}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] bg-mint-light/30 text-forest border-forest/30 hover:bg-mint-light hover:text-forest" onClick={() => openModal('content', material.id)}>
                         <Plus className="mr-1.5 size-3.5" /> Konten
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-sb-green/30 text-sb-green hover:bg-sb-light" onClick={() => openModal('quiz', material.id, null, 'material')}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-forest/30 text-forest hover:bg-mint-light" onClick={() => openModal('quiz', material.id, null, 'material')}>
                         <HelpCircle className="mr-1.5 size-3.5" /> Quiz
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-sb-green/30 text-sb-green hover:bg-sb-light" onClick={() => openModal('assignment', material.id, null, 'material')}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-forest/30 text-forest hover:bg-mint-light" onClick={() => openModal('assignment', material.id, null, 'material')}>
                         <ClipboardList className="mr-1.5 size-3.5" /> Tugas
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/materials/${material.id}`, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/materials/${material.id}`, { preserveScroll: true })}>
                         <Trash2 className="mr-1.5 size-3.5" />Hapus
                     </Button>
                 </div>
             </div>
-            <div className={`border-t bg-[#f9f9f9] border-[#edebe9] dark:bg-white/5 dark:border-white/[0.07] ${expandedMaterials.has(material.id) ? '' : 'hidden'}`}>
-                <ol className="flex flex-col divide-y divide-[#edebe9]">
+            <div className={`border-t bg-slate-50 border-ceramic dark:bg-white/5 dark:border-white/[0.07] ${expandedMaterials.has(material.id) ? '' : 'hidden'}`}>
+                <ol className="flex flex-col divide-y divide-ceramic">
                     {material.contents.map((content, cIdx) => {
                         const hasQuizzes = material.quizzes && material.quizzes.length > 0;
                         const hasAssignments = material.assignments && material.assignments.length > 0;
@@ -468,22 +468,22 @@ function MaterialItem({ material, moduleId, expandedModules, expandedMaterials, 
                             <MaterialAssignmentItem key={`assignment-${assignment.id}`} assignment={assignment} materialId={material.id} isLast={isLast} openModal={openModal} />
                         );
                     })}
-                    <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors cursor-pointer bg-[#f9f9f9] hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5" onClick={() => openModal('discussion', material.id, material)}>
-                        <div className="absolute left-[56px] top-0 h-[18px] w-[2px] bg-[#edebe9]"></div>
-                        <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-[#edebe9]"></div>
+                    <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors cursor-pointer bg-slate-50 hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5" onClick={() => openModal('discussion', material.id, material)}>
+                        <div className="absolute left-[56px] top-0 h-[18px] w-[2px] bg-ceramic"></div>
+                        <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-ceramic"></div>
                         <div className="flex items-center gap-2 relative z-10">
                             <MessageSquare className="size-4 text-blue-600" />
-                            <span className="text-[13px] font-medium text-sb-text-black dark:text-white/80">Diskusi Materi <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">({material.discussions?.length || 0} post)</span></span>
+                            <span className="text-[13px] font-medium text-fg-primary dark:text-white/80">Diskusi Materi <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">({material.discussions?.length || 0} post)</span></span>
                         </div>
                         <div className="flex items-center gap-2 relative z-10">
-                            <span className="text-[11px] text-blue-600 font-semibold">Lihat diskusi →</span>
+                            <span className="text-[11px] text-blue-600 font-semibold">Lihat diskusi</span>
                         </div>
                     </li>
                     {material.contents.length === 0 && (!material.quizzes || material.quizzes.length === 0) && (!material.assignments || material.assignments.length === 0) && (
-                        <div className="relative py-2.5 pl-[80px] pr-4 bg-[#f9f9f9]">
-                            <div className="absolute left-[56px] top-0 h-[18px] w-[2px] bg-[#edebe9]"></div>
-                            <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-[#edebe9]"></div>
-                            <p className="text-[12px] text-sb-text-soft italic">Materi ini masih kosong.</p>
+                        <div className="relative py-2.5 pl-[80px] pr-4 bg-slate-50">
+                            <div className="absolute left-[56px] top-0 h-[18px] w-[2px] bg-ceramic"></div>
+                            <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-ceramic"></div>
+                            <p className="text-[12px] text-fg-secondary italic">Materi ini masih kosong.</p>
                         </div>
                     )}
                 </ol>
@@ -495,18 +495,18 @@ function MaterialItem({ material, moduleId, expandedModules, expandedMaterials, 
 
 function ContentItem({ content, materialId, isLast, openModal, getContentTypeIcon }) {
     return (
-        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors bg-[#f9f9f9] hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5">
-            <div className={`absolute left-[56px] top-0 w-[2px] bg-[#edebe9] ${isLast ? 'h-[18px]' : 'h-full'}`}></div>
-            <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-[#edebe9]"></div>
+        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors bg-slate-50 hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5">
+            <div className={`absolute left-[56px] top-0 w-[2px] bg-ceramic ${isLast ? 'h-[18px]' : 'h-full'}`}></div>
+            <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-ceramic"></div>
             <div className="flex items-center gap-2 relative z-10">
                 {getContentTypeIcon(content.type)}
-                <span className="text-[13px] font-medium text-sb-text-black dark:text-white/80">{content.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">({content.type})</span></span>
+                <span className="text-[13px] font-medium text-fg-primary dark:text-white/80">{content.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">({content.type})</span></span>
             </div>
             <div className="flex items-center gap-2 relative z-10">
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal('content', materialId, content)}>
+                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-mint-light/30" onClick={() => openModal('content', materialId, content)}>
                     <Edit2 className="mr-1.5 size-3.5" />Edit
                 </Button>
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/contents/${content.id}`, { preserveScroll: true })}>
+                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/contents/${content.id}`, { preserveScroll: true })}>
                     <Trash2 className="mr-1.5 size-3.5" />Hapus
                 </Button>
             </div>
@@ -516,24 +516,24 @@ function ContentItem({ content, materialId, isLast, openModal, getContentTypeIco
 
 function MaterialQuizItem({ quiz, materialId, isLast, openModal }) {
     return (
-        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors bg-[#f9f9f9] hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5">
-            <div className={`absolute left-[56px] top-0 w-[2px] bg-[#edebe9] ${isLast ? 'h-[18px]' : 'h-full'}`}></div>
-            <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-[#edebe9]"></div>
+        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors bg-slate-50 hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5">
+            <div className={`absolute left-[56px] top-0 w-[2px] bg-ceramic ${isLast ? 'h-[18px]' : 'h-full'}`}></div>
+            <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-ceramic"></div>
             <div className="flex items-center gap-2 relative z-10">
-                <HelpCircle className="size-4 text-sb-green" />
-                <span className="text-[13px] font-medium text-sb-text-black dark:text-white/80">{quiz.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">(Quiz)</span></span>
+                <HelpCircle className="size-4 text-forest" />
+                <span className="text-[13px] font-medium text-fg-primary dark:text-white/80">{quiz.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">(Quiz)</span></span>
             </div>
             <div className="flex items-center gap-2 relative z-10">
-                <Link href={`/instructor/quizzes/${quiz.id}/edit`} className="inline-flex h-[28px] items-center justify-center rounded-[6px] border border-sb-green bg-sb-light/30 px-2.5 text-[11px] font-semibold text-sb-green hover:bg-sb-light transition-colors">
+                <Link href={`/instructor/quizzes/${quiz.id}/edit`} className="inline-flex h-[28px] items-center justify-center rounded-[6px] border border-forest bg-mint-light/30 px-2.5 text-[11px] font-semibold text-forest hover:bg-mint-light transition-colors">
                     <Layers3 className="mr-1.5 size-3.5" /> Builder Soal
                 </Link>
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal('quiz', materialId, quiz, 'material')}>
+                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-mint-light/30" onClick={() => openModal('quiz', materialId, quiz, 'material')}>
                     <Edit2 className="mr-1.5 size-3.5" />Edit
                 </Button>
-                <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] border-[#edebe9] ${quiz.is_published ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50' : 'text-sb-green hover:text-sb-green hover:bg-sb-light'}`} onClick={() => router.patch(`/instructor/quizzes/${quiz.id}/toggle`, {}, { preserveScroll: true })}>
+                <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] border-ceramic ${quiz.is_published ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50' : 'text-forest hover:text-forest hover:bg-mint-light'}`} onClick={() => router.patch(`/instructor/quizzes/${quiz.id}/toggle`, {}, { preserveScroll: true })}>
                     {quiz.is_published ? 'Unpublish' : 'Publish'}
                 </Button>
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/quizzes/${quiz.id}`, { preserveScroll: true })}>
+                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/quizzes/${quiz.id}`, { preserveScroll: true })}>
                     <Trash2 className="mr-1.5 size-3.5" />Hapus
                 </Button>
             </div>
@@ -543,21 +543,21 @@ function MaterialQuizItem({ quiz, materialId, isLast, openModal }) {
 
 function MaterialAssignmentItem({ assignment, materialId, isLast, openModal }) {
     return (
-        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors bg-[#f9f9f9] hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5">
-            <div className={`absolute left-[56px] top-0 w-[2px] bg-[#edebe9] ${isLast ? 'h-[18px]' : 'h-full'}`}></div>
-            <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-[#edebe9]"></div>
+        <li className="relative flex items-center justify-between gap-3 py-2.5 pl-[80px] pr-4 transition-colors bg-slate-50 hover:bg-[#f1f1f1] dark:bg-transparent dark:hover:bg-white/5">
+            <div className={`absolute left-[56px] top-0 w-[2px] bg-ceramic ${isLast ? 'h-[18px]' : 'h-full'}`}></div>
+            <div className="absolute left-[56px] top-[18px] w-[16px] h-[2px] bg-ceramic"></div>
             <div className="flex items-center gap-2 relative z-10">
-                <ClipboardList className="size-4 text-sb-green" />
-                <span className="text-[13px] font-medium text-sb-text-black dark:text-white/80">{assignment.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-sb-text-soft dark:text-white/35">(Tugas)</span></span>
+                <ClipboardList className="size-4 text-forest" />
+                <span className="text-[13px] font-medium text-fg-primary dark:text-white/80">{assignment.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">(Tugas)</span></span>
             </div>
             <div className="flex items-center gap-2 relative z-10">
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-sb-text-black hover:bg-sb-light/30" onClick={() => openModal('assignment', materialId, assignment, 'material')}>
+                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-mint-light/30" onClick={() => openModal('assignment', materialId, assignment, 'material')}>
                     <Edit2 className="mr-1.5 size-3.5" />Edit
                 </Button>
-                <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] border-[#edebe9] ${assignment.is_published ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50' : 'text-sb-green hover:text-sb-green hover:bg-sb-light'}`} onClick={() => router.patch(`/instructor/assignments/${assignment.id}/toggle`, {}, { preserveScroll: true })}>
+                <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] border-ceramic ${assignment.is_published ? 'text-orange-600 hover:text-orange-700 hover:bg-orange-50' : 'text-forest hover:text-forest hover:bg-mint-light'}`} onClick={() => router.patch(`/instructor/assignments/${assignment.id}/toggle`, {}, { preserveScroll: true })}>
                     {assignment.is_published ? 'Unpublish' : 'Publish'}
                 </Button>
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-[#edebe9] text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/assignments/${assignment.id}`, { preserveScroll: true })}>
+                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => router.delete(`/instructor/assignments/${assignment.id}`, { preserveScroll: true })}>
                     <Trash2 className="mr-1.5 size-3.5" />Hapus
                 </Button>
             </div>
@@ -569,15 +569,15 @@ function ModalOverlay({ modalState, closeModal, editId, course, moduleForm, mate
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-[2px] tracking-[-0.01em]">
             <div className={`w-full rounded-[12px] shadow-xl ring-1 animate-in fade-in zoom-in-95 duration-200 bg-white ring-black/5 dark:bg-[#111a15] dark:ring-white/10 ${modalState.type === 'content' ? 'max-w-2xl' : 'max-w-md'}`} role="dialog" aria-modal="true">
-                <div className="flex items-center justify-between border-b px-5 py-4 border-[#edebe9] dark:border-white/[0.07]">
-                    <h3 className="text-[16px] font-semibold text-sb-text-black dark:text-white/90">
+                <div className="flex items-center justify-between border-b px-5 py-4 border-ceramic dark:border-white/[0.07]">
+                    <h3 className="text-[16px] font-semibold text-fg-primary dark:text-white/90">
                         {modalState.type === 'module' && (editId ? 'Edit Modul' : 'Tambah Modul Baru')}
                         {modalState.type === 'material' && (editId ? 'Edit Materi' : 'Tambah Materi Baru')}
                         {modalState.type === 'content' && (editId ? 'Edit Konten' : 'Tambah Konten Pembelajaran')}
                         {modalState.type === 'quiz' && (editId ? 'Edit Quiz' : 'Tambah Quiz')}
                         {modalState.type === 'discussion' && 'Diskusi Materi'}
                     </h3>
-                    <button onClick={closeModal} className="rounded-full p-1 transition-colors text-sb-text-soft hover:bg-[#f9f9f9] hover:text-sb-text-black dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80">
+                    <button onClick={closeModal} className="rounded-full p-1 transition-colors text-fg-secondary hover:bg-slate-50 hover:text-fg-primary dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80">
                         <X className="size-5" />
                     </button>
                 </div>
@@ -607,10 +607,10 @@ function ModuleForm({ form, onSubmit, onCancel, editId }) {
     return (
         <form onSubmit={onSubmit} className="space-y-4">
             <Field label="Judul Modul" id="module-title" error={form.errors.title}>
-                <input id="module-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Pengantar Algoritma" />
+                <input id="module-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Pengantar Algoritma" />
             </Field>
             <Field label="Deskripsi (Opsional)" id="module-description" error={form.errors.description}>
-                <textarea id="module-description" rows="3" value={form.data.description} onChange={(e) => form.setData('description', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Penjelasan singkat modul" />
+                <textarea id="module-description" rows="3" value={form.data.description} onChange={(e) => form.setData('description', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Penjelasan singkat modul" />
             </Field>
             <div className="flex justify-end gap-3 pt-2">
                 <Button type="button" variant="outline" onClick={onCancel}>Batal</Button>
@@ -628,7 +628,7 @@ function MaterialForm({ form, onSubmit, onCancel, editId, course, parentId }) {
         <form onSubmit={onSubmit} className="space-y-4">
             {!parentId && (
                 <Field label="Pilih Modul" id="material-module" error={form.errors.module_id}>
-                    <select id="material-module" value={form.data.module_id} onChange={(e) => form.setData('module_id', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60">
+                    <select id="material-module" value={form.data.module_id} onChange={(e) => form.setData('module_id', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60">
                         <option value="">-- Pilih modul --</option>
                         {course.modules.map((module) => (
                             <option key={module.id} value={module.id}>{module.title}</option>
@@ -637,7 +637,7 @@ function MaterialForm({ form, onSubmit, onCancel, editId, course, parentId }) {
                 </Field>
             )}
             <Field label="Judul Materi" id="material-title" error={form.errors.title}>
-                <input id="material-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Konsep Dasar Array" />
+                <input id="material-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Konsep Dasar Array" />
             </Field>
             <div className="flex justify-end gap-3 pt-2">
                 <Button type="button" variant="outline" onClick={onCancel}>Batal</Button>
@@ -653,7 +653,7 @@ function ContentForm({ form, onSubmit, onCancel, editId }) {
     return (
         <form onSubmit={onSubmit} className="space-y-4">
             <Field label="Format Konten" id="content-type" error={form.errors.type}>
-                <select id="content-type" value={form.data.type} disabled={!!editId} onChange={(e) => form.setData('type', e.target.value)} className={`w-full rounded-[6px] border border-[#d6dbde] px-3 py-2 text-[13px] text-sb-text-black outline-none focus:border-sb-accent focus:ring-1 focus:ring-sb-accent ${editId ? 'bg-[#f9f9f9] cursor-not-allowed opacity-60' : ''}`}>
+                <select id="content-type" value={form.data.type} disabled={!!editId} onChange={(e) => form.setData('type', e.target.value)} className={`w-full rounded-[6px] border border-gray-300 px-3 py-2 text-[13px] text-fg-primary outline-none focus:border-mint focus:ring-1 focus:ring-mint ${editId ? 'bg-slate-50 cursor-not-allowed opacity-60' : ''}`}>
                     <option value="artikel">Teks / Artikel</option>
                     <option value="video">Video YouTube</option>
                     <option value="audio">Audio / Podcast</option>
@@ -662,7 +662,7 @@ function ContentForm({ form, onSubmit, onCancel, editId }) {
                 </select>
             </Field>
             <Field label="Judul Konten" id="content-title" error={form.errors.title}>
-                <input id="content-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
+                <input id="content-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
             </Field>
             {form.data.type === 'artikel' && (
                 <Field label="Isi Artikel" id="content-body" error={form.errors.body}>
@@ -672,7 +672,7 @@ function ContentForm({ form, onSubmit, onCancel, editId }) {
             {form.data.type === 'video' && (
                 <div>
                     <Field label="Tautan Video YouTube" id="content-url" error={form.errors.url}>
-                        <input id="content-url" type="url" value={form.data.url} onChange={(e) => form.setData('url', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="https://youtube.com/watch?v=... atau https://youtu.be/..." />
+                        <input id="content-url" type="url" value={form.data.url} onChange={(e) => form.setData('url', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="https://youtube.com/watch?v=... atau https://youtu.be/..." />
                     </Field>
                     {form.data.url && <VideoUrlPreview url={form.data.url} className="mt-2" />}
                 </div>
@@ -680,12 +680,12 @@ function ContentForm({ form, onSubmit, onCancel, editId }) {
             {['audio', 'pdf', 'file'].includes(form.data.type) && (
                 <div>
                     <Field label="Unggah File" id="content-file" error={form.errors.file}>
-                        <input id="content-file" type="file" accept={form.data.type === 'audio' ? 'audio/*' : form.data.type === 'pdf' ? '.pdf' : undefined} onChange={(e) => form.setData('file', e.target.files?.[0] ?? null)} className="w-full text-[13px] file:mr-3 file:rounded-[4px] file:border-0 file:bg-sb-light file:text-sb-green file:px-3 file:py-1.5 file:font-semibold cursor-pointer" />
+                        <input id="content-file" type="file" accept={form.data.type === 'audio' ? 'audio/*' : form.data.type === 'pdf' ? '.pdf' : undefined} onChange={(e) => form.setData('file', e.target.files?.[0] ?? null)} className="w-full text-[13px] file:mr-3 file:rounded-[4px] file:border-0 file:bg-mint-light file:text-forest file:px-3 file:py-1.5 file:font-semibold cursor-pointer" />
                     </Field>
                     {editId && form.data.file_path && (
-                        <p className="text-xs text-sb-text-soft mt-1">File saat ini: {form.data.file_path.split('/').pop()}</p>
+                        <p className="text-xs text-fg-secondary mt-1">File saat ini: {form.data.file_path.split('/').pop()}</p>
                     )}
-                    <p className="text-xs text-sb-text-soft mt-1">Maksimal 50 MB</p>
+                    <p className="text-xs text-fg-secondary mt-1">Maksimal 50 MB</p>
                 </div>
             )}
             <div className="flex justify-end gap-3 pt-2">
@@ -703,30 +703,30 @@ function QuizForm({ form, onSubmit, onCancel, editId }) {
     return (
         <form onSubmit={onSubmit} className="space-y-4">
             <Field label="Judul Quiz" id="quiz-title" error={form.errors.title}>
-                <input id="quiz-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
+                <input id="quiz-title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
             </Field>
             <div className="grid gap-3 sm:grid-cols-2">
                 <Field label="Durasi (menit)" id="quiz-duration" error={form.errors.duration}>
-                    <input id="quiz-duration" type="number" min="1" max="600" value={form.data.duration} onChange={(e) => form.setData('duration', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
+                    <input id="quiz-duration" type="number" min="1" max="600" value={form.data.duration} onChange={(e) => form.setData('duration', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
                 </Field>
                 <Field label="Passing Score" id="quiz-passing-score" error={form.errors.passing_score}>
-                    <input id="quiz-passing-score" type="number" min="0" max="100" value={form.data.passing_score} onChange={(e) => form.setData('passing_score', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
+                    <input id="quiz-passing-score" type="number" min="0" max="100" value={form.data.passing_score} onChange={(e) => form.setData('passing_score', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
                 </Field>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
                 <Field label="Maks. Percobaan" id="quiz-max-attempts" error={form.errors.max_attempts}>
-                    <input id="quiz-max-attempts" type="number" min="1" max="10" value={form.data.max_attempts} onChange={(e) => form.setData('max_attempts', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
+                    <input id="quiz-max-attempts" type="number" min="1" max="10" value={form.data.max_attempts} onChange={(e) => form.setData('max_attempts', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
                 </Field>
                 <Field label="Mode Hasil" id="quiz-result-mode" error={form.errors.result_mode}>
-                    <select id="quiz-result-mode" value={form.data.result_mode} onChange={(e) => form.setData('result_mode', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60">
+                    <select id="quiz-result-mode" value={form.data.result_mode} onChange={(e) => form.setData('result_mode', e.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60">
                         <option value="immediate">Langsung tampil</option>
                         <option value="delayed">Ditunda</option>
                         <option value="custom">Setelah dinilai</option>
                     </select>
                 </Field>
             </div>
-            <label className="flex items-center gap-2 text-[13px] text-sb-text-soft">
-                <input type="checkbox" checked={form.data.is_published} onChange={(e) => form.setData('is_published', e.target.checked)} className="size-4 rounded border-[#d6dbde] text-sb-green focus:ring-sb-accent" />
+            <label className="flex items-center gap-2 text-[13px] text-fg-secondary">
+                <input type="checkbox" checked={form.data.is_published} onChange={(e) => form.setData('is_published', e.target.checked)} className="size-4 rounded border-gray-300 text-forest focus:ring-mint" />
                 Publish quiz
             </label>
             <div className="flex justify-end gap-3 pt-2">
@@ -778,20 +778,20 @@ function InstructorDiscussionSection({ materialId, discussions }) {
 
     return (
         <div>
-            <div className="flex items-center gap-2 border-b pb-3 border-[#edebe9] dark:border-white/[0.07]">
-                <MessageSquare className="size-4 text-sb-green" aria-hidden="true" />
-                <h5 className="text-[14px] font-semibold text-sb-text-black dark:text-white/90">Diskusi Materi</h5>
-                <span className="ml-auto text-[12px] text-sb-text-soft dark:text-white/35">{discussions.length} diskusi</span>
+            <div className="flex items-center gap-2 border-b pb-3 border-ceramic dark:border-white/[0.07]">
+                <MessageSquare className="size-4 text-forest" aria-hidden="true" />
+                <h5 className="text-[14px] font-semibold text-fg-primary dark:text-white/90">Diskusi Materi</h5>
+                <span className="ml-auto text-[12px] text-fg-secondary dark:text-white/35">{discussions.length} diskusi</span>
             </div>
 
             <form onSubmit={submitDiscussion} className="mt-4 space-y-3">
                 {replyingTo && (
-                    <div className="flex items-center justify-between rounded-[6px] px-3 py-2 text-[12px] bg-sb-light text-sb-green dark:bg-emerald-500/15 dark:text-emerald-400">
+                    <div className="flex items-center justify-between rounded-[6px] px-3 py-2 text-[12px] bg-mint-light text-forest dark:bg-emerald-500/15 dark:text-emerald-400">
                         <span>Membalas diskusi...</span>
-                        <button type="button" onClick={cancelReply} className="text-sb-text-black hover:text-sb-text-soft">Batal</button>
+                        <button type="button" onClick={cancelReply} className="text-fg-primary hover:text-fg-secondary">Batal</button>
                     </div>
                 )}
-                <textarea value={form.data.body} onChange={(e) => form.setData('body', e.target.value)} rows="3" placeholder={replyingTo ? 'Tulis balasan...' : 'Jawab pertanyaan mahasiswa atau beri komentar...'} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
+                <textarea value={form.data.body} onChange={(e) => form.setData('body', e.target.value)} rows="3" placeholder={replyingTo ? 'Tulis balasan...' : 'Jawab pertanyaan mahasiswa atau beri komentar...'} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" />
                 {form.errors.body && <p role="alert" className="text-[12px] text-red-600">{form.errors.body}</p>}
                 <Button type="submit" size="sm" disabled={form.processing}>
                     <Send className="mr-1.5 size-3.5" />Kirim
@@ -800,28 +800,28 @@ function InstructorDiscussionSection({ materialId, discussions }) {
 
             <div className="mt-5 space-y-4">
                 {discussions.length === 0 && (
-                    <p className="text-center text-[12px] text-sb-text-soft dark:text-white/35">Belum ada diskusi di materi ini.</p>
+                    <p className="text-center text-[12px] text-fg-secondary dark:text-white/35">Belum ada diskusi di materi ini.</p>
                 )}
                 {discussions.map((discussion) => (
-                    <article key={discussion.id} className="rounded-[8px] border p-3 border-[#edebe9] bg-[#f9f9f9] dark:border-white/[0.07] dark:bg-white/5">
+                    <article key={discussion.id} className="rounded-[8px] border p-3 border-ceramic bg-slate-50 dark:border-white/[0.07] dark:bg-white/5">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex items-start gap-3">
-                                <div className="flex size-7 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300">
+                                <div className="flex size-7 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold bg-blue-100 text-blue-700 dark:bg-emerald-500/20 dark:text-emerald-300">
                                     {discussion.user?.name?.slice(0, 2).toUpperCase() ?? 'U'}
                                 </div>
                                 <div>
-                                    <p className="text-[13px] font-semibold text-sb-text-black dark:text-white/80">{discussion.user?.name ?? 'User'}</p>
-                                    <p className="mt-1 whitespace-pre-line text-[13px] leading-6 text-sb-text-soft dark:text-white/45">{discussion.body}</p>
-                                    <div className="mt-2 flex items-center gap-3 text-[11px] text-sb-text-soft dark:text-white/30">
+                                    <p className="text-[13px] font-semibold text-fg-primary dark:text-white/80">{discussion.user?.name ?? 'User'}</p>
+                                    <p className="mt-1 whitespace-pre-line text-[13px] leading-6 text-fg-secondary dark:text-white/45">{discussion.body}</p>
+                                    <div className="mt-2 flex items-center gap-3 text-[11px] text-fg-secondary dark:text-white/30">
                                         <span>{new Date(discussion.created_at).toLocaleString('id-ID')}</span>
-                                        <button type="button" onClick={() => startReply(discussion.id)} className="font-semibold text-sb-green hover:text-sb-accent">Balas</button>
+                                        <button type="button" onClick={() => startReply(discussion.id)} className="font-semibold text-forest hover:text-mint">Balas</button>
                                         <button type="button" onClick={() => handleDelete(discussion.id)} className="font-semibold text-red-600 hover:text-red-700">Hapus</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {discussion.replies?.length > 0 && (
-                            <div className="ml-10 mt-3 space-y-2 border-l-2 border-[#edebe9] pl-3">
+                            <div className="ml-10 mt-3 space-y-2 border-l-2 border-ceramic pl-3">
                                 {discussion.replies.map((reply) => (
                                     <div key={reply.id} className="rounded-[6px] p-3 bg-white dark:bg-white/5">
                                         <div className="flex items-start gap-2">
@@ -829,9 +829,9 @@ function InstructorDiscussionSection({ materialId, discussions }) {
                                                 {reply.user?.name?.slice(0, 2).toUpperCase() ?? 'U'}
                                             </div>
                                             <div className="flex-1">
-                                                <p className="text-[12px] font-semibold text-sb-text-black dark:text-white/80">{reply.user?.name ?? 'User'}</p>
-                                                <p className="mt-1 whitespace-pre-line text-[12px] leading-5 text-sb-text-soft dark:text-white/45">{reply.body}</p>
-                                                <div className="mt-2 flex items-center gap-3 text-[10px] text-sb-text-soft dark:text-white/30">
+                                                <p className="text-[12px] font-semibold text-fg-primary dark:text-white/80">{reply.user?.name ?? 'User'}</p>
+                                                <p className="mt-1 whitespace-pre-line text-[12px] leading-5 text-fg-secondary dark:text-white/45">{reply.body}</p>
+                                                <div className="mt-2 flex items-center gap-3 text-[10px] text-fg-secondary dark:text-white/30">
                                                     <span>{new Date(reply.created_at).toLocaleString('id-ID')}</span>
                                                     <button type="button" onClick={() => handleDelete(reply.id)} className="font-semibold text-red-600 hover:text-red-700">Hapus</button>
                                                 </div>
@@ -852,7 +852,7 @@ function Field({ label, id, error, children }) {
     const describedBy = error ? `${id}-error` : undefined;
     return (
         <div>
-            <label htmlFor={id} className="text-[12px] font-semibold mb-1.5 block text-sb-text-black dark:text-white/70">{label}</label>
+            <label htmlFor={id} className="text-[12px] font-semibold mb-1.5 block text-fg-primary dark:text-white/70">{label}</label>
             <div>
                 {cloneElement(children, { 'aria-describedby': describedBy, 'aria-invalid': Boolean(error) })}
             </div>

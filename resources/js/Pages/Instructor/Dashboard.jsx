@@ -3,6 +3,7 @@ import { BookOpen, CheckCircle2, Clock, FileCheck2, GraduationCap, HelpCircle, M
 import { motion } from 'framer-motion';
 
 import InstructorLayout from '@/Layouts/InstructorLayout';
+import { Button } from '@/components/ui/button';
 import { AnimatedPage, StaggerContainer, FadeInWhenVisible } from '@/components/animated/AnimatedPage';
 import { fadeUp } from '@/lib/animations';
 
@@ -127,7 +128,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                         href="/instructor/courses"
                                         className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors"
                                     >
-                                        Kelola kursus →
+                                        Kelola kursus
                                     </Link>
                                 </div>
 
@@ -306,7 +307,7 @@ function CourseCard({ course, delay }) {
                         Buka builder
                         <span className="absolute -bottom-0.5 left-0 w-0 h-[2px] bg-emerald-600 dark:bg-emerald-400 group-hover/link:w-full transition-all duration-300" />
                     </span>
-                    <span aria-hidden="true">→</span>
+                    <span aria-hidden="true"></span>
                 </Link>
             </div>
         </motion.article>
@@ -338,25 +339,23 @@ function EnrollmentCard({ enrollment, delay }) {
                         {enrollment.course.code} - {enrollment.course.name}
                     </p>
                     <div className="mt-3 flex gap-2">
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                        <Button
+                            variant="success"
+                            size="sm"
+                            className="flex-1 h-8 rounded-lg"
                             onClick={() => router.patch(`/instructor/courses/${enrollment.course.id}/enrollments/${enrollment.id}/approve`, {}, { preserveScroll: true })}
-                            className="flex-1 h-8 px-3 rounded-lg bg-emerald-700 text-white text-xs font-bold transition-colors hover:bg-emerald-800 flex items-center justify-center gap-1.5"
                         >
                             <CheckCircle2 className="size-3" />
                             Setujui
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 rounded-lg"
                             onClick={() => router.patch(`/instructor/courses/${enrollment.course.id}/enrollments/${enrollment.id}/reject`, {}, { preserveScroll: true })}
-                            className="h-8 px-3 rounded-lg border text-xs font-bold transition-all
-                                bg-white/80 backdrop-blur-sm border-neutral-300 text-neutral-700 hover:bg-neutral-50
-                                dark:bg-white/8 dark:border-white/15 dark:text-white/60 dark:hover:bg-white/12"
                         >
                             Tolak
-                        </motion.button>
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -373,13 +372,13 @@ function DiscussionCard({ discussion, delay }) {
             whileHover={{ y: -2 }}
             className="rounded-[12px] border p-3 shadow-sm transition-all
                 border-neutral-200 bg-white hover:border-blue-200 hover:bg-sky-50/30
-                dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-blue-500/25 dark:hover:bg-blue-500/5"
+                dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-emerald-500/25 dark:hover:bg-emerald-500/5"
         >
             <div className="flex items-start gap-2">
                 <div className="size-8 rounded-full flex items-center justify-center border shrink-0
                     bg-gradient-to-br from-blue-100 to-cyan-100 border-blue-200/60
-                    dark:from-blue-600/25 dark:to-cyan-600/25 dark:border-blue-500/20">
-                    <span className="text-[10px] font-bold text-blue-700 dark:text-blue-400">
+                    dark:from-emerald-600/25 dark:to-teal-600/25 dark:border-emerald-500/20">
+                    <span className="text-[10px] font-bold text-blue-700 dark:text-emerald-400">
                         {discussion.user?.name?.slice(0, 2).toUpperCase() ?? 'U'}
                     </span>
                 </div>
@@ -395,7 +394,7 @@ function DiscussionCard({ discussion, delay }) {
                     </div>
                     <Link 
                         href={`/instructor/courses/${discussion.course_id}`}
-                        className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 group/link"
+                        className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-emerald-400 hover:text-blue-700 dark:hover:text-emerald-300 group/link"
                     >
                         <span className="relative">
                             Lihat diskusi

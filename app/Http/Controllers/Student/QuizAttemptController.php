@@ -38,18 +38,17 @@ class QuizAttemptController extends Controller
 
         $hasEssay = false;
         $earned = 0;
-        $total = 0;
+        $totalGradable = 0;
         $answers = $validated['answers'] ?? [];
 
         foreach ($quiz->questions as $question) {
-            $total += (int) $question->points;
-            $answer = $answers[$question->id] ?? null;
-
             if ($question->type === 'essay') {
                 $hasEssay = true;
-
                 continue;
             }
+
+            $totalGradable += (int) $question->points;
+            $answer = $answers[$question->id] ?? null;
 
             if ($this->sameAnswer($answer, $question->correct_answer)) {
                 $earned += (int) $question->points;
@@ -60,7 +59,7 @@ class QuizAttemptController extends Controller
             'quiz_id' => $quiz->id,
             'user_id' => $request->user()->id,
             'answers' => $answers,
-            'score' => $total > 0 ? round(($earned / $total) * 100, 2) : 0,
+            'score' => $totalGradable > 0 ? round(($earned / $totalGradable) * 100, 2) : 0,
             'status' => $hasEssay ? 'submitted' : 'graded',
             'started_at' => $startedAt,
             'finished_at' => now(),

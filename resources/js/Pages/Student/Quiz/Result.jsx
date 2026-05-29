@@ -1,12 +1,15 @@
 import { Head, Link } from '@inertiajs/react';
 import { CheckCircle, XCircle, Clock, ArrowLeft, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
 export default function Result({ attempt, courseId }) {
     const totalQuestions = attempt.quiz.questions.length;
     const answers = attempt.answers || {};
     const correctAnswers = Object.values(answers).filter((a) => a.is_correct).length;
-    const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+    const isPending = attempt.status === 'submitted';
+    // Use server-computed score (already a percentage 0-100)
+    const percentage = attempt.score ?? 0;
     const passed = percentage >= (attempt.quiz.passing_score || 0);
     const totalTime = Object.values(answers).reduce((sum, a) => sum + (a.time_taken || 0), 0);
     const courseUrl = courseId ? `/student/courses/${courseId}` : '/student/courses';
@@ -90,7 +93,7 @@ export default function Result({ attempt, courseId }) {
                                             transition={{ delay: 0.7, type: 'spring' }}
                                             className="text-4xl font-bold text-white tabular-nums"
                                         >
-                                            {percentage}%
+                                            {isPending ? '...' : `${percentage}%`}
                                         </motion.span>
                                     </div>
                                 </motion.div>
@@ -101,13 +104,15 @@ export default function Result({ attempt, courseId }) {
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: 0.6 }}
                                     className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mb-3 ${
-                                        passed
-                                            ? 'bg-emerald-500/25 border border-emerald-400/40 text-emerald-300'
-                                            : 'bg-amber-500/25 border border-amber-400/40 text-amber-300'
+                                        isPending
+                                            ? 'bg-sky-500/25 border border-sky-400/40 text-sky-300'
+                                            : passed
+                                                ? 'bg-emerald-500/25 border border-emerald-400/40 text-emerald-300'
+                                                : 'bg-amber-500/25 border border-amber-400/40 text-amber-300'
                                     }`}
                                 >
-                                    <span>{passed ? '🎉' : '💪'}</span>
-                                    <span>{passed ? 'Lulus' : 'Belum Lulus'}</span>
+                                    <span>{isPending ? '⏳' : passed ? '🎉' : '💪'}</span>
+                                    <span>{isPending ? 'Menunggu Penilaian' : passed ? 'Lulus' : 'Belum Lulus'}</span>
                                 </motion.div>
 
                                 <motion.h1
@@ -116,7 +121,7 @@ export default function Result({ attempt, courseId }) {
                                     transition={{ delay: 0.65 }}
                                     className="text-2xl sm:text-3xl font-bold text-white mb-1"
                                 >
-                                    {passed ? 'Selamat!' : 'Tetap Semangat!'}
+                                    {isPending ? 'Quiz Dikirim' : passed ? 'Selamat!' : 'Tetap Semangat!'}
                                 </motion.h1>
 
                                 <motion.p
@@ -125,7 +130,10 @@ export default function Result({ attempt, courseId }) {
                                     transition={{ delay: 0.7 }}
                                     className="text-white/60 text-base"
                                 >
-                                    {correctAnswers} dari {totalQuestions} jawaban benar
+                                    {isPending
+                                        ? 'Jawaban essay menunggu penilaian dosen.'
+                                        : `${correctAnswers} dari ${totalQuestions} jawaban benar`
+                                    }
                                 </motion.p>
                             </div>
 
@@ -251,22 +259,13 @@ export default function Result({ attempt, courseId }) {
                             transition={{ delay: 1.1 }}
                         >
                             <Link href={courseUrl}>
-                                <motion.div
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="relative w-full h-14 rounded-2xl overflow-hidden flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30 group cursor-pointer"
+                                <Button
+                                    variant="success"
+                                    className="relative w-full h-14 rounded-2xl text-base shadow-xl shadow-emerald-500/30"
                                 >
-                                    {/* Shine */}
-                                    <motion.div
-                                        animate={{ x: ['-100%', '200%'] }}
-                                        transition={{ duration: 2, repeat: Infinity, repeatDelay: 1.5 }}
-                                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                                    />
-                                    <ArrowLeft className="relative w-5 h-5 text-white" />
-                                    <span className="relative text-white font-bold text-base">
-                                        Kembali ke Pembelajaran
-                                    </span>
-                                </motion.div>
+                                    <ArrowLeft className="w-5 h-5" />
+                                    Kembali ke Pembelajaran
+                                </Button>
                             </Link>
                         </motion.div>
                     </div>

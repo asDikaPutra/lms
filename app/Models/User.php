@@ -65,11 +65,6 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    public function activeCourses(): BelongsToMany
-    {
-        return $this->enrolledCourses()->wherePivot('status', 'active');
-    }
-
     public function quizAttempts(): HasMany
     {
         return $this->hasMany(QuizAttempt::class);
@@ -88,10 +83,5 @@ class User extends Authenticatable
     public function certificates(): HasMany
     {
         return $this->hasMany(Certificate::class);
-    }
-
-    public function contentProgress(): HasMany
-    {
-        return $this->hasMany(ContentProgress::class);
     }
 }

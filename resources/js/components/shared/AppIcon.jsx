@@ -31,23 +31,6 @@ const sizeClasses = {
     },
 };
 
-export default function AppIcon({ icon: Icon, size = 'md', className = '', iconClassName = '', ...props }) {
-    const classes = sizeClasses[size] ?? sizeClasses.md;
-
-    return (
-        <span
-            className={`inline-flex shrink-0 items-center justify-center bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-white ${classes.frame} ${classes.shadow} ${className}`}
-            {...props}
-        >
-            <Icon
-                className={`${classes.icon} ${iconClassName}`}
-                strokeWidth={1.75}
-                aria-hidden="true"
-            />
-        </span>
-    );
-}
-
 /**
  * NavIcon — versi kecil untuk sidebar nav, dengan state active/inactive.
  * Active: gradient emerald + shadow. Inactive: abu-abu lembut.

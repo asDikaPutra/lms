@@ -1,13 +1,15 @@
 import { useForm } from '@inertiajs/react';
-import { X, CheckCircle2, FileText, Link as LinkIcon } from 'lucide-react';
-import { cloneElement, useEffect, useMemo } from 'react';
+import { CheckCircle2, FileText, Link as LinkIcon } from 'lucide-react';
+import { useEffect, useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { Modal } from '@/components/ui/modal';
+import { TextField, TextArea, SelectField, CheckboxField } from '@/components/ui/text-field';
 
 /**
  * Reusable Assignment Form Modal
  * Used in both Assignments page and Curriculum page
- * 
+ *
  * @param {boolean} isOpen - Whether modal is open
  * @param {function} onClose - Close modal callback
  * @param {object|null} assignment - Existing assignment for edit mode, null for create
@@ -16,14 +18,14 @@ import { Button } from '@/components/ui/button';
  * @param {number|null} preselectedId - Pre-selected parent ID
  * @param {boolean} showParentSelect - Whether to show parent selection (true for Assignments page)
  */
-export default function AssignmentFormModal({ 
-    isOpen, 
-    onClose, 
-    assignment = null, 
-    modules = [], 
+export default function AssignmentFormModal({
+    isOpen,
+    onClose,
+    assignment = null,
+    modules = [],
     preselectedType = null,
     preselectedId = null,
-    showParentSelect = true 
+    showParentSelect = true
 }) {
     const isEditing = Boolean(assignment);
 
@@ -98,7 +100,7 @@ export default function AssignmentFormModal({
             form.setData({ ...form.data, assignable_type: 'module', assignable_id: '' });
             return;
         }
-        
+
         const [type, id] = value.split(':');
         form.setData({ ...form.data, assignable_type: type, assignable_id: id });
     };
@@ -111,7 +113,7 @@ export default function AssignmentFormModal({
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         if (isEditing) {
             form.put(`/instructor/assignments/${assignment.id}`, {
                 preserveScroll: true,
@@ -131,164 +133,108 @@ export default function AssignmentFormModal({
         }
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-[2px]">
-            <div
-                className="w-full max-w-lg rounded-xl shadow-xl ring-1
-                    bg-white ring-black/5
-                    dark:bg-[#111a15] dark:ring-white/10"
-                role="dialog"
-                aria-modal="true"
-            >
-                <div className="flex items-center justify-between border-b px-5 py-4
-                    border-neutral-200 dark:border-white/[0.07]">
-                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">
-                        {isEditing ? 'Edit Tugas' : 'Buat Tugas Baru'}
-                    </h3>
-                    <button 
-                        onClick={onClose} 
-                        className="rounded-full p-1 transition-colors
-                            text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600
-                            dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/70"
+        <Modal open={isOpen} onClose={onClose} title={isEditing ? 'Edit Tugas' : 'Buat Tugas Baru'}>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Parent Selection - Show when showParentSelect is true */}
+                {showParentSelect && (
+                    <SelectField
+                        id="assignment-parent"
+                        label={<>Tingkat Tugas <span className="text-red-500">*</span></>}
+                        description="Pilih modul untuk tugas tingkat modul, atau materi untuk tugas tingkat materi."
+                        error={form.errors.assignable_id || form.errors.assignable_type}
+                        value={getCurrentValue()}
+                        onChange={handleParentChange}
                     >
-                        <X className="size-5" />
-                    </button>
-                </div>
-
-                <div className="p-5 max-h-[75vh] overflow-y-auto">
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        {/* Parent Selection - Show when showParentSelect is true */}
-                        {showParentSelect && (
-                            <div>
-                                <label htmlFor="assignment-parent" className="text-sm font-medium mb-1.5 block text-neutral-700 dark:text-white/70">
-                                    Tingkat Tugas <span className="text-red-500">*</span>
-                                </label>
-                                <select
-                                    id="assignment-parent"
-                                    value={getCurrentValue()}
-                                    onChange={handleParentChange}
-                                    className="w-full rounded-lg border px-3 py-2 text-sm outline-none
-                                        border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
-                                        dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60"
-                                >
-                                    <option value="">-- Pilih Modul atau Materi --</option>
-                                    {parentOptions.map((option) => (
-                                        <option 
-                                            key={`${option.type}:${option.id}`} 
-                                            value={`${option.type}:${option.id}`}
-                                            className={option.isModule ? 'font-semibold' : ''}
-                                        >
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
-                                <p className="mt-1 text-xs text-neutral-500 dark:text-white/35">
-                                    Pilih modul untuk tugas tingkat modul, atau materi untuk tugas tingkat materi.
-                                </p>
-                                {(form.errors.assignable_id || form.errors.assignable_type) && (
-                                    <p className="mt-1.5 text-xs text-red-600">{form.errors.assignable_id || form.errors.assignable_type}</p>
-                                )}
-                            </div>
-                        )}
-
-                        {/* Title */}
-                        <Field label="Judul Tugas" id="assignment-title" error={form.errors.title} required>
-                            <input
-                                id="assignment-title"
-                                value={form.data.title}
-                                onChange={(e) => form.setData('title', e.target.value)}
-                                className="w-full rounded-lg border px-3 py-2 text-sm outline-none
-                                    border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
-                                    dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
-                                placeholder="Contoh: Ringkasan Materi Modul 1"
-                            />
-                        </Field>
-
-                        <Field label="Deskripsi / Instruksi" id="assignment-description" error={form.errors.description} required>
-                            <textarea
-                                id="assignment-description"
-                                rows="4"
-                                value={form.data.description}
-                                onChange={(e) => form.setData('description', e.target.value)}
-                                className="w-full rounded-lg border px-3 py-2 text-sm outline-none
-                                    border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
-                                    dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
-                                placeholder="Jelaskan instruksi tugas untuk mahasiswa..."
-                            />
-                        </Field>
-
-                        <Field label="Deadline" id="assignment-deadline" error={form.errors.deadline} required>
-                            <input
-                                id="assignment-deadline"
-                                type="datetime-local"
-                                value={form.data.deadline}
-                                onChange={(e) => form.setData('deadline', e.target.value)}
-                                className="w-full rounded-lg border px-3 py-2 text-sm outline-none
-                                    border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
-                                    dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60"
-                            />
-                        </Field>
-
-                        <div className="space-y-3 rounded-lg p-4 border
-                            bg-neutral-50 border-neutral-200
-                            dark:bg-white/5 dark:border-white/[0.07]">
-                            <p className="text-sm font-semibold text-neutral-700 dark:text-white/70">Tipe Pengumpulan</p>
-                            <div className="flex flex-wrap gap-4">
-                                <label className="flex items-center gap-2 text-sm cursor-pointer text-neutral-700 dark:text-white/60">
-                                    <input type="checkbox" checked={form.data.allow_file} onChange={(e) => form.setData('allow_file', e.target.checked)} className="size-4 rounded border-neutral-300 text-emerald-600 focus:ring-emerald-500" />
-                                    <FileText className="size-4 text-neutral-500 dark:text-white/40" />
-                                    Upload File
-                                </label>
-                                <label className="flex items-center gap-2 text-sm cursor-pointer text-neutral-700 dark:text-white/60">
-                                    <input type="checkbox" checked={form.data.allow_link} onChange={(e) => form.setData('allow_link', e.target.checked)} className="size-4 rounded border-neutral-300 text-emerald-600 focus:ring-emerald-500" />
-                                    <LinkIcon className="size-4 text-neutral-500 dark:text-white/40" />
-                                    Submit Link
-                                </label>
-                            </div>
-                            {form.errors.allow_file && <p className="text-xs text-red-600">{form.errors.allow_file}</p>}
-                            {form.errors.allow_link && <p className="text-xs text-red-600">{form.errors.allow_link}</p>}
-                        </div>
-
-                        <div className="flex items-center gap-2 pt-2">
-                            <label className="flex items-center gap-2 text-sm cursor-pointer text-neutral-700 dark:text-white/60">
-                                <input type="checkbox" checked={form.data.is_published} onChange={(e) => form.setData('is_published', e.target.checked)} className="size-4 rounded border-neutral-300 text-emerald-600 focus:ring-emerald-500" />
-                                Publish tugas (langsung terlihat oleh mahasiswa)
-                            </label>
-                        </div>
-
-                        <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-white/[0.07]">
-                            <Button type="button" variant="outline" onClick={onClose}>
-                                Batal
-                            </Button>
-                            <Button
-                                type="submit"
-                                disabled={form.processing || (showParentSelect && !form.data.assignable_id)}
-                                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                        <option value="">-- Pilih Modul atau Materi --</option>
+                        {parentOptions.map((option) => (
+                            <option
+                                key={`${option.type}:${option.id}`}
+                                value={`${option.type}:${option.id}`}
+                                className={option.isModule ? 'font-semibold' : ''}
                             >
-                                <CheckCircle2 className="mr-1.5 size-4" />
-                                {isEditing ? 'Simpan Perubahan' : 'Buat Tugas'}
-                            </Button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    );
-}
+                                {option.label}
+                            </option>
+                        ))}
+                    </SelectField>
+                )}
 
-function Field({ label, id, error, required, children }) {
-    const describedBy = error ? `${id}-error` : undefined;
-    return (
-        <div>
-            <label htmlFor={id} className="text-sm font-medium mb-1.5 block text-neutral-700 dark:text-white/70">
-                {label} {required && <span className="text-red-500">*</span>}
-            </label>
-            <div>
-                {cloneElement(children, { 'aria-describedby': describedBy, 'aria-invalid': Boolean(error) })}
-            </div>
-            {error && <p id={describedBy} role="alert" className="mt-1.5 text-xs text-red-600">{error}</p>}
-        </div>
+                {/* Title */}
+                <TextField
+                    id="assignment-title"
+                    label={<>Judul Tugas <span className="text-red-500">*</span></>}
+                    error={form.errors.title}
+                    value={form.data.title}
+                    onChange={(e) => form.setData('title', e.target.value)}
+                    placeholder="Contoh: Ringkasan Materi Modul 1"
+                />
+
+                {/* Description */}
+                <TextArea
+                    id="assignment-description"
+                    label={<>Deskripsi / Instruksi <span className="text-red-500">*</span></>}
+                    error={form.errors.description}
+                    rows="4"
+                    value={form.data.description}
+                    onChange={(e) => form.setData('description', e.target.value)}
+                    placeholder="Jelaskan instruksi tugas untuk mahasiswa..."
+                />
+
+                {/* Deadline */}
+                <TextField
+                    id="assignment-deadline"
+                    type="datetime-local"
+                    label={<>Deadline <span className="text-red-500">*</span></>}
+                    error={form.errors.deadline}
+                    value={form.data.deadline}
+                    onChange={(e) => form.setData('deadline', e.target.value)}
+                />
+
+                {/* Submission Type */}
+                <div className="space-y-3 rounded-lg p-4 border
+                    bg-neutral-50 border-neutral-200
+                    dark:bg-white/5 dark:border-white/[0.07]">
+                    <p className="text-sm font-semibold text-neutral-700 dark:text-white/70">Tipe Pengumpulan</p>
+                    <div className="flex flex-wrap gap-4">
+                        <CheckboxField
+                            checked={form.data.allow_file}
+                            onChange={(e) => form.setData('allow_file', e.target.checked)}
+                            label={<><FileText className="size-4 text-neutral-500 dark:text-white/40" /> Upload File</>}
+                        />
+                        <CheckboxField
+                            checked={form.data.allow_link}
+                            onChange={(e) => form.setData('allow_link', e.target.checked)}
+                            label={<><LinkIcon className="size-4 text-neutral-500 dark:text-white/40" /> Submit Link</>}
+                        />
+                    </div>
+                    {form.errors.allow_file && <p className="text-xs text-red-600">{form.errors.allow_file}</p>}
+                    {form.errors.allow_link && <p className="text-xs text-red-600">{form.errors.allow_link}</p>}
+                </div>
+
+                {/* Publish Toggle */}
+                <div className="flex items-center gap-2 pt-2">
+                    <CheckboxField
+                        checked={form.data.is_published}
+                        onChange={(e) => form.setData('is_published', e.target.checked)}
+                        label="Publish tugas (langsung terlihat oleh mahasiswa)"
+                    />
+                </div>
+
+                {/* Actions */}
+                <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-white/[0.07]">
+                    <Button type="button" variant="outline" onClick={onClose}>
+                        Batal
+                    </Button>
+                    <Button
+                        type="submit"
+                        disabled={form.processing || (showParentSelect && !form.data.assignable_id)}
+                        className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                    >
+                        <CheckCircle2 className="mr-1.5 size-4" />
+                        {isEditing ? 'Simpan Perubahan' : 'Buat Tugas'}
+                    </Button>
+                </div>
+            </form>
+        </Modal>
     );
 }

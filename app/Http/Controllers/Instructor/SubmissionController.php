@@ -14,23 +14,6 @@ use Inertia\Response;
 
 class SubmissionController extends Controller
 {
-    public function index(Request $request): Response
-    {
-        $assignmentIds = $this->ownedAssignmentIds($request);
-
-        $submissions = Submission::query()
-            ->with(['assignment', 'user:id,name,nim'])
-            ->whereIn('assignment_id', $assignmentIds)
-            ->latest('submitted_at')
-            ->paginate(20)
-            ->withQueryString();
-
-        return Inertia::render('Instructor/Submissions/Index', [
-            'submissions' => $submissions,
-            'filters' => $request->only(['status', 'assignment_id']),
-        ]);
-    }
-
     public function show(Request $request, Assignment $assignment): Response
     {
         abort_unless($this->ownedAssignmentIds($request)->contains($assignment->id), 403);

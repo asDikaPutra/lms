@@ -53,18 +53,24 @@
     --color-foreground: var(--foreground);
     --color-background: var(--background);
     
-    /* Starbucks Design System Tokens */
-    --color-sb-green: #006241;
-    --color-sb-accent: #00754A;
-    --color-sb-house: #1E3932;
-    --color-sb-uplift: #2b5148;
-    --color-sb-light: #d4e9e2;
-    --color-sb-gold: #cba258;
-    --color-sb-canvas: #f2f0eb;
-    --color-sb-ceramic: #edebe9;
-    --color-sb-text-black: rgba(0, 0, 0, 0.87);
-    --color-sb-text-soft: rgba(0, 0, 0, 0.58);
-    --color-sb-text-white-soft: rgba(255, 255, 255, 0.70);
+    /* DESIGN.md Tokens — Forest Green & Mint */
+    --color-forest: #0B3D2E;
+    --color-mint: #5DCAA5;
+    --color-mint-light: #E1F5EE;
+    --color-mint-dark: #0F6E56;
+
+    /* Semantic — Activity Type */
+    --color-quiz: #378ADD;
+    --color-quiz-text: #185FA5;
+    --color-tugas: #EF9F27;
+    --color-tugas-text: #854F0B;
+
+    /* Neutral Utility */
+    --color-canvas: #f2f0eb;
+    --color-ceramic: #edebe9;
+    --color-fg-primary: rgba(0, 0, 0, 0.87);
+    --color-fg-secondary: rgba(0, 0, 0, 0.58);
+    --color-fg-white-soft: rgba(255, 255, 255, 0.70);
     
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);

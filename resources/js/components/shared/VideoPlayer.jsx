@@ -128,34 +128,6 @@ export default function VideoPlayer({ videoId: videoIdProp, url, title = 'Video'
 }
 
 /**
- * Compact video thumbnail — used in content lists / cards.
- * Does NOT embed; clicking navigates to the content.
- */
-export function VideoThumbnail({ videoId, title = 'Video', className = '' }) {
-    if (!videoId) return null;
-
-    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-
-    return (
-        <div className={`relative overflow-hidden rounded-xl bg-neutral-900 ${className}`}
-             style={{ aspectRatio: '16/9' }}>
-            <img
-                src={thumbnailUrl}
-                alt={title}
-                className="absolute inset-0 w-full h-full object-cover opacity-90"
-                loading="lazy"
-            />
-            <div className="absolute inset-0 bg-black/20" />
-            <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex size-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow-lg">
-                    <Play className="size-4 text-emerald-600 translate-x-0.5" fill="currentColor" />
-                </div>
-            </div>
-        </div>
-    );
-}
-
-/**
  * YouTube URL preview for the instructor content form.
  * Shows a live thumbnail preview as the instructor types a URL.
  */

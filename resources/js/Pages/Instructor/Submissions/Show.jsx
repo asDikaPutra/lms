@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { StatCard } from '@/components/ui/stat-card';
 
 export default function Show({ assignment, submissions }) {
     const stats = {
@@ -48,7 +50,8 @@ export default function Show({ assignment, submissions }) {
                     </Link>
                 )}
                 
-                <div className="mt-4 rounded-xl border p-5 shadow-sm border-neutral-200 bg-white dark:bg-[#111a15] dark:border-white/[0.07]">
+                <Card className="mt-4">
+                    <CardContent className="pt-5">
                     <h2 className="text-xl font-bold text-neutral-900 dark:text-white/90">{assignment.title}</h2>
                     <p className="mt-2 text-sm text-neutral-600 dark:text-white/50">{assignment.description}</p>
                     
@@ -62,7 +65,8 @@ export default function Show({ assignment, submissions }) {
                             {stats.total} submission
                         </span>
                     </div>
-                </div>
+                    </CardContent>
+                </Card>
             </div>
 
             {/* Stats Cards */}
@@ -72,8 +76,6 @@ export default function Show({ assignment, submissions }) {
                 <StatCard label="Menunggu Penilaian" value={stats.pending} color="amber" />
                 <StatCard label="Terlambat" value={stats.late} color="red" />
             </div>
-
-            {/* Submissions List */}
             <section className="space-y-4" aria-label="Daftar pengumpulan tugas">
                 {submissions.length === 0 ? (
                     <div className="rounded-xl border border-dashed p-8 text-center text-sm border-neutral-300 bg-white text-neutral-500 dark:bg-transparent dark:border-white/15 dark:text-white/35">
@@ -86,22 +88,6 @@ export default function Show({ assignment, submissions }) {
                 )}
             </section>
         </InstructorLayout>
-    );
-}
-
-function StatCard({ label, value, color }) {
-    const colorClasses = {
-        emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-        teal: 'bg-teal-50 text-teal-700 border-teal-200',
-        amber: 'bg-amber-50 text-amber-700 border-amber-200',
-        red: 'bg-red-50 text-red-700 border-red-200',
-    };
-
-    return (
-        <div className={`rounded-xl border p-4 ${colorClasses[color]} dark:border-opacity-40`}>
-            <p className="text-2xl font-bold">{value}</p>
-            <p className="text-xs font-medium">{label}</p>
-        </div>
     );
 }
 
@@ -133,7 +119,8 @@ function SubmissionCard({ submission }) {
     };
 
     return (
-        <article className="rounded-xl border p-5 shadow-sm border-neutral-200 bg-white dark:bg-[#111a15] dark:border-white/[0.07]">
+        <Card>
+            <CardContent className="pt-5">
             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                 <div>
                     <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">
@@ -254,7 +241,8 @@ function SubmissionCard({ submission }) {
                     )}
                 </div>
             )}
-        </article>
+        </CardContent>
+        </Card>
     );
 }
 

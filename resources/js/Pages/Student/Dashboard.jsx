@@ -3,7 +3,7 @@ import { BadgeCheck, BookOpen, CalendarClock, CheckCircle2, KeyRound, Search, Tr
 import { motion } from 'framer-motion';
 
 import StudentLayout from '@/Layouts/StudentLayout';
-import { AnimatedBadge, AnimatedDot } from '@/components/animated/AnimatedBadge';
+import { Button } from '@/components/ui/button';
 import { AnimatedPage, StaggerContainer, FadeInWhenVisible } from '@/components/animated/AnimatedPage';
 import { fadeUp } from '@/lib/animations';
 
@@ -22,10 +22,17 @@ const iconToneClasses = {
 };
 
 const statCardHover = {
-    emerald: 'hover:border-emerald-300 hover:shadow-[0_8px_28px_rgba(16,185,129,0.14)] dark:hover:border-emerald-500/30 dark:hover:shadow-[0_8px_28px_rgba(16,185,129,0.18)]',
-    blue:    'hover:border-blue-300 hover:shadow-[0_8px_28px_rgba(99,102,241,0.14)] dark:hover:border-indigo-500/30 dark:hover:shadow-[0_8px_28px_rgba(99,102,241,0.18)]',
-    teal:    'hover:border-teal-300 hover:shadow-[0_8px_28px_rgba(20,184,166,0.14)] dark:hover:border-teal-500/30 dark:hover:shadow-[0_8px_28px_rgba(20,184,166,0.18)]',
-    violet:  'hover:border-violet-300 hover:shadow-[0_8px_28px_rgba(139,92,246,0.14)] dark:hover:border-violet-500/30 dark:hover:shadow-[0_8px_28px_rgba(139,92,246,0.18)]',
+    emerald: 'hover:border-emerald-300 hover:shadow-[0_8px_28px_rgba(16,185,129,0.22)] dark:hover:border-emerald-500/30 dark:hover:shadow-[0_8px_28px_rgba(16,185,129,0.18)]',
+    blue:    'hover:border-blue-300 hover:shadow-[0_8px_28px_rgba(99,102,241,0.22)] dark:hover:border-indigo-500/30 dark:hover:shadow-[0_8px_28px_rgba(99,102,241,0.18)]',
+    teal:    'hover:border-teal-300 hover:shadow-[0_8px_28px_rgba(20,184,166,0.22)] dark:hover:border-teal-500/30 dark:hover:shadow-[0_8px_28px_rgba(20,184,166,0.18)]',
+    violet:  'hover:border-violet-300 hover:shadow-[0_8px_28px_rgba(139,92,246,0.22)] dark:hover:border-violet-500/30 dark:hover:shadow-[0_8px_28px_rgba(139,92,246,0.18)]',
+};
+
+const statCardTint = {
+    emerald: 'bg-gradient-to-br from-white to-emerald-50/80 dark:from-[#111a15] dark:to-[#111a15]',
+    blue:    'bg-gradient-to-br from-white to-blue-50/80 dark:from-[#111a15] dark:to-[#111a15]',
+    teal:    'bg-gradient-to-br from-white to-teal-50/80 dark:from-[#111a15] dark:to-[#111a15]',
+    violet:  'bg-gradient-to-br from-white to-violet-50/80 dark:from-[#111a15] dark:to-[#111a15]',
 };
 
 export default function DashboardAnimated({ filters, stats, enrollments, upcomingAssignments }) {
@@ -56,13 +63,12 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                             initial={{ opacity: 0, y: 24 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                            className="relative overflow-hidden rounded-2xl border p-7 shadow-lg
-                                border-emerald-100/80 bg-gradient-to-br from-emerald-50 via-teal-50/60 to-white
+                            className="relative overflow-hidden rounded-2xl border p-7 shadow-md
+                                border-emerald-200 bg-gradient-to-br from-emerald-50 via-teal-50/80 to-white
                                 dark:border-white/[0.07] dark:bg-gradient-to-br dark:from-[#0d1f16] dark:via-[#0f1c14] dark:to-[#0a1510] dark:shadow-[0_2px_24px_rgba(0,0,0,0.5)]"
                         >
                             {/* Pattern */}
                             <div className="pointer-events-none absolute inset-0 opacity-[0.04] dark:opacity-[0.04]"
-                                style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}
                             />
                             <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/10" />
 
@@ -100,8 +106,8 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}>
                             <motion.div
                                 whileHover={{ y: -4 }}
-                                className="relative overflow-hidden rounded-2xl border p-6 shadow-lg transition-shadow duration-300
-                                    border-neutral-200/80 bg-white/90 backdrop-blur-xl shadow-emerald-500/5
+                                className="relative overflow-hidden rounded-2xl border p-6 shadow-md transition-shadow duration-300
+                                    border-neutral-200 bg-white hover:shadow-xl hover:border-emerald-200
                                     dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_20px_rgba(0,0,0,0.45)]"
                             >
                                 <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
@@ -139,15 +145,16 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                                 </motion.p>
                                             )}
                                         </div>
-                                        <motion.button
+                                        <Button
                                             type="submit"
+                                            variant="success"
+                                            size="sm"
                                             disabled={enrollForm.processing}
-                                            whileHover={{ scale: enrollForm.processing ? 1 : 1.02 }}
-                                            whileTap={{ scale: enrollForm.processing ? 1 : 0.98 }}
-                                            className="h-10 w-full rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 text-sm font-bold text-white shadow-[0_4px_16px_rgba(16,185,129,0.38)] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                                            loading={enrollForm.processing}
+                                            className="w-full h-10 rounded-lg shadow-[0_4px_16px_rgba(16,185,129,0.38)]"
                                         >
                                             {enrollForm.processing ? 'Mengirim...' : 'Gabung Sekarang'}
-                                        </motion.button>
+                                        </Button>
                                     </form>
                                 </div>
                             </motion.div>
@@ -164,12 +171,12 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                 key={item.key}
                                 variants={fadeUp}
                                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                                className={`group relative overflow-hidden rounded-xl border p-5 shadow-sm transition-all duration-300
-                                    border-neutral-200/70 bg-white/90 backdrop-blur-sm hover:shadow-lg
-                                    dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]
+                                className={`group relative overflow-hidden rounded-xl border p-5 shadow-md transition-all duration-300
+                                    border-neutral-200 ${statCardTint[item.tone]} backdrop-blur-sm hover:shadow-xl
+                                    dark:border-white/[0.07] dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]
                                     ${statCardHover[item.tone]}`}
                             >
-                                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neutral-200/80 to-transparent dark:via-white/8" />
+                                <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
                                 <div className="flex items-start justify-between">
                                     <div>
                                         <motion.p
@@ -197,11 +204,11 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                     {/* Courses Section */}
                     <FadeInWhenVisible>
                         <motion.div whileHover={{ y: -2 }}
-                            className="relative overflow-hidden rounded-2xl border p-6 shadow-sm transition-shadow duration-300 h-full
-                                border-neutral-200/70 bg-white/90 backdrop-blur-xl hover:shadow-lg
+                            className="relative overflow-hidden rounded-2xl border p-6 shadow-md transition-shadow duration-300 h-full
+                                border-neutral-200 bg-white hover:shadow-xl hover:border-neutral-300
                                 dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                         >
-                            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-neutral-200/80 to-transparent dark:via-white/8" />
+                            <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
                             <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                                 <div>
                                     <h2 className="text-lg font-bold text-neutral-900 dark:text-white/90">Kursus Saya</h2>
@@ -241,11 +248,11 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                     {/* Assignments Section — redesigned as deadline timeline */}
                     <FadeInWhenVisible>
                         <motion.div whileHover={{ y: -2 }}
-                            className="relative overflow-hidden rounded-2xl border shadow-sm transition-shadow duration-300 h-full flex flex-col
-                                border-neutral-200/70 bg-white/90 backdrop-blur-xl hover:shadow-lg
+                            className="relative overflow-hidden rounded-2xl border shadow-md transition-shadow duration-300 h-full flex flex-col
+                                border-neutral-200 bg-white hover:shadow-xl hover:border-neutral-300
                                 dark:border-white/[0.07] dark:bg-[#111a15] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                         >
-                            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-300/60 to-transparent dark:via-teal-500/20" />
+                            <div className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
 
                             {/* Section header — compact */}
                             <div className="flex items-center justify-between px-5 pt-5 pb-4">
@@ -262,7 +269,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                                     href="/student/courses"
                                     className="text-[11px] font-semibold transition-colors text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
                                 >
-                                    Lihat semua →
+                                    Lihat semua
                                 </Link>
                             </div>
 
@@ -293,15 +300,13 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                             {upcomingAssignments.length > 0 && (
                                 <div className="px-4 pb-4 pt-2">
                                     <Link href="/student/courses">
-                                        <motion.button
-                                            whileHover={{ scale: 1.01 }}
-                                            whileTap={{ scale: 0.99 }}
-                                            className="w-full rounded-xl py-2.5 text-xs font-bold transition-all
-                                                border border-teal-200 bg-teal-50/60 text-teal-700 hover:bg-teal-100/80
-                                                dark:border-teal-500/25 dark:bg-teal-500/8 dark:text-teal-300 dark:hover:bg-teal-500/15"
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="w-full rounded-xl border-teal-200 text-teal-700 hover:bg-teal-100/80 dark:border-teal-500/25 dark:text-teal-300 dark:hover:bg-teal-500/15"
                                         >
-                                            Kerjakan Tugas →
-                                        </motion.button>
+                                            Kerjakan Tugas
+                                        </Button>
                                     </Link>
                                 </div>
                             )}
@@ -321,14 +326,14 @@ function CourseCard({ enrollment, delay }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className="group relative overflow-hidden rounded-[14px] border shadow-sm transition-all
-                border-neutral-200 bg-white hover:border-emerald-200 hover:shadow-md
+            className="group relative overflow-hidden rounded-[14px] border shadow-md transition-all
+                border-neutral-200 bg-white hover:border-emerald-300 hover:shadow-[0_8px_24px_rgba(16,185,129,0.15)]
                 dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-emerald-500/25 dark:hover:shadow-[0_6px_24px_rgba(16,185,129,0.12)]"
         >
             {/* Banner — sama dengan Courses Index */}
             <div className="relative h-36 overflow-hidden bg-gradient-to-br from-emerald-500/90 via-teal-500/90 to-emerald-600/90 backdrop-blur-sm">
                 <div className="absolute inset-0 opacity-[0.2]"
-                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M40 0l20 20-20 20-20-20L40 0zm0 40l20 20-20 20-20-20 20-20zm20-20l20 20-20 20-20-20 20-20zM0 20l20 20-20 20L0 40V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}
+                    
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
                 <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-emerald-400/20 blur-2xl" />
@@ -396,13 +401,13 @@ function CourseCard({ enrollment, delay }) {
                 {/* Action */}
                 {enrollment.status === 'active' ? (
                     <Link href={`/student/courses/${enrollment.course.id}`}>
-                        <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                            className="flex h-9 w-full items-center justify-center rounded-[10px] text-xs font-bold text-white transition-opacity hover:opacity-90
-                                bg-emerald-700 hover:bg-emerald-800
-                                dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 dark:shadow-[0_3px_12px_rgba(16,185,129,0.35)]"
+                        <Button
+                            variant="success"
+                            size="sm"
+                            className="w-full h-9 rounded-[10px]"
                         >
-                            Lanjut Belajar →
-                        </motion.button>
+                            Lanjut Belajar
+                        </Button>
                     </Link>
                 ) : (
                     <div className="py-1.5 text-center text-[11px] font-medium text-neutral-400 dark:text-white/25">
@@ -458,7 +463,7 @@ function AssignmentCard({ assignment, delay }) {
             transition={{ delay, duration: 0.3 }}
             whileHover={{ x: 2, transition: { duration: 0.15 } }}
             className="group relative flex items-start gap-3 rounded-xl border px-3.5 py-3 transition-all cursor-pointer
-                border-neutral-100 bg-white/60 hover:border-neutral-200 hover:bg-white hover:shadow-sm
+                border-neutral-200 bg-neutral-50 hover:border-neutral-300 hover:bg-white hover:shadow-sm
                 dark:border-white/[0.06] dark:bg-white/[0.03] dark:hover:border-white/10 dark:hover:bg-white/[0.06]"
         >
             {/* Left urgency bar */}

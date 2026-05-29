@@ -4,6 +4,7 @@ import { cloneElement, useEffect, useState } from 'react';
 
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 export default function Index({ courses, filters, instructors }) {
     const [editingCourse, setEditingCourse] = useState(null);
@@ -60,15 +61,14 @@ export default function Index({ courses, filters, instructors }) {
             <Head title="Manajemen Kursus" />
 
             <div className="grid gap-6 xl:grid-cols-[1fr_24rem]">
-                <section aria-labelledby="courses-title" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                        <div>
-                            <h2 id="courses-title" className="text-lg font-semibold text-slate-950">
-                                Daftar Kursus
-                            </h2>
-                            <p className="mt-1 text-sm text-slate-500">Pantau dosen, status kelas, dan jumlah peserta aktif.</p>
-                        </div>
-                        <div className="flex flex-col gap-2 md:flex-row">
+                <Card>
+                    <CardHeader>
+                        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                            <div>
+                                <CardTitle>Daftar Kursus</CardTitle>
+                                <CardDescription className="mt-1">Pantau dosen, status kelas, dan jumlah peserta aktif.</CardDescription>
+                            </div>
+                            <div className="flex flex-col gap-2 md:flex-row">
                             <form onSubmit={applyFilters} className="flex flex-col gap-2 md:flex-row" aria-label="Filter kursus">
                                 <label className="sr-only" htmlFor="course-search">
                                     Cari kursus
@@ -108,9 +108,10 @@ export default function Index({ courses, filters, instructors }) {
                                 Export
                             </a>
                         </div>
-                    </div>
-
-                    <div className="mt-5 overflow-x-auto">
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                    <div className="overflow-x-auto">
                         <table className="w-full min-w-[56rem] text-left text-sm">
                             <thead>
                                 <tr className="border-b border-slate-200 text-slate-500">
@@ -159,22 +160,23 @@ export default function Index({ courses, filters, instructors }) {
                             </tbody>
                         </table>
                     </div>
-                </section>
+                    </CardContent>
+                </Card>
 
-                <section aria-labelledby="course-form-title" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <Card>
+                    <CardHeader>
                     <div className="flex items-center gap-3">
                         <div className="flex size-11 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
                             <BookOpen className="size-5" aria-hidden="true" />
                         </div>
                         <div>
-                            <h2 id="course-form-title" className="text-lg font-semibold text-slate-950">
-                                Edit Kursus
-                            </h2>
-                            <p className="text-sm text-slate-500">{editingCourse ? editingCourse.name : 'Pilih kursus dari tabel'}</p>
+                            <CardTitle>Edit Kursus</CardTitle>
+                            <CardDescription>{editingCourse ? editingCourse.name : 'Pilih kursus dari tabel'}</CardDescription>
                         </div>
                     </div>
-
-                    <form onSubmit={submitCourse} className="mt-5 space-y-4" aria-busy={form.processing}>
+                    </CardHeader>
+                    <CardContent>
+                    <form onSubmit={submitCourse} className="space-y-4" aria-busy={form.processing}>
                         <Field label="Dosen Pengampu" id="instructor-id" error={form.errors.instructor_id}>
                             <select id="instructor-id" value={form.data.instructor_id} onChange={(event) => form.setData('instructor_id', event.target.value)} className="field" disabled={!editingCourse}>
                                 <option value="">Pilih dosen</option>
@@ -209,7 +211,8 @@ export default function Index({ courses, filters, instructors }) {
                             )}
                         </div>
                     </form>
-                </section>
+                    </CardContent>
+                </Card>
             </div>
         </AdminLayout>
     );

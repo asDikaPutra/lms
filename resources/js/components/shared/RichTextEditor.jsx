@@ -36,7 +36,7 @@ export default function RichTextEditor({ value = '', onChange, placeholder = 'Tu
             }),
             Link.configure({
                 openOnClick: false,
-                HTMLAttributes: { class: 'text-sb-green underline' },
+                HTMLAttributes: { class: 'text-forest underline' },
             }),
             Image.configure({
                 inline: false,
@@ -49,7 +49,7 @@ export default function RichTextEditor({ value = '', onChange, placeholder = 'Tu
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-sm max-w-none px-3 py-2 min-h-[160px] text-[13px] text-sb-text-black outline-none focus:outline-none',
+                class: 'prose prose-sm max-w-none px-3 py-2 min-h-[160px] text-[13px] text-fg-primary outline-none focus:outline-none',
             },
         },
     });
@@ -88,7 +88,7 @@ export default function RichTextEditor({ value = '', onChange, placeholder = 'Tu
     if (!editor) return null;
 
     return (
-        <div data-testid="rich-text-editor" className={`rounded-[6px] border border-[#d6dbde] overflow-hidden focus-within:border-sb-accent focus-within:ring-1 focus-within:ring-sb-accent ${className}`}>
+        <div data-testid="rich-text-editor" className={`rounded-[6px] border border-[#d6dbde] overflow-hidden focus-within:border-mint focus-within:ring-1 focus-within:ring-mint ${className}`}>
             {/* Toolbar */}
             <div className="flex flex-wrap items-center gap-0.5 border-b border-[#d6dbde] bg-[#f9f9f9] px-2 py-1.5">
                 <ToolbarButton
@@ -202,8 +202,8 @@ function ToolbarButton({ onClick, active = false, disabled = false, title, child
             title={title}
             className={`inline-flex items-center justify-center size-7 rounded-[4px] transition-colors ${
                 active
-                    ? 'bg-sb-green/10 text-sb-green'
-                    : 'text-sb-text-soft hover:bg-[#edebe9] hover:text-sb-text-black'
+                    ? 'bg-forest/10 text-forest'
+                    : 'text-fg-secondary hover:bg-ceramic hover:text-fg-primary'
             } ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}
         >
             {children}

@@ -6,6 +6,9 @@ import { motion } from 'framer-motion';
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import CourseWorkspaceLayout from '@/components/instructor/CourseWorkspaceLayout';
 import { Button } from '@/components/ui/button';
+import { FilterButton } from '@/components/ui/filter-button';
+import { Card } from '@/components/ui/card';
+import { StatCard } from '@/components/ui/stat-card';
 
 export default function Grades({ course, gradebook, needsGrading, stats, tab }) {
     const [activeTab, setActiveTab] = useState(tab || 'gradebook');
@@ -55,20 +58,17 @@ export default function Grades({ course, gradebook, needsGrading, stats, tab }) 
                     </div>
 
                     {/* Tabs */}
-                    <div className="rounded-xl shadow-sm border overflow-hidden bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]">
+                    <Card>
                         <div className="border-b border-neutral-100 dark:border-white/[0.07]">
                             <nav className="flex gap-1 p-1.5">
                                 {tabs.map((t) => {
                                     const Icon = t.icon;
                                     return (
-                                        <button
+                                        <FilterButton
                                             key={t.id}
+                                            active={activeTab === t.id}
                                             onClick={() => handleTabChange(t.id)}
-                                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                                                activeTab === t.id
-                                                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/25'
-                                                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80'
-                                            }`}
+                                            className="rounded-lg"
                                         >
                                             <Icon className="size-4" />
                                             {t.label}
@@ -79,7 +79,7 @@ export default function Grades({ course, gradebook, needsGrading, stats, tab }) 
                                                     {t.count}
                                                 </span>
                                             )}
-                                        </button>
+                                        </FilterButton>
                                     );
                                 })}
                             </nav>
@@ -91,7 +91,7 @@ export default function Grades({ course, gradebook, needsGrading, stats, tab }) 
                             {activeTab === 'weights' && <WeightsTab />}
                             {activeTab === 'export' && <ExportTab />}
                         </div>
-                    </div>
+                    </Card>
                 </div>
             </CourseWorkspaceLayout>
         </InstructorLayout>
@@ -311,35 +311,3 @@ function getGradeColor(value) {
     if (value >= 60) return 'text-amber-600';
     return 'text-red-600';
 }
-
-function StatCard({ label, value, icon: Icon, color }) {
-    const colors = {
-        emerald: 'from-emerald-500 to-teal-500 shadow-emerald-500/25',
-        teal: 'from-teal-500 to-cyan-500 shadow-teal-500/25',
-        amber: 'from-amber-500 to-orange-500 shadow-amber-500/25',
-        red: 'from-red-500 to-rose-500 shadow-red-500/25',
-        blue: 'from-blue-500 to-indigo-500 shadow-blue-500/25',
-    };
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-4 bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
-        >
-            <div className="flex items-center gap-3">
-                <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
-                    <Icon className="size-5 text-white" />
-                </div>
-                <div>
-                    <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}</p>
-                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
-                </div>
-            </div>
-        </motion.div>
-    );
-}
-
-
-
-

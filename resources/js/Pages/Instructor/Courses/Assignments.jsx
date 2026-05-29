@@ -7,6 +7,9 @@ import InstructorLayout from '@/Layouts/InstructorLayout';
 import CourseWorkspaceLayout from '@/components/instructor/CourseWorkspaceLayout';
 import AssignmentFormModal from '@/components/instructor/AssignmentFormModal';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { StatCard } from '@/components/ui/stat-card';
+import { EmptyState } from '@/components/ui/empty-state';
 
 export default function Assignments({ course, assignments, stats, filters }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,8 +103,6 @@ export default function Assignments({ course, assignments, stats, filters }) {
                         <StatCard label="Draft" value={stats.draft} icon={FileText} color="neutral" />
                         <StatCard label="Perlu Dinilai" value={stats.needs_grading} icon={Clock} color="amber" />
                     </div>
-
-                    {/* Filters */}
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative flex-1 max-w-sm">
                             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
@@ -142,14 +143,18 @@ export default function Assignments({ course, assignments, stats, filters }) {
 
                     {/* Assignments Table */}
                     {assignments.length === 0 ? (
-                        <EmptyState onCreateClick={() => openModal()} />
+                        <EmptyState
+                            icon={ClipboardList}
+                            title="Belum ada tugas"
+                            description="Tambahkan tugas untuk modul agar mahasiswa dapat mengumpulkan pekerjaan mereka."
+                            action={
+                                <Button onClick={() => openModal()} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white">
+                                    <Plus className="mr-2 size-4" /> Buat Tugas
+                                </Button>
+                            }
+                        />
                     ) : (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden
-                                dark:bg-[#111a15] dark:border-white/[0.07]"
-                        >
+                        <Card>
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[800px]">
                                     <thead>
@@ -233,15 +238,17 @@ export default function Assignments({ course, assignments, stats, filters }) {
                                                             <Eye className="mr-1.5 size-3.5" /> Submission
                                                         </Link>
                                                         <div className="relative">
-                                                            <button
+                                                            <Button
+                                                                variant="outline"
+                                                                size="icon-sm"
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
                                                                     setOpenDropdown(openDropdown === assignment.id ? null : assignment.id);
                                                                 }}
-                                                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 text-neutral-500 hover:bg-neutral-50 transition-colors"
+                                                                aria-label="Aksi lainnya"
                                                             >
                                                                 <MoreHorizontal className="size-4" />
-                                                            </button>
+                                                            </Button>
                                                             {openDropdown === assignment.id && (
                                                                 <DropdownMenu
                                                                     assignment={assignment}
@@ -258,7 +265,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
                                     </tbody>
                                 </table>
                             </div>
-                        </motion.div>
+                        </Card>
                     )}
                 </div>
             </CourseWorkspaceLayout>
@@ -275,35 +282,6 @@ export default function Assignments({ course, assignments, stats, filters }) {
     );
 }
 
-
-function StatCard({ label, value, icon: Icon, color }) {
-    const colorClasses = {
-        emerald: 'from-emerald-500 to-teal-500 shadow-emerald-500/25',
-        teal: 'from-teal-500 to-cyan-500 shadow-teal-500/25',
-        neutral: 'from-neutral-400 to-neutral-500 shadow-neutral-400/25',
-        amber: 'from-amber-500 to-orange-500 shadow-amber-500/25',
-    };
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-4
-                bg-white border-neutral-100
-                dark:bg-[#111a15] dark:border-white/[0.07]"
-        >
-            <div className="flex items-center gap-3">
-                <div className={`flex size-10 items-center justify-center rounded-lg bg-gradient-to-br ${colorClasses[color]} shadow-lg`}>
-                    <Icon className="size-5 text-white" />
-                </div>
-                <div>
-                    <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}</p>
-                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
-                </div>
-            </div>
-        </motion.div>
-    );
-}
 
 function StatusBadge({ isPublished, isOverdue }) {
     if (!isPublished) {
@@ -343,33 +321,5 @@ function DropdownMenu({ assignment, onEdit, onToggle, onDelete }) {
                 <Trash2 className="size-4" /> Hapus
             </button>
         </div>
-    );
-}
-
-function EmptyState({ onCreateClick }) {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-12 text-center
-                bg-white border-neutral-100
-                dark:bg-[#111a15] dark:border-white/[0.07]"
-        >
-            <div className="flex justify-center mb-6">
-                <div className="flex size-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-500/20 dark:to-teal-500/20 border border-emerald-200 dark:border-emerald-500/30">
-                    <ClipboardList className="size-10 text-emerald-600 dark:text-emerald-400" />
-                </div>
-            </div>
-            <h3 className="text-xl font-bold mb-2 text-neutral-900 dark:text-white/90">Belum ada tugas</h3>
-            <p className="mb-6 max-w-md mx-auto text-neutral-600 dark:text-white/45">
-                Tambahkan tugas untuk modul agar mahasiswa dapat mengumpulkan pekerjaan mereka.
-            </p>
-            <Button 
-                onClick={onCreateClick} 
-                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
-            >
-                <Plus className="mr-2 size-4" /> Buat Tugas
-            </Button>
-        </motion.div>
     );
 }

@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 import StudentLayout from '@/Layouts/StudentLayout';
-import { AnimatedButton } from '@/components/animated/AnimatedButton';
-import { AnimatedBadge } from '@/components/animated/AnimatedBadge';
-import { AnimatedPage, StaggerContainer, FadeInWhenVisible } from '@/components/animated/AnimatedPage';
+import { Button } from '@/components/ui/button';
+import { FilterButton } from '@/components/ui/filter-button';
+import { AnimatedPage, StaggerContainer } from '@/components/animated/AnimatedPage';
 import { fadeUp } from '@/lib/animations';
 
 export default function CoursesIndex({ courses }) {
@@ -84,30 +84,12 @@ export default function CoursesIndex({ courses }) {
                 >
                     {/* Filter Tabs */}
                     <div className="flex gap-2">
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => setFilter('all')}
-                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                                filter === 'all'
-                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
-                                    : 'bg-white dark:bg-white/8 text-neutral-600 dark:text-white/60 border border-neutral-200 dark:border-white/10 hover:border-emerald-300 dark:hover:border-emerald-500/40 dark:hover:bg-white/12'
-                            }`}
-                        >
+                        <FilterButton active={filter === 'all'} onClick={() => setFilter('all')}>
                             Semua Kursus
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => setFilter('enrolled')}
-                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                                filter === 'enrolled'
-                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
-                                    : 'bg-white dark:bg-white/8 text-neutral-600 dark:text-white/60 border border-neutral-200 dark:border-white/10 hover:border-emerald-300 dark:hover:border-emerald-500/40 dark:hover:bg-white/12'
-                            }`}
-                        >
+                        </FilterButton>
+                        <FilterButton active={filter === 'enrolled'} onClick={() => setFilter('enrolled')}>
                             Kursus Saya
-                        </motion.button>
+                        </FilterButton>
                     </div>
 
                     {/* Search Bar */}
@@ -351,16 +333,13 @@ function CourseCard({ course, delay }) {
 
                     {cardAction.type === 'continue' && (
                         <Link href={cardAction.href}>
-                            <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="relative w-full h-11 rounded-xl overflow-hidden shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300"
+                            <Button
+                                variant="success"
+                                size="sm"
+                                className="w-full h-11 rounded-xl shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/40"
                             >
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-700 hover:via-teal-700 hover:to-emerald-700 transition-all duration-300" />
-                                <span className="relative flex items-center justify-center gap-2 text-sm font-bold text-white tracking-wide">
-                                    {cardAction.label} →
-                                </span>
-                            </motion.button>
+                                {cardAction.label}
+                            </Button>
                         </Link>
                     )}
 
@@ -380,7 +359,7 @@ function CourseCard({ course, delay }) {
                                         border-neutral-200 bg-white/80 text-neutral-900 placeholder:text-neutral-400
                                         focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
                                         dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25
-                                        dark:focus:border-blue-500/60 dark:focus:ring-blue-500/15"
+                                        dark:focus:border-emerald-500/60 dark:focus:ring-emerald-500/15"
                                 />
                                 {enrollForm.errors.enroll_code && (
                                     <p className="mt-1.5 text-xs font-medium text-red-600 dark:text-red-400">
@@ -388,18 +367,16 @@ function CourseCard({ course, delay }) {
                                     </p>
                                 )}
                             </div>
-                            <motion.button
+                            <Button
                                 type="submit"
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
+                                variant="default"
+                                size="sm"
                                 disabled={cardAction.disabled}
-                                className="relative w-full h-11 rounded-xl overflow-hidden shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                loading={enrollForm.processing}
+                                className="w-full h-11 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40"
                             >
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 hover:from-blue-700 hover:via-cyan-700 hover:to-blue-700 transition-all duration-300" />
-                                <span className="relative flex items-center justify-center gap-2 text-sm font-bold text-white tracking-wide">
-                                    {cardAction.disabled ? 'Memproses...' : cardAction.label}
-                                </span>
-                            </motion.button>
+                                {cardAction.disabled ? 'Memproses...' : cardAction.label}
+                            </Button>
                         </form>
                     )}
 

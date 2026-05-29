@@ -14,21 +14,6 @@ use Inertia\Response;
 
 class QuizAttemptController extends Controller
 {
-    public function index(Request $request): Response
-    {
-        $attempts = QuizAttempt::query()
-            ->with(['quiz.questions', 'quiz.quizzable', 'user:id,name'])
-            ->where('status', 'submitted')
-            ->whereIn('quiz_id', $this->ownedQuizIds($request))
-            ->latest('finished_at')
-            ->get()
-            ->map(fn (QuizAttempt $attempt) => $this->attemptPayload($attempt));
-
-        return Inertia::render('Instructor/QuizAttempts/Index', [
-            'attempts' => $attempts,
-        ]);
-    }
-
     public function grade(Request $request, QuizAttempt $attempt): RedirectResponse
     {
         abort_unless($this->ownedQuizIds($request)->contains($attempt->quiz_id), 403);
@@ -40,29 +25,34 @@ class QuizAttemptController extends Controller
 
         $attempt->load(['quiz.questions', 'quiz.quizzable', 'user']);
 
-        $responses = $this->responses($attempt->answers);
         $essayScores = collect($validated['essay_scores'])
             ->mapWithKeys(fn ($score, $questionId) => [(int) $questionId => (float) ($score ?? 0)]);
 
-        $totalPoints = (float) $attempt->quiz->questions->sum('points');
-        $earnedPoints = $attempt->quiz->questions->sum(function ($question) use ($responses, $essayScores): float {
+        // Preserve original answers format and update essay entries
+        $answers = $attempt->answers ?? [];
+        foreach ($attempt->quiz->questions as $question) {
             if ($question->type === 'essay') {
-                return min((float) ($essayScores->get($question->id) ?? 0), (float) $question->points);
+                $essayScore = min($essayScores->get($question->id, 0), (float) $question->points);
+                $answers[$question->id] = [
+                    'answer' => $answers[$question->id]['answer'] ?? null,
+                    'time_taken' => $answers[$question->id]['time_taken'] ?? 0,
+                    'is_correct' => $essayScore >= (float) $question->points,
+                    'points' => (int) $essayScore,
+                    'answered_at' => $answers[$question->id]['answered_at'] ?? now()->toISOString(),
+                ];
             }
+        }
 
-            return (string) ($responses[$question->id] ?? '') === (string) $question->correct_answer
-                ? (float) $question->points
-                : 0.0;
-        });
+        // Recalculate total score as percentage (excluding ungraded essay = already graded here)
+        $totalPoints = (float) $attempt->quiz->questions->sum('points');
+        $earnedPoints = collect($answers)->sum('points');
+        $score = $totalPoints > 0 ? round(($earnedPoints / $totalPoints) * 100, 2) : 0;
 
         $attempt->update([
-            'answers' => [
-                'responses' => $responses,
-                'essay_scores' => $essayScores->all(),
-            ],
-            'score' => $totalPoints > 0 ? round(($earnedPoints / $totalPoints) * 100, 2) : 0,
+            'answers' => $answers,
+            'score' => $score,
             'status' => 'graded',
-            'finished_at' => now(),
+            'finished_at' => $attempt->finished_at ?? now(),
         ]);
 
         // Notify student

@@ -142,14 +142,14 @@ export default function Discussions({ course, discussions, stats, filters }) {
                     {/* Info Card */}
                     <div className="rounded-xl border p-4
                         bg-blue-50 border-blue-200
-                        dark:bg-blue-500/10 dark:border-blue-500/30">
+                        dark:bg-emerald-500/10 dark:border-emerald-500/30">
                         <div className="flex items-start gap-3">
-                            <div className="flex size-8 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-500/20">
-                                <MessageSquare className="size-4 text-blue-600 dark:text-blue-400" />
+                            <div className="flex size-8 items-center justify-center rounded-lg bg-blue-100 dark:bg-emerald-500/20">
+                                <MessageSquare className="size-4 text-blue-600 dark:text-emerald-400" />
                             </div>
                             <div>
-                                <h4 className="font-medium text-blue-900 dark:text-blue-300">Tentang Diskusi</h4>
-                                <p className="text-sm text-blue-700 dark:text-blue-400/80 mt-1">
+                                <h4 className="font-medium text-blue-900 dark:text-emerald-300">Tentang Diskusi</h4>
+                                <p className="text-sm text-blue-700 dark:text-emerald-400/80 mt-1">
                                     Diskusi terkait dengan setiap materi pembelajaran. Untuk melihat dan membalas diskusi, 
                                     buka halaman <Link href={`/instructor/courses/${course.id}/curriculum`} className="underline font-medium">Struktur Kurikulum</Link> dan 
                                     klik pada materi yang ingin dilihat diskusinya.

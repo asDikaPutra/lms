@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { Clock, ListChecks, Play, ArrowLeft, BookOpen, Sparkles, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
 export default function Show({ quiz, userAttempts, canAttempt }) {
     const [starting, setStarting] = useState(false);
@@ -46,18 +47,23 @@ export default function Show({ quiz, userAttempts, canAttempt }) {
                 />
 
                 {/* Back button */}
-                <motion.button
+                <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
-                    onClick={() => router.visit('/student/dashboard')}
-                    className="absolute top-6 left-6 z-10 flex items-center gap-2 text-white/70 hover:text-white transition-colors group"
+                    className="absolute top-6 left-6 z-10"
                 >
-                    <div className="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 group-hover:bg-white/20 transition-all">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => router.visit('/student/dashboard')}
+                        className="flex items-center gap-2 text-white/70 hover:text-white hover:bg-white/10 border border-white/20 rounded-full"
+                        aria-label="Kembali ke dashboard"
+                    >
                         <ArrowLeft className="w-4 h-4" />
-                    </div>
-                    <span className="text-sm font-medium hidden sm:block">Kembali</span>
-                </motion.button>
+                        <span className="hidden sm:block">Kembali</span>
+                    </Button>
+                </motion.div>
 
                 {/* Main content */}
                 <div className="relative h-full flex items-center justify-center px-4 py-16">

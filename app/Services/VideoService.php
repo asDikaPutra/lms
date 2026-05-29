@@ -85,54 +85,10 @@ class VideoService
     }
 
     /**
-     * Generate the YouTube embed URL from a video ID.
-     */
-    public function embedUrl(string $videoId): string
-    {
-        return "https://www.youtube.com/embed/{$videoId}?rel=0&modestbranding=1";
-    }
-
-    /**
-     * Generate the YouTube thumbnail URL from a video ID.
-     * Uses hqdefault (480x360) as the default quality.
-     */
-    public function thumbnailUrl(string $videoId, string $quality = 'hqdefault'): string
-    {
-        // Valid qualities: default, mqdefault, hqdefault, sddefault, maxresdefault
-        $allowed = ['default', 'mqdefault', 'hqdefault', 'sddefault', 'maxresdefault'];
-        if (! in_array($quality, $allowed, true)) {
-            $quality = 'hqdefault';
-        }
-
-        return "https://img.youtube.com/vi/{$videoId}/{$quality}.jpg";
-    }
-
-    /**
      * Validate that a URL is a supported YouTube URL.
      */
     public function isValidYouTubeUrl(string $url): bool
     {
         return $this->extractVideoId($url) !== null;
-    }
-
-    /**
-     * Parse a YouTube URL and return all derived data.
-     * Returns null if the URL is not valid.
-     *
-     * @return array{video_id: string, embed_url: string, thumbnail_url: string}|null
-     */
-    public function parse(string $url): ?array
-    {
-        $videoId = $this->extractVideoId($url);
-
-        if ($videoId === null) {
-            return null;
-        }
-
-        return [
-            'video_id' => $videoId,
-            'embed_url' => $this->embedUrl($videoId),
-            'thumbnail_url' => $this->thumbnailUrl($videoId),
-        ];
     }
 }

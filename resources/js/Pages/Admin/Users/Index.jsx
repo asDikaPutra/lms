@@ -4,6 +4,7 @@ import { cloneElement, useEffect, useState } from 'react';
 
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 const emptyForm = {
     name: '',
@@ -83,17 +84,16 @@ export default function Index({ users, filters, stats }) {
             <Head title="Manajemen User" />
 
             <div className="grid gap-6 xl:grid-cols-[1fr_24rem]">
-                <section aria-labelledby="users-title" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                        <div>
-                            <h2 id="users-title" className="text-lg font-semibold text-slate-950">
-                                Daftar User
-                            </h2>
-                            <p className="mt-1 text-sm text-slate-500">
-                                {stats.total} total, {stats.active} aktif, {stats.inactive} nonaktif
-                            </p>
-                        </div>
-                        <form onSubmit={applyFilters} className="flex flex-col gap-2 md:flex-row" aria-label="Filter user">
+                <Card>
+                    <CardHeader>
+                        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                            <div>
+                                <CardTitle>Daftar User</CardTitle>
+                                <CardDescription className="mt-1">
+                                    {stats.total} total, {stats.active} aktif, {stats.inactive} nonaktif
+                                </CardDescription>
+                            </div>
+                            <form onSubmit={applyFilters} className="flex flex-col gap-2 md:flex-row" aria-label="Filter user">
                             <label className="sr-only" htmlFor="search">
                                 Cari user
                             </label>
@@ -138,9 +138,10 @@ export default function Index({ users, filters, stats }) {
                                 Filter
                             </Button>
                         </form>
-                    </div>
-
-                    <div className="mt-5 overflow-x-auto">
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                    <div className="overflow-x-auto">
                         <table className="w-full min-w-[48rem] text-left text-sm">
                             <thead>
                                 <tr className="border-b border-slate-200 text-slate-500">
@@ -181,23 +182,24 @@ export default function Index({ users, filters, stats }) {
                             </tbody>
                         </table>
                     </div>
-                </section>
+                </CardContent>
+                </Card>
 
                 <aside className="space-y-6">
-                <section aria-labelledby="user-form-title" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <Card>
+                    <CardHeader>
                     <div className="flex items-center gap-3">
                         <div className="flex size-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
                             <UserPlus className="size-5" aria-hidden="true" />
                         </div>
                         <div>
-                            <h2 id="user-form-title" className="text-lg font-semibold text-slate-950">
-                                {editingUser ? 'Edit User' : 'Tambah User'}
-                            </h2>
-                            <p className="text-sm text-slate-500">Data dasar akun LMS</p>
+                            <CardTitle>{editingUser ? 'Edit User' : 'Tambah User'}</CardTitle>
+                            <CardDescription>Data dasar akun LMS</CardDescription>
                         </div>
                     </div>
-
-                    <form onSubmit={submitUser} className="mt-5 space-y-4">
+                    </CardHeader>
+                    <CardContent>
+                    <form onSubmit={submitUser} className="space-y-4">
                         <Field label="Nama" id="name" error={form.errors.name}>
                             <input id="name" value={form.data.name} onChange={(event) => form.setData('name', event.target.value)} className="field" />
                         </Field>
@@ -239,22 +241,23 @@ export default function Index({ users, filters, stats }) {
                             )}
                         </div>
                     </form>
-                </section>
+                    </CardContent>
+                </Card>
 
-                <section aria-labelledby="import-title" className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <Card>
+                    <CardHeader>
                     <div className="flex items-center gap-3">
                         <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
                             <Upload className="size-5" aria-hidden="true" />
                         </div>
                         <div>
-                            <h2 id="import-title" className="text-lg font-semibold text-slate-950">
-                                Import Mahasiswa
-                            </h2>
-                            <p className="text-sm text-slate-500">CSV: name, email, nim, password</p>
+                            <CardTitle>Import Mahasiswa</CardTitle>
+                            <CardDescription>CSV: name, email, nim, password</CardDescription>
                         </div>
                     </div>
-
-                    <form onSubmit={importStudents} className="mt-5 space-y-4" aria-busy={importForm.processing}>
+                    </CardHeader>
+                    <CardContent>
+                    <form onSubmit={importStudents} className="space-y-4" aria-busy={importForm.processing}>
                         <Field label="File CSV" id="student-import" error={importForm.errors.file}>
                             <input
                                 id="student-import"
@@ -269,7 +272,8 @@ export default function Index({ users, filters, stats }) {
                             {importForm.processing ? 'Mengimpor...' : 'Import CSV'}
                         </Button>
                     </form>
-                </section>
+                    </CardContent>
+                </Card>
                 </aside>
             </div>
         </AdminLayout>

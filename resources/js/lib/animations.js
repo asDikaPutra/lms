@@ -45,73 +45,6 @@ export const fadeUp = {
   },
 };
 
-// Scale fade - badges, small elements
-export const scaleFade = {
-  hidden: { 
-    opacity: 0, 
-    scale: 0.9,
-  },
-  show: { 
-    opacity: 1, 
-    scale: 1,
-    transition: {
-      duration: 0.3,
-      ease: easings.bounce,
-    },
-  },
-};
-
-// Slide in from side - modals, sidebars
-export const slideIn = (direction = 'right') => ({
-  hidden: { 
-    opacity: 0, 
-    x: direction === 'right' ? 100 : -100,
-  },
-  show: { 
-    opacity: 1, 
-    x: 0,
-    transition: {
-      duration: 0.4,
-      ease: easings.fluid,
-    },
-  },
-});
-
-// Expand - collapsible sections
-export const expand = {
-  hidden: { 
-    opacity: 0,
-    height: 0,
-  },
-  show: { 
-    opacity: 1,
-    height: 'auto',
-    transition: {
-      height: {
-        duration: 0.4,
-        ease: easings.fluid,
-      },
-      opacity: {
-        duration: 0.3,
-        delay: 0.1,
-      },
-    },
-  },
-  exit: {
-    opacity: 0,
-    height: 0,
-    transition: {
-      height: {
-        duration: 0.3,
-        ease: easings.fluid,
-      },
-      opacity: {
-        duration: 0.2,
-      },
-    },
-  },
-};
-
 // Hover lift - interactive cards
 export const hoverLift = {
   rest: { 
@@ -130,18 +63,6 @@ export const hoverLift = {
     scale: 0.98,
     transition: {
       duration: 0.1,
-    },
-  },
-};
-
-// Shimmer loading effect
-export const shimmer = {
-  animate: {
-    backgroundPosition: ['200% 0', '-200% 0'],
-    transition: {
-      duration: 2,
-      ease: 'linear',
-      repeat: Infinity,
     },
   },
 };
@@ -184,46 +105,4 @@ export const pageTransition = {
   },
 };
 
-// Modal backdrop
-export const modalBackdrop = {
-  hidden: { opacity: 0 },
-  show: { 
-    opacity: 1,
-    transition: {
-      duration: 0.2,
-    },
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.2,
-      delay: 0.1,
-    },
-  },
-};
 
-// Modal content
-export const modalContent = {
-  hidden: { 
-    opacity: 0,
-    scale: 0.95,
-    y: 20,
-  },
-  show: { 
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: 0.3,
-      ease: easings.bounce,
-    },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.95,
-    y: 20,
-    transition: {
-      duration: 0.2,
-    },
-  },
-};

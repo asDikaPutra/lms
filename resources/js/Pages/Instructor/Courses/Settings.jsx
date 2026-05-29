@@ -26,6 +26,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import CourseWorkspaceLayout from '@/components/instructor/CourseWorkspaceLayout';
 import { Button } from '@/components/ui/button';
+import { FilterButton } from '@/components/ui/filter-button';
+import { ConfirmDialog } from '@/components/ui/modal';
+import { TextField, TextArea, SelectField } from '@/components/ui/text-field';
 
 export default function Settings({ course, settings, stats }) {
     const [activeSection, setActiveSection] = useState('basic');
@@ -101,23 +104,21 @@ export default function Settings({ course, settings, stats }) {
                                 const Icon = section.icon;
                                 const isActive = activeSection === section.id;
                                 return (
-                                    <button
+                                    <FilterButton
                                         key={section.id}
+                                        active={isActive}
                                         onClick={() => {
                                             setActiveSection(section.id);
                                             document.getElementById(`section-${section.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                         }}
-                                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
-                                            isActive
-                                                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/25'
-                                                : section.id === 'danger'
-                                                ? 'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10'
-                                                : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80'
-                                        }`}
+                                        className={section.id === 'danger' && !isActive
+                                            ? 'text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10 border-transparent'
+                                            : undefined
+                                        }
                                     >
                                         <Icon className="size-4" />
                                         {section.label}
-                                    </button>
+                                    </FilterButton>
                                 );
                             })}
                         </nav>
@@ -275,90 +276,6 @@ function SectionCard({ id, title, description, icon: Icon, children, expanded, o
     );
 }
 
-function FormField({ label, description, children, error }) {
-    return (
-        <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-neutral-700 dark:text-white/70">{label}</label>
-            {description && <p className="text-xs text-neutral-500 dark:text-white/35">{description}</p>}
-            {children}
-            {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
-        </div>
-    );
-}
-
-function TextInput({ value, onChange, placeholder, error, ...props }) {
-    return (
-        <input
-            type="text"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={placeholder}
-            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors
-                dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 ${
-                error 
-                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500/40' 
-                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:focus:border-emerald-500/60'
-            }`}
-            {...props}
-        />
-    );
-}
-
-function TextArea({ value, onChange, placeholder, rows = 3, error }) {
-    return (
-        <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={placeholder}
-            rows={rows}
-            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors resize-none
-                dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 ${
-                error 
-                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500/40' 
-                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:focus:border-emerald-500/60'
-            }`}
-        />
-    );
-}
-
-function SelectInput({ value, onChange, options, error }) {
-    return (
-        <select
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors
-                dark:bg-white/8 dark:text-white/90 ${
-                error 
-                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500/40' 
-                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:focus:border-emerald-500/60'
-            }`}
-        >
-            {options.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-        </select>
-    );
-}
-
-function NumberInput({ value, onChange, min, max, error, ...props }) {
-    return (
-        <input
-            type="number"
-            value={value}
-            onChange={(e) => onChange(parseInt(e.target.value) || 0)}
-            min={min}
-            max={max}
-            className={`w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors
-                dark:bg-white/8 dark:text-white/90 ${
-                error 
-                    ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500/40' 
-                    : 'border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:focus:border-emerald-500/60'
-            }`}
-            {...props}
-        />
-    );
-}
-
 function Toggle({ checked, onChange, label, description }) {
     return (
         <label className="flex items-start gap-3 cursor-pointer group">
@@ -442,40 +359,36 @@ function BasicInfoSection({ course, expanded, onToggle }) {
         >
             <form onSubmit={handleSubmit} className="space-y-4 pt-4">
                 <div className="grid gap-4 md:grid-cols-2">
-                    <FormField label="Nama Kursus" error={form.errors.name}>
-                        <TextInput
-                            value={form.data.name}
-                            onChange={(v) => form.setData('name', v)}
-                            placeholder="Contoh: Tafsir Al-Quran"
-                            error={form.errors.name}
-                        />
-                    </FormField>
-                    <FormField label="Kode Kursus" error={form.errors.code}>
-                        <TextInput
-                            value={form.data.code}
-                            onChange={(v) => form.setData('code', v)}
-                            placeholder="Contoh: FAI301"
-                            error={form.errors.code}
-                        />
-                    </FormField>
+                    <TextField
+                        label="Nama Kursus"
+                        value={form.data.name}
+                        onChange={(e) => form.setData('name', e.target.value)}
+                        placeholder="Contoh: Tafsir Al-Quran"
+                        error={form.errors.name}
+                    />
+                    <TextField
+                        label="Kode Kursus"
+                        value={form.data.code}
+                        onChange={(e) => form.setData('code', e.target.value)}
+                        placeholder="Contoh: FAI301"
+                        error={form.errors.code}
+                    />
                 </div>
-                <FormField label="Semester / Periode" error={form.errors.semester}>
-                    <TextInput
-                        value={form.data.semester}
-                        onChange={(v) => form.setData('semester', v)}
-                        placeholder="Contoh: Ganjil 2025/2026"
-                        error={form.errors.semester}
-                    />
-                </FormField>
-                <FormField label="Deskripsi Kursus" error={form.errors.description}>
-                    <TextArea
-                        value={form.data.description}
-                        onChange={(v) => form.setData('description', v)}
-                        placeholder="Deskripsi singkat tentang kursus ini..."
-                        rows={4}
-                        error={form.errors.description}
-                    />
-                </FormField>
+                <TextField
+                    label="Semester / Periode"
+                    value={form.data.semester}
+                    onChange={(e) => form.setData('semester', e.target.value)}
+                    placeholder="Contoh: Ganjil 2025/2026"
+                    error={form.errors.semester}
+                />
+                <TextArea
+                    label="Deskripsi Kursus"
+                    value={form.data.description}
+                    onChange={(e) => form.setData('description', e.target.value)}
+                    placeholder="Deskripsi singkat tentang kursus ini..."
+                    rows={4}
+                    error={form.errors.description}
+                />
                 <div className="flex items-center justify-between pt-2">
                     <SuccessMessage show={saved} />
                     <SaveButton processing={form.processing} onClick={handleSubmit} />
@@ -524,38 +437,28 @@ function VisibilitySection({ course, expanded, onToggle }) {
         >
             <form onSubmit={handleSubmit} className="space-y-4 pt-4">
                 <div className="grid gap-4 md:grid-cols-2">
-                    <FormField 
-                        label="Status Kursus" 
+                    <SelectField
+                        label="Status Kursus"
                         description="Tentukan status aktif kursus"
+                        value={form.data.status}
+                        onChange={(e) => form.setData('status', e.target.value)}
                         error={form.errors.status}
                     >
-                        <SelectInput
-                            value={form.data.status}
-                            onChange={(v) => form.setData('status', v)}
-                            options={[
-                                { value: 'draft', label: 'Draft - Belum dipublikasikan' },
-                                { value: 'active', label: 'Aktif - Dapat diakses mahasiswa' },
-                                { value: 'closed', label: 'Selesai - Tidak menerima aktivitas baru' },
-                                { value: 'archived', label: 'Arsip - Tidak aktif' },
-                            ]}
-                            error={form.errors.status}
-                        />
-                    </FormField>
-                    <FormField 
-                        label="Tipe Enrollment" 
+                        <option value="draft">Draft - Belum dipublikasikan</option>
+                        <option value="active">Aktif - Dapat diakses mahasiswa</option>
+                        <option value="closed">Selesai - Tidak menerima aktivitas baru</option>
+                        <option value="archived">Arsip - Tidak aktif</option>
+                    </SelectField>
+                    <SelectField
+                        label="Tipe Enrollment"
                         description="Cara mahasiswa bergabung ke kursus"
+                        value={form.data.enrollment_type}
+                        onChange={(e) => form.setData('enrollment_type', e.target.value)}
                         error={form.errors.enrollment_type}
                     >
-                        <SelectInput
-                            value={form.data.enrollment_type}
-                            onChange={(v) => form.setData('enrollment_type', v)}
-                            options={[
-                                { value: 'auto', label: 'Otomatis - Langsung diterima' },
-                                { value: 'manual', label: 'Manual - Perlu persetujuan' },
-                            ]}
-                            error={form.errors.enrollment_type}
-                        />
-                    </FormField>
+                        <option value="auto">Otomatis - Langsung diterima</option>
+                        <option value="manual">Manual - Perlu persetujuan</option>
+                    </SelectField>
                 </div>
 
                 <div className="p-4 rounded-lg border
@@ -581,34 +484,22 @@ function VisibilitySection({ course, expanded, onToggle }) {
                 />
 
                 <div className="grid gap-4 md:grid-cols-2">
-                    <FormField 
-                        label="Tanggal Mulai Akses" 
+                    <TextField
+                        label="Tanggal Mulai Akses"
                         description="Opsional"
+                        type="date"
+                        value={form.data.start_date}
+                        onChange={(e) => form.setData('start_date', e.target.value)}
                         error={form.errors.start_date}
-                    >
-                        <input
-                            type="date"
-                            value={form.data.start_date}
-                            onChange={(e) => form.setData('start_date', e.target.value)}
-                            className="w-full rounded-lg border px-3 py-2 text-sm outline-none
-                                border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
-                                dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60"
-                        />
-                    </FormField>
-                    <FormField 
-                        label="Tanggal Selesai Akses" 
+                    />
+                    <TextField
+                        label="Tanggal Selesai Akses"
                         description="Opsional"
+                        type="date"
+                        value={form.data.end_date}
+                        onChange={(e) => form.setData('end_date', e.target.value)}
                         error={form.errors.end_date}
-                    >
-                        <input
-                            type="date"
-                            value={form.data.end_date}
-                            onChange={(e) => form.setData('end_date', e.target.value)}
-                            className="w-full rounded-lg border px-3 py-2 text-sm outline-none
-                                border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
-                                dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60"
-                        />
-                    </FormField>
+                    />
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
@@ -665,34 +556,26 @@ function LearningSection({ course, settings, expanded, onToggle }) {
             onToggle={onToggle}
         >
             <form onSubmit={handleSubmit} className="space-y-4 pt-4">
-                <FormField 
-                    label="Urutan Belajar" 
+                <SelectField
+                    label="Urutan Belajar"
                     description="Tentukan bagaimana mahasiswa mengakses materi"
+                    value={form.data.settings.learning.order}
+                    onChange={(e) => updateLearning('order', e.target.value)}
                 >
-                    <SelectInput
-                        value={form.data.settings.learning.order}
-                        onChange={(v) => updateLearning('order', v)}
-                        options={[
-                            { value: 'free', label: 'Bebas - Mahasiswa dapat mengakses materi mana saja' },
-                            { value: 'sequential', label: 'Berurutan - Harus menyelesaikan materi sebelumnya' },
-                        ]}
-                    />
-                </FormField>
+                    <option value="free">Bebas - Mahasiswa dapat mengakses materi mana saja</option>
+                    <option value="sequential">Berurutan - Harus menyelesaikan materi sebelumnya</option>
+                </SelectField>
 
-                <FormField 
-                    label="Aturan Penyelesaian Materi" 
+                <SelectField
+                    label="Aturan Penyelesaian Materi"
                     description="Kapan materi dianggap selesai"
+                    value={form.data.settings.learning.completion_rule}
+                    onChange={(e) => updateLearning('completion_rule', e.target.value)}
                 >
-                    <SelectInput
-                        value={form.data.settings.learning.completion_rule}
-                        onChange={(v) => updateLearning('completion_rule', v)}
-                        options={[
-                            { value: 'opened', label: 'Dibuka - Materi selesai jika sudah dibuka' },
-                            { value: 'read_complete', label: 'Dibaca Lengkap - Materi selesai jika dibaca sampai akhir' },
-                            { value: 'all_items', label: 'Semua Item - Modul selesai jika semua tugas/kuis selesai' },
-                        ]}
-                    />
-                </FormField>
+                    <option value="opened">Dibuka - Materi selesai jika sudah dibuka</option>
+                    <option value="read_complete">Dibaca Lengkap - Materi selesai jika dibaca sampai akhir</option>
+                    <option value="all_items">Semua Item - Modul selesai jika semua tugas/kuis selesai</option>
+                </SelectField>
 
                 <Toggle
                     checked={form.data.settings.learning.enable_prerequisites}
@@ -759,10 +642,10 @@ function AssignmentsSection({ course, settings, expanded, onToggle }) {
             <form onSubmit={handleSubmit} className="space-y-4 pt-4">
                 <div className="p-3 rounded-lg border
                     bg-blue-50 border-blue-200
-                    dark:bg-blue-500/10 dark:border-blue-500/30">
+                    dark:bg-emerald-500/10 dark:border-emerald-500/30">
                     <div className="flex items-start gap-2">
-                        <Info className="size-4 text-blue-600 dark:text-blue-400 mt-0.5" />
-                        <p className="text-xs text-blue-700 dark:text-blue-300">
+                        <Info className="size-4 text-blue-600 dark:text-emerald-400 mt-0.5" />
+                        <p className="text-xs text-blue-700 dark:text-emerald-300">
                             Pengaturan ini adalah default untuk semua tugas baru. Setiap tugas dapat memiliki pengaturan berbeda.
                         </p>
                     </div>
@@ -776,17 +659,15 @@ function AssignmentsSection({ course, settings, expanded, onToggle }) {
                 />
 
                 {form.data.settings.assignments.allow_late_submission && (
-                    <FormField 
-                        label="Penalti Keterlambatan (%)" 
+                    <TextField
+                        label="Penalti Keterlambatan (%)"
                         description="Pengurangan nilai untuk submission terlambat"
-                    >
-                        <NumberInput
-                            value={form.data.settings.assignments.late_penalty_percent}
-                            onChange={(v) => updateAssignments('late_penalty_percent', v)}
-                            min={0}
-                            max={100}
-                        />
-                    </FormField>
+                        type="number"
+                        value={form.data.settings.assignments.late_penalty_percent}
+                        onChange={(e) => updateAssignments('late_penalty_percent', parseInt(e.target.value) || 0)}
+                        min={0}
+                        max={100}
+                    />
                 )}
 
                 <Toggle
@@ -797,35 +678,29 @@ function AssignmentsSection({ course, settings, expanded, onToggle }) {
                 />
 
                 {form.data.settings.assignments.allow_resubmission && (
-                    <FormField 
-                        label="Maksimal Percobaan Submit" 
+                    <TextField
+                        label="Maksimal Percobaan Submit"
                         description="Jumlah maksimal submission yang diizinkan"
-                    >
-                        <NumberInput
-                            value={form.data.settings.assignments.max_attempts}
-                            onChange={(v) => updateAssignments('max_attempts', v)}
-                            min={1}
-                            max={10}
-                        />
-                    </FormField>
+                        type="number"
+                        value={form.data.settings.assignments.max_attempts}
+                        onChange={(e) => updateAssignments('max_attempts', parseInt(e.target.value) || 0)}
+                        min={1}
+                        max={10}
+                    />
                 )}
 
-                <FormField 
-                    label="Tipe Submission Default" 
+                <SelectField
+                    label="Tipe Submission Default"
                     description="Format submission yang digunakan secara default"
+                    value={form.data.settings.assignments.default_submission_type}
+                    onChange={(e) => updateAssignments('default_submission_type', e.target.value)}
                 >
-                    <SelectInput
-                        value={form.data.settings.assignments.default_submission_type}
-                        onChange={(v) => updateAssignments('default_submission_type', v)}
-                        options={[
-                            { value: 'text', label: 'Teks - Jawaban dalam bentuk teks' },
-                            { value: 'file', label: 'File - Upload file dokumen' },
-                            { value: 'link', label: 'Link - URL/tautan' },
-                            { value: 'audio', label: 'Audio - File audio' },
-                            { value: 'video', label: 'Video - File video' },
-                        ]}
-                    />
-                </FormField>
+                    <option value="text">Teks - Jawaban dalam bentuk teks</option>
+                    <option value="file">File - Upload file dokumen</option>
+                    <option value="link">Link - URL/tautan</option>
+                    <option value="audio">Audio - File audio</option>
+                    <option value="video">Video - File video</option>
+                </SelectField>
 
                 <div className="flex items-center justify-between pt-2">
                     <SuccessMessage show={saved} />
@@ -887,38 +762,34 @@ function QuizzesSection({ course, settings, expanded, onToggle }) {
             <form onSubmit={handleSubmit} className="space-y-4 pt-4">
                 <div className="p-3 rounded-lg border
                     bg-blue-50 border-blue-200
-                    dark:bg-blue-500/10 dark:border-blue-500/30">
+                    dark:bg-emerald-500/10 dark:border-emerald-500/30">
                     <div className="flex items-start gap-2">
-                        <Info className="size-4 text-blue-600 dark:text-blue-400 mt-0.5" />
-                        <p className="text-xs text-blue-700 dark:text-blue-300">
+                        <Info className="size-4 text-blue-600 dark:text-emerald-400 mt-0.5" />
+                        <p className="text-xs text-blue-700 dark:text-emerald-300">
                             Pengaturan ini adalah default untuk semua kuis baru. Setiap kuis dapat memiliki pengaturan berbeda.
                         </p>
                     </div>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
-                    <FormField 
-                        label="Jumlah Percobaan Default" 
+                    <TextField
+                        label="Jumlah Percobaan Default"
                         description="Berapa kali mahasiswa dapat mengerjakan kuis"
-                    >
-                        <NumberInput
-                            value={form.data.settings.quizzes.default_attempt_limit}
-                            onChange={(v) => updateQuizzes('default_attempt_limit', v)}
-                            min={1}
-                            max={10}
-                        />
-                    </FormField>
-                    <FormField 
-                        label="Durasi Default (menit)" 
+                        type="number"
+                        value={form.data.settings.quizzes.default_attempt_limit}
+                        onChange={(e) => updateQuizzes('default_attempt_limit', parseInt(e.target.value) || 0)}
+                        min={1}
+                        max={10}
+                    />
+                    <TextField
+                        label="Durasi Default (menit)"
                         description="Waktu pengerjaan kuis"
-                    >
-                        <NumberInput
-                            value={form.data.settings.quizzes.default_duration_minutes}
-                            onChange={(v) => updateQuizzes('default_duration_minutes', v)}
-                            min={1}
-                            max={480}
-                        />
-                    </FormField>
+                        type="number"
+                        value={form.data.settings.quizzes.default_duration_minutes}
+                        onChange={(e) => updateQuizzes('default_duration_minutes', parseInt(e.target.value) || 0)}
+                        min={1}
+                        max={480}
+                    />
                 </div>
 
                 <div className="space-y-3">
@@ -1037,35 +908,31 @@ function GradesSection({ course, settings, expanded, onToggle }) {
         >
             <form onSubmit={handleSubmit} className="space-y-6 pt-4">
                 <div className="grid gap-4 md:grid-cols-3">
-                    <FormField label="Skala Nilai">
-                        <SelectInput
-                            value={form.data.settings.grades.scale}
-                            onChange={(v) => updateGrades('scale', v)}
-                            options={[
-                                { value: '0-100', label: '0 - 100' },
-                                { value: 'letter', label: 'A/B/C/D/E' },
-                            ]}
-                        />
-                    </FormField>
-                    <FormField label="Nilai Minimum Kelulusan">
-                        <NumberInput
-                            value={form.data.settings.grades.passing_grade}
-                            onChange={(v) => updateGrades('passing_grade', v)}
-                            min={0}
-                            max={100}
-                        />
-                    </FormField>
-                    <FormField label="Pembulatan Nilai">
-                        <SelectInput
-                            value={form.data.settings.grades.rounding}
-                            onChange={(v) => updateGrades('rounding', v)}
-                            options={[
-                                { value: 'none', label: 'Tanpa Pembulatan' },
-                                { value: 'one_decimal', label: '1 Angka Desimal' },
-                                { value: 'integer', label: 'Bilangan Bulat' },
-                            ]}
-                        />
-                    </FormField>
+                    <SelectField
+                        label="Skala Nilai"
+                        value={form.data.settings.grades.scale}
+                        onChange={(e) => updateGrades('scale', e.target.value)}
+                    >
+                        <option value="0-100">0 - 100</option>
+                        <option value="letter">A/B/C/D/E</option>
+                    </SelectField>
+                    <TextField
+                        label="Nilai Minimum Kelulusan"
+                        type="number"
+                        value={form.data.settings.grades.passing_grade}
+                        onChange={(e) => updateGrades('passing_grade', parseInt(e.target.value) || 0)}
+                        min={0}
+                        max={100}
+                    />
+                    <SelectField
+                        label="Pembulatan Nilai"
+                        value={form.data.settings.grades.rounding}
+                        onChange={(e) => updateGrades('rounding', e.target.value)}
+                    >
+                        <option value="none">Tanpa Pembulatan</option>
+                        <option value="one_decimal">1 Angka Desimal</option>
+                        <option value="integer">Bilangan Bulat</option>
+                    </SelectField>
                 </div>
 
                 {/* Grade Weights */}
@@ -1092,9 +959,10 @@ function GradesSection({ course, settings, expanded, onToggle }) {
                             <div key={item.key} className="space-y-1">
                                 <label className="text-xs font-medium text-neutral-600">{item.label}</label>
                                 <div className="relative">
-                                    <NumberInput
+                                    <TextField
+                                        type="number"
                                         value={form.data.settings.grades.weights[item.key]}
-                                        onChange={(v) => updateWeight(item.key, v)}
+                                        onChange={(e) => updateWeight(item.key, parseInt(e.target.value) || 0)}
                                         min={0}
                                         max={100}
                                     />
@@ -1109,28 +977,24 @@ function GradesSection({ course, settings, expanded, onToggle }) {
                 <div className="space-y-3 pt-4 border-t border-neutral-100">
                     <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60">Kriteria Sertifikat</h4>
                     <div className="grid gap-4 md:grid-cols-2">
-                        <FormField 
-                            label="Progres Minimum (%)" 
+                        <TextField
+                            label="Progres Minimum (%)"
                             description="Persentase penyelesaian kursus untuk mendapat sertifikat"
-                        >
-                            <NumberInput
-                                value={form.data.certificate_criteria.min_progress}
-                                onChange={(v) => updateCertificate('min_progress', v)}
-                                min={0}
-                                max={100}
-                            />
-                        </FormField>
-                        <FormField 
-                            label="Nilai Minimum" 
+                            type="number"
+                            value={form.data.certificate_criteria.min_progress}
+                            onChange={(e) => updateCertificate('min_progress', parseInt(e.target.value) || 0)}
+                            min={0}
+                            max={100}
+                        />
+                        <TextField
+                            label="Nilai Minimum"
                             description="Nilai rata-rata minimum untuk mendapat sertifikat"
-                        >
-                            <NumberInput
-                                value={form.data.certificate_criteria.min_score}
-                                onChange={(v) => updateCertificate('min_score', v)}
-                                min={0}
-                                max={100}
-                            />
-                        </FormField>
+                            type="number"
+                            value={form.data.certificate_criteria.min_score}
+                            onChange={(e) => updateCertificate('min_score', parseInt(e.target.value) || 0)}
+                            min={0}
+                            max={100}
+                        />
                     </div>
                 </div>
 
@@ -1234,17 +1098,15 @@ function DiscussionsSection({ course, settings, expanded, onToggle }) {
                             label="Tampilkan Aturan Adab Diskusi"
                             description="Tampilkan panduan adab sebelum berkomentar"
                         />
-                        <FormField 
-                            label="Minimal Komentar untuk Dinilai" 
+                        <TextField
+                            label="Minimal Komentar untuk Dinilai"
                             description="Jumlah komentar minimum agar diskusi dihitung dalam nilai (0 = tidak dihitung)"
-                        >
-                            <NumberInput
-                                value={form.data.settings.discussions.min_comments_for_grade}
-                                onChange={(v) => updateDiscussions('min_comments_for_grade', v)}
-                                min={0}
-                                max={50}
-                            />
-                        </FormField>
+                            type="number"
+                            value={form.data.settings.discussions.min_comments_for_grade}
+                            onChange={(e) => updateDiscussions('min_comments_for_grade', parseInt(e.target.value) || 0)}
+                            min={0}
+                            max={50}
+                        />
                     </>
                 )}
 
@@ -1314,18 +1176,16 @@ function ParticipantsSection({ course, settings, expanded, onToggle }) {
                     label="Izinkan Keluar Sendiri"
                     description="Mahasiswa dapat keluar dari kursus tanpa persetujuan"
                 />
-                <FormField 
-                    label="Batas Maksimal Peserta" 
+                <TextField
+                    label="Batas Maksimal Peserta"
                     description="Kosongkan jika tidak ada batasan"
-                >
-                    <NumberInput
-                        value={form.data.settings.participants.max_participants || ''}
-                        onChange={(v) => updateParticipants('max_participants', v || null)}
-                        min={1}
-                        max={1000}
-                        placeholder="Tidak terbatas"
-                    />
-                </FormField>
+                    type="number"
+                    value={form.data.settings.participants.max_participants || ''}
+                    onChange={(e) => updateParticipants('max_participants', parseInt(e.target.value) || null)}
+                    min={1}
+                    max={1000}
+                    placeholder="Tidak terbatas"
+                />
 
                 <div className="flex items-center justify-between pt-2">
                     <SuccessMessage show={saved} />
@@ -1585,122 +1445,31 @@ function DangerZoneSection({
             </div>
 
             {/* Archive Confirmation Modal */}
-            <AnimatePresence>
-                {showArchiveConfirm && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-                        onClick={() => setShowArchiveConfirm(false)}
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            className="rounded-2xl shadow-xl max-w-md w-full p-6
-                                bg-white dark:bg-[#111a15]"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="flex size-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-500/20">
-                                    <Archive className="size-6 text-amber-600 dark:text-amber-400" />
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">Arsipkan Kursus?</h3>
-                                    <p className="text-sm text-neutral-500 dark:text-white/40">Kursus akan dinonaktifkan</p>
-                                </div>
-                            </div>
-                            <p className="text-sm text-neutral-600 dark:text-white/50 mb-6">
-                                Kursus <strong>{course.name}</strong> akan diarsipkan. Mahasiswa tidak akan dapat mengakses kursus ini, 
-                                tetapi semua data tetap tersimpan dan dapat diaktifkan kembali.
-                            </p>
-                            <div className="flex gap-3 justify-end">
-                                <Button variant="outline" onClick={() => setShowArchiveConfirm(false)}>
-                                    Batal
-                                </Button>
-                                <Button 
-                                    onClick={handleArchive}
-                                    className="bg-amber-600 hover:bg-amber-700"
-                                >
-                                    Ya, Arsipkan
-                                </Button>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            <ConfirmDialog
+                open={showArchiveConfirm}
+                onClose={() => setShowArchiveConfirm(false)}
+                onConfirm={handleArchive}
+                title="Arsipkan Kursus?"
+                description={`Kursus ${course.name} akan diarsipkan. Mahasiswa tidak akan dapat mengakses kursus ini, tetapi semua data tetap tersimpan dan dapat diaktifkan kembali.`}
+                confirmLabel="Ya, Arsipkan"
+                variant="warning"
+                icon={Archive}
+            />
 
             {/* Delete Confirmation Modal */}
-            <AnimatePresence>
-                {showDeleteConfirm && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-                        onClick={() => {
-                            setShowDeleteConfirm(false);
-                            setDeleteConfirmText('');
-                        }}
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            className="rounded-2xl shadow-xl max-w-md w-full p-6
-                                bg-white dark:bg-[#111a15]"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="flex size-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/20">
-                                    <Trash2 className="size-6 text-red-600 dark:text-red-400" />
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">Hapus Kursus?</h3>
-                                    <p className="text-sm text-neutral-500 dark:text-white/40">Tindakan ini tidak dapat dibatalkan</p>
-                                </div>
-                            </div>
-                            <div className="p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-xl mb-4">
-                                <p className="text-sm text-red-800 dark:text-red-300">
-                                    <strong>Peringatan:</strong> Semua data kursus termasuk modul, materi, tugas, kuis, 
-                                    submission, dan nilai akan dihapus secara permanen.
-                                </p>
-                            </div>
-                            <p className="text-sm text-neutral-600 dark:text-white/50 mb-4">
-                                Untuk mengkonfirmasi, ketik kode kursus <strong className="font-mono">{course.code}</strong> di bawah ini:
-                            </p>
-                            <input
-                                type="text"
-                                value={deleteConfirmText}
-                                onChange={(e) => setDeleteConfirmText(e.target.value)}
-                                placeholder={course.code}
-                                className="w-full rounded-lg border px-3 py-2 text-sm outline-none font-mono mb-4
-                                    border-neutral-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20
-                                    dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25"
-                            />
-                            <div className="flex gap-3 justify-end">
-                                <Button 
-                                    variant="outline" 
-                                    onClick={() => {
-                                        setShowDeleteConfirm(false);
-                                        setDeleteConfirmText('');
-                                    }}
-                                >
-                                    Batal
-                                </Button>
-                                <Button 
-                                    variant="destructive"
-                                    onClick={handleDelete}
-                                    disabled={deleteConfirmText !== course.code}
-                                >
-                                    Hapus Permanen
-                                </Button>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            <ConfirmDialog
+                open={showDeleteConfirm}
+                onClose={() => {
+                    setShowDeleteConfirm(false);
+                    setDeleteConfirmText('');
+                }}
+                onConfirm={handleDelete}
+                title="Hapus Kursus?"
+                description={`Semua data kursus termasuk modul, materi, tugas, kuis, submission, dan nilai akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.`}
+                confirmLabel="Hapus Permanen"
+                variant="danger"
+                icon={Trash2}
+            />
         </SectionCard>
     );
 }

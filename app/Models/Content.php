@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['material_id', 'type', 'title', 'body', 'url', 'video_id', 'file_path', 'order'])]
 class Content extends Model
@@ -13,10 +12,5 @@ class Content extends Model
     public function material(): BelongsTo
     {
         return $this->belongsTo(Material::class);
-    }
-
-    public function progress(): HasMany
-    {
-        return $this->hasMany(ContentProgress::class);
     }
 }

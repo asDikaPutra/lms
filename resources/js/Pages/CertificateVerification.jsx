@@ -2,6 +2,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { BookOpenCheck, Search, ShieldCheck, XCircle, CheckCircle2, User, Hash, BookOpen, GraduationCap, CalendarDays, BadgeCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 /**
  * Formats an ISO date string as a readable Indonesian date.
@@ -327,46 +328,17 @@ export default function CertificateVerification({ certificate = null, error = nu
                                     )}
                                 </div>
 
-                                {/* Submit button — full-width Forest Green with Framer Motion press */}
-                                <motion.button
+                                {/* Submit button */}
+                                <Button
                                     type="submit"
+                                    variant="success"
                                     disabled={processing}
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.97 }}
-                                    transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                                    className="relative w-full overflow-hidden rounded-xl py-3 text-sm font-bold text-white shadow-lg shadow-emerald-900/25 transition-shadow hover:shadow-xl hover:shadow-emerald-900/30 disabled:cursor-not-allowed disabled:opacity-60"
+                                    loading={processing}
+                                    className="w-full rounded-xl py-3 shadow-lg shadow-emerald-900/25 hover:shadow-xl hover:shadow-emerald-900/30"
                                 >
-                                    {/* Forest Green gradient background */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-[#0B3D2E] via-emerald-700 to-[#0B3D2E]" />
-
-                                    {/* Shine sweep on hover */}
-                                    <motion.div
-                                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                                        animate={{ x: ['-100%', '200%'] }}
-                                        transition={{
-                                            duration: 2,
-                                            repeat: Infinity,
-                                            repeatDelay: 1,
-                                            ease: 'linear',
-                                        }}
-                                    />
-
-                                    <span className="relative flex items-center justify-center gap-2">
-                                        {processing ? (
-                                            <motion.span
-                                                animate={{ opacity: [1, 0.5, 1] }}
-                                                transition={{ duration: 1.2, repeat: Infinity }}
-                                            >
-                                                Memverifikasi...
-                                            </motion.span>
-                                        ) : (
-                                            <>
-                                                <Search className="size-4" />
-                                                Verifikasi Sertifikat
-                                            </>
-                                        )}
-                                    </span>
-                                </motion.button>
+                                    <Search className="size-4" />
+                                    {processing ? 'Memverifikasi...' : 'Verifikasi Sertifikat'}
+                                </Button>
                             </form>
                         </div>
                     </motion.div>

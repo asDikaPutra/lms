@@ -34,11 +34,6 @@ class CoursePolicy
         return $user->isAdmin() || $this->ownsCourse($user, $course);
     }
 
-    public function viewReports(User $user, Course $course): bool
-    {
-        return $user->isAdmin() || $this->ownsCourse($user, $course);
-    }
-
     private function ownsCourse(User $user, Course $course): bool
     {
         return $user->isInstructor() && $course->instructor_id === $user->id;

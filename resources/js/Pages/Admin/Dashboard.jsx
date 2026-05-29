@@ -2,6 +2,8 @@ import { Head, Link } from '@inertiajs/react';
 import { BookOpen, Clock, GraduationCap, Users } from 'lucide-react';
 
 import AdminLayout from '@/Layouts/AdminLayout';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { StatCard } from '@/components/ui/stat-card';
 
 const statConfig = [
     { key: 'total_users', label: 'Total User', icon: Users, tone: 'blue' },
@@ -34,68 +36,66 @@ export default function Dashboard({ stats, recentUsers, recentCourses }) {
                     {statConfig.map((item) => {
                         const Icon = item.icon;
                         return (
-                            <article key={item.key} className="rounded-[10px] bg-white p-4 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)] transition-all hover:shadow-[0_1px_3px_rgba(0,0,0,0.1),_0_2px_2px_rgba(0,0,0,0.06),_0_0_2px_rgba(0,0,0,0.07)]">
-                                <div className="flex items-center gap-3">
-                                    <span className={`inline-flex size-10 shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br text-white ${toneClasses[item.tone]}`}>
-                                        <Icon className="size-5" strokeWidth={1.75} aria-hidden="true" />
-                                    </span>
-                                    <div>
-                                        <p className="text-[20px] font-semibold text-sb-text-black tracking-[-0.16px] leading-tight">{stats[item.key]}</p>
-                                        <p className="text-[12px] text-sb-text-soft">{item.label}</p>
-                                    </div>
-                                </div>
-                            </article>
+                            <StatCard
+                                key={item.key}
+                                label={item.label}
+                                value={stats[item.key]}
+                                icon={Icon}
+                                color={item.tone}
+                            />
                         );
                     })}
                 </div>
             </section>
 
             <div className="mt-5 grid gap-5 xl:grid-cols-[1.3fr_1fr] tracking-[-0.01em]">
-                <section aria-labelledby="recent-users-title" className="rounded-[10px] bg-white p-4 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)]">
-                    <div className="flex items-center justify-between gap-4">
-                        <h2 id="recent-users-title" className="text-[16px] font-semibold text-sb-text-black tracking-[-0.16px]">
-                            User Terbaru
-                        </h2>
-                        <Link href="/admin/users" className="text-[13px] font-semibold text-sb-accent hover:text-sb-green transition-colors">
+                <Card>
+                    <CardHeader className="flex-row items-center justify-between pb-3">
+                        <CardTitle className="text-[16px]">User Terbaru</CardTitle>
+                        <Link href="/admin/users" className="text-[13px] font-semibold text-mint hover:text-forest transition-colors">
                             Kelola user
                         </Link>
-                    </div>
-                    <div className="mt-4 divide-y divide-[#edebe9]">
+                    </CardHeader>
+                    <CardContent>
+                    <div className="divide-y divide-[ceramic]">
                         {recentUsers.map((user) => (
                             <div key={user.id} className="flex items-center justify-between gap-3 py-2.5 first:pt-0 last:pb-0">
                                 <div>
-                                    <p className="text-[14px] font-semibold text-sb-text-black">{user.name}</p>
-                                    <p className="text-[12px] text-sb-text-soft">{user.email}</p>
+                                    <p className="text-[14px] font-semibold text-fg-primary">{user.name}</p>
+                                    <p className="text-[12px] text-fg-secondary">{user.email}</p>
                                 </div>
-                                <span className="rounded-pill bg-[#f9f9f9] px-2 py-0.5 text-[11px] font-medium text-sb-text-black border border-[#edebe9]">
+                                <span className="rounded-pill bg-[#f9f9f9] px-2 py-0.5 text-[11px] font-medium text-fg-primary border border-[ceramic]">
                                     {user.role}
                                 </span>
                             </div>
                         ))}
                     </div>
-                </section>
+                    </CardContent>
+                </Card>
 
-                <section aria-labelledby="recent-courses-title" className="rounded-[10px] bg-white p-4 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)]">
-                    <h2 id="recent-courses-title" className="text-[16px] font-semibold text-sb-text-black tracking-[-0.16px]">
-                        Kursus Terbaru
-                    </h2>
-                    <div className="mt-4 space-y-3">
+                <Card>
+                    <CardHeader className="pb-3">
+                        <CardTitle className="text-[16px]">Kursus Terbaru</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                    <div className="space-y-3">
                         {recentCourses.map((course) => (
-                            <article key={course.id} className="rounded-[8px] border border-[#edebe9] bg-[#f9f9f9] p-3 transition-all hover:border-[#d6dbde] hover:bg-white">
+                            <article key={course.id} className="rounded-[8px] border border-[ceramic] bg-[#f9f9f9] p-3 transition-all hover:border-[#d6dbde] hover:bg-white">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
-                                        <p className="text-[11px] font-semibold text-sb-green tracking-[0.05em] uppercase">{course.code}</p>
-                                        <h3 className="text-[14px] font-semibold text-sb-text-black leading-snug">{course.name}</h3>
-                                        <p className="mt-0.5 text-[12px] text-sb-text-soft">{course.instructor?.name}</p>
+                                        <p className="text-[11px] font-semibold text-forest tracking-[0.05em] uppercase">{course.code}</p>
+                                        <h3 className="text-[14px] font-semibold text-fg-primary leading-snug">{course.name}</h3>
+                                        <p className="mt-0.5 text-[12px] text-fg-secondary">{course.instructor?.name}</p>
                                     </div>
-                                    <span className={`rounded-pill px-2 py-0.5 text-[11px] font-medium border ${course.is_active ? 'bg-sb-light border-sb-light text-sb-green' : 'bg-white border-[#edebe9] text-sb-text-soft'}`}>
+                                    <span className={`rounded-pill px-2 py-0.5 text-[11px] font-medium border ${course.is_active ? 'bg-mint-light border-mint-light text-forest' : 'bg-white border-[ceramic] text-fg-secondary'}`}>
                                         {course.is_active ? 'Aktif' : 'Arsip'}
                                     </span>
                                 </div>
                             </article>
                         ))}
                     </div>
-                </section>
+                    </CardContent>
+                </Card>
             </div>
         </AdminLayout>
     );

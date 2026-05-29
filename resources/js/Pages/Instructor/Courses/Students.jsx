@@ -6,6 +6,9 @@ import { motion } from 'framer-motion';
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import CourseWorkspaceLayout from '@/components/instructor/CourseWorkspaceLayout';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { StatCard } from '@/components/ui/stat-card';
+import { EmptyState } from '@/components/ui/empty-state';
 
 export default function Students({ course, enrollments, stats, filters }) {
     const [filterData, setFilterData] = useState({
@@ -91,8 +94,6 @@ export default function Students({ course, enrollments, stats, filters }) {
                         <StatCard label="Berisiko" value={stats.at_risk} icon={AlertTriangle} color="red" />
                         <StatCard label="Rata-rata Progres" value={stats.avg_progress} icon={TrendingUp} color="blue" suffix="%" />
                     </div>
-
-                    {/* Filters */}
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative flex-1 max-w-sm">
                             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
@@ -116,13 +117,13 @@ export default function Students({ course, enrollments, stats, filters }) {
 
                     {/* Students Table */}
                     {enrollments.length === 0 ? (
-                        <EmptyState />
+                        <EmptyState
+                            icon={Users}
+                            title="Belum Ada Peserta"
+                            description="Bagikan kode enroll kursus kepada mahasiswa untuk mendaftarkan mereka ke kursus ini."
+                        />
                     ) : (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="rounded-xl shadow-sm border overflow-hidden bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
-                        >
+                        <Card>
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[1000px]">
                                     <thead>
@@ -217,7 +218,7 @@ export default function Students({ course, enrollments, stats, filters }) {
                                     </tbody>
                                 </table>
                             </div>
-                        </motion.div>
+                        </Card>
                     )}
                 </div>
             </CourseWorkspaceLayout>
@@ -225,34 +226,6 @@ export default function Students({ course, enrollments, stats, filters }) {
     );
 }
 
-
-function StatCard({ label, value, icon: Icon, color, suffix = '' }) {
-    const colors = {
-        emerald: 'from-emerald-500 to-teal-500 shadow-emerald-500/25',
-        teal: 'from-teal-500 to-cyan-500 shadow-teal-500/25',
-        amber: 'from-amber-500 to-orange-500 shadow-amber-500/25',
-        red: 'from-red-500 to-rose-500 shadow-red-500/25',
-        blue: 'from-blue-500 to-indigo-500 shadow-blue-500/25',
-    };
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-4 bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
-        >
-            <div className="flex items-center gap-3">
-                <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
-                    <Icon className="size-5 text-white" />
-                </div>
-                <div>
-                    <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}{suffix}</p>
-                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
-                </div>
-            </div>
-        </motion.div>
-    );
-}
 
 function StatusBadge({ status, isAtRisk }) {
     if (status === 'pending') {
@@ -278,25 +251,3 @@ function StatusBadge({ status, isAtRisk }) {
         </span>
     );
 }
-
-function EmptyState() {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-12 text-center bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
-        >
-            <div className="flex justify-center mb-6">
-                <div className="flex size-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 border border-emerald-200">
-                    <Users className="size-10 text-emerald-600" />
-                </div>
-            </div>
-            <h3 className="text-xl font-bold mb-2 text-neutral-900 dark:text-white/90">Belum Ada Peserta</h3>
-            <p className="mb-6 max-w-md mx-auto text-neutral-600 dark:text-white/45">
-                Bagikan kode enroll kursus kepada mahasiswa untuk mendaftarkan mereka ke kursus ini.
-            </p>
-        </motion.div>
-    );
-}
-
-

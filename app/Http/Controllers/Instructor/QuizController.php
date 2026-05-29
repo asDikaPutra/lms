@@ -29,6 +29,11 @@ class QuizController extends Controller
         $parent = $this->resolveParent($validated['quizzable_type'], (int) $validated['quizzable_id']);
         Gate::authorize('update', $parent);
 
+        // Normalize short type name to FQCN for polymorphic relation
+        $quizzableType = $validated['quizzable_type'] === 'module'
+            ? Module::class
+            : Material::class;
+
         $parent->quizzes()->create([
             'title' => $validated['title'],
             'duration' => $validated['duration'] ?? null,
@@ -36,6 +41,7 @@ class QuizController extends Controller
             'passing_score' => $validated['passing_score'],
             'max_attempts' => $validated['max_attempts'] ?? 1,
             'is_published' => (bool) ($validated['is_published'] ?? false),
+            'quizzable_type' => $quizzableType,
         ]);
 
         return back()->with('success', 'Quiz berhasil dibuat.');

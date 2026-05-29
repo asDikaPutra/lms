@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, ChevronRight } from 'lucide-react';
@@ -54,15 +54,18 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
     const [timeLeft, setTimeLeft] = useState(0);
     const [maxTime, setMaxTime] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [essayAnswer, setEssayAnswer] = useState('');
     const [showFeedback, setShowFeedback] = useState(false);
     const [feedback, setFeedback] = useState(null);
     const [loading, setLoading] = useState(true);
     const [startTime, setStartTime] = useState(null);
     const [transitioning, setTransitioning] = useState(false);
+    const submittingRef = useRef(false);
 
     const loadQuestion = useCallback(async () => {
         setLoading(true);
         setTransitioning(false);
+        submittingRef.current = false;
         try {
             const response = await fetch(
                 `/student/quiz-attempts/${attemptId}/questions/${currentQuestion}`,
@@ -81,6 +84,7 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
             setMaxTime(data.question.time_limit);
             setStartTime(Date.now());
             setSelectedAnswer(null);
+            setEssayAnswer('');
             setShowFeedback(false);
             setFeedback(null);
         } catch (error) {
@@ -99,7 +103,6 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
         const timer = setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
-                    handleTimeout();
                     return 0;
                 }
                 return prev - 1;
@@ -108,8 +111,15 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
         return () => clearInterval(timer);
     }, [timeLeft, showFeedback, loading]);
 
+    // Handle timeout separately to avoid stale closure
+    useEffect(() => {
+        if (timeLeft !== 0 || showFeedback || loading || !startTime) return;
+        handleTimeout();
+    }, [timeLeft, showFeedback, loading, startTime]);
+
     const handleTimeout = async () => {
-        if (showFeedback) return;
+        if (showFeedback || submittingRef.current) return;
+        submittingRef.current = true;
         const timeTaken = Math.floor((Date.now() - startTime) / 1000);
         try {
             const response = await fetch(
@@ -129,11 +139,13 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
             setShowFeedback(true);
         } catch (error) {
             console.error('Failed to submit on timeout:', error);
+            submittingRef.current = false;
         }
     };
 
     const handleAnswerSelect = async (answer) => {
-        if (showFeedback || selectedAnswer) return;
+        if (showFeedback || submittingRef.current) return;
+        submittingRef.current = true;
         setSelectedAnswer(answer);
         const timeTaken = Math.floor((Date.now() - startTime) / 1000);
         try {
@@ -155,6 +167,34 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
             setShowFeedback(true);
         } catch (error) {
             console.error('Failed to submit answer:', error);
+            submittingRef.current = false;
+        }
+    };
+
+    const handleEssaySubmit = async () => {
+        if (showFeedback || submittingRef.current || !essayAnswer.trim()) return;
+        submittingRef.current = true;
+        const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+        try {
+            const response = await fetch(
+                `/student/quiz-attempts/${attemptId}/questions/${currentQuestion}/submit`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({ answer: essayAnswer.trim(), time_taken: timeTaken }),
+                }
+            );
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            setFeedback(data);
+            setShowFeedback(true);
+        } catch (error) {
+            console.error('Failed to submit essay answer:', error);
+            submittingRef.current = false;
         }
     };
 
@@ -315,7 +355,29 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
                             </motion.div>
 
                             {/* Answer grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1 content-start">
+                            {question?.type === 'essay' ? (
+                                <div className="flex-1 flex flex-col gap-3">
+                                    <textarea
+                                        value={essayAnswer}
+                                        onChange={(e) => setEssayAnswer(e.target.value)}
+                                        placeholder="Tulis jawaban essay Anda di sini..."
+                                        className="flex-1 min-h-[200px] w-full rounded-2xl bg-white/95 backdrop-blur-xl border border-white/20 p-5 text-gray-900 text-base font-medium resize-none outline-none focus:ring-2 focus:ring-emerald-400/50 focus:border-emerald-400 shadow-xl placeholder:text-gray-400"
+                                        disabled={!!selectedAnswer}
+                                    />
+                                    <motion.button
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={handleEssaySubmit}
+                                        disabled={!essayAnswer.trim() || submittingRef.current}
+                                        className="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-lg rounded-2xl shadow-xl shadow-emerald-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                    >
+                                        Kirim Jawaban
+                                    </motion.button>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1 content-start">
                                 {question?.options?.map((option, index) => {
                                     const style = ANSWER_STYLES[index % ANSWER_STYLES.length];
                                     return (
@@ -358,6 +420,7 @@ export default function QuizPlay({ attemptId, initialQuestionNumber = 1 }) {
                                     );
                                 })}
                             </div>
+                            )}
                         </motion.div>
                     ) : (
                         /* ── FEEDBACK SCREEN ── */

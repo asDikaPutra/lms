@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 import FlashMessages from '@/components/FlashMessages';
-import { AnimatedButton } from '@/components/animated/AnimatedButton';
+import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/shared/ThemeToggle';
 
 export default function Login() {
@@ -236,17 +236,19 @@ export default function Login() {
 
                                 {/* Submit */}
                                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
-                                    <AnimatedButton
+                                    <Button
                                         type="submit"
+                                        variant="success"
                                         disabled={processing}
-                                        className="h-11 w-full text-sm font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40"
+                                        loading={processing}
+                                        className="h-11 w-full text-sm font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40"
                                     >
                                         {processing ? 'Memproses...' : (
                                             <span className="flex items-center justify-center gap-2">
                                                 Sign in <LogIn className="size-4" />
                                             </span>
                                         )}
-                                    </AnimatedButton>
+                                    </Button>
                                 </motion.div>
                             </div>
                         </form>

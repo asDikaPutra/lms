@@ -296,7 +296,7 @@ describe('Property 2: Preservation - Existing CRUD Operations Unchanged', () => 
             const allButtons = screen.getAllByRole('button');
             const kontenBtn = allButtons.find(btn =>
                 btn.textContent.trim() === 'Konten' &&
-                btn.className.includes('bg-sb-light/30')
+                btn.className.includes('bg-mint-light/30')
             );
             if (kontenBtn) {
                 fireEvent.click(kontenBtn);

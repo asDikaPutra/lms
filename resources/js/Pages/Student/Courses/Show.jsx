@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import StudentLayout from '@/Layouts/StudentLayout';
 import { Button } from '@/components/ui/button';
-import { AnimatedButton } from '@/components/animated/AnimatedButton';
 import { FadeInWhenVisible } from '@/components/animated/AnimatedPage';
 import VideoPlayer from '@/components/shared/VideoPlayer';
 
@@ -68,7 +67,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
         <StudentLayout title="Belajar">
             <Head title={`${course.name} - Belajar`} />
 
-            {/* Background — handled by AtmosphericBackground in layout */}
+            {/* Background � handled by AtmosphericBackground in layout */}
 
             {/* Course Header - Same as Instructor */}
             <motion.div
@@ -77,13 +76,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                 transition={{ duration: 0.5 }}
                 className="rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-600 p-6 text-white shadow-xl shadow-emerald-500/20 relative overflow-hidden"
             >
-                {/* Islamic pattern overlay */}
-                <div
-                    className="absolute inset-0 opacity-[0.1]"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
-                />
+           
 
                 <div className="relative">
                     {/* Back link */}
@@ -300,8 +293,8 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                         onClick={() => navigateTo(`quiz-${quiz.id}`)}
                                                         className={`w-full text-left p-2 rounded-lg border transition-all ${
                                                             currentView === `quiz-${quiz.id}`
-                                                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/15'
-                                                                : 'border-neutral-200 dark:border-white/10 hover:border-blue-200 hover:bg-blue-50/50 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/10'
+                                                                ? 'border-blue-500 bg-blue-50 dark:bg-emerald-500/15'
+                                                                : 'border-neutral-200 dark:border-white/10 hover:border-blue-200 hover:bg-blue-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
                                                         }`}
                                                     >
                                                         <span className="block truncate text-xs font-medium text-neutral-900 dark:text-white/70">{quiz.title}</span>
@@ -386,7 +379,7 @@ function OverviewPage({ course, expandedModules, toggleModule, navigateTo, compl
                         <button
                             onClick={() => toggleModule(module.id)}
                             type="button"
-                            className="w-full border-b-2 border-neutral-200 dark:border-white/[0.07] bg-gradient-to-br from-white to-neutral-50/50 dark:from-[#111a15] dark:to-[#0d1610] p-4 text-left transition-colors hover:from-emerald-50/30 hover:to-teal-50/30 dark:hover:from-emerald-500/5 dark:hover:to-teal-500/5 sm:p-5 md:p-6"
+                            className="w-full border-b-2 border-neutral-200 dark:border-white/[0.07] bg-gradient-to-br from-white to-neutral-50/50 dark:from-[#111a15] dark:to-[#0d1610] p-4 text-left transition-colors hover:from-emerald-50/30 hover:to-teal-50/30 dark:hover:from-blue-500/5 dark:hover:to-cyan-500/5 sm:p-5 md:p-6"
                         >
                             <div className="flex items-start justify-between gap-4">
                                 <div className="min-w-0 flex-1">
@@ -490,7 +483,7 @@ function OverviewPage({ course, expandedModules, toggleModule, navigateTo, compl
     );
 }
 
-// CriterionRow sub-component — single criterion display row
+// CriterionRow sub-component � single criterion display row
 function CriterionRow({ label, currentValue, threshold, met }) {
     return (
         <div className="flex items-center gap-3 rounded-[10px] border border-neutral-100 dark:border-white/[0.07] bg-neutral-50 dark:bg-white/5 px-4 py-3">
@@ -591,7 +584,7 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
                                 ? `${certificate_eligibility.current_progress}%`
                                 : 'Belum ada data'
                         }
-                        threshold={`≥ ${certificate_criteria.min_progress}%`}
+                        threshold={`= ${certificate_criteria.min_progress}%`}
                         met={
                             certificate_eligibility?.current_progress != null &&
                             certificate_eligibility.current_progress >= certificate_criteria.min_progress
@@ -607,7 +600,7 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
                                 ? certificate_eligibility.current_quiz_score
                                 : 'Belum ada percobaan'
                         }
-                        threshold={`≥ ${certificate_criteria.min_quiz_score}`}
+                        threshold={`= ${certificate_criteria.min_quiz_score}`}
                         met={
                             certificate_eligibility?.current_quiz_score != null &&
                             certificate_eligibility.current_quiz_score >= certificate_criteria.min_quiz_score
@@ -623,7 +616,7 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
                                 ? certificate_eligibility.current_assignment_score
                                 : 'Belum ada pengumpulan'
                         }
-                        threshold={`≥ ${certificate_criteria.min_assignment_score}`}
+                        threshold={`= ${certificate_criteria.min_assignment_score}`}
                         met={
                             certificate_eligibility?.current_assignment_score != null &&
                             certificate_eligibility.current_assignment_score >= certificate_criteria.min_assignment_score
@@ -659,7 +652,7 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
 
             {/* Action Button */}
             {has_certificate ? (
-                /* View Certificate — already has one */
+                /* View Certificate � already has one */
                 <div className="border-t border-neutral-100 dark:border-white/[0.06] px-4 pb-4 pt-3 md:px-5 md:pb-5">
                     <Link
                         href={`/student/certificates/${certificate_id}`}
@@ -670,22 +663,23 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
                     </Link>
                 </div>
             ) : eligible ? (
-                /* Request Certificate — eligible but no certificate yet */
+                /* Request Certificate � eligible but no certificate yet */
                 <div className="border-t border-neutral-100 px-4 pb-4 pt-3 md:px-5 md:pb-5">
                     <form onSubmit={handleRequestCertificate}>
-                        <motion.button
+                        <Button
                             type="submit"
+                            variant="success"
+                            size="sm"
                             disabled={processing}
-                            whileHover={{ scale: processing ? 1 : 1.02 }}
-                            whileTap={{ scale: processing ? 1 : 0.98 }}
-                            className="inline-flex items-center gap-2 rounded-[10px] bg-gradient-to-r from-[#0B3D2E] to-emerald-700 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(11,61,46,0.30)] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-700 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                            loading={processing}
+                            className="rounded-[10px] shadow-[0_4px_14px_rgba(11,61,46,0.30)]"
                         >
                             <Award className="size-4" aria-hidden="true" />
                             {processing ? 'Memproses...' : 'Minta Sertifikat'}
-                        </motion.button>
+                        </Button>
                     </form>
                 </div>
-            ) : null /* Not eligible — criteria rows explain what's missing */}
+            ) : null /* Not eligible � criteria rows explain what's missing */}
         </div>
     );
 }
@@ -726,7 +720,7 @@ function LearningItemButton({ tone, title, eyebrow, meta, status, onClick }) {
             <span className={`absolute inset-y-0 left-0 w-1 ${selectedTone.accent}`} />
 
             <div className="flex items-start gap-4 pl-3">
-                {/* Icon badge — rounded-square app icon style */}
+                {/* Icon badge � rounded-square app icon style */}
                 <span className={`inline-flex size-10 shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br text-white shadow-[0_4px_12px_rgba(5,150,105,0.28)] ${
                     eyebrow === 'Quiz'
                         ? 'from-blue-400 via-blue-500 to-indigo-600 shadow-[0_4px_12px_rgba(99,102,241,0.28)]'
@@ -1350,7 +1344,7 @@ function QuizView({ quiz, attempt }) {
                 >
                     {[
                         { icon: <FileText className="size-4" />, value: `${quiz.questions.length}`, label: 'Soal', color: 'text-emerald-300' },
-                        { icon: <Clock className="size-4" />, value: quiz.duration ? `${quiz.duration}` : 'âˆž', label: 'Menit', color: 'text-teal-300' },
+                        { icon: <Clock className="size-4" />, value: quiz.duration ? `${quiz.duration}` : '∞', label: 'Menit', color: 'text-teal-300' },
                         { icon: <CheckCircle2 className="size-4" />, value: `${quiz.passing_score}`, label: 'Passing', color: 'text-green-300' },
                         { icon: <HelpCircle className="size-4" />, value: `${remainingAttempts}`, label: 'Sisa Coba', color: 'text-cyan-300' },
                     ].map((stat, i) => (
@@ -1382,7 +1376,7 @@ function QuizView({ quiz, attempt }) {
                         {[
                             'Pastikan koneksi internet Anda stabil sebelum memulai',
                             `Anda memiliki ${quiz.max_attempts} kesempatan mengerjakan quiz ini`,
-                            quiz.duration ? `Waktu berjalan setelah klik "Mulai" â€” quiz otomatis berakhir jika waktu habis` : null,
+                            quiz.duration ? `Waktu berjalan setelah klik "Mulai" — quiz otomatis berakhir jika waktu habis` : null,
                             'Jawaban tidak dapat diubah setelah dikonfirmasi',
                         ].filter(Boolean).map((item, i) => (
                             <li key={i} className="flex items-start gap-2 text-sm text-white/60">
@@ -1462,7 +1456,7 @@ function QuizView({ quiz, attempt }) {
                             <div className={`mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
                                 passed ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
                             }`}>
-                                {passed ? 'ðŸŽ‰ Lulus' : 'ðŸ“š Belum Lulus'}
+                                {passed ? 'Lulus' : 'Belum Lulus'}
                             </div>
                         </motion.div>
                     )}
@@ -1537,7 +1531,7 @@ function QuizView({ quiz, attempt }) {
                             <div className={`mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
                                 passed ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
                             }`}>
-                                {passed ? 'ðŸŽ‰ Selamat, kamu lulus!' : 'ðŸ“š Belum lulus, pelajari lagi'}
+                                {passed ? 'Selamat, kamu lulus!' : 'Belum lulus, pelajari lagi'}
                             </div>
                         </motion.div>
                     )}
@@ -1552,7 +1546,7 @@ function QuizView({ quiz, attempt }) {
         );
     }
 
-    // Quiz Active â€” FULLSCREEN Quizizz/Wayground style (rendered via portal to escape layout)
+    // Quiz Active — FULLSCREEN Quizizz/Wayground style (rendered via portal to escape layout)
     return createPortal(
         <QuizFullscreen
             quiz={quiz}
@@ -1672,7 +1666,7 @@ function QuizFullscreen({
             />
 
             <div className="relative flex h-full flex-col">
-                {/* â”€â”€ TOP BAR â”€â”€ */}
+                {/* ── TOP BAR ── */}
                 <header className="flex flex-shrink-0 items-center gap-3 px-4 py-4 sm:gap-5 sm:px-8 sm:py-5">
                     {/* Exit */}
                     <button
@@ -1702,7 +1696,7 @@ function QuizFullscreen({
                             />
                         </div>
                         <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-white/40 sm:hidden">
-                            Soal {currentQuestionIndex + 1}/{totalQuestions} â€¢ {answeredCount} terjawab
+                            Soal {currentQuestionIndex + 1}/{totalQuestions} • {answeredCount} terjawab
                         </p>
                     </div>
 
@@ -1792,7 +1786,7 @@ function QuizFullscreen({
                     )}
                 </AnimatePresence>
 
-                {/* â”€â”€ MAIN â”€â”€ */}
+                {/* ── MAIN ── */}
                 <main className="flex flex-1 flex-col overflow-y-auto px-4 pb-4 sm:px-8 sm:pb-6">
                     <AnimatePresence mode="wait">
                         {activeQuestion ? (
@@ -1941,7 +1935,7 @@ function QuizFullscreen({
                     </AnimatePresence>
                 </main>
 
-                {/* â”€â”€ BOTTOM BAR â”€â”€ */}
+                {/* ── BOTTOM BAR ── */}
                 <footer className="flex flex-shrink-0 items-center gap-2 border-t border-white/10 bg-emerald-950/40 px-4 py-3 backdrop-blur sm:gap-3 sm:px-8 sm:py-4">
                     <button
                         type="button"
@@ -2117,7 +2111,7 @@ function AssignmentView({ assignment, submission }) {
                             ? 'bg-rose-100 text-rose-700'
                             : 'bg-teal-100 text-teal-700'
                     }`}>
-                        {isGraded ? `Nilai: ${submission.grade ?? 'â€”'}` : submission.status === 'late' ? 'Terlambat' : 'Dikumpulkan'}
+                        {isGraded ? `Nilai: ${submission.grade ?? '—'}` : submission.status === 'late' ? 'Terlambat' : 'Dikumpulkan'}
                     </span>
                 )}
             </div>
@@ -2196,16 +2190,16 @@ function AssignmentView({ assignment, submission }) {
                         )}
                     </div>
 
-                    <motion.button
+                    <Button
                         type="submit"
+                        variant="success"
                         disabled={form.processing}
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="relative flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-sm font-bold text-white shadow-lg shadow-emerald-500/25 transition disabled:cursor-not-allowed disabled:opacity-60 hover:from-emerald-700 hover:to-teal-700"
+                        loading={form.processing}
+                        className="w-full h-12 rounded-xl shadow-lg shadow-emerald-500/25"
                     >
                         <Upload className="size-4" />
                         {form.processing ? 'Mengirim...' : submission ? 'Kirim Ulang Tugas' : 'Kirim Tugas'}
-                    </motion.button>
+                    </Button>
                 </form>
             )}
         </div>
@@ -2275,7 +2269,7 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
             <form onSubmit={submitDiscussion} className="space-y-3">
                 {replyingTo && (
                     <div className="flex items-center justify-between rounded-lg bg-emerald-100 px-4 py-2 text-sm text-emerald-700 font-semibold">
-                        <span>ðŸ’¬ Membalas diskusi...</span>
+                        <span>Membalas diskusi...</span>
                         <button type="button" onClick={cancelReply} className="text-emerald-900 hover:text-emerald-950 font-bold text-xs">
                             Batal
                         </button>
@@ -2289,14 +2283,17 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
                     className="w-full rounded-lg border-2 border-neutral-200 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                 />
                 {form.errors.body && <p role="alert" className="text-sm text-rose-600 font-semibold">{form.errors.body}</p>}
-                <AnimatedButton
+                <Button
                     type="submit"
-                    className="px-6 py-2 text-sm font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
+                    variant="success"
+                    size="sm"
                     disabled={form.processing}
+                    loading={form.processing}
+                    className="px-6"
                 >
                     <Send className="mr-1.5 size-4" />
                     Kirim Diskusi
-                </AnimatedButton>
+                </Button>
             </form>
 
             <div className="space-y-3">
@@ -2318,7 +2315,7 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
                                 <div className="mt-2 flex items-center gap-3 text-xs text-neutral-500">
                                     <span>{new Date(discussion.created_at).toLocaleString('id-ID')}</span>
                                     <button type="button" onClick={() => startReply(discussion.id)} className="font-bold text-emerald-600 hover:text-emerald-700">
-                                        ðŸ’¬ Balas
+                                        Balas
                                     </button>
                                     {discussion.user_id === auth?.user?.id && (
                                         <button
@@ -2326,7 +2323,7 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
                                             onClick={() => handleDelete(discussion.id)}
                                             className="font-bold text-rose-600 hover:text-rose-700"
                                         >
-                                            ðŸ—‘ï¸ Hapus
+                                            Hapus
                                         </button>
                                     )}
                                 </div>

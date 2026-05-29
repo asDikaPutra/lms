@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 
 import InstructorLayout from '@/Layouts/InstructorLayout';
 import { Button } from '@/components/ui/button';
+import { FilterButton } from '@/components/ui/filter-button';
 import { AnimatedPage, StaggerContainer } from '@/components/animated/AnimatedPage';
 import { fadeUp } from '@/lib/animations';
 
@@ -130,42 +131,24 @@ export default function Index({ courses, filters }) {
                 >
                     {/* Filter Tabs */}
                     <div className="flex gap-2">
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                        <FilterButton
+                            active={filterForm.data.status === ''}
                             onClick={() => filterForm.setData('status', '')}
-                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                                filterForm.data.status === ''
-                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
-                                    : 'bg-white dark:bg-white/8 text-neutral-600 dark:text-white/60 border border-neutral-200 dark:border-white/10 hover:border-emerald-300 dark:hover:border-emerald-500/40'
-                            }`}
                         >
                             Semua
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                        </FilterButton>
+                        <FilterButton
+                            active={filterForm.data.status === 'active'}
                             onClick={() => filterForm.setData('status', 'active')}
-                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                                filterForm.data.status === 'active'
-                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
-                                    : 'bg-white dark:bg-white/8 text-neutral-600 dark:text-white/60 border border-neutral-200 dark:border-white/10 hover:border-emerald-300 dark:hover:border-emerald-500/40'
-                            }`}
                         >
                             Aktif
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                        </FilterButton>
+                        <FilterButton
+                            active={filterForm.data.status === 'inactive'}
                             onClick={() => filterForm.setData('status', 'inactive')}
-                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                                filterForm.data.status === 'inactive'
-                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30'
-                                    : 'bg-white dark:bg-white/8 text-neutral-600 dark:text-white/60 border border-neutral-200 dark:border-white/10 hover:border-emerald-300 dark:hover:border-emerald-500/40'
-                            }`}
                         >
                             Arsip
-                        </motion.button>
+                        </FilterButton>
                     </div>
 
                     {/* Search Bar */}
@@ -241,13 +224,14 @@ export default function Index({ courses, filters }) {
                         dark:bg-[#111a15] dark:ring-white/10"
                         role="dialog" aria-modal="true">
                         <div className="flex items-center justify-between border-b px-5 py-4
-                            border-[#edebe9] dark:border-white/[0.07]">
-                            <h3 className="text-[16px] font-semibold text-sb-text-black dark:text-white/90">
+                            border-gray-300 dark:border-white/[0.07]">
+                            <h3 className="text-[16px] font-semibold text-fg-primary dark:text-white/90">
                                 Buat Kursus Baru
                             </h3>
                             <button onClick={closeModal} className="rounded-full p-1 transition-colors
-                                text-sb-text-soft hover:bg-[#f9f9f9] hover:text-sb-text-black
-                                dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80">
+                                text-fg-secondary hover:bg-slate-50 hover:text-fg-primary
+                                dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80"
+                                aria-label="Tutup modal">
                                 <X className="size-5" />
                             </button>
                         </div>
@@ -256,49 +240,49 @@ export default function Index({ courses, filters }) {
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <Field label="Kode Kursus" id="code" error={form.errors.code}>
                                 <input id="code" value={form.data.code} onChange={(event) => form.setData('code', event.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
-                                    border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent
+                                    border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint
                                     dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: IF101" />
                                     </Field>
                                     <Field label="Semester" id="semester" error={form.errors.semester}>
                                 <input id="semester" value={form.data.semester} onChange={(event) => form.setData('semester', event.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
-                                    border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent
+                                    border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint
                                     dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Genap 2026" />
                                     </Field>
                                 </div>
 
                                 <Field label="Nama Kursus" id="name" error={form.errors.name}>
                                 <input id="name" value={form.data.name} onChange={(event) => form.setData('name', event.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
-                                    border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent
+                                    border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint
                                     dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Contoh: Pengantar Informatika" />
                                 </Field>
 
                                 <Field label="Deskripsi" id="description" error={form.errors.description}>
                                 <textarea id="description" rows="3" value={form.data.description} onChange={(event) => form.setData('description', event.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
-                                    border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent
+                                    border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint
                                     dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25 dark:focus:border-emerald-500/60" placeholder="Penjelasan singkat mengenai kursus ini" />
                                 </Field>
 
                                 <div className="grid gap-4 sm:grid-cols-2">
                                     <Field label="Mode Enrollment" id="enrollment-type" error={form.errors.enrollment_type}>
                                 <select id="enrollment-type" value={form.data.enrollment_type} onChange={(event) => form.setData('enrollment_type', event.target.value)} className="w-full rounded-[6px] border px-3 py-2 text-[13px] outline-none transition-all
-                                    border-[#d6dbde] text-sb-text-black focus:border-sb-accent focus:ring-1 focus:ring-sb-accent
+                                    border-gray-300 text-fg-primary focus:border-mint focus:ring-1 focus:ring-mint
                                     dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:focus:border-emerald-500/60">
                                             <option value="auto">Otomatis (Auto)</option>
                                             <option value="manual">Manual (Approval)</option>
                                         </select>
                                     </Field>
                                     <div className="flex flex-col justify-end pb-2">
-                                        <label className="flex items-center gap-2 text-[13px] cursor-pointer text-sb-text-black dark:text-white/70">
-                                            <input type="checkbox" checked={form.data.leaderboard_enabled} onChange={(event) => form.setData('leaderboard_enabled', event.target.checked)} className="size-4 rounded border-[#d6dbde] text-sb-accent focus:ring-sb-accent" />
+                                        <label className="flex items-center gap-2 text-[13px] cursor-pointer text-fg-primary dark:text-white/70">
+                                            <input type="checkbox" checked={form.data.leaderboard_enabled} onChange={(event) => form.setData('leaderboard_enabled', event.target.checked)} className="size-4 rounded border-gray-300 text-mint focus:ring-mint" />
                                             Leaderboard aktif
                                         </label>
                                     </div>
                                 </div>
 
                                 <div className="rounded-[8px] p-3 border
-                                    bg-[#f9f9f9] border-[#edebe9]
+                                    bg-slate-50 border-gray-300
                                     dark:bg-white/5 dark:border-white/[0.07]">
-                                    <p className="text-[12px] font-semibold mb-3 text-sb-text-black dark:text-white/70">Kriteria Sertifikat</p>
+                                    <p className="text-[12px] font-semibold mb-3 text-fg-primary dark:text-white/70">Kriteria Sertifikat</p>
                                     <div className="grid gap-4 sm:grid-cols-2">
                                         <Field label="Min. Progress (%)" id="min-progress" error={form.errors['certificate_criteria.min_progress']}>
                                             <input
@@ -308,7 +292,7 @@ export default function Index({ courses, filters }) {
                                                 max="100"
                                                 value={form.data.certificate_criteria.min_progress}
                                                 onChange={(event) => form.setData('certificate_criteria', { ...form.data.certificate_criteria, min_progress: event.target.value })}
-                                                className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-1.5 text-[13px] text-sb-text-black"
+                                                className="w-full rounded-[6px] border border-gray-300 px-3 py-1.5 text-[13px] text-fg-primary"
                                             />
                                         </Field>
                                         <Field label="Min. Nilai Kuis" id="min-score" error={form.errors['certificate_criteria.min_score']}>
@@ -319,7 +303,7 @@ export default function Index({ courses, filters }) {
                                                 max="100"
                                                 value={form.data.certificate_criteria.min_score}
                                                 onChange={(event) => form.setData('certificate_criteria', { ...form.data.certificate_criteria, min_score: event.target.value })}
-                                                className="w-full rounded-[6px] border border-[#d6dbde] px-3 py-1.5 text-[13px] text-sb-text-black"
+                                                className="w-full rounded-[6px] border border-gray-300 px-3 py-1.5 text-[13px] text-fg-primary"
                                             />
                                         </Field>
                                     </div>
@@ -447,16 +431,9 @@ function CourseCard({ course, delay }) {
 
                     {/* Action button */}
                     <Link href={`/instructor/courses/${course.id}`}>
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="relative w-full h-10 rounded-xl overflow-hidden group/btn shadow-md shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300"
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 group-hover/btn:from-emerald-700 group-hover/btn:via-teal-700 group-hover/btn:to-emerald-700 transition-all duration-300" />
-                            <span className="relative flex items-center justify-center gap-2 text-sm font-semibold text-white">
-                                Kelola →
-                            </span>
-                        </motion.button>
+                        <Button variant="success" size="sm" className="w-full h-10 rounded-xl shadow-md shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-500/30">
+                            Kelola
+                        </Button>
                     </Link>
                 </div>
             </div>
@@ -469,7 +446,7 @@ function Field({ label, id, error, children }) {
 
     return (
         <div>
-            <label htmlFor={id} className="text-[12px] font-semibold mb-1.5 block text-sb-text-black dark:text-white/70">
+            <label htmlFor={id} className="text-[12px] font-semibold mb-1.5 block text-fg-primary dark:text-white/70">
                 {label}
             </label>
             <div>
