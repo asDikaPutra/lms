@@ -52,19 +52,19 @@ export default function Dashboard({ stats, recentUsers, recentCourses }) {
                 <Card>
                     <CardHeader className="flex-row items-center justify-between pb-3">
                         <CardTitle className="text-[16px]">User Terbaru</CardTitle>
-                        <Link href="/admin/users" className="text-[13px] font-semibold text-mint hover:text-forest transition-colors">
+                        <Link href="/admin/users" className="text-[13px] font-semibold text-brand hover:text-brand-hover transition-colors">
                             Kelola user
                         </Link>
                     </CardHeader>
                     <CardContent>
-                    <div className="divide-y divide-[ceramic]">
+                    <div className="divide-y divide-line-subtle">
                         {recentUsers.map((user) => (
                             <div key={user.id} className="flex items-center justify-between gap-3 py-2.5 first:pt-0 last:pb-0">
                                 <div>
-                                    <p className="text-[14px] font-semibold text-fg-primary">{user.name}</p>
-                                    <p className="text-[12px] text-fg-secondary">{user.email}</p>
+                                    <p className="text-[14px] font-semibold text-content-primary">{user.name}</p>
+                                    <p className="text-[12px] text-content-secondary">{user.email}</p>
                                 </div>
-                                <span className="rounded-pill bg-[#f9f9f9] px-2 py-0.5 text-[11px] font-medium text-fg-primary border border-[ceramic]">
+                                <span className="rounded-pill bg-surface-muted px-2 py-0.5 text-[11px] font-medium text-content-primary border border-line">
                                     {user.role}
                                 </span>
                             </div>
@@ -80,14 +80,14 @@ export default function Dashboard({ stats, recentUsers, recentCourses }) {
                     <CardContent>
                     <div className="space-y-3">
                         {recentCourses.map((course) => (
-                            <article key={course.id} className="rounded-[8px] border border-[ceramic] bg-[#f9f9f9] p-3 transition-all hover:border-[#d6dbde] hover:bg-white">
+                            <article key={course.id} className="rounded-[8px] border border-line bg-surface-muted p-3 transition-all hover:border-line-strong hover:bg-surface">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
-                                        <p className="text-[11px] font-semibold text-forest tracking-[0.05em] uppercase">{course.code}</p>
-                                        <h3 className="text-[14px] font-semibold text-fg-primary leading-snug">{course.name}</h3>
-                                        <p className="mt-0.5 text-[12px] text-fg-secondary">{course.instructor?.name}</p>
+                                        <p className="text-[11px] font-semibold text-brand tracking-[0.05em] uppercase">{course.code}</p>
+                                        <h3 className="text-[14px] font-semibold text-content-primary leading-snug">{course.name}</h3>
+                                        <p className="mt-0.5 text-[12px] text-content-secondary">{course.instructor?.name}</p>
                                     </div>
-                                    <span className={`rounded-pill px-2 py-0.5 text-[11px] font-medium border ${course.is_active ? 'bg-mint-light border-mint-light text-forest' : 'bg-white border-[ceramic] text-fg-secondary'}`}>
+                                    <span className={`rounded-pill px-2 py-0.5 text-[11px] font-medium border ${course.is_active ? 'bg-brand-subtle border-transparent text-brand' : 'bg-surface border-line text-content-secondary'}`}>
                                         {course.is_active ? 'Aktif' : 'Arsip'}
                                     </span>
                                 </div>

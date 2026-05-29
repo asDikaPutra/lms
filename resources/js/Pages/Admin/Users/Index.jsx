@@ -98,13 +98,13 @@ export default function Index({ users, filters, stats }) {
                                 Cari user
                             </label>
                             <div className="relative">
-                                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+                                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-content-muted" aria-hidden="true" />
                                 <input
                                     id="search"
                                     value={filterForm.data.search}
                                     onChange={(event) => filterForm.setData('search', event.target.value)}
                                     placeholder="Cari nama/email"
-                                    className="h-10 w-full rounded-lg border border-slate-300 pl-9 pr-3 text-sm outline-none focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 md:w-56"
+                                    className="h-10 w-full rounded-lg border border-line bg-surface pl-9 pr-3 text-sm text-content-primary placeholder:text-content-muted outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 md:w-56"
                                 />
                             </div>
                             <label className="sr-only" htmlFor="role">
@@ -114,7 +114,7 @@ export default function Index({ users, filters, stats }) {
                                 id="role"
                                 value={filterForm.data.role}
                                 onChange={(event) => filterForm.setData('role', event.target.value)}
-                                className="h-10 rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15"
+                                className="h-10 rounded-lg border border-line bg-surface px-3 text-sm text-content-primary outline-none focus:border-brand focus:ring-2 focus:ring-brand/20"
                             >
                                 <option value="">Semua role</option>
                                 <option value="admin">Admin</option>
@@ -128,13 +128,13 @@ export default function Index({ users, filters, stats }) {
                                 id="status"
                                 value={filterForm.data.status}
                                 onChange={(event) => filterForm.setData('status', event.target.value)}
-                                className="h-10 rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15"
+                                className="h-10 rounded-lg border border-line bg-surface px-3 text-sm text-content-primary outline-none focus:border-brand focus:ring-2 focus:ring-brand/20"
                             >
                                 <option value="">Semua status</option>
                                 <option value="active">Aktif</option>
                                 <option value="inactive">Nonaktif</option>
                             </select>
-                            <Button type="submit" className="h-10 bg-blue-700 text-white hover:bg-blue-800">
+                            <Button type="submit" className="h-10">
                                 Filter
                             </Button>
                         </form>
@@ -144,7 +144,7 @@ export default function Index({ users, filters, stats }) {
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-[48rem] text-left text-sm">
                             <thead>
-                                <tr className="border-b border-slate-200 text-slate-500">
+                                <tr className="border-b border-line text-content-secondary">
                                     <th className="py-3 pr-4 font-medium">Nama</th>
                                     <th className="py-3 pr-4 font-medium">Role</th>
                                     <th className="py-3 pr-4 font-medium">Identitas</th>
@@ -152,17 +152,17 @@ export default function Index({ users, filters, stats }) {
                                     <th className="py-3 text-right font-medium">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100">
+                            <tbody className="divide-y divide-line-subtle">
                                 {users.data.map((user) => (
                                     <tr key={user.id}>
                                         <td className="py-4 pr-4">
-                                            <p className="font-semibold text-slate-950">{user.name}</p>
-                                            <p className="text-slate-500">{user.email}</p>
+                                            <p className="font-semibold text-content-primary">{user.name}</p>
+                                            <p className="text-content-secondary">{user.email}</p>
                                         </td>
-                                        <td className="py-4 pr-4 capitalize">{user.role}</td>
-                                        <td className="py-4 pr-4 text-slate-600">{user.nim || user.nidn || '-'}</td>
+                                        <td className="py-4 pr-4 capitalize text-content-primary">{user.role}</td>
+                                        <td className="py-4 pr-4 text-content-secondary">{user.nim || user.nidn || '-'}</td>
                                         <td className="py-4 pr-4">
-                                            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${user.is_active ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
+                                            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${user.is_active ? 'bg-success-subtle text-success' : 'bg-surface-muted text-content-secondary'}`}>
                                                 {user.is_active ? 'Aktif' : 'Nonaktif'}
                                             </span>
                                         </td>
@@ -189,7 +189,7 @@ export default function Index({ users, filters, stats }) {
                 <Card>
                     <CardHeader>
                     <div className="flex items-center gap-3">
-                        <div className="flex size-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                        <div className="flex size-11 items-center justify-center rounded-xl bg-info-subtle text-info">
                             <UserPlus className="size-5" aria-hidden="true" />
                         </div>
                         <div>
@@ -226,12 +226,12 @@ export default function Index({ users, filters, stats }) {
                                 <input id="nidn" value={form.data.nidn} onChange={(event) => form.setData('nidn', event.target.value)} className="field" />
                             </Field>
                         )}
-                        <label className="flex items-center gap-2 text-sm text-slate-600">
-                            <input type="checkbox" checked={form.data.is_active} onChange={(event) => form.setData('is_active', event.target.checked)} className="size-4 rounded border-slate-300 text-blue-700 focus:ring-blue-600" />
+                        <label className="flex items-center gap-2 text-sm text-content-secondary">
+                            <input type="checkbox" checked={form.data.is_active} onChange={(event) => form.setData('is_active', event.target.checked)} className="size-4 rounded border-line text-brand accent-brand focus:ring-brand/30" />
                             Akun aktif
                         </label>
                         <div className="flex gap-2">
-                            <Button type="submit" className="bg-blue-700 text-white hover:bg-blue-800" disabled={form.processing}>
+                            <Button type="submit" disabled={form.processing}>
                                 {form.processing ? 'Menyimpan...' : 'Simpan'}
                             </Button>
                             {editingUser && (
@@ -247,7 +247,7 @@ export default function Index({ users, filters, stats }) {
                 <Card>
                     <CardHeader>
                     <div className="flex items-center gap-3">
-                        <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                        <div className="flex size-11 items-center justify-center rounded-xl bg-success-subtle text-success">
                             <Upload className="size-5" aria-hidden="true" />
                         </div>
                         <div>
@@ -264,10 +264,10 @@ export default function Index({ users, filters, stats }) {
                                 type="file"
                                 accept=".csv,text/csv,text/plain"
                                 onChange={(event) => importForm.setData('file', event.target.files?.[0] ?? null)}
-                                className="field file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-slate-700"
+                                className="field file:mr-3 file:rounded-md file:border-0 file:bg-surface-muted file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-content-primary"
                             />
                         </Field>
-                        <Button type="submit" className="bg-emerald-700 text-white hover:bg-emerald-800" disabled={importForm.processing}>
+                        <Button type="submit" variant="success" disabled={importForm.processing}>
                             <Upload />
                             {importForm.processing ? 'Mengimpor...' : 'Import CSV'}
                         </Button>
@@ -285,7 +285,7 @@ function Field({ label, id, error, children }) {
 
     return (
         <div>
-            <label htmlFor={id} className="text-sm font-medium text-slate-700">
+            <label htmlFor={id} className="text-sm font-medium text-content-primary">
                 {label}
             </label>
             <div className="mt-2">
@@ -295,7 +295,7 @@ function Field({ label, id, error, children }) {
                 })}
             </div>
             {error && (
-                <p id={describedBy} role="alert" className="mt-2 text-sm text-rose-600">
+                <p id={describedBy} role="alert" className="mt-2 text-sm text-danger">
                     {error}
                 </p>
             )}

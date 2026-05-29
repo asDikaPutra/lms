@@ -74,13 +74,13 @@ export default function Index({ courses, filters, instructors }) {
                                     Cari kursus
                                 </label>
                                 <div className="relative">
-                                    <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+                                    <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-content-muted" aria-hidden="true" />
                                     <input
                                         id="course-search"
                                         value={filterForm.data.search}
                                         onChange={(event) => filterForm.setData('search', event.target.value)}
                                         placeholder="Cari kode/nama"
-                                        className="h-10 w-full rounded-lg border border-slate-300 pl-9 pr-3 text-sm outline-none focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 md:w-56"
+                                        className="h-10 w-full rounded-lg border border-line bg-surface pl-9 pr-3 text-sm text-content-primary placeholder:text-content-muted outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 md:w-56"
                                     />
                                 </div>
                                 <label className="sr-only" htmlFor="course-status">
@@ -90,19 +90,19 @@ export default function Index({ courses, filters, instructors }) {
                                     id="course-status"
                                     value={filterForm.data.status}
                                     onChange={(event) => filterForm.setData('status', event.target.value)}
-                                    className="h-10 rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15"
+                                    className="h-10 rounded-lg border border-line bg-surface px-3 text-sm text-content-primary outline-none focus:border-brand focus:ring-2 focus:ring-brand/20"
                                 >
                                     <option value="">Semua status</option>
                                     <option value="active">Aktif</option>
                                     <option value="inactive">Arsip</option>
                                 </select>
-                                <Button type="submit" className="h-10 bg-blue-700 text-white hover:bg-blue-800">
+                                <Button type="submit" className="h-10">
                                     Filter
                                 </Button>
                             </form>
                             <a
                                 href="/admin/reports/courses.csv"
-                                className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-3 focus:ring-blue-600/15"
+                                className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-line px-3 text-sm font-medium text-content-primary transition hover:bg-surface-muted focus:outline-none focus:ring-2 focus:ring-brand/20"
                             >
                                 <Download className="size-4" aria-hidden="true" />
                                 Export
@@ -114,7 +114,7 @@ export default function Index({ courses, filters, instructors }) {
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-[56rem] text-left text-sm">
                             <thead>
-                                <tr className="border-b border-slate-200 text-slate-500">
+                                <tr className="border-b border-line text-content-secondary">
                                     <th className="py-3 pr-4 font-medium">Kursus</th>
                                     <th className="py-3 pr-4 font-medium">Dosen</th>
                                     <th className="py-3 pr-4 font-medium">Semester</th>
@@ -123,23 +123,23 @@ export default function Index({ courses, filters, instructors }) {
                                     <th className="py-3 text-right font-medium">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100">
+                            <tbody className="divide-y divide-line-subtle">
                                 {courses.data.map((course) => (
                                     <tr key={course.id}>
                                         <td className="py-4 pr-4">
-                                            <p className="font-semibold text-slate-950">{course.name}</p>
-                                            <p className="text-slate-500">{course.code}</p>
+                                            <p className="font-semibold text-content-primary">{course.name}</p>
+                                            <p className="text-content-secondary">{course.code}</p>
                                         </td>
                                         <td className="py-4 pr-4">
-                                            <p className="font-medium text-slate-800">{course.instructor?.name ?? '-'}</p>
-                                            <p className="text-slate-500">{course.instructor?.email ?? ''}</p>
+                                            <p className="font-medium text-content-primary">{course.instructor?.name ?? '-'}</p>
+                                            <p className="text-content-secondary">{course.instructor?.email ?? ''}</p>
                                         </td>
-                                        <td className="py-4 pr-4 text-slate-600">{course.semester ?? '-'}</td>
-                                        <td className="py-4 pr-4 text-slate-600">
+                                        <td className="py-4 pr-4 text-content-secondary">{course.semester ?? '-'}</td>
+                                        <td className="py-4 pr-4 text-content-secondary">
                                             {course.active_enrollments_count} aktif, {course.modules_count} modul
                                         </td>
                                         <td className="py-4 pr-4">
-                                            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${course.is_active ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
+                                            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${course.is_active ? 'bg-success-subtle text-success' : 'bg-surface-muted text-content-secondary'}`}>
                                                 {course.is_active ? 'Aktif' : 'Arsip'}
                                             </span>
                                         </td>
@@ -166,7 +166,7 @@ export default function Index({ courses, filters, instructors }) {
                 <Card>
                     <CardHeader>
                     <div className="flex items-center gap-3">
-                        <div className="flex size-11 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
+                        <div className="flex size-11 items-center justify-center rounded-xl bg-brand-subtle text-brand">
                             <BookOpen className="size-5" aria-hidden="true" />
                         </div>
                         <div>
@@ -190,18 +190,18 @@ export default function Index({ courses, filters, instructors }) {
                         <Field label="Semester" id="semester" error={form.errors.semester}>
                             <input id="semester" value={form.data.semester} onChange={(event) => form.setData('semester', event.target.value)} className="field" disabled={!editingCourse} />
                         </Field>
-                        <label className="flex items-center gap-2 text-sm text-slate-600">
+                        <label className="flex items-center gap-2 text-sm text-content-secondary">
                             <input
                                 type="checkbox"
                                 checked={form.data.leaderboard_enabled}
                                 onChange={(event) => form.setData('leaderboard_enabled', event.target.checked)}
-                                className="size-4 rounded border-slate-300 text-blue-700 focus:ring-blue-600"
+                                className="size-4 rounded border-line text-brand accent-brand focus:ring-brand/30"
                                 disabled={!editingCourse}
                             />
                             Leaderboard aktif
                         </label>
                         <div className="flex gap-2">
-                            <Button type="submit" className="bg-blue-700 text-white hover:bg-blue-800" disabled={!editingCourse || form.processing}>
+                            <Button type="submit" disabled={!editingCourse || form.processing}>
                                 {form.processing ? 'Menyimpan...' : 'Simpan'}
                             </Button>
                             {editingCourse && (
@@ -223,7 +223,7 @@ function Field({ label, id, error, children }) {
 
     return (
         <div>
-            <label htmlFor={id} className="text-sm font-medium text-slate-700">
+            <label htmlFor={id} className="text-sm font-medium text-content-primary">
                 {label}
             </label>
             <div className="mt-2">
@@ -233,7 +233,7 @@ function Field({ label, id, error, children }) {
                 })}
             </div>
             {error && (
-                <p id={describedBy} role="alert" className="mt-2 text-sm text-rose-600">
+                <p id={describedBy} role="alert" className="mt-2 text-sm text-danger">
                     {error}
                 </p>
             )}
