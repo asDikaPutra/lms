@@ -64,7 +64,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="max-w-2xl text-sm leading-relaxed text-neutral-600 dark:text-white/45"
+                            className="max-w-2xl text-sm leading-relaxed text-content-secondary"
                         >
                             Kelola kursus, nilai tugas, dan pantau progress mahasiswa Anda.
                         </motion.p>
@@ -87,14 +87,14 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 <div className="relative flex items-start justify-between">
                                     <div>
                                         <motion.p 
-                                            className="text-3xl font-bold text-neutral-900 dark:text-white/90"
+                                            className="text-3xl font-bold text-content-primary"
                                             initial={{ scale: 0.5, opacity: 0 }}
                                             animate={{ scale: 1, opacity: 1 }}
                                             transition={{ delay: 0.5 + index * 0.1, type: 'spring' }}
                                         >
                                             {stats[item.key]}
                                         </motion.p>
-                                        <p className="mt-1.5 text-xs font-semibold text-neutral-600 dark:text-white/40">{item.label}</p>
+                                        <p className="mt-1.5 text-xs font-semibold text-content-secondary">{item.label}</p>
                                     </div>
                                     <div className={`flex size-11 items-center justify-center rounded-[13px] bg-gradient-to-br text-white ${iconToneClasses[item.tone]}`}>
                                         <Icon className="size-5" strokeWidth={1.75} aria-hidden="true" />
@@ -118,11 +118,11 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                             <div className="relative">
                                 <div className="flex items-center justify-between mb-6">
                                     <div>
-                                        <h2 className="text-xl font-bold flex items-center gap-2.5 text-neutral-900 dark:text-white/90">
+                                        <h2 className="text-xl font-bold flex items-center gap-2.5 text-content-primary">
                                             <BookOpen className="size-5 text-emerald-600" strokeWidth={1.75} aria-hidden="true" />
                                             Kursus Saya
                                         </h2>
-                                        <p className="mt-1 text-xs text-neutral-600 dark:text-white/35">Kelola dan pantau kursus Anda</p>
+                                        <p className="mt-1 text-xs text-content-secondary">Kelola dan pantau kursus Anda</p>
                                     </div>
                                     <Link 
                                         href="/instructor/courses"
@@ -137,8 +137,8 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                         <div className="col-span-2 rounded-xl border-2 border-dashed p-8 text-center
                                             border-neutral-200 bg-neutral-50/50
                                             dark:border-white/10 dark:bg-transparent">
-                                            <BookOpen className="mx-auto mb-3 size-8 text-neutral-400 dark:text-white/20" aria-hidden="true" />
-                                            <p className="text-xs text-neutral-500 dark:text-white/30 font-medium">Belum ada kursus.</p>
+                                            <BookOpen className="mx-auto mb-3 size-8 text-content-muted" aria-hidden="true" />
+                                            <p className="text-xs text-content-muted font-medium">Belum ada kursus.</p>
                                         </div>
                                     )}
                                     {courses.map((course, index) => (
@@ -166,8 +166,8 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                             <Clock className="size-5" strokeWidth={1.75} aria-hidden="true" />
                                         </span>
                                         <div>
-                                            <h2 className="text-xl font-bold text-neutral-900 dark:text-white/90">Pengajuan Enrollment</h2>
-                                            <p className="text-xs text-neutral-600 dark:text-white/35">Perlu persetujuan Anda</p>
+                                            <h2 className="text-xl font-bold text-content-primary">Pengajuan Enrollment</h2>
+                                            <p className="text-xs text-content-secondary">Perlu persetujuan Anda</p>
                                         </div>
                                     </div>
                                     
@@ -175,8 +175,8 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                         {pendingEnrollments.length === 0 && (
                                             <div className="text-center py-8 rounded-xl
                                                 bg-neutral-50/50 dark:bg-transparent">
-                                                <CheckCircle2 className="mx-auto mb-3 size-8 text-neutral-400 dark:text-white/20" aria-hidden="true" />
-                                                <p className="text-xs text-neutral-500 dark:text-white/30 font-medium">Belum ada pengajuan baru.</p>
+                                                <CheckCircle2 className="mx-auto mb-3 size-8 text-content-muted" aria-hidden="true" />
+                                                <p className="text-xs text-content-muted font-medium">Belum ada pengajuan baru.</p>
                                             </div>
                                         )}
                                         {pendingEnrollments.map((enrollment, index) => (
@@ -202,8 +202,8 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                             <MessageSquare className="size-5" strokeWidth={1.75} />
                                         </span>
                                         <div>
-                                            <h2 className="text-xl font-bold text-neutral-900 dark:text-white/90">Diskusi Terbaru</h2>
-                                            <p className="text-xs text-neutral-600 dark:text-white/35">Aktivitas mahasiswa</p>
+                                            <h2 className="text-xl font-bold text-content-primary">Diskusi Terbaru</h2>
+                                            <p className="text-xs text-content-secondary">Aktivitas mahasiswa</p>
                                         </div>
                                     </div>
                                     
@@ -211,8 +211,8 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                         {recentDiscussions.length === 0 && (
                                             <div className="text-center py-8 rounded-xl
                                                 bg-neutral-50/50 dark:bg-transparent">
-                                                <MessageSquare className="mx-auto mb-3 size-8 text-neutral-400 dark:text-white/20" aria-hidden="true" />
-                                                <p className="text-xs text-neutral-500 dark:text-white/30 font-medium">Belum ada diskusi.</p>
+                                                <MessageSquare className="mx-auto mb-3 size-8 text-content-muted" aria-hidden="true" />
+                                                <p className="text-xs text-content-muted font-medium">Belum ada diskusi.</p>
                                             </div>
                                         )}
                                         {recentDiscussions.map((discussion, index) => (
@@ -274,28 +274,28 @@ function CourseCard({ course, delay }) {
                             {course.code}
                         </p>
                     </div>
-                    <h3 className="text-sm font-bold leading-snug line-clamp-2 text-neutral-900 dark:text-white/90">{course.name}</h3>
-                    <p className="mt-0.5 text-xs text-neutral-600 dark:text-white/40">{course.semester ?? 'Semester belum diatur'}</p>
+                    <h3 className="text-sm font-bold leading-snug line-clamp-2 text-content-primary">{course.name}</h3>
+                    <p className="mt-0.5 text-xs text-content-secondary">{course.semester ?? 'Semester belum diatur'}</p>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 text-xs mb-3">
                     <div className="text-center p-2 rounded-lg border
                         border-neutral-200 bg-neutral-50
                         dark:border-white/[0.07] dark:bg-white/5">
-                        <p className="font-bold text-neutral-900 dark:text-white/80">{course.modules_count}</p>
-                        <p className="text-[10px] text-neutral-600 dark:text-white/35">Modul</p>
+                        <p className="font-bold text-content-primary">{course.modules_count}</p>
+                        <p className="text-[10px] text-content-secondary">Modul</p>
                     </div>
                     <div className="text-center p-2 rounded-lg border
                         border-neutral-200 bg-neutral-50
                         dark:border-white/[0.07] dark:bg-white/5">
-                        <p className="font-bold text-neutral-900 dark:text-white/80">{course.active_enrollments_count}</p>
-                        <p className="text-[10px] text-neutral-600 dark:text-white/35">Aktif</p>
+                        <p className="font-bold text-content-primary">{course.active_enrollments_count}</p>
+                        <p className="text-[10px] text-content-secondary">Aktif</p>
                     </div>
                     <div className="text-center p-2 rounded-lg border
                         border-neutral-200 bg-neutral-50
                         dark:border-white/[0.07] dark:bg-white/5">
-                        <p className="font-bold text-neutral-900 dark:text-white/80">{course.pending_enrollments_count}</p>
-                        <p className="text-[10px] text-neutral-600 dark:text-white/35">Pending</p>
+                        <p className="font-bold text-content-primary">{course.pending_enrollments_count}</p>
+                        <p className="text-[10px] text-content-secondary">Pending</p>
                     </div>
                 </div>
 
@@ -334,8 +334,8 @@ function EnrollmentCard({ enrollment, delay }) {
                     </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold leading-snug text-neutral-900 dark:text-white/80">{enrollment.user.name}</p>
-                    <p className="mt-0.5 text-xs text-neutral-600 dark:text-white/40 line-clamp-1">
+                    <p className="text-sm font-bold leading-snug text-content-primary">{enrollment.user.name}</p>
+                    <p className="mt-0.5 text-xs text-content-secondary line-clamp-1">
                         {enrollment.course.code} - {enrollment.course.name}
                     </p>
                     <div className="mt-3 flex gap-2">
@@ -383,9 +383,9 @@ function DiscussionCard({ discussion, delay }) {
                     </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-neutral-900 dark:text-white/80">{discussion.user?.name ?? 'User'}</p>
-                    <p className="mt-1 text-xs text-neutral-600 dark:text-white/45 line-clamp-2">{discussion.body}</p>
-                    <div className="mt-2 flex items-center gap-2 text-[10px] text-neutral-500 dark:text-white/30">
+                    <p className="text-xs font-bold text-content-primary">{discussion.user?.name ?? 'User'}</p>
+                    <p className="mt-1 text-xs text-content-secondary line-clamp-2">{discussion.body}</p>
+                    <div className="mt-2 flex items-center gap-2 text-[10px] text-content-muted">
                         <span className="text-blue-600 font-semibold">{discussion.course_code}</span>
                         <span>/</span>
                         <span className="line-clamp-1">{discussion.material_title}</span>

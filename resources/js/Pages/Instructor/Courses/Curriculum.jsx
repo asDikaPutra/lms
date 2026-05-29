@@ -213,7 +213,7 @@ export default function Curriculum({ course }) {
 
             <CourseWorkspaceLayout course={course}>
                 <div className="w-full tracking-[-0.01em]">
-                    <section aria-labelledby="builder-title" className="rounded-[10px] p-4 lg:p-5 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)] bg-white dark:bg-[#111a15] dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]">
+                    <section aria-labelledby="builder-title" className="rounded-[10px] p-4 lg:p-5 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)] bg-surface dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]">
                         <div className="flex items-center justify-between border-b pb-4 border-ceramic dark:border-white/[0.07]">
                             <div className="flex items-center gap-3">
                                 <div className="flex size-[36px] items-center justify-center rounded-[8px] bg-mint-light text-forest dark:bg-emerald-500/20 dark:text-emerald-400">
@@ -327,7 +327,7 @@ function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, 
             {/* Materials */}
             <div className={`flex flex-col border-t divide-y border-ceramic divide-ceramic dark:border-white/[0.07] dark:divide-white/[0.06] ${expandedModules.has(module.id) ? '' : 'hidden'}`}>
                 {module.materials.length === 0 && (
-                    <div className="relative p-4 pl-[48px] pr-4 bg-white dark:bg-[#111a15]">
+                    <div className="relative p-4 pl-[48px] pr-4 bg-surface">
                         <div className="absolute left-[24px] top-0 h-full w-[2px] bg-ceramic dark:bg-white/10"></div>
                         <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-ceramic dark:bg-white/10"></div>
                         <p className="text-[12px] text-fg-secondary italic">Belum ada materi di modul ini.</p>
@@ -345,7 +345,7 @@ function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, 
                         getContentTypeIcon={getContentTypeIcon}
                     />
                 ))}
-                <div className="relative p-3 pl-[48px] pr-4 bg-white dark:bg-[#111a15]">
+                <div className="relative p-3 pl-[48px] pr-4 bg-surface">
                     <div className="absolute left-[24px] top-0 h-[30px] w-[2px] bg-ceramic"></div>
                     <div className="absolute left-[24px] top-[30px] w-[16px] h-[2px] bg-ceramic"></div>
                     <Button onClick={() => openModal('material', module.id)} variant="outline" size="sm" className="w-full border-dashed text-fg-secondary hover:text-fg-primary hover:border-gray-300 hover:bg-slate-50 relative z-10">
@@ -416,7 +416,7 @@ function AssignmentItem({ assignment, parentId, parentKind, expanded, openModal 
 
 function MaterialItem({ material, moduleId, expandedModules, expandedMaterials, toggleMaterial, openModal, getContentTypeIcon }) {
     return (
-        <div className="relative bg-white dark:bg-[#111a15]">
+        <div className="relative bg-surface">
             <div className={`absolute left-[24px] top-0 w-[2px] bg-ceramic ${expandedModules.has(moduleId) ? 'h-full' : 'h-0'}`}></div>
             <div className="relative flex flex-col gap-2 py-3 pl-[48px] pr-4 md:flex-row md:items-center md:justify-between">
                 <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-ceramic dark:bg-white/10"></div>

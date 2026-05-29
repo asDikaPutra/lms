@@ -77,7 +77,7 @@ export default function Login() {
                             <div className="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/30">
                                 <BookOpenCheck className="size-5" />
                             </div>
-                            <span className="text-base font-bold text-neutral-800 dark:text-white/90">LMS Islam Fakultas</span>
+                            <span className="text-base font-bold text-content-primary">LMS Islam Fakultas</span>
                         </motion.div>
 
                         {/* Heading */}
@@ -91,7 +91,7 @@ export default function Login() {
                                 Assalamu'alaikum
                             </span>
                             <br />
-                            <span className="text-neutral-800 dark:text-white/90">
+                            <span className="text-content-primary">
                                 selamat datang kembali.
                             </span>
                         </motion.h1>
@@ -118,7 +118,7 @@ export default function Login() {
                                         dark:bg-white/8 dark:border-white/10 dark:backdrop-blur-sm"
                                 >
                                     <item.icon className="size-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-                                    <span className="text-xs font-medium text-neutral-700 dark:text-white/60">{item.label}</span>
+                                    <span className="text-xs font-medium text-content-secondary">{item.label}</span>
                                 </motion.div>
                             ))}
                         </motion.div>
@@ -145,18 +145,18 @@ export default function Login() {
                             <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
                                 <span className="text-xs font-semibold uppercase tracking-wider">Silakan masuk</span>
                             </div>
-                            <h2 className="mt-2 text-2xl font-bold text-neutral-900 dark:text-white/90">
+                            <h2 className="mt-2 text-2xl font-bold text-content-primary">
                                 Masuk Akun
                             </h2>
 
                             <div className="mt-6 space-y-4">
                                 {/* Email */}
                                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-                                    <label htmlFor="email" className="block text-xs font-semibold mb-1.5 text-neutral-700 dark:text-white/70">
+                                    <label htmlFor="email" className="block text-xs font-semibold mb-1.5 text-content-primary">
                                         Email
                                     </label>
                                     <div className="relative">
-                                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-400 dark:text-white/30" />
+                                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-content-muted" />
                                         <input
                                             id="email"
                                             type="email"
@@ -171,7 +171,7 @@ export default function Login() {
                                                     ? 'border-red-400 bg-red-50/50 dark:border-red-500/60 dark:bg-red-500/10'
                                                     : focusedField === 'email'
                                                     ? 'border-emerald-500 bg-white shadow-lg shadow-emerald-500/10 dark:border-emerald-500/70 dark:bg-white/12'
-                                                    : 'border-neutral-200 bg-neutral-50/50 hover:border-neutral-300 dark:border-white/15 dark:hover:border-white/25'
+                                                    : 'border-neutral-200 bg-neutral-50/50 hover:border-line-strong dark:hover:border-white/25'
                                             }`}
                                             placeholder="nama@email.com"
                                         />
@@ -186,11 +186,11 @@ export default function Login() {
 
                                 {/* Password */}
                                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-                                    <label htmlFor="password" className="block text-xs font-semibold mb-1.5 text-neutral-700 dark:text-white/70">
+                                    <label htmlFor="password" className="block text-xs font-semibold mb-1.5 text-content-primary">
                                         Password
                                     </label>
                                     <div className="relative">
-                                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-400 dark:text-white/30" />
+                                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-content-muted" />
                                         <input
                                             id="password"
                                             type="password"
@@ -205,7 +205,7 @@ export default function Login() {
                                                     ? 'border-red-400 bg-red-50/50 dark:border-red-500/60 dark:bg-red-500/10'
                                                     : focusedField === 'password'
                                                     ? 'border-emerald-500 bg-white shadow-lg shadow-emerald-500/10 dark:border-emerald-500/70 dark:bg-white/12'
-                                                    : 'border-neutral-200 bg-neutral-50/50 hover:border-neutral-300 dark:border-white/15 dark:hover:border-white/25'
+                                                    : 'border-neutral-200 bg-neutral-50/50 hover:border-line-strong dark:hover:border-white/25'
                                             }`}
                                             placeholder="••••••••"
                                         />

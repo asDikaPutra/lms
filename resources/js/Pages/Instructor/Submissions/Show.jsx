@@ -52,10 +52,10 @@ export default function Show({ assignment, submissions }) {
                 
                 <Card className="mt-4">
                     <CardContent className="pt-5">
-                    <h2 className="text-xl font-bold text-neutral-900 dark:text-white/90">{assignment.title}</h2>
-                    <p className="mt-2 text-sm text-neutral-600 dark:text-white/50">{assignment.description}</p>
+                    <h2 className="text-xl font-bold text-content-primary">{assignment.title}</h2>
+                    <p className="mt-2 text-sm text-content-secondary">{assignment.description}</p>
                     
-                    <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-neutral-500 dark:text-white/35">
+                    <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-content-secondary">
                         <span className="inline-flex items-center gap-1.5">
                             <Calendar className="size-4" />
                             Deadline: {assignment.deadline ? new Date(assignment.deadline).toLocaleString('id-ID') : '-'}
@@ -123,13 +123,13 @@ function SubmissionCard({ submission }) {
             <CardContent className="pt-5">
             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                 <div>
-                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">
+                    <h3 className="text-lg font-semibold text-content-primary">
                         {submission.user?.name}
                     </h3>
                     {submission.user?.nim && (
-                        <p className="text-sm text-neutral-500 dark:text-white/35">NIM: {submission.user.nim}</p>
+                        <p className="text-sm text-content-secondary">NIM: {submission.user.nim}</p>
                     )}
-                    <p className="mt-1 flex items-center gap-1.5 text-xs text-neutral-400 dark:text-white/25">
+                    <p className="mt-1 flex items-center gap-1.5 text-xs text-content-muted">
                         <Clock className="size-3.5" />
                         Dikumpulkan: {submission.submitted_at ? new Date(submission.submitted_at).toLocaleString('id-ID') : '-'}
                     </p>
@@ -176,9 +176,9 @@ function SubmissionCard({ submission }) {
             )}
 
             {showGrade && (
-                <form onSubmit={submitGrade} className="mt-4 space-y-4 rounded-xl border p-4 border-neutral-100 bg-neutral-50 dark:bg-white/5 dark:border-white/[0.07]">
+                <form onSubmit={submitGrade} className="mt-4 space-y-4 rounded-xl border p-4 border-neutral-100 bg-surface-muted dark:border-white/[0.07]">
                     <div>
-                        <label htmlFor={`grade-${submission.id}`} className="block text-sm font-semibold text-neutral-700 dark:text-white/70">
+                        <label htmlFor={`grade-${submission.id}`} className="block text-sm font-semibold text-content-primary">
                             Nilai (0-100)
                         </label>
                         <input
@@ -194,7 +194,7 @@ function SubmissionCard({ submission }) {
                         {form.errors.grade && <p role="alert" className="mt-1 text-sm text-red-600">{form.errors.grade}</p>}
                     </div>
                     <div>
-                        <label htmlFor={`feedback-${submission.id}`} className="block text-sm font-semibold text-neutral-700 dark:text-white/70">
+                        <label htmlFor={`feedback-${submission.id}`} className="block text-sm font-semibold text-content-primary">
                             Feedback (opsional)
                         </label>
                         <textarea

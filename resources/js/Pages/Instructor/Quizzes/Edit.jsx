@@ -112,7 +112,7 @@ export default function EditQuiz({ quiz, course_id }) {
                     {/* Sidebar navigasi soal */}
                     <div className="w-full md:w-[240px] shrink-0">
                         <div className="rounded-[10px] p-4 shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)]
-                            bg-white dark:bg-[#111a15] dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]">
+                            bg-surface dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]">
                             <h3 className="text-[14px] font-semibold mb-3 text-fg-primary dark:text-white/90">
                                 Navigasi Soal
                             </h3>
@@ -157,7 +157,7 @@ export default function EditQuiz({ quiz, course_id }) {
                     {/* Editor soal */}
                     <div className="flex-1">
                         <div className="rounded-[10px] shadow-[0_0_0.5px_rgba(0,0,0,0.14),_0_1px_1px_rgba(0,0,0,0.24)]
-                            bg-white dark:bg-[#111a15] dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]">
+                            bg-surface dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]">
 
                             {/* Header editor */}
                             <div className="border-b px-6 py-4 flex items-center justify-between

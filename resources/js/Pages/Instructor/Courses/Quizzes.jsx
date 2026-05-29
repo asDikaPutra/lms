@@ -87,8 +87,8 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Kuis</h2>
-                            <p className="text-sm mt-1 text-neutral-600 dark:text-white/45">Kelola semua kuis pada kursus ini.</p>
+                            <h2 className="text-2xl font-bold text-content-primary">Kuis</h2>
+                            <p className="text-sm mt-1 text-content-secondary">Kelola semua kuis pada kursus ini.</p>
                         </div>
                         <Button 
                             onClick={() => openModal()} 
@@ -107,7 +107,7 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                     </div>
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative flex-1 max-w-sm">
-                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
+                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-content-muted" />
                             <input
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
@@ -154,14 +154,14 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                                 <table className="w-full min-w-[900px]">
                                     <thead>
                                         <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
-                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Kuis</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Modul</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Soal</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Durasi</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Peserta</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Rata-rata</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Status</th>
-                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aksi</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Kuis</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Modul</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Soal</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Durasi</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Peserta</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Rata-rata</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Status</th>
+                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
@@ -173,25 +173,25 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                                                             <HelpCircle className="size-4 text-emerald-600" />
                                                         </div>
                                                         <div>
-                                                            <p className="font-medium text-neutral-900 dark:text-white/80">{quiz.title}</p>
-                                                            <p className="text-xs text-neutral-500 dark:text-white/40">Tingkat {getQuizLevel(quiz)}</p>
+                                                            <p className="font-medium text-content-primary">{quiz.title}</p>
+                                                            <p className="text-xs text-content-secondary">Tingkat {getQuizLevel(quiz)}</p>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="py-3 px-4">
-                                                    <span className="text-sm text-neutral-600 dark:text-white/50">{getModuleName(quiz)}</span>
+                                                    <span className="text-sm text-content-secondary">{getModuleName(quiz)}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm font-medium text-neutral-900 dark:text-white/80">{quiz.questions?.length ?? 0}</span>
+                                                    <span className="text-sm font-medium text-content-primary">{quiz.questions?.length ?? 0}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm text-neutral-600 dark:text-white/50">{quiz.duration ? `${quiz.duration} menit` : '-'}</span>
+                                                    <span className="text-sm text-content-secondary">{quiz.duration ? `${quiz.duration} menit` : '-'}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm text-neutral-600 dark:text-white/50">{quiz.completed_attempts_count ?? 0}</span>
+                                                    <span className="text-sm text-content-secondary">{quiz.completed_attempts_count ?? 0}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm font-medium text-neutral-900 dark:text-white/80">
+                                                    <span className="text-sm font-medium text-content-primary">
                                                         {quiz.attempts_avg_score ? Math.round(quiz.attempts_avg_score) : '-'}
                                                     </span>
                                                 </td>
@@ -276,14 +276,14 @@ function ActionDropdown({ quiz, isOpen, onToggle, onEdit, onTogglePublish, onDel
                 bg-white border-neutral-200
                 dark:bg-[#111a15] dark:border-white/[0.07]">
                     <button onClick={() => { onEdit(); onToggle({ stopPropagation: () => {} }); }}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-white/70 hover:bg-neutral-50 dark:hover:bg-white/8">
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-neutral-50 dark:hover:bg-white/8">
                         <Edit2 className="size-4" /> Edit
                     </button>
                     <button onClick={() => { onTogglePublish(); onToggle({ stopPropagation: () => {} }); }}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-white/70 hover:bg-neutral-50 dark:hover:bg-white/8">
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-neutral-50 dark:hover:bg-white/8">
                         <Eye className="size-4" /> {quiz.is_published ? 'Unpublish' : 'Publish'}
                     </button>
-                    <hr className="my-1 border-neutral-100 dark:border-white/[0.07]" />
+                    <hr className="my-1 border-line-subtle" />
                     <button onClick={() => { onDelete(); onToggle({ stopPropagation: () => {} }); }}
                         className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10">
                         <Trash2 className="size-4" /> Hapus

@@ -85,8 +85,8 @@ export default function Assignments({ course, assignments, stats, filters }) {
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Tugas</h2>
-                            <p className="text-sm text-neutral-600 dark:text-white/45 mt-1">Kelola semua tugas pada kursus ini.</p>
+                            <h2 className="text-2xl font-bold text-content-primary">Tugas</h2>
+                            <p className="text-sm text-content-secondary mt-1">Kelola semua tugas pada kursus ini.</p>
                         </div>
                         <Button 
                             onClick={() => openModal()} 
@@ -105,7 +105,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
                     </div>
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative flex-1 max-w-sm">
-                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
+                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-content-muted" />
                             <input
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
@@ -158,14 +158,14 @@ export default function Assignments({ course, assignments, stats, filters }) {
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[800px]">
                                     <thead>
-                                        <tr className="border-b border-neutral-100 dark:border-white/[0.07] bg-neutral-50/50 dark:bg-white/5">
-                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Tugas</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Lokasi</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Deadline</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Submission</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Perlu Dinilai</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Status</th>
-                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aksi</th>
+                                        <tr className="border-b border-line-subtle bg-neutral-50/50 dark:bg-white/5">
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Tugas</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Lokasi</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Deadline</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Submission</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Perlu Dinilai</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Status</th>
+                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
@@ -177,7 +177,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
                                                             <ClipboardList className="size-4" />
                                                         </div>
                                                         <div>
-                                                            <p className="font-medium text-sm text-neutral-900 dark:text-white/80">{assignment.title}</p>
+                                                            <p className="font-medium text-sm text-content-primary">{assignment.title}</p>
                                                             <div className="flex items-center gap-2 mt-0.5">
                                                                 {assignment.allow_file && (
                                                                     <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500">
@@ -310,13 +310,13 @@ function DropdownMenu({ assignment, onEdit, onToggle, onDelete }) {
         <div className="absolute right-0 top-full mt-1 w-40 rounded-lg shadow-lg border py-1 z-50
             bg-white border-neutral-200
             dark:bg-[#111a15] dark:border-white/[0.07]">
-            <button onClick={onEdit} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-white/70 hover:bg-neutral-50 dark:hover:bg-white/8">
+            <button onClick={onEdit} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-neutral-50 dark:hover:bg-white/8">
                 <Edit2 className="size-4" /> Edit
             </button>
-            <button onClick={onToggle} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-neutral-700 dark:text-white/70 hover:bg-neutral-50 dark:hover:bg-white/8">
+            <button onClick={onToggle} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-neutral-50 dark:hover:bg-white/8">
                 {assignment.is_published ? (<><X className="size-4" /> Unpublish</>) : (<><CheckCircle2 className="size-4" /> Publish</>)}
             </button>
-            <hr className="my-1 border-neutral-100 dark:border-white/[0.07]" />
+            <hr className="my-1 border-line-subtle" />
             <button onClick={onDelete} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10">
                 <Trash2 className="size-4" /> Hapus
             </button>

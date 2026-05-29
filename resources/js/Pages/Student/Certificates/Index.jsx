@@ -53,7 +53,7 @@ export default function Index({ certificates }) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="max-w-2xl text-sm leading-relaxed text-neutral-600 dark:text-white/45"
+                            className="max-w-2xl text-sm leading-relaxed text-content-secondary"
                         >
                             Kumpulan sertifikat yang telah Anda peroleh dari kursus yang diselesaikan.
                         </motion.p>
@@ -71,10 +71,10 @@ export default function Index({ certificates }) {
                             dark:border-white/10 dark:bg-white/5"
                     >
                         <GraduationCap className="size-12 mx-auto mb-4 text-neutral-300 dark:text-white/20" />
-                        <p className="text-sm font-medium text-neutral-600 dark:text-white/45">
+                        <p className="text-sm font-medium text-content-secondary">
                             Belum ada sertifikat yang diperoleh.
                         </p>
-                        <p className="text-xs mt-2 text-neutral-400 dark:text-white/25">
+                        <p className="text-xs mt-2 text-content-muted">
                             Selesaikan kursus untuk mendapatkan sertifikat.
                         </p>
                     </motion.div>
@@ -158,21 +158,21 @@ function CertificateCard({ certificate }) {
                     </div>
 
                     {/* Course name */}
-                    <h3 className="text-base font-bold leading-tight line-clamp-2 tracking-tight text-neutral-900 dark:text-white/90">
+                    <h3 className="text-base font-bold leading-tight line-clamp-2 tracking-tight text-content-primary">
                         {certificate.course.name}
                     </h3>
 
                     {/* Issue date */}
-                    <p className="text-xs font-medium text-neutral-500 dark:text-white/35">
+                    <p className="text-xs font-medium text-content-secondary">
                         Diterbitkan: {formattedDate}
                     </p>
 
                     {/* Verify code */}
-                    <div className="flex items-center gap-2 pt-1 border-t border-neutral-100 dark:border-white/[0.07]">
-                        <span className="text-[9px] uppercase tracking-wider font-semibold text-neutral-400 dark:text-white/25">
+                    <div className="flex items-center gap-2 pt-1 border-t border-line-subtle">
+                        <span className="text-[9px] uppercase tracking-wider font-semibold text-content-muted">
                             Kode:
                         </span>
-                        <span className="font-mono text-[10px] tracking-wider text-neutral-600 dark:text-white/50">
+                        <span className="font-mono text-[10px] tracking-wider text-content-secondary">
                             {truncatedCode}
                         </span>
                     </div>

@@ -77,9 +77,9 @@ export default function Settings({ course, settings, stats }) {
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Pengaturan</h2>
-                            <p className="text-sm text-neutral-600 dark:text-white/45 mt-1">Atur konfigurasi kursus ini.</p>
-                            <div className="flex items-center gap-2 mt-2 text-xs text-neutral-500 dark:text-white/35">
+                            <h2 className="text-2xl font-bold text-content-primary">Pengaturan</h2>
+                            <p className="text-sm text-content-secondary mt-1">Atur konfigurasi kursus ini.</p>
+                            <div className="flex items-center gap-2 mt-2 text-xs text-content-secondary">
                                 <span className="font-medium">{course.name}</span>
                                 <span>·</span>
                                 <span className="font-mono">{course.code}</span>
@@ -214,7 +214,7 @@ function StatusBadge({ status }) {
 
 function SectionCard({ id, title, description, icon: Icon, children, expanded, onToggle, variant = 'default' }) {
     const variants = {
-        default: 'border-neutral-100 dark:border-white/[0.07]',
+        default: 'border-line-subtle',
         danger: 'border-red-200 bg-red-50/30 dark:border-red-500/30 dark:bg-red-500/5',
     };
 
@@ -224,7 +224,7 @@ function SectionCard({ id, title, description, icon: Icon, children, expanded, o
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className={`rounded-xl shadow-sm border overflow-hidden scroll-mt-6
-                bg-white dark:bg-[#111a15]
+                bg-surface
                 ${variants[variant]}`}
         >
             <button
@@ -244,17 +244,17 @@ function SectionCard({ id, title, description, icon: Icon, children, expanded, o
                         <Icon className="size-5" />
                     </div>
                     <div>
-                        <h3 className={`text-lg font-semibold ${variant === 'danger' ? 'text-red-900 dark:text-red-300' : 'text-neutral-900 dark:text-white/90'}`}>
+                        <h3 className={`text-lg font-semibold ${variant === 'danger' ? 'text-red-900 dark:text-red-300' : 'text-content-primary'}`}>
                             {title}
                         </h3>
-                        <p className={`text-sm ${variant === 'danger' ? 'text-red-600 dark:text-red-400/70' : 'text-neutral-500 dark:text-white/40'}`}>
+                        <p className={`text-sm ${variant === 'danger' ? 'text-red-600 dark:text-red-400/70' : 'text-content-secondary'}`}>
                             {description}
                         </p>
                     </div>
                 </div>
                 {expanded
-                    ? <ChevronUp className="size-5 text-neutral-400 dark:text-white/30" />
-                    : <ChevronDown className="size-5 text-neutral-400 dark:text-white/30" />
+                    ? <ChevronUp className="size-5 text-content-muted" />
+                    : <ChevronDown className="size-5 text-content-muted" />
                 }
             </button>
             <AnimatePresence>
@@ -266,7 +266,7 @@ function SectionCard({ id, title, description, icon: Icon, children, expanded, o
                         transition={{ duration: 0.2 }}
                         className="overflow-hidden"
                     >
-                        <div className="px-5 pb-5 pt-0 border-t border-neutral-100 dark:border-white/[0.07]">
+                        <div className="px-5 pb-5 pt-0 border-t border-line-subtle">
                             {children}
                         </div>
                     </motion.div>
@@ -285,8 +285,8 @@ function Toggle({ checked, onChange, label, description }) {
                 <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform peer-checked:translate-x-4" />
             </div>
             <div className="flex-1">
-                <span className="text-sm font-medium text-neutral-700 dark:text-white/70 group-hover:text-neutral-900 dark:group-hover:text-white/90">{label}</span>
-                {description && <p className="text-xs text-neutral-500 dark:text-white/35 mt-0.5">{description}</p>}
+                <span className="text-sm font-medium text-content-primary group-hover:text-neutral-900 dark:group-hover:text-white/90">{label}</span>
+                {description && <p className="text-xs text-content-secondary mt-0.5">{description}</p>}
             </div>
         </label>
     );
@@ -466,7 +466,7 @@ function VisibilitySection({ course, expanded, onToggle }) {
                     dark:bg-white/5 dark:border-white/[0.07]">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm font-medium text-neutral-700 dark:text-white/70">Kode Enrollment</p>
+                            <p className="text-sm font-medium text-content-primary">Kode Enrollment</p>
                             <p className="text-2xl font-mono font-bold text-emerald-600 dark:text-emerald-400 mt-1">{course.enroll_code}</p>
                         </div>
                         <Button type="button" variant="outline" onClick={regenerateCode} className="gap-2">
@@ -938,7 +938,7 @@ function GradesSection({ course, settings, expanded, onToggle }) {
                 {/* Grade Weights */}
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60">Bobot Nilai</h4>
+                        <h4 className="text-sm font-medium text-content-secondary">Bobot Nilai</h4>
                         <span className={`text-sm font-bold ${isWeightValid ? 'text-emerald-600' : 'text-red-600'}`}>
                             Total: {totalWeight}%
                         </span>
@@ -975,7 +975,7 @@ function GradesSection({ course, settings, expanded, onToggle }) {
 
                 {/* Certificate Criteria */}
                 <div className="space-y-3 pt-4 border-t border-neutral-100">
-                    <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60">Kriteria Sertifikat</h4>
+                    <h4 className="text-sm font-medium text-content-secondary">Kriteria Sertifikat</h4>
                     <div className="grid gap-4 md:grid-cols-2">
                         <TextField
                             label="Progres Minimum (%)"
@@ -1264,7 +1264,7 @@ function IslamicSection({ course, settings, expanded, onToggle }) {
                 </div>
 
                 <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60 pt-2">Tampilan & Konten</h4>
+                    <h4 className="text-sm font-medium text-content-secondary pt-2">Tampilan & Konten</h4>
                     <Toggle
                         checked={form.data.settings.islamic.show_learning_dua}
                         onChange={(v) => updateIslamic('show_learning_dua', v)}
@@ -1292,7 +1292,7 @@ function IslamicSection({ course, settings, expanded, onToggle }) {
                 </div>
 
                 <div className="space-y-3 pt-4 border-t border-neutral-100">
-                    <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60">Validasi & Review</h4>
+                    <h4 className="text-sm font-medium text-content-secondary">Validasi & Review</h4>
                     <Toggle
                         checked={form.data.settings.islamic.require_islamic_references}
                         onChange={(v) => updateIslamic('require_islamic_references', v)}
@@ -1308,7 +1308,7 @@ function IslamicSection({ course, settings, expanded, onToggle }) {
                 </div>
 
                 <div className="space-y-3 pt-4 border-t border-neutral-100">
-                    <h4 className="text-sm font-medium text-neutral-700 dark:text-white/60">Diskusi & Aktivitas</h4>
+                    <h4 className="text-sm font-medium text-content-secondary">Diskusi & Aktivitas</h4>
                     <Toggle
                         checked={form.data.settings.islamic.show_adab_discussion}
                         onChange={(v) => updateIslamic('show_adab_discussion', v)}

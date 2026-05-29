@@ -104,7 +104,7 @@ export default function Index({ courses, filters }) {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.3 }}
-                                className="max-w-2xl text-sm leading-relaxed text-neutral-600 dark:text-white/45"
+                                className="max-w-2xl text-sm leading-relaxed text-content-secondary"
                             >
                                 Kelola kursus yang Anda ampu.
                             </motion.p>
@@ -153,7 +153,7 @@ export default function Index({ courses, filters }) {
 
                     {/* Search Bar */}
                     <div className="relative w-full sm:w-80">
-                        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
+                        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-content-muted" />
                         <motion.input
                             whileFocus={{ scale: 1.01 }}
                             value={filterForm.data.search}
@@ -179,10 +179,10 @@ export default function Index({ courses, filters }) {
                                 dark:border-white/10 dark:bg-white/5"
                         >
                             <span className="text-5xl mb-4 block">📚</span>
-                            <p className="text-sm text-neutral-600 dark:text-white/45 font-medium">
+                            <p className="text-sm text-content-secondary font-medium">
                                 Belum ada kursus yang dibuat.
                             </p>
-                            <p className="text-xs text-neutral-500 dark:text-white/30 mt-2">Klik tombol "Tambah Kursus" untuk membuat kursus baru.</p>
+                            <p className="text-xs text-content-muted mt-2">Klik tombol "Tambah Kursus" untuk membuat kursus baru.</p>
                         </motion.div>
                     )}
                     {courses.data.map((course, index) => (
@@ -206,8 +206,8 @@ export default function Index({ courses, filters }) {
                                     link.active
                                         ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg'
                                         : link.url
-                                        ? 'bg-white dark:bg-white/8 text-neutral-600 dark:text-white/60 border border-neutral-200 dark:border-white/10 hover:border-emerald-300 dark:hover:border-emerald-500/40'
-                                        : 'bg-neutral-100 dark:bg-white/5 text-neutral-400 dark:text-white/20 cursor-not-allowed'
+                                        ? 'bg-white dark:bg-white/8 text-neutral-600 dark:text-white/60 border border-line hover:border-emerald-300 dark:hover:border-emerald-500/40'
+                                        : 'bg-surface-muted text-content-muted cursor-not-allowed'
                                 }`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />
@@ -393,39 +393,39 @@ function CourseCard({ course, delay }) {
                             </span>
                         </span>
                         {course.semester && (
-                            <span className="text-[10px] font-medium uppercase tracking-wider text-neutral-500 dark:text-white/35">
+                            <span className="text-[10px] font-medium uppercase tracking-wider text-content-secondary">
                                 {course.semester}
                             </span>
                         )}
                     </div>
                     
                     {/* Course title */}
-                    <h3 className="text-base font-bold leading-snug line-clamp-2 text-neutral-900 dark:text-white/90">
+                    <h3 className="text-base font-bold leading-snug line-clamp-2 text-content-primary">
                         {course.name}
                     </h3>
 
                     {/* Stats grid */}
-                    <div className="grid grid-cols-3 gap-3 py-3 border-y border-neutral-100 dark:border-white/[0.07]">
+                    <div className="grid grid-cols-3 gap-3 py-3 border-y border-line-subtle">
                         <div className="text-center">
                             <div className="flex items-center justify-center gap-1 text-emerald-600 mb-1">
                                 <Users className="size-3.5" />
                             </div>
-                            <p className="text-sm font-bold text-neutral-900 dark:text-white/80">{course.active_enrollments_count}</p>
-                            <p className="text-[10px] text-neutral-500 dark:text-white/35">Mahasiswa</p>
+                            <p className="text-sm font-bold text-content-primary">{course.active_enrollments_count}</p>
+                            <p className="text-[10px] text-content-secondary">Mahasiswa</p>
                         </div>
-                        <div className="text-center border-x border-neutral-100 dark:border-white/[0.07]">
+                        <div className="text-center border-x border-line-subtle">
                             <div className="flex items-center justify-center gap-1 text-teal-600 mb-1">
                                 <Layers3 className="size-3.5" />
                             </div>
-                            <p className="text-sm font-bold text-neutral-900 dark:text-white/80">{course.modules_count ?? 0}</p>
-                            <p className="text-[10px] text-neutral-500 dark:text-white/35">Modul</p>
+                            <p className="text-sm font-bold text-content-primary">{course.modules_count ?? 0}</p>
+                            <p className="text-[10px] text-content-secondary">Modul</p>
                         </div>
                         <div className="text-center">
                             <div className="flex items-center justify-center gap-1 text-amber-600 mb-1">
                                 <ClipboardCheck className="size-3.5" />
                             </div>
-                            <p className="text-sm font-bold text-neutral-900 dark:text-white/80">{course.pending_enrollments_count}</p>
-                            <p className="text-[10px] text-neutral-500 dark:text-white/35">Pending</p>
+                            <p className="text-sm font-bold text-content-primary">{course.pending_enrollments_count}</p>
+                            <p className="text-[10px] text-content-secondary">Pending</p>
                         </div>
                     </div>
 

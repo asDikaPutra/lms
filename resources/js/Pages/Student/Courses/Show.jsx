@@ -237,13 +237,13 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                             animate={{ x: 0 }}
                             exit={{ x: 400 }}
                             transition={{ type: "spring", damping: 25 }}
-                            className="fixed right-0 top-0 bottom-0 w-full max-w-md shadow-2xl z-50 overflow-y-auto bg-white dark:bg-[#111a15]"
+                            className="fixed right-0 top-0 bottom-0 w-full max-w-md shadow-2xl z-50 overflow-y-auto bg-surface"
                         >
-                            <div className="sticky top-0 border-b p-4 flex items-center justify-between bg-white dark:bg-[#111a15] border-neutral-200 dark:border-white/[0.07]">
-                                <h2 className="text-lg font-bold text-neutral-900 dark:text-white/90">Daftar Materi</h2>
+                            <div className="sticky top-0 border-b p-4 flex items-center justify-between bg-surface border-line">
+                                <h2 className="text-lg font-bold text-content-primary">Daftar Materi</h2>
                                 <button
                                     onClick={() => setShowSidebar(false)}
-                                    className="p-1.5 rounded-lg transition-colors hover:bg-neutral-100 dark:hover:bg-white/8 text-neutral-600 dark:text-white/50"
+                                    className="p-1.5 rounded-lg transition-colors hover:bg-neutral-100 dark:hover:bg-white/8 text-content-secondary"
                                 >
                                     <X className="size-4" />
                                 </button>
@@ -256,12 +256,12 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                     className={`w-full text-left p-3 rounded-lg border-2 transition-all ${
                                         currentView === 'overview'
                                             ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-500/15'
-                                            : 'border-neutral-200 dark:border-white/10 hover:border-emerald-200 hover:bg-emerald-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
+                                            : 'border-line hover:border-emerald-200 hover:bg-emerald-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
                                     }`}
                                 >
                                     <div>
-                                        <p className="text-xs font-bold text-neutral-900 dark:text-white/80">Overview</p>
-                                        <p className="text-[10px] text-neutral-500 dark:text-white/35">Lihat semua modul</p>
+                                        <p className="text-xs font-bold text-content-primary">Overview</p>
+                                        <p className="text-[10px] text-content-secondary">Lihat semua modul</p>
                                     </div>
                                 </button>
 
@@ -271,14 +271,14 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                         {/* Module Header */}
                                         <button
                                             onClick={() => toggleModule(module.id)}
-                                            className="w-full text-left p-2.5 rounded-lg transition-colors bg-neutral-100 hover:bg-neutral-200 dark:bg-white/8 dark:hover:bg-white/12"
+                                            className="w-full text-left p-2.5 rounded-lg transition-colors bg-neutral-100 hover:bg-surface-muted dark:hover:bg-white/12"
                                         >
                                             <div className="flex items-center justify-between">
-                                                <span className="text-xs font-semibold text-neutral-900 dark:text-white/80">{module.title}</span>
+                                                <span className="text-xs font-semibold text-content-primary">{module.title}</span>
                                                 {expandedModules[module.id] ? (
-                                                    <ChevronUp className="size-3.5 text-neutral-600 dark:text-white/40" />
+                                                    <ChevronUp className="size-3.5 text-content-secondary" />
                                                 ) : (
-                                                    <ChevronDown className="size-3.5 text-neutral-600 dark:text-white/40" />
+                                                    <ChevronDown className="size-3.5 text-content-secondary" />
                                                 )}
                                             </div>
                                         </button>
@@ -294,7 +294,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                         className={`w-full text-left p-2 rounded-lg border transition-all ${
                                                             currentView === `quiz-${quiz.id}`
                                                                 ? 'border-blue-500 bg-blue-50 dark:bg-emerald-500/15'
-                                                                : 'border-neutral-200 dark:border-white/10 hover:border-blue-200 hover:bg-blue-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
+                                                                : 'border-line hover:border-blue-200 hover:bg-blue-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
                                                         }`}
                                                     >
                                                         <span className="block truncate text-xs font-medium text-neutral-900 dark:text-white/70">{quiz.title}</span>
@@ -309,7 +309,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                         className={`w-full text-left p-2 rounded-lg border transition-all ${
                                                             currentView === `assignment-${assignment.id}`
                                                                 ? 'border-amber-500 bg-amber-50 dark:bg-amber-500/15'
-                                                                : 'border-neutral-200 dark:border-white/10 hover:border-amber-200 hover:bg-amber-50/50 dark:hover:border-amber-500/30 dark:hover:bg-amber-500/10'
+                                                                : 'border-line hover:border-amber-200 hover:bg-amber-50/50 dark:hover:border-amber-500/30 dark:hover:bg-amber-500/10'
                                                         }`}
                                                     >
                                                         <span className="block truncate text-xs font-medium text-neutral-900 dark:text-white/70">{assignment.title}</span>
@@ -324,7 +324,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                         className={`w-full text-left p-2 rounded-lg border transition-all ${
                                                             currentView === `material-${material.id}`
                                                                 ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-500/15'
-                                                                : 'border-neutral-200 dark:border-white/10 hover:border-emerald-200 hover:bg-emerald-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
+                                                                : 'border-line hover:border-emerald-200 hover:bg-emerald-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
                                                         }`}
                                                     >
                                                         <span className="block truncate text-xs font-medium text-neutral-900 dark:text-white/70">{material.title}</span>
@@ -351,17 +351,17 @@ function OverviewPage({ course, expandedModules, toggleModule, navigateTo, compl
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-400">Daftar Pembelajaran</p>
-                    <h2 className="text-2xl font-bold text-neutral-950 dark:text-white/90 sm:text-3xl">Pilih Aktivitas Belajar</h2>
+                    <h2 className="text-2xl font-bold text-content-primary sm:text-3xl">Pilih Aktivitas Belajar</h2>
                 </div>
             </div>
 
             {course.modules.length === 0 && (
-                <div className="rounded-2xl border-2 border-dashed border-neutral-300 dark:border-white/10 bg-white dark:bg-[#111a15] p-12 text-center shadow-sm">
-                    <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-neutral-100 dark:bg-white/8">
-                        <FileText className="size-8 text-neutral-400 dark:text-white/30" />
+                <div className="rounded-2xl border-2 border-dashed border-line-strong bg-surface p-12 text-center shadow-sm">
+                    <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-surface-muted">
+                        <FileText className="size-8 text-content-muted" />
                     </div>
-                    <p className="text-base font-semibold text-neutral-600 dark:text-white/50">Belum ada materi yang dipublish.</p>
-                    <p className="mt-1 text-sm text-neutral-500 dark:text-white/35">Instruktur sedang menyiapkan konten pembelajaran.</p>
+                    <p className="text-base font-semibold text-content-secondary">Belum ada materi yang dipublish.</p>
+                    <p className="mt-1 text-sm text-content-secondary">Instruktur sedang menyiapkan konten pembelajaran.</p>
                 </div>
             )}
 
@@ -373,25 +373,25 @@ function OverviewPage({ course, expandedModules, toggleModule, navigateTo, compl
                         key={module.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="overflow-hidden rounded-2xl border-2 border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg transition-shadow hover:shadow-xl md:rounded-[18px]"
+                        className="overflow-hidden rounded-2xl border-2 border-line bg-surface shadow-lg transition-shadow hover:shadow-xl md:rounded-[18px]"
                     >
                         {/* Enhanced Module Header */}
                         <button
                             onClick={() => toggleModule(module.id)}
                             type="button"
-                            className="w-full border-b-2 border-neutral-200 dark:border-white/[0.07] bg-gradient-to-br from-white to-neutral-50/50 dark:from-[#111a15] dark:to-[#0d1610] p-4 text-left transition-colors hover:from-emerald-50/30 hover:to-teal-50/30 dark:hover:from-blue-500/5 dark:hover:to-cyan-500/5 sm:p-5 md:p-6"
+                            className="w-full border-b-2 border-line bg-gradient-to-br from-white to-neutral-50/50 dark:from-[#111a15] dark:to-[#0d1610] p-4 text-left transition-colors hover:from-emerald-50/30 hover:to-teal-50/30 dark:hover:from-blue-500/5 dark:hover:to-cyan-500/5 sm:p-5 md:p-6"
                         >
                             <div className="flex items-start justify-between gap-4">
                                 <div className="min-w-0 flex-1">
-                                    <h3 className="text-lg font-bold leading-snug text-neutral-950 dark:text-white/90 sm:text-xl">{module.title}</h3>
+                                    <h3 className="text-lg font-bold leading-snug text-content-primary sm:text-xl">{module.title}</h3>
                                     {module.description && (
-                                        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-neutral-600 dark:text-white/45">{module.description}</p>
+                                        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-content-secondary">{module.description}</p>
                                     )}
                                 </div>
                                 <motion.div
                                     animate={{ rotate: isExpanded ? 180 : 0 }}
                                     transition={{ duration: 0.3 }}
-                                    className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-neutral-200 dark:border-white/10 bg-white dark:bg-white/5 text-neutral-600 dark:text-white/50 shadow-sm"
+                                    className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-line bg-white dark:bg-white/5 text-content-secondary shadow-sm"
                                 >
                                     <ChevronDown className="size-5" />
                                 </motion.div>
@@ -486,20 +486,20 @@ function OverviewPage({ course, expandedModules, toggleModule, navigateTo, compl
 // CriterionRow sub-component � single criterion display row
 function CriterionRow({ label, currentValue, threshold, met }) {
     return (
-        <div className="flex items-center gap-3 rounded-[10px] border border-neutral-100 dark:border-white/[0.07] bg-neutral-50 dark:bg-white/5 px-4 py-3">
+        <div className="flex items-center gap-3 rounded-[10px] border border-line-subtle bg-surface-muted px-4 py-3">
             {/* Mint accent bar */}
             <span className="h-8 w-[3px] shrink-0 rounded-full bg-[#5DCAA5]" aria-hidden="true" />
 
             {/* Label + current value */}
             <div className="min-w-0 flex-1">
                 <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-700 dark:text-emerald-400">{label}</p>
-                <p className="mt-0.5 text-sm font-semibold text-neutral-950 dark:text-white/90">{currentValue}</p>
+                <p className="mt-0.5 text-sm font-semibold text-content-primary">{currentValue}</p>
             </div>
 
             {/* Required threshold */}
             <div className="shrink-0 text-right">
-                <p className="text-[10px] font-medium text-neutral-400 dark:text-white/30">Syarat</p>
-                <p className="text-sm font-semibold text-neutral-700 dark:text-white/60">{threshold}</p>
+                <p className="text-[10px] font-medium text-content-muted">Syarat</p>
+                <p className="text-sm font-semibold text-content-secondary">{threshold}</p>
             </div>
 
             {/* Status icon */}
@@ -545,16 +545,16 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
     };
 
     return (
-        <div className="overflow-hidden rounded-[14px] border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15]">
+        <div className="overflow-hidden rounded-[14px] border border-line bg-surface">
             {/* Section Header */}
-            <div className="flex items-center justify-between gap-3 border-b border-neutral-200 dark:border-white/[0.07] p-4 md:p-5">
+            <div className="flex items-center justify-between gap-3 border-b border-line p-4 md:p-5">
                 <div className="flex items-center gap-3">
                     <span className="flex size-9 shrink-0 items-center justify-center rounded-[10px] border border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400">
                         <Award className="size-5" aria-label="Sertifikat" />
                     </span>
                     <div>
                         <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-700 dark:text-emerald-400">Pencapaian</p>
-                        <h3 className="text-[15px] font-semibold text-neutral-950 dark:text-white/90">Sertifikat Kursus</h3>
+                        <h3 className="text-[15px] font-semibold text-content-primary">Sertifikat Kursus</h3>
                     </div>
                 </div>
 
@@ -653,7 +653,7 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
             {/* Action Button */}
             {has_certificate ? (
                 /* View Certificate � already has one */
-                <div className="border-t border-neutral-100 dark:border-white/[0.06] px-4 pb-4 pt-3 md:px-5 md:pb-5">
+                <div className="border-t border-line-subtle px-4 pb-4 pt-3 md:px-5 md:pb-5">
                     <Link
                         href={`/student/certificates/${certificate_id}`}
                         className="inline-flex items-center gap-2 rounded-[10px] border border-emerald-300 dark:border-emerald-500/40 bg-emerald-50 dark:bg-emerald-500/15 px-5 py-2.5 text-sm font-semibold text-emerald-700 dark:text-emerald-300 transition-colors hover:bg-emerald-100 dark:hover:bg-emerald-500/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
@@ -714,7 +714,7 @@ function LearningItemButton({ tone, title, eyebrow, meta, status, onClick }) {
             onClick={onClick}
             whileHover={{ scale: 1.01, y: -2 }}
             whileTap={{ scale: 0.99 }}
-            className={`group relative w-full overflow-hidden rounded-xl border-2 border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] p-4 text-left shadow-sm transition-all ${selectedTone.hover} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2`}
+            className={`group relative w-full overflow-hidden rounded-xl border-2 border-line bg-surface p-4 text-left shadow-sm transition-all ${selectedTone.hover} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2`}
         >
             {/* Accent bar */}
             <span className={`absolute inset-y-0 left-0 w-1 ${selectedTone.accent}`} />
@@ -734,8 +734,8 @@ function LearningItemButton({ tone, title, eyebrow, meta, status, onClick }) {
                 </span>
 
                 <div className="min-w-0 flex-1">
-                    <p className="mt-1 text-base font-semibold leading-snug text-neutral-950 dark:text-white/90">{title}</p>
-                    {meta && <p className="mt-1.5 text-sm text-neutral-600 dark:text-white/45">{meta}</p>}
+                    <p className="mt-1 text-base font-semibold leading-snug text-content-primary">{title}</p>
+                    {meta && <p className="mt-1.5 text-sm text-content-secondary">{meta}</p>}
                 </div>
 
                 {status && (
@@ -838,7 +838,7 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
     if (!currentItem) {
         return (
             <div className="rounded-3xl bg-white/90 dark:bg-[#111a15] backdrop-blur-xl p-8 shadow-2xl border border-neutral-200/60 dark:border-white/[0.07] text-center">
-                <p className="text-neutral-500 dark:text-white/40">Item tidak ditemukan</p>
+                <p className="text-content-secondary">Item tidak ditemukan</p>
                 <button
                     onClick={() => navigateTo('overview')}
                     className="mt-4 px-6 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-semibold"
@@ -861,7 +861,7 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
             </button>
 
             {/* Breadcrumb */}
-            <div className="text-xs text-neutral-600 dark:text-white/40">
+            <div className="text-xs text-content-secondary">
                 <span className="font-semibold text-emerald-600 dark:text-emerald-400">{currentModule.title}</span>
                 {currentMaterial && (
                     <>
@@ -883,26 +883,26 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
                     />
                 )}
                 {currentItem.type === 'content' && (
-                    <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg md:rounded-[24px]">
+                    <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-lg md:rounded-[24px]">
                         <div className="p-4 md:p-6">
                             <ContentView content={currentItem.data} completed={currentItem.completed} />
                         </div>
                     </div>
                 )}
                 {currentItem.type === 'quiz' && (
-                    <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg md:rounded-[24px]">
+                    <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-lg md:rounded-[24px]">
                         <QuizView quiz={currentItem.data} attempt={currentItem.attempt} />
                     </div>
                 )}
                 {currentItem.type === 'assignment' && (
-                    <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg md:rounded-[24px]">
+                    <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-lg md:rounded-[24px]">
                         <div className="p-4 md:p-6">
                             <AssignmentView assignment={currentItem.data} submission={currentItem.submission} />
                         </div>
                     </div>
                 )}
                 {currentItem.type === 'discussion' && (
-                    <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg md:rounded-[24px]">
+                    <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-lg md:rounded-[24px]">
                         <div className="p-4 md:p-6">
                             <DiscussionView materialId={currentItem.materialId} discussions={currentItem.discussions} />
                         </div>
@@ -975,12 +975,12 @@ function MaterialView({ material, completed, navigateTo, attemptsByQuizId, submi
     return (
         <div className="space-y-4 md:space-y-5">
             {/* Card Ruang Belajar - Separate card wrapper */}
-            <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] p-4 shadow-lg sm:p-5 md:rounded-[20px] md:p-6">
+            <div className="overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-lg sm:p-5 md:rounded-[20px] md:p-6">
                 {/* Material header */}
                 <div className="mb-4 space-y-2">
                     <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-emerald-700 dark:text-emerald-400">Ruang Belajar</p>
-                    <h2 className="text-xl font-bold leading-tight text-neutral-950 dark:text-white/90 sm:text-2xl md:text-3xl">{material.title}</h2>
-                    <p className="text-sm text-neutral-600 dark:text-white/45">
+                    <h2 className="text-xl font-bold leading-tight text-content-primary sm:text-2xl md:text-3xl">{material.title}</h2>
+                    <p className="text-sm text-content-secondary">
                         {tabs.length} aktivitas tersedia
                     </p>
                 </div>
@@ -1053,13 +1053,13 @@ function ContentView({ content, completed }) {
     return (
         <div className="space-y-5">
             {/* Card Konten - Separate card wrapper */}
-            <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/[0.07] bg-white dark:bg-[#111a15] shadow-lg md:rounded-[24px]">
+            <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-lg md:rounded-[24px]">
                 {/* Header */}
-                <div className="border-b border-neutral-200 dark:border-white/[0.07] bg-gradient-to-br from-emerald-50 via-teal-50/30 to-white dark:from-emerald-500/8 dark:via-teal-500/5 dark:to-[#111a15] p-5 sm:p-6 md:p-8">
+                <div className="border-b border-line bg-gradient-to-br from-emerald-50 via-teal-50/30 to-white dark:from-emerald-500/8 dark:via-teal-500/5 dark:to-[#111a15] p-5 sm:p-6 md:p-8">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div className="flex-1">
                             {/* Title only - clean and simple */}
-                            <h2 className="max-w-3xl text-2xl font-bold leading-tight text-neutral-950 dark:text-white/90 sm:text-3xl md:text-4xl">
+                            <h2 className="max-w-3xl text-2xl font-bold leading-tight text-content-primary sm:text-3xl md:text-4xl">
                                 {content.title}
                             </h2>
                         </div>
@@ -1103,7 +1103,7 @@ function ContentView({ content, completed }) {
                             </div>
                         )}
                         {content.type === 'audio' && (
-                            <div className="flex items-center justify-center rounded-2xl border-2 border-neutral-200 dark:border-white/10 bg-gradient-to-br from-neutral-50 to-white dark:from-white/5 dark:to-[#111a15] p-8 md:p-12">
+                            <div className="flex items-center justify-center rounded-2xl border-2 border-line bg-gradient-to-br from-neutral-50 to-white dark:from-white/5 dark:to-[#111a15] p-8 md:p-12">
                                 <div className="w-full max-w-2xl space-y-4">
                                     <div className="flex items-center justify-center">
                                         <div className="flex size-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg">

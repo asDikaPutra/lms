@@ -33,8 +33,8 @@ export default function Progress({ course, studentProgress, moduleProgress, stat
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Progres</h2>
-                            <p className="text-sm mt-1 text-neutral-600 dark:text-white/45">Pantau perkembangan belajar mahasiswa pada kursus ini.</p>
+                            <h2 className="text-2xl font-bold text-content-primary">Progres</h2>
+                            <p className="text-sm mt-1 text-content-secondary">Pantau perkembangan belajar mahasiswa pada kursus ini.</p>
                         </div>
                     </div>
 
@@ -60,7 +60,7 @@ export default function Progress({ course, studentProgress, moduleProgress, stat
 
                     {/* Tabs */}
                     <div className="rounded-xl shadow-sm border overflow-hidden bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]">
-                        <div className="border-b border-neutral-100 dark:border-white/[0.07]">
+                        <div className="border-b border-line-subtle">
                             <nav className="flex gap-1 p-1.5">
                                 {tabs.map((t) => {
                                     const Icon = t.icon;
@@ -106,8 +106,8 @@ function StudentProgressTab({ data }) {
         return (
             <div className="text-center py-12">
                 <Users className="size-12 text-neutral-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2 text-neutral-900 dark:text-white/90">Belum Ada Data</h3>
-                <p className="text-neutral-500 dark:text-white/35">Data progres akan muncul setelah mahasiswa mulai belajar.</p>
+                <h3 className="text-lg font-medium mb-2 text-content-primary">Belum Ada Data</h3>
+                <p className="text-content-secondary">Data progres akan muncul setelah mahasiswa mulai belajar.</p>
             </div>
         );
     }
@@ -132,13 +132,13 @@ function StudentProgressTab({ data }) {
             <table className="w-full min-w-[800px]">
                 <thead>
                     <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
-                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Mahasiswa</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Progres</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Modul</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Tugas</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Kuis</th>
-                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aktivitas Terakhir</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Status</th>
+                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Mahasiswa</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Progres</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Modul</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Tugas</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Kuis</th>
+                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Aktivitas Terakhir</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Status</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
@@ -150,15 +150,15 @@ function StudentProgressTab({ data }) {
                                         {item.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
                                     </div>
                                     <div>
-                                        <p className="font-medium text-neutral-900 dark:text-white/80">{item.user?.name ?? '-'}</p>
-                                        <p className="text-xs text-neutral-500 dark:text-white/40">{item.user?.nim ?? '-'}</p>
+                                        <p className="font-medium text-content-primary">{item.user?.name ?? '-'}</p>
+                                        <p className="text-xs text-content-secondary">{item.user?.nim ?? '-'}</p>
                                     </div>
                                 </div>
                             </td>
                             <td className="py-3 px-4">
                                 <div className="flex flex-col items-center gap-1">
-                                    <span className="text-sm font-medium text-neutral-900 dark:text-white/80">{item.progress}%</span>
-                                    <div className="w-20 h-1.5 rounded-full overflow-hidden bg-neutral-200 dark:bg-white/10">
+                                    <span className="text-sm font-medium text-content-primary">{item.progress}%</span>
+                                    <div className="w-20 h-1.5 rounded-full overflow-hidden bg-surface-muted">
                                         <div 
                                             className={`h-full rounded-full ${getProgressColor(item.progress)}`}
                                             style={{ width: `${item.progress}%` }}
@@ -167,16 +167,16 @@ function StudentProgressTab({ data }) {
                                 </div>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600 dark:text-white/50">{item.modules_completed}/{item.total_modules}</span>
+                                <span className="text-sm text-content-secondary">{item.modules_completed}/{item.total_modules}</span>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600 dark:text-white/50">{item.assignments_submitted}/{item.total_assignments}</span>
+                                <span className="text-sm text-content-secondary">{item.assignments_submitted}/{item.total_assignments}</span>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600 dark:text-white/50">{item.quizzes_completed}/{item.total_quizzes}</span>
+                                <span className="text-sm text-content-secondary">{item.quizzes_completed}/{item.total_quizzes}</span>
                             </td>
                             <td className="py-3 px-4">
-                                <span className="text-sm text-neutral-500 dark:text-white/35">{formatDate(item.last_activity)}</span>
+                                <span className="text-sm text-content-secondary">{formatDate(item.last_activity)}</span>
                             </td>
                             <td className="py-3 px-4 text-center">
                                 <StatusBadge isAtRisk={item.is_at_risk} />
@@ -195,8 +195,8 @@ function ModuleProgressTab({ data }) {
         return (
             <div className="text-center py-12">
                 <Layers3 className="size-12 text-neutral-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2 text-neutral-900 dark:text-white/90">Belum Ada Modul</h3>
-                <p className="text-neutral-500 dark:text-white/35">Buat modul di Struktur Kurikulum untuk melihat progres per modul.</p>
+                <h3 className="text-lg font-medium mb-2 text-content-primary">Belum Ada Modul</h3>
+                <p className="text-content-secondary">Buat modul di Struktur Kurikulum untuk melihat progres per modul.</p>
             </div>
         );
     }
@@ -206,11 +206,11 @@ function ModuleProgressTab({ data }) {
             <table className="w-full min-w-[600px]">
                 <thead>
                     <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
-                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Modul</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Materi Selesai</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Tugas Submit</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Kuis Selesai</th>
-                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Progres Rata-rata</th>
+                        <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Modul</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Materi Selesai</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Tugas Submit</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Kuis Selesai</th>
+                        <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Progres Rata-rata</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
@@ -221,24 +221,24 @@ function ModuleProgressTab({ data }) {
                                     <div className="flex size-8 items-center justify-center rounded-lg font-bold text-sm bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
                                         {module.order}
                                     </div>
-                                    <span className="font-medium text-neutral-900 dark:text-white/80">{module.title}</span>
+                                    <span className="font-medium text-content-primary">{module.title}</span>
                                 </div>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600 dark:text-white/50">
+                                <span className="text-sm text-content-secondary">
                                     {module.content_completions}/{module.max_content_completions}
                                 </span>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600 dark:text-white/50">{module.assignment_submissions}</span>
+                                <span className="text-sm text-content-secondary">{module.assignment_submissions}</span>
                             </td>
                             <td className="py-3 px-4 text-center">
-                                <span className="text-sm text-neutral-600 dark:text-white/50">{module.quiz_completions}</span>
+                                <span className="text-sm text-content-secondary">{module.quiz_completions}</span>
                             </td>
                             <td className="py-3 px-4">
                                 <div className="flex flex-col items-center gap-1">
-                                    <span className="text-sm font-medium text-neutral-900 dark:text-white/80">{module.avg_progress}%</span>
-                                    <div className="w-20 h-1.5 rounded-full overflow-hidden bg-neutral-200 dark:bg-white/10">
+                                    <span className="text-sm font-medium text-content-primary">{module.avg_progress}%</span>
+                                    <div className="w-20 h-1.5 rounded-full overflow-hidden bg-surface-muted">
                                         <div 
                                             className={`h-full rounded-full ${getProgressColor(module.avg_progress)}`}
                                             style={{ width: `${module.avg_progress}%` }}
@@ -259,8 +259,8 @@ function AtRiskTab({ data }) {
         return (
             <div className="text-center py-12">
                 <CheckCircle2 className="size-12 text-emerald-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2 text-neutral-900 dark:text-white/90">Tidak Ada Mahasiswa Berisiko</h3>
-                <p className="text-neutral-500 dark:text-white/35">Semua mahasiswa memiliki progres yang baik.</p>
+                <h3 className="text-lg font-medium mb-2 text-content-primary">Tidak Ada Mahasiswa Berisiko</h3>
+                <p className="text-content-secondary">Semua mahasiswa memiliki progres yang baik.</p>
             </div>
         );
     }
@@ -287,16 +287,16 @@ function AtRiskTab({ data }) {
                                 {item.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
                             </div>
                             <div>
-                                <p className="font-medium text-neutral-900 dark:text-white/80">{item.user?.name ?? '-'}</p>
-                                <p className="text-xs text-neutral-500 dark:text-white/40">{item.user?.nim ?? '-'}</p>
+                                <p className="font-medium text-content-primary">{item.user?.name ?? '-'}</p>
+                                <p className="text-xs text-content-secondary">{item.user?.nim ?? '-'}</p>
                             </div>
                         </div>
                         <div className="space-y-2">
                             <div className="flex justify-between text-sm">
-                                <span className="text-neutral-500 dark:text-white/35">Progres</span>
+                                <span className="text-content-secondary">Progres</span>
                                 <span className="font-medium text-red-600">{item.progress}%</span>
                             </div>
-                            <div className="w-full h-2 rounded-full overflow-hidden bg-neutral-200 dark:bg-white/10">
+                            <div className="w-full h-2 rounded-full overflow-hidden bg-surface-muted">
                                 <div 
                                     className="h-full rounded-full bg-red-500"
                                     style={{ width: `${item.progress}%` }}
@@ -360,9 +360,9 @@ function StatCard({ label, value, icon: Icon, color, suffix = '', isText = false
                     {isText ? (
                         <p className="text-sm font-bold text-neutral-900 truncate">{value}</p>
                     ) : (
-                        <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}{suffix}</p>
+                        <p className="text-2xl font-bold text-content-primary">{value}{suffix}</p>
                     )}
-                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
+                    <p className="text-xs text-content-secondary">{label}</p>
                 </div>
             </div>
         </motion.div>

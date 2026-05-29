@@ -81,8 +81,8 @@ export default function Students({ course, enrollments, stats, filters }) {
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Peserta</h2>
-                            <p className="text-sm mt-1 text-neutral-600 dark:text-white/45">Lihat dan kelola peserta pada kursus ini.</p>
+                            <h2 className="text-2xl font-bold text-content-primary">Peserta</h2>
+                            <p className="text-sm mt-1 text-content-secondary">Lihat dan kelola peserta pada kursus ini.</p>
                         </div>
                     </div>
 
@@ -96,7 +96,7 @@ export default function Students({ course, enrollments, stats, filters }) {
                     </div>
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative flex-1 max-w-sm">
-                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
+                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-content-muted" />
                             <input
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
@@ -128,14 +128,14 @@ export default function Students({ course, enrollments, stats, filters }) {
                                 <table className="w-full min-w-[1000px]">
                                     <thead>
                                         <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
-                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Mahasiswa</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">NIM</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Progres</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Tugas</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Kuis</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aktivitas Terakhir</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Status</th>
-                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aksi</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Mahasiswa</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">NIM</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Progres</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Tugas</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Kuis</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Aktivitas Terakhir</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Status</th>
+                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
@@ -147,8 +147,8 @@ export default function Students({ course, enrollments, stats, filters }) {
                                                             {enrollment.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
                                                         </div>
                                                         <div>
-                                                            <p className="font-medium text-neutral-900 dark:text-white/80">{enrollment.user?.name ?? '-'}</p>
-                                                            <p className="text-xs text-neutral-500 dark:text-white/40">{enrollment.user?.email ?? '-'}</p>
+                                                            <p className="font-medium text-content-primary">{enrollment.user?.name ?? '-'}</p>
+                                                            <p className="text-xs text-content-secondary">{enrollment.user?.email ?? '-'}</p>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -157,8 +157,8 @@ export default function Students({ course, enrollments, stats, filters }) {
                                                 </td>
                                                 <td className="py-3 px-4">
                                                     <div className="flex flex-col items-center gap-1">
-                                                        <span className="text-sm font-medium text-neutral-900 dark:text-white/80">{enrollment.progress ?? 0}%</span>
-                                                        <div className="w-16 h-1.5 rounded-full overflow-hidden bg-neutral-200 dark:bg-white/10">
+                                                        <span className="text-sm font-medium text-content-primary">{enrollment.progress ?? 0}%</span>
+                                                        <div className="w-16 h-1.5 rounded-full overflow-hidden bg-surface-muted">
                                                             <div 
                                                                 className={`h-full rounded-full ${enrollment.progress >= 70 ? 'bg-emerald-500' : enrollment.progress >= 30 ? 'bg-amber-500' : 'bg-red-500'}`}
                                                                 style={{ width: `${enrollment.progress ?? 0}%` }}
@@ -167,17 +167,17 @@ export default function Students({ course, enrollments, stats, filters }) {
                                                     </div>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm text-neutral-600 dark:text-white/50">
+                                                    <span className="text-sm text-content-secondary">
                                                         {enrollment.submitted_assignments ?? 0}/{enrollment.total_assignments ?? 0}
                                                     </span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm text-neutral-600 dark:text-white/50">
+                                                    <span className="text-sm text-content-secondary">
                                                         {enrollment.completed_quizzes ?? 0}/{enrollment.total_quizzes ?? 0}
                                                     </span>
                                                 </td>
                                                 <td className="py-3 px-4">
-                                                    <span className="text-sm text-neutral-500 dark:text-white/35">{getTimeSince(enrollment.updated_at)}</span>
+                                                    <span className="text-sm text-content-secondary">{getTimeSince(enrollment.updated_at)}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
                                                     <StatusBadge status={enrollment.status} isAtRisk={enrollment.is_at_risk} />

@@ -124,12 +124,12 @@ function CertificateDocument({ certificate }) {
             <div className="px-8 py-7 space-y-5
                 bg-white/95 backdrop-blur-sm
                 dark:bg-[#111a15]">
-                <p className="text-sm font-medium text-neutral-500 dark:text-white/40">
+                <p className="text-sm font-medium text-content-secondary">
                     atas keberhasilan menyelesaikan kursus
                 </p>
 
                 <div className="space-y-1">
-                    <h2 className="text-xl font-bold leading-snug text-neutral-900 dark:text-white/90">
+                    <h2 className="text-xl font-bold leading-snug text-content-primary">
                         {certificate.course.name}
                     </h2>
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border
@@ -158,10 +158,10 @@ function CertificateDocument({ certificate }) {
                                 <Icon className="size-4 text-emerald-700 dark:text-emerald-400" />
                             </div>
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-white/30">
+                                <p className="text-[10px] font-bold uppercase tracking-wider text-content-muted">
                                     {label}
                                 </p>
-                                <p className={`text-sm font-semibold leading-snug mt-0.5 text-neutral-800 dark:text-white/80 ${mono ? 'font-mono tracking-wider' : ''}`}>
+                                <p className={`text-sm font-semibold leading-snug mt-0.5 text-content-primary ${mono ? 'font-mono tracking-wider' : ''}`}>
                                     {value}
                                 </p>
                             </div>
@@ -212,15 +212,15 @@ function CriteriaMetList({ criteria }) {
             aria-label="Kriteria yang Dipenuhi"
         >
             <div className="px-6 py-4 border-b flex items-center gap-2.5
-                border-neutral-100 dark:border-white/[0.07]">
+                border-line-subtle">
                 <div className="flex size-8 items-center justify-center rounded-lg border
                     bg-[#0B3D2E]/10 border-[#0B3D2E]/20
                     dark:bg-emerald-500/15 dark:border-emerald-500/30">
                     <CheckCircle2 className="size-4 text-[#0B3D2E] dark:text-emerald-400" />
                 </div>
                 <div>
-                    <h3 className="text-sm font-bold text-neutral-900 dark:text-white/90">Kriteria yang Dipenuhi</h3>
-                    <p className="text-[11px] text-neutral-500 dark:text-white/35">Semua kriteria berikut telah terpenuhi</p>
+                    <h3 className="text-sm font-bold text-content-primary">Kriteria yang Dipenuhi</h3>
+                    <p className="text-[11px] text-content-secondary">Semua kriteria berikut telah terpenuhi</p>
                 </div>
             </div>
 
@@ -235,11 +235,11 @@ function CriteriaMetList({ criteria }) {
                     >
                         <div className="w-1 h-10 rounded-full bg-[#5DCAA5] shrink-0" aria-hidden="true" />
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-neutral-900 dark:text-white/80">{config.label}</p>
-                            <p className="text-[11px] mt-0.5 text-neutral-500 dark:text-white/35">{config.description}</p>
+                            <p className="text-sm font-semibold text-content-primary">{config.label}</p>
+                            <p className="text-[11px] mt-0.5 text-content-secondary">{config.description}</p>
                         </div>
                         <div className="shrink-0 flex items-center gap-2">
-                            <span className="text-sm font-bold text-neutral-700 dark:text-white/60">
+                            <span className="text-sm font-bold text-content-secondary">
                                 ≥ {criteria[config.key]}{config.unit}
                             </span>
                             <div className="flex size-6 items-center justify-center rounded-full bg-[#5DCAA5]/15 border border-[#5DCAA5]/40">
@@ -286,15 +286,15 @@ function VerifyCodeCopyWidget({ verifyCode, certificateId }) {
             aria-label="Kode Verifikasi"
         >
             <div className="px-6 py-4 border-b flex items-center gap-2.5
-                border-neutral-100 dark:border-white/[0.07]">
+                border-line-subtle">
                 <div className="flex size-8 items-center justify-center rounded-lg border
                     bg-[#0B3D2E]/10 border-[#0B3D2E]/20
                     dark:bg-emerald-500/15 dark:border-emerald-500/30">
                     <Award className="size-4 text-[#0B3D2E] dark:text-emerald-400" />
                 </div>
                 <div>
-                    <h3 className="text-sm font-bold text-neutral-900 dark:text-white/90">Kode Verifikasi</h3>
-                    <p className="text-[11px] text-neutral-500 dark:text-white/35">Klik kode untuk menyalin ke clipboard</p>
+                    <h3 className="text-sm font-bold text-content-primary">Kode Verifikasi</h3>
+                    <p className="text-[11px] text-content-secondary">Klik kode untuk menyalin ke clipboard</p>
                 </div>
             </div>
 
@@ -341,7 +341,7 @@ function VerifyCodeCopyWidget({ verifyCode, certificateId }) {
 
                 {/* Shareable URL */}
                 <div className="space-y-1.5">
-                    <p className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 text-neutral-400 dark:text-white/30">
+                    <p className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 text-content-muted">
                         <ExternalLink className="size-3" aria-hidden="true" />
                         URL Verifikasi
                     </p>

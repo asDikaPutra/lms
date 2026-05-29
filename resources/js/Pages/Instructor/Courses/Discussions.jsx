@@ -34,8 +34,8 @@ export default function Discussions({ course, discussions, stats, filters }) {
                     {/* Header */}
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white/90">Diskusi</h2>
-                            <p className="text-sm mt-1 text-neutral-600 dark:text-white/45">Kelola forum dan diskusi pada kursus ini.</p>
+                            <h2 className="text-2xl font-bold text-content-primary">Diskusi</h2>
+                            <p className="text-sm mt-1 text-content-secondary">Kelola forum dan diskusi pada kursus ini.</p>
                         </div>
                     </div>
 
@@ -49,7 +49,7 @@ export default function Discussions({ course, discussions, stats, filters }) {
                     {/* Filters */}
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                         <div className="relative flex-1 max-w-sm">
-                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
+                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-content-muted" />
                             <input
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
@@ -82,12 +82,12 @@ export default function Discussions({ course, discussions, stats, filters }) {
                                 <table className="w-full min-w-[700px]">
                                     <thead>
                                         <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
-                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Materi</th>
-                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Modul</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Post</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Komentar</th>
-                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Baru</th>
-                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40">Aksi</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Materi</th>
+                                            <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Modul</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Post</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Komentar</th>
+                                            <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Baru</th>
+                                            <th className="text-right py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
@@ -99,18 +99,18 @@ export default function Discussions({ course, discussions, stats, filters }) {
                                                             <MessageSquare className="size-4 text-blue-600" />
                                                         </div>
                                                         <div>
-                                                            <p className="font-medium text-neutral-900 dark:text-white/80">{material.title}</p>
+                                                            <p className="font-medium text-content-primary">{material.title}</p>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="py-3 px-4">
-                                                    <span className="text-sm text-neutral-600 dark:text-white/50">{material.module?.title ?? '-'}</span>
+                                                    <span className="text-sm text-content-secondary">{material.module?.title ?? '-'}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm font-medium text-neutral-900 dark:text-white/80">{material.total_posts ?? 0}</span>
+                                                    <span className="text-sm font-medium text-content-primary">{material.total_posts ?? 0}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="text-sm text-neutral-600 dark:text-white/50">{material.total_comments ?? 0}</span>
+                                                    <span className="text-sm text-content-secondary">{material.total_comments ?? 0}</span>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
                                                     {material.new_comments > 0 ? (
@@ -183,8 +183,8 @@ function StatCard({ label, value, icon: Icon, color }) {
                     <Icon className="size-5 text-white" />
                 </div>
                 <div>
-                    <p className="text-2xl font-bold text-neutral-900 dark:text-white/90">{value}</p>
-                    <p className="text-xs text-neutral-500 dark:text-white/40">{label}</p>
+                    <p className="text-2xl font-bold text-content-primary">{value}</p>
+                    <p className="text-xs text-content-secondary">{label}</p>
                 </div>
             </div>
         </motion.div>
@@ -203,8 +203,8 @@ function EmptyState() {
                     <MessageSquare className="size-10 text-blue-600" />
                 </div>
             </div>
-            <h3 className="text-xl font-bold mb-2 text-neutral-900 dark:text-white/90">Belum Ada Materi</h3>
-            <p className="mb-6 max-w-md mx-auto text-neutral-600 dark:text-white/45">
+            <h3 className="text-xl font-bold mb-2 text-content-primary">Belum Ada Materi</h3>
+            <p className="mb-6 max-w-md mx-auto text-content-secondary">
                 Diskusi akan muncul setelah Anda membuat materi pembelajaran di Struktur Kurikulum.
             </p>
         </motion.div>

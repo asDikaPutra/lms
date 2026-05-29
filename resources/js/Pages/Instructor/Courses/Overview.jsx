@@ -115,7 +115,7 @@ export default function Overview({ course }) {
                     {/* Course Info Card */}
                     <Card>
                         <CardContent className="pt-5">
-                        <h2 className="text-lg font-semibold mb-4 text-neutral-900 dark:text-white/90">Informasi Kursus</h2>
+                        <h2 className="text-lg font-semibold mb-4 text-content-primary">Informasi Kursus</h2>
                         
                         <div className="grid gap-4 md:grid-cols-2">
                             <InfoRow label="Kode Kursus" value={course.code} />
@@ -127,19 +127,19 @@ export default function Overview({ course }) {
                         </div>
 
                         {course.description && (
-                            <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-white/[0.07]">
-                                <p className="text-sm font-medium mb-1 text-neutral-500 dark:text-white/40">Deskripsi</p>
-                                <p className="text-sm text-neutral-700 dark:text-white/60">{course.description}</p>
+                            <div className="mt-4 pt-4 border-t border-line-subtle">
+                                <p className="text-sm font-medium mb-1 text-content-secondary">Deskripsi</p>
+                                <p className="text-sm text-content-secondary">{course.description}</p>
                             </div>
                         )}
 
-                        <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-white/[0.07]">
-                            <p className="text-sm font-medium mb-2 text-neutral-500 dark:text-white/40">Kriteria Sertifikat</p>
+                        <div className="mt-4 pt-4 border-t border-line-subtle">
+                            <p className="text-sm font-medium mb-2 text-content-secondary">Kriteria Sertifikat</p>
                             <div className="flex gap-4 text-sm">
-                                <span className="text-neutral-700 dark:text-white/60">
+                                <span className="text-content-secondary">
                                     Min. Progress: <strong>{course.certificate_criteria?.min_progress ?? 100}%</strong>
                                 </span>
-                                <span className="text-neutral-700 dark:text-white/60">
+                                <span className="text-content-secondary">
                                     Min. Nilai Kuis: <strong>{course.certificate_criteria?.min_score ?? 70}</strong>
                                 </span>
                             </div>
@@ -178,8 +178,8 @@ export default function Overview({ course }) {
                                     <Layers3 className="size-6 text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-neutral-900 dark:text-white/90">Struktur Kurikulum</h3>
-                                    <p className="text-sm text-neutral-600 dark:text-white/45">Kelola modul, materi, konten, kuis, dan tugas</p>
+                                    <h3 className="font-semibold text-content-primary">Struktur Kurikulum</h3>
+                                    <p className="text-sm text-content-secondary">Kelola modul, materi, konten, kuis, dan tugas</p>
                                 </div>
                             </div>
                             <Link href={`/instructor/courses/${course.id}/curriculum`}>
@@ -263,7 +263,7 @@ export default function Overview({ course }) {
                     <div className="rounded-lg p-4 border
                         bg-neutral-50 border-neutral-200
                         dark:bg-white/5 dark:border-white/[0.07]">
-                        <p className="text-sm font-semibold mb-3 text-neutral-700 dark:text-white/70">Kriteria Sertifikat</p>
+                        <p className="text-sm font-semibold mb-3 text-content-primary">Kriteria Sertifikat</p>
                         <div className="grid gap-4 sm:grid-cols-2">
                             <TextField
                                 label="Min. Progress (%)"
@@ -303,8 +303,8 @@ export default function Overview({ course }) {
 function InfoRow({ label, value, mono = false }) {
     return (
         <div>
-            <p className="text-sm font-medium text-neutral-500 dark:text-white/40">{label}</p>
-            <p className={`text-sm text-neutral-900 dark:text-white/80 ${mono ? 'font-mono' : ''}`}>{value}</p>
+            <p className="text-sm font-medium text-content-secondary">{label}</p>
+            <p className={`text-sm text-content-primary ${mono ? 'font-mono' : ''}`}>{value}</p>
         </div>
     );
 }

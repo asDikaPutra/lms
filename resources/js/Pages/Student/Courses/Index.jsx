@@ -68,7 +68,7 @@ export default function CoursesIndex({ courses }) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="max-w-2xl text-sm leading-relaxed text-neutral-600 dark:text-white/45"
+                            className="max-w-2xl text-sm leading-relaxed text-content-secondary"
                         >
                             Jelajahi semua kursus yang tersedia dan bergabung untuk memulai pembelajaran.
                         </motion.p>
@@ -94,7 +94,7 @@ export default function CoursesIndex({ courses }) {
 
                     {/* Search Bar */}
                     <form onSubmit={handleSearch} className="relative w-full sm:w-80">
-                        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-neutral-400 dark:text-white/30" />
+                        <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-content-muted" />
                         <motion.input
                             whileFocus={{ scale: 1.01 }}
                             value={searchForm.data.search}
@@ -120,11 +120,11 @@ export default function CoursesIndex({ courses }) {
                                 dark:border-white/10 dark:bg-white/5"
                         >
                             <span className="text-5xl mb-4 block">📚</span>
-                            <p className="text-sm text-neutral-600 dark:text-white/45 font-medium">
+                            <p className="text-sm text-content-secondary font-medium">
                                 {filter === 'enrolled' ? 'Belum ada kursus yang diikuti.' : 'Tidak ada kursus yang tersedia.'}
                             </p>
                             {filter === 'enrolled' && (
-                                <p className="text-xs text-neutral-500 dark:text-white/30 mt-2">Gunakan kode enroll dari dosen untuk bergabung ke kursus.</p>
+                                <p className="text-xs text-content-muted mt-2">Gunakan kode enroll dari dosen untuk bergabung ke kursus.</p>
                             )}
                         </motion.div>
                     )}
@@ -271,7 +271,7 @@ function CourseCard({ course, delay }) {
                         
                         {/* Course title with better typography */}
                         <h3 className="text-lg font-bold leading-tight line-clamp-2 tracking-tight drop-shadow-sm
-                            text-neutral-900 dark:text-white/90">
+                            text-content-primary">
                             {course.name}
                         </h3>
                         
