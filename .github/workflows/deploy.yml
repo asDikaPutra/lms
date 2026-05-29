@@ -45,7 +45,8 @@ jobs:
       - name: Set permissions
         run: |
           sudo chown -R www-data:www-data /var/www/laravel
-          sudo chown www-data:www-data /var/www/laravel
+          sudo chown -R softcomp:www-data /var/www/laravel/.git
+          sudo chown -R softcomp:www-data /var/www/laravel/.github
           sudo chmod -R 775 /var/www/laravel/storage
           sudo chmod -R 775 /var/www/laravel/bootstrap/cache
 
