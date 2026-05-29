@@ -15,10 +15,7 @@ jobs:
 
       - name: Fix ownership before sync
         run: |
-          sudo chown -R softcomp:www-data /var/www/laravel/bootstrap/cache
-          sudo chown -R softcomp:www-data /var/www/laravel/public
-          sudo chmod -R 775 /var/www/laravel/bootstrap/cache
-          sudo chmod -R 775 /var/www/laravel/public
+          sudo chown -R softcomp:www-data /var/www/laravel
 
       - name: Sync code to production directory
         run: |
