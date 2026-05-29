@@ -12,7 +12,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
+      - name: Fix ownership before sync
+        run: |
+          sudo chown -R softcomp:www-data /var/www/laravel/bootstrap/cache
+          sudo chown -R softcomp:www-data /var/www/laravel/public
+          sudo chmod -R 775 /var/www/laravel/bootstrap/cache
+          sudo chmod -R 775 /var/www/laravel/public
+
       - name: Sync code to production directory
         run: |
           rsync -av --delete \
@@ -22,36 +29,37 @@ jobs:
             --exclude='storage' \
             --exclude='.env' \
             ./ /var/www/laravel/
-      
+
       - name: Install Composer dependencies
         run: composer install --optimize-autoloader --no-dev
         working-directory: /var/www/laravel
-      
+
       - name: Install NPM dependencies
         run: npm install
         working-directory: /var/www/laravel
-      
+
       - name: Build frontend assets
         run: npm run build
         working-directory: /var/www/laravel
-      
+
       - name: Set permissions
         run: |
           sudo chown -R www-data:www-data /var/www/laravel
+          sudo chown www-data:www-data /var/www/laravel
           sudo chmod -R 775 /var/www/laravel/storage
           sudo chmod -R 775 /var/www/laravel/bootstrap/cache
-      
+
       - name: Run database migrations
         run: sudo -u www-data php artisan migrate --force
         working-directory: /var/www/laravel
-      
+
       - name: Clear cache
         run: sudo -u www-data php artisan optimize:clear
         working-directory: /var/www/laravel
-      
+
       - name: Restart Apache
         run: sudo systemctl restart apache2
-      
+
       - name: Verify deployment
         run: |
           sleep 3
