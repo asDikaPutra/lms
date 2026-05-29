@@ -1181,9 +1181,10 @@ function QuizView({ quiz, attempt }) {
         });
     };
 
-    // Timer effect
+    // Timer effect — runs whenever a quiz is actively being taken
+    // (including a re-take, where a prior attempt still exists).
     useEffect(() => {
-        if (!quizStarted || !startTime || attempt || timeExpired) return;
+        if (!quizStarted || !startTime || timeExpired) return;
 
         const interval = setInterval(() => {
             const elapsed = Math.floor((Date.now() - startTime) / 1000);
@@ -1199,7 +1200,7 @@ function QuizView({ quiz, attempt }) {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [quizStarted, startTime, attempt, timeExpired, quiz.duration]);
+    }, [quizStarted, startTime, timeExpired, quiz.duration]);
 
     const startQuiz = () => {
         const now = new Date().toISOString();
@@ -1472,8 +1473,9 @@ function QuizView({ quiz, attempt }) {
         );
     }
 
-    // Quiz already attempted (show result summary, NOT fullscreen)
-    if (attempt) {
+    // Quiz already attempted (show result summary, NOT fullscreen) —
+    // but only when the student is NOT currently re-taking the quiz.
+    if (attempt && !quizStarted) {
         const passed = canShowScore && Number(attempt.score) >= Number(quiz.passing_score);
         return (
             <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 shadow-2xl">
