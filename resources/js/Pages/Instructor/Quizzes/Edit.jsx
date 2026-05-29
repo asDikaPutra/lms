@@ -234,8 +234,7 @@ export default function EditQuiz({ quiz, course_id }) {
                                                 {options.map((opt, i) => (
                                                     <div key={i} className="flex items-center gap-2">
                                                         <div className="flex size-[36px] shrink-0 items-center justify-center rounded-[6px] border font-semibold text-[13px]
-                                                            bg-white border-gray-300 text-fg-secondary
-                                                            dark:bg-white/8 dark:border-white/15 dark:text-white/50">
+                                                            bg-surface border-line text-content-secondary">
                                                             {String.fromCharCode(65 + i)}
                                                         </div>
                                                         <input
