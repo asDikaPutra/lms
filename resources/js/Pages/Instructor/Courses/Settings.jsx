@@ -97,7 +97,7 @@ export default function Settings({ course, settings, stats }) {
 
                     {/* Quick Navigation */}
                     <div className="rounded-xl shadow-sm border p-1.5 overflow-x-auto
-                        bg-white border-neutral-100
+                        bg-surface border-line
                         dark:bg-[#111a15] dark:border-white/[0.07]">
                         <nav className="flex gap-1 min-w-max">
                             {sections.map((section) => {
@@ -199,10 +199,10 @@ export default function Settings({ course, settings, stats }) {
 
 function StatusBadge({ status }) {
     const configs = {
-        draft: { label: 'Draft', className: 'bg-neutral-100 text-neutral-600 border-neutral-200' },
+        draft: { label: 'Draft', className: 'bg-surface-muted text-content-secondary border-line' },
         active: { label: 'Aktif', className: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
         closed: { label: 'Selesai', className: 'bg-amber-100 text-amber-700 border-amber-200' },
-        archived: { label: 'Arsip', className: 'bg-neutral-100 text-neutral-600 border-neutral-200' },
+        archived: { label: 'Arsip', className: 'bg-surface-muted text-content-secondary border-line' },
     };
     const config = configs[status] || configs.draft;
     return (
@@ -232,7 +232,7 @@ function SectionCard({ id, title, description, icon: Icon, children, expanded, o
                 className={`w-full flex items-center justify-between p-5 text-left transition-colors ${
                     variant === 'danger'
                         ? 'hover:bg-red-50 dark:hover:bg-red-500/8'
-                        : 'hover:bg-neutral-50 dark:hover:bg-white/5'
+                        : 'hover:bg-surface-muted dark:hover:bg-white/5'
                 }`}
             >
                 <div className="flex items-center gap-4">
@@ -285,7 +285,7 @@ function Toggle({ checked, onChange, label, description }) {
                 <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform peer-checked:translate-x-4" />
             </div>
             <div className="flex-1">
-                <span className="text-sm font-medium text-content-primary group-hover:text-neutral-900 dark:group-hover:text-white/90">{label}</span>
+                <span className="text-sm font-medium text-content-primary group-hover:text-content-primary dark:group-hover:text-white/90">{label}</span>
                 {description && <p className="text-xs text-content-secondary mt-0.5">{description}</p>}
             </div>
         </label>
@@ -462,7 +462,7 @@ function VisibilitySection({ course, expanded, onToggle }) {
                 </div>
 
                 <div className="p-4 rounded-lg border
-                    bg-neutral-50 border-neutral-200
+                    bg-surface-muted border-line
                     dark:bg-white/5 dark:border-white/[0.07]">
                     <div className="flex items-center justify-between">
                         <div>
@@ -957,7 +957,7 @@ function GradesSection({ course, settings, expanded, onToggle }) {
                             { key: 'final', label: 'UAS' },
                         ].map((item) => (
                             <div key={item.key} className="space-y-1">
-                                <label className="text-xs font-medium text-neutral-600">{item.label}</label>
+                                <label className="text-xs font-medium text-content-secondary">{item.label}</label>
                                 <div className="relative">
                                     <TextField
                                         type="number"
@@ -966,7 +966,7 @@ function GradesSection({ course, settings, expanded, onToggle }) {
                                         min={0}
                                         max={100}
                                     />
-                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-neutral-400">%</span>
+                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-content-muted">%</span>
                                 </div>
                             </div>
                         ))}
@@ -974,7 +974,7 @@ function GradesSection({ course, settings, expanded, onToggle }) {
                 </div>
 
                 {/* Certificate Criteria */}
-                <div className="space-y-3 pt-4 border-t border-neutral-100">
+                <div className="space-y-3 pt-4 border-t border-line">
                     <h4 className="text-sm font-medium text-content-secondary">Kriteria Sertifikat</h4>
                     <div className="grid gap-4 md:grid-cols-2">
                         <TextField
@@ -999,7 +999,7 @@ function GradesSection({ course, settings, expanded, onToggle }) {
                 </div>
 
                 {/* Leaderboard */}
-                <div className="pt-4 border-t border-neutral-100">
+                <div className="pt-4 border-t border-line">
                     <Toggle
                         checked={form.data.leaderboard_enabled}
                         onChange={(v) => form.setData('leaderboard_enabled', v)}
@@ -1291,7 +1291,7 @@ function IslamicSection({ course, settings, expanded, onToggle }) {
                     />
                 </div>
 
-                <div className="space-y-3 pt-4 border-t border-neutral-100">
+                <div className="space-y-3 pt-4 border-t border-line">
                     <h4 className="text-sm font-medium text-content-secondary">Validasi & Review</h4>
                     <Toggle
                         checked={form.data.settings.islamic.require_islamic_references}
@@ -1307,7 +1307,7 @@ function IslamicSection({ course, settings, expanded, onToggle }) {
                     />
                 </div>
 
-                <div className="space-y-3 pt-4 border-t border-neutral-100">
+                <div className="space-y-3 pt-4 border-t border-line">
                     <h4 className="text-sm font-medium text-content-secondary">Diskusi & Aktivitas</h4>
                     <Toggle
                         checked={form.data.settings.islamic.show_adab_discussion}

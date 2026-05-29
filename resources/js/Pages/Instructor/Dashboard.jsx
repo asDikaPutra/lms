@@ -81,7 +81,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 variants={fadeUp}
                                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                                 className="group relative overflow-hidden rounded-xl p-5 shadow-lg border backdrop-blur-sm transition-all
-                                    bg-white/90 border-neutral-200/60 hover:shadow-2xl hover:border-emerald-200/60
+                                    bg-white/90 border-line/60 hover:shadow-2xl hover:border-emerald-200/60
                                     dark:bg-[#111a15] dark:border-white/[0.07] dark:hover:border-emerald-500/25 dark:shadow-[0_2px_16px_rgba(0,0,0,0.4)]"
                             >
                                 <div className="relative flex items-start justify-between">
@@ -112,7 +112,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                         <motion.div
                             whileHover={{ y: -2 }}
                             className="relative overflow-hidden rounded-2xl p-6 shadow-xl border backdrop-blur-xl transition-shadow h-full
-                                bg-white/90 border-neutral-200/60
+                                bg-white/90 border-line/60
                                 dark:bg-[#111a15] dark:border-white/[0.07] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                         >
                             <div className="relative">
@@ -135,7 +135,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                 <div className="grid gap-4 md:grid-cols-2">
                                     {courses.length === 0 && (
                                         <div className="col-span-2 rounded-xl border-2 border-dashed p-8 text-center
-                                            border-neutral-200 bg-neutral-50/50
+                                            border-line bg-surface-muted/50
                                             dark:border-white/10 dark:bg-transparent">
                                             <BookOpen className="mx-auto mb-3 size-8 text-content-muted" aria-hidden="true" />
                                             <p className="text-xs text-content-muted font-medium">Belum ada kursus.</p>
@@ -156,7 +156,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                             <motion.div
                                 whileHover={{ y: -2 }}
                                 className="relative overflow-hidden rounded-2xl p-6 shadow-xl border backdrop-blur-xl
-                                    bg-white/90 border-neutral-200/60
+                                    bg-white/90 border-line/60
                                     dark:bg-[#111a15] dark:border-white/[0.07] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                             >
                                 
@@ -174,7 +174,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                     <div className="space-y-3">
                                         {pendingEnrollments.length === 0 && (
                                             <div className="text-center py-8 rounded-xl
-                                                bg-neutral-50/50 dark:bg-transparent">
+                                                bg-surface-muted/50 dark:bg-transparent">
                                                 <CheckCircle2 className="mx-auto mb-3 size-8 text-content-muted" aria-hidden="true" />
                                                 <p className="text-xs text-content-muted font-medium">Belum ada pengajuan baru.</p>
                                             </div>
@@ -192,7 +192,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                             <motion.div
                                 whileHover={{ y: -2 }}
                                 className="relative overflow-hidden rounded-2xl p-6 shadow-xl border backdrop-blur-xl
-                                    bg-white/90 border-neutral-200/60
+                                    bg-white/90 border-line/60
                                     dark:bg-[#111a15] dark:border-white/[0.07] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]"
                             >
                                 
@@ -210,7 +210,7 @@ export default function Dashboard({ stats, courses, pendingEnrollments, recentDi
                                     <div className="space-y-3 max-h-[400px] overflow-y-auto">
                                         {recentDiscussions.length === 0 && (
                                             <div className="text-center py-8 rounded-xl
-                                                bg-neutral-50/50 dark:bg-transparent">
+                                                bg-surface-muted/50 dark:bg-transparent">
                                                 <MessageSquare className="mx-auto mb-3 size-8 text-content-muted" aria-hidden="true" />
                                                 <p className="text-xs text-content-muted font-medium">Belum ada diskusi.</p>
                                             </div>
@@ -237,7 +237,7 @@ function CourseCard({ course, delay }) {
             transition={{ delay, duration: 0.4 }}
             whileHover={{ y: -3, transition: { duration: 0.2 } }}
             className="rounded-[12px] border shadow-sm transition-all overflow-hidden
-                border-neutral-200 bg-white hover:border-emerald-200 hover:shadow-md
+                border-line bg-surface hover:border-emerald-200 hover:shadow-md
                 dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-emerald-500/25"
         >
             {/* Header banner */}
@@ -280,19 +280,19 @@ function CourseCard({ course, delay }) {
 
                 <div className="grid grid-cols-3 gap-2 text-xs mb-3">
                     <div className="text-center p-2 rounded-lg border
-                        border-neutral-200 bg-neutral-50
+                        border-line bg-surface-muted
                         dark:border-white/[0.07] dark:bg-white/5">
                         <p className="font-bold text-content-primary">{course.modules_count}</p>
                         <p className="text-[10px] text-content-secondary">Modul</p>
                     </div>
                     <div className="text-center p-2 rounded-lg border
-                        border-neutral-200 bg-neutral-50
+                        border-line bg-surface-muted
                         dark:border-white/[0.07] dark:bg-white/5">
                         <p className="font-bold text-content-primary">{course.active_enrollments_count}</p>
                         <p className="text-[10px] text-content-secondary">Aktif</p>
                     </div>
                     <div className="text-center p-2 rounded-lg border
-                        border-neutral-200 bg-neutral-50
+                        border-line bg-surface-muted
                         dark:border-white/[0.07] dark:bg-white/5">
                         <p className="font-bold text-content-primary">{course.pending_enrollments_count}</p>
                         <p className="text-[10px] text-content-secondary">Pending</p>
@@ -322,7 +322,7 @@ function EnrollmentCard({ enrollment, delay }) {
             transition={{ delay, duration: 0.4 }}
             whileHover={{ y: -2 }}
             className="rounded-[12px] border p-3 shadow-sm transition-all
-                border-neutral-200 bg-white hover:border-amber-200 hover:bg-amber-50/30
+                border-line bg-surface hover:border-amber-200 hover:bg-amber-50/30
                 dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-amber-500/25 dark:hover:bg-amber-500/5"
         >
             <div className="flex items-start gap-2">
@@ -371,7 +371,7 @@ function DiscussionCard({ discussion, delay }) {
             transition={{ delay, duration: 0.4 }}
             whileHover={{ y: -2 }}
             className="rounded-[12px] border p-3 shadow-sm transition-all
-                border-neutral-200 bg-white hover:border-blue-200 hover:bg-sky-50/30
+                border-line bg-surface hover:border-blue-200 hover:bg-sky-50/30
                 dark:border-white/[0.07] dark:bg-[#0d1610] dark:hover:border-emerald-500/25 dark:hover:bg-emerald-500/5"
         >
             <div className="flex items-start gap-2">

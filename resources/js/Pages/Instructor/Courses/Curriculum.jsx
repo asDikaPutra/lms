@@ -568,7 +568,7 @@ function MaterialAssignmentItem({ assignment, materialId, isLast, openModal }) {
 function ModalOverlay({ modalState, closeModal, editId, course, moduleForm, materialForm, contentForm, quizForm, storeModule, storeMaterial, storeContent, storeQuiz }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-[2px] tracking-[-0.01em]">
-            <div className={`w-full rounded-[12px] shadow-xl ring-1 animate-in fade-in zoom-in-95 duration-200 bg-white ring-black/5 dark:bg-[#111a15] dark:ring-white/10 ${modalState.type === 'content' ? 'max-w-2xl' : 'max-w-md'}`} role="dialog" aria-modal="true">
+            <div className={`w-full rounded-[12px] shadow-xl ring-1 animate-in fade-in zoom-in-95 duration-200 bg-surface ring-line dark:bg-[#111a15] dark:ring-white/10 ${modalState.type === 'content' ? 'max-w-2xl' : 'max-w-md'}`} role="dialog" aria-modal="true">
                 <div className="flex items-center justify-between border-b px-5 py-4 border-ceramic dark:border-white/[0.07]">
                     <h3 className="text-[16px] font-semibold text-fg-primary dark:text-white/90">
                         {modalState.type === 'module' && (editId ? 'Edit Modul' : 'Tambah Modul Baru')}

@@ -261,7 +261,7 @@ export default function Overview({ course }) {
                     </div>
 
                     <div className="rounded-lg p-4 border
-                        bg-neutral-50 border-neutral-200
+                        bg-surface-muted border-line
                         dark:bg-white/5 dark:border-white/[0.07]">
                         <p className="text-sm font-semibold mb-3 text-content-primary">Kriteria Sertifikat</p>
                         <div className="grid gap-4 sm:grid-cols-2">

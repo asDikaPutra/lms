@@ -28,7 +28,7 @@ export default function Show({ certificate }) {
                     <Link
                         href="/student/certificates"
                         className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors group
-                            text-neutral-600 hover:text-emerald-700
+                            text-content-secondary hover:text-emerald-700
                             dark:text-white/50 dark:hover:text-emerald-400"
                     >
                         <ChevronLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
@@ -207,7 +207,7 @@ function CriteriaMetList({ criteria }) {
     return (
         <section
             className="rounded-2xl overflow-hidden border shadow-lg backdrop-blur-sm
-                bg-white/90 border-neutral-200/60
+                bg-white/90 border-line/60
                 dark:bg-[#111a15] dark:border-white/[0.07]"
             aria-label="Kriteria yang Dipenuhi"
         >
@@ -281,7 +281,7 @@ function VerifyCodeCopyWidget({ verifyCode, certificateId }) {
     return (
         <section
             className="rounded-2xl overflow-hidden border shadow-lg backdrop-blur-sm
-                bg-white/90 border-neutral-200/60
+                bg-white/90 border-line/60
                 dark:bg-[#111a15] dark:border-white/[0.07]"
             aria-label="Kode Verifikasi"
         >
@@ -352,7 +352,7 @@ function VerifyCodeCopyWidget({ verifyCode, certificateId }) {
                             value={shareableUrl}
                             aria-label="URL verifikasi sertifikat"
                             className="flex-1 rounded-lg border px-3 py-2 font-mono text-xs outline-none cursor-text select-all transition-colors
-                                border-neutral-200 bg-neutral-50 text-neutral-600 focus:ring-2 focus:ring-emerald-400/50
+                                border-line bg-surface-muted text-content-secondary focus:ring-2 focus:ring-emerald-400/50
                                 dark:border-white/10 dark:bg-white/5 dark:text-white/50 dark:focus:ring-emerald-500/30"
                             onFocus={(e) => e.target.select()}
                         />
@@ -361,7 +361,7 @@ function VerifyCodeCopyWidget({ verifyCode, certificateId }) {
                             onClick={() => copy(shareableUrl)}
                             aria-label="Salin URL verifikasi"
                             className="flex size-9 shrink-0 items-center justify-center rounded-lg border transition-all focus:outline-none focus:ring-2 focus:ring-offset-1
-                                border-neutral-200 bg-neutral-50 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700 focus:ring-emerald-400/50
+                                border-line bg-surface-muted text-content-secondary hover:bg-surface-muted hover:text-content-secondary focus:ring-emerald-400/50
                                 dark:border-white/10 dark:bg-white/5 dark:text-white/35 dark:hover:bg-white/10 dark:hover:text-white/60"
                         >
                             <Copy className="size-3.5" />

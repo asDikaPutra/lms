@@ -112,13 +112,13 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
                                 placeholder="Cari kuis..."
-                                className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
+                                className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
                             />
                         </div>
                         <select
                             value={filterData.status}
                             onChange={(e) => setFilterData(prev => ({ ...prev, status: e.target.value }))}
-                            className="h-10 rounded-lg border px-3 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
+                            className="h-10 rounded-lg border px-3 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Status</option>
                             <option value="published">Aktif</option>
@@ -127,7 +127,7 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                         <select
                             value={filterData.module_id}
                             onChange={(e) => setFilterData(prev => ({ ...prev, module_id: e.target.value }))}
-                            className="h-10 rounded-lg border px-3 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
+                            className="h-10 rounded-lg border px-3 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Modul</option>
                             {course.modules?.map((module) => (
@@ -153,7 +153,7 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[900px]">
                                     <thead>
-                                        <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                                        <tr className="border-b border-line bg-surface-muted/50 dark:border-white/[0.07] dark:bg-white/5">
                                             <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Kuis</th>
                                             <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Modul</th>
                                             <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Soal</th>
@@ -166,7 +166,7 @@ export default function Quizzes({ course, quizzes, stats, filters }) {
                                     </thead>
                                     <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                                         {quizzes.map((quiz) => (
-                                            <tr key={quiz.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
+                                            <tr key={quiz.id} className="transition-colors hover:bg-surface-muted/50 dark:hover:bg-white/5">
                                                 <td className="py-3 px-4">
                                                     <div className="flex items-center gap-3">
                                                         <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-100">
@@ -252,7 +252,7 @@ function StatusBadge({ isPublished }) {
         );
     }
     return (
-        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600 border border-neutral-200">
+        <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-surface-muted text-content-secondary border border-line">
             <span className="size-1.5 rounded-full bg-neutral-400" />
             Draft
         </span>
@@ -273,14 +273,14 @@ function ActionDropdown({ quiz, isOpen, onToggle, onEdit, onTogglePublish, onDel
             </Button>
             {isOpen && (
                 <div className="absolute right-0 top-full mt-1 w-40 rounded-lg shadow-lg border py-1 z-10
-                bg-white border-neutral-200
+                bg-surface border-line
                 dark:bg-[#111a15] dark:border-white/[0.07]">
                     <button onClick={() => { onEdit(); onToggle({ stopPropagation: () => {} }); }}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-neutral-50 dark:hover:bg-white/8">
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-surface-muted dark:hover:bg-white/8">
                         <Edit2 className="size-4" /> Edit
                     </button>
                     <button onClick={() => { onTogglePublish(); onToggle({ stopPropagation: () => {} }); }}
-                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-neutral-50 dark:hover:bg-white/8">
+                        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-surface-muted dark:hover:bg-white/8">
                         <Eye className="size-4" /> {quiz.is_published ? 'Unpublish' : 'Publish'}
                     </button>
                     <hr className="my-1 border-line-subtle" />

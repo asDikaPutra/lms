@@ -111,7 +111,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
                                 placeholder="Cari tugas..."
                                 className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none
-                                    border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                    border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
                                     dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
                             />
                         </div>
@@ -119,7 +119,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
                             value={filterData.status}
                             onChange={(e) => setFilterData(prev => ({ ...prev, status: e.target.value }))}
                             className="h-10 rounded-lg border px-3 text-sm outline-none
-                                border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
                                 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Status</option>
@@ -131,7 +131,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
                             value={filterData.module_id}
                             onChange={(e) => setFilterData(prev => ({ ...prev, module_id: e.target.value }))}
                             className="h-10 rounded-lg border px-3 text-sm outline-none
-                                border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
+                                border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20
                                 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Modul</option>
@@ -158,7 +158,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[800px]">
                                     <thead>
-                                        <tr className="border-b border-line-subtle bg-neutral-50/50 dark:bg-white/5">
+                                        <tr className="border-b border-line-subtle bg-surface-muted/50 dark:bg-white/5">
                                             <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Tugas</th>
                                             <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Lokasi</th>
                                             <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Deadline</th>
@@ -170,7 +170,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
                                     </thead>
                                     <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                                         {assignments.map((assignment) => (
-                                            <tr key={assignment.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
+                                            <tr key={assignment.id} className="transition-colors hover:bg-surface-muted/50 dark:hover:bg-white/5">
                                                 <td className="py-3 px-4">
                                                     <div className="flex items-center gap-3">
                                                         <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
@@ -180,12 +180,12 @@ export default function Assignments({ course, assignments, stats, filters }) {
                                                             <p className="font-medium text-sm text-content-primary">{assignment.title}</p>
                                                             <div className="flex items-center gap-2 mt-0.5">
                                                                 {assignment.allow_file && (
-                                                                    <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500">
+                                                                    <span className="inline-flex items-center gap-1 text-[10px] text-content-secondary">
                                                                         <FileText className="size-3" /> File
                                                                     </span>
                                                                 )}
                                                                 {assignment.allow_link && (
-                                                                    <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500">
+                                                                    <span className="inline-flex items-center gap-1 text-[10px] text-content-secondary">
                                                                         <LinkIcon className="size-3" /> Link
                                                                     </span>
                                                                 )}
@@ -195,8 +195,8 @@ export default function Assignments({ course, assignments, stats, filters }) {
                                                 </td>
                                                 <td className="py-3 px-4">
                                                     <div className="flex flex-col">
-                                                        <span className="text-sm text-neutral-600">{assignment.assignable?.title ?? '-'}</span>
-                                                        <span className="text-[10px] text-neutral-400 uppercase">
+                                                        <span className="text-sm text-content-secondary">{assignment.assignable?.title ?? '-'}</span>
+                                                        <span className="text-[10px] text-content-muted uppercase">
                                                             {(assignment.assignable_type === 'material' || assignment.assignable_type === 'App\\Models\\Material') 
                                                                 ? 'Tingkat Materi' 
                                                                 : 'Tingkat Modul'}
@@ -205,14 +205,14 @@ export default function Assignments({ course, assignments, stats, filters }) {
                                                 </td>
                                                 <td className="py-3 px-4">
                                                     <div className="flex items-center gap-1.5">
-                                                        <Calendar className="size-3.5 text-neutral-400" />
-                                                        <span className={`text-sm ${isOverdue(assignment.deadline) ? 'text-red-600' : 'text-neutral-600'}`}>
+                                                        <Calendar className="size-3.5 text-content-muted" />
+                                                        <span className={`text-sm ${isOverdue(assignment.deadline) ? 'text-red-600' : 'text-content-secondary'}`}>
                                                             {formatDate(assignment.deadline)}
                                                         </span>
                                                     </div>
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
-                                                    <span className="inline-flex items-center gap-1 text-sm text-neutral-600">
+                                                    <span className="inline-flex items-center gap-1 text-sm text-content-secondary">
                                                         <Users className="size-3.5" />
                                                         {assignment.submissions_count ?? 0}
                                                     </span>
@@ -223,7 +223,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
                                                             {assignment.pending_submissions_count}
                                                         </span>
                                                     ) : (
-                                                        <span className="text-sm text-neutral-400">0</span>
+                                                        <span className="text-sm text-content-muted">0</span>
                                                     )}
                                                 </td>
                                                 <td className="py-3 px-4 text-center">
@@ -286,7 +286,7 @@ export default function Assignments({ course, assignments, stats, filters }) {
 function StatusBadge({ isPublished, isOverdue }) {
     if (!isPublished) {
         return (
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-neutral-100 text-neutral-600 border border-neutral-200">
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-surface-muted text-content-secondary border border-line">
                 Draft
             </span>
         );
@@ -308,12 +308,12 @@ function StatusBadge({ isPublished, isOverdue }) {
 function DropdownMenu({ assignment, onEdit, onToggle, onDelete }) {
     return (
         <div className="absolute right-0 top-full mt-1 w-40 rounded-lg shadow-lg border py-1 z-50
-            bg-white border-neutral-200
+            bg-surface border-line
             dark:bg-[#111a15] dark:border-white/[0.07]">
-            <button onClick={onEdit} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-neutral-50 dark:hover:bg-white/8">
+            <button onClick={onEdit} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-surface-muted dark:hover:bg-white/8">
                 <Edit2 className="size-4" /> Edit
             </button>
-            <button onClick={onToggle} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-neutral-50 dark:hover:bg-white/8">
+            <button onClick={onToggle} className="flex w-full items-center gap-2 px-3 py-2 text-sm text-content-primary hover:bg-surface-muted dark:hover:bg-white/8">
                 {assignment.is_published ? (<><X className="size-4" /> Unpublish</>) : (<><CheckCircle2 className="size-4" /> Publish</>)}
             </button>
             <hr className="my-1 border-line-subtle" />

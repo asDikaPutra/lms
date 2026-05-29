@@ -102,7 +102,7 @@ function GradebookTab({ gradebook }) {
     if (!gradebook || gradebook.length === 0) {
         return (
             <div className="text-center py-12">
-                <BarChart3 className="size-12 text-neutral-300 mx-auto mb-4" />
+                <BarChart3 className="size-12 text-content-muted mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2 text-content-primary">Belum Ada Data Nilai</h3>
                 <p className="text-content-secondary">Data nilai akan muncul setelah mahasiswa mengerjakan tugas dan kuis.</p>
             </div>
@@ -113,7 +113,7 @@ function GradebookTab({ gradebook }) {
         <div className="overflow-x-auto">
             <table className="w-full min-w-[700px]">
                 <thead>
-                    <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                    <tr className="border-b border-line bg-surface-muted/50 dark:border-white/[0.07] dark:bg-white/5">
                         <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Mahasiswa</th>
                         <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Tugas</th>
                         <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Kuis</th>
@@ -123,7 +123,7 @@ function GradebookTab({ gradebook }) {
                 </thead>
                 <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                     {gradebook.map((item, index) => (
-                        <tr key={index} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
+                        <tr key={index} className="transition-colors hover:bg-surface-muted/50 dark:hover:bg-white/5">
                             <td className="py-3 px-4">
                                 <div className="flex items-center gap-3">
                                     <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-medium text-sm">
@@ -192,7 +192,7 @@ function NeedsGradingTab({ items, courseId }) {
         <div className="overflow-x-auto">
             <table className="w-full min-w-[600px]">
                 <thead>
-                    <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                    <tr className="border-b border-line bg-surface-muted/50 dark:border-white/[0.07] dark:bg-white/5">
                         <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Item</th>
                         <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Mahasiswa</th>
                         <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Submit</th>
@@ -201,7 +201,7 @@ function NeedsGradingTab({ items, courseId }) {
                 </thead>
                 <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                     {items.map((item) => (
-                        <tr key={item.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
+                        <tr key={item.id} className="transition-colors hover:bg-surface-muted/50 dark:hover:bg-white/5">
                             <td className="py-3 px-4">
                                 <div className="flex items-center gap-3">
                                     <div className="flex size-8 items-center justify-center rounded-lg bg-amber-100">
@@ -238,12 +238,12 @@ function WeightsTab() {
     return (
         <div className="max-w-md mx-auto py-8">
             <div className="text-center mb-6">
-                <Settings className="size-12 text-neutral-300 mx-auto mb-4" />
+                <Settings className="size-12 text-content-muted mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2 text-content-primary">Bobot Nilai</h3>
-                <p className="text-neutral-500 text-sm">Atur bobot penilaian untuk setiap komponen.</p>
+                <p className="text-content-secondary text-sm">Atur bobot penilaian untuk setiap komponen.</p>
             </div>
             <div className="space-y-4 rounded-xl p-6 border
-                bg-neutral-50 border-neutral-200
+                bg-surface-muted border-line
                 dark:bg-white/5 dark:border-white/[0.07]">
                 <WeightItem label="Tugas" value={30} />
                 <WeightItem label="Kuis" value={20} />
@@ -257,7 +257,7 @@ function WeightsTab() {
                     </div>
                 </div>
             </div>
-            <p className="text-xs text-neutral-500 text-center mt-4">
+            <p className="text-xs text-content-secondary text-center mt-4">
                 Fitur pengaturan bobot akan segera tersedia.
             </p>
         </div>
@@ -276,9 +276,9 @@ function WeightItem({ label, value }) {
 function ExportTab() {
     return (
         <div className="text-center py-12">
-            <Download className="size-12 text-neutral-300 mx-auto mb-4" />
+            <Download className="size-12 text-content-muted mx-auto mb-4" />
             <h3 className="text-lg font-medium mb-2 text-content-primary">Export Nilai</h3>
-            <p className="text-neutral-500 mb-6">Unduh rekap nilai dalam berbagai format.</p>
+            <p className="text-content-secondary mb-6">Unduh rekap nilai dalam berbagai format.</p>
             <div className="flex justify-center gap-3">
                 <Button variant="outline" className="gap-2">
                     <FileText className="size-4" /> Excel
@@ -290,7 +290,7 @@ function ExportTab() {
                     <FileText className="size-4" /> PDF
                 </Button>
             </div>
-            <p className="text-xs text-neutral-500 mt-4">
+            <p className="text-xs text-content-secondary mt-4">
                 Fitur export akan segera tersedia.
             </p>
         </div>
@@ -306,7 +306,7 @@ function GradeCell({ value }) {
 }
 
 function getGradeColor(value) {
-    if (value === null || value === undefined) return 'text-neutral-400';
+    if (value === null || value === undefined) return 'text-content-muted';
     if (value >= 80) return 'text-emerald-600';
     if (value >= 60) return 'text-amber-600';
     return 'text-red-600';

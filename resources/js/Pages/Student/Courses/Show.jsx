@@ -243,7 +243,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                 <h2 className="text-lg font-bold text-content-primary">Daftar Materi</h2>
                                 <button
                                     onClick={() => setShowSidebar(false)}
-                                    className="p-1.5 rounded-lg transition-colors hover:bg-neutral-100 dark:hover:bg-white/8 text-content-secondary"
+                                    className="p-1.5 rounded-lg transition-colors hover:bg-surface-muted dark:hover:bg-white/8 text-content-secondary"
                                 >
                                     <X className="size-4" />
                                 </button>
@@ -271,7 +271,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                         {/* Module Header */}
                                         <button
                                             onClick={() => toggleModule(module.id)}
-                                            className="w-full text-left p-2.5 rounded-lg transition-colors bg-neutral-100 hover:bg-surface-muted dark:hover:bg-white/12"
+                                            className="w-full text-left p-2.5 rounded-lg transition-colors bg-surface-muted hover:bg-surface-muted dark:hover:bg-white/12"
                                         >
                                             <div className="flex items-center justify-between">
                                                 <span className="text-xs font-semibold text-content-primary">{module.title}</span>
@@ -297,7 +297,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                                 : 'border-line hover:border-blue-200 hover:bg-blue-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
                                                         }`}
                                                     >
-                                                        <span className="block truncate text-xs font-medium text-neutral-900 dark:text-white/70">{quiz.title}</span>
+                                                        <span className="block truncate text-xs font-medium text-content-primary dark:text-white/70">{quiz.title}</span>
                                                     </button>
                                                 ))}
 
@@ -312,7 +312,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                                 : 'border-line hover:border-amber-200 hover:bg-amber-50/50 dark:hover:border-amber-500/30 dark:hover:bg-amber-500/10'
                                                         }`}
                                                     >
-                                                        <span className="block truncate text-xs font-medium text-neutral-900 dark:text-white/70">{assignment.title}</span>
+                                                        <span className="block truncate text-xs font-medium text-content-primary dark:text-white/70">{assignment.title}</span>
                                                     </button>
                                                 ))}
 
@@ -327,7 +327,7 @@ export default function Show({ course, completedContentIds, attemptsByQuizId, su
                                                                 : 'border-line hover:border-emerald-200 hover:bg-emerald-50/50 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/10'
                                                         }`}
                                                     >
-                                                        <span className="block truncate text-xs font-medium text-neutral-900 dark:text-white/70">{material.title}</span>
+                                                        <span className="block truncate text-xs font-medium text-content-primary dark:text-white/70">{material.title}</span>
                                                     </button>
                                                 ))}
                                             </div>
@@ -391,7 +391,7 @@ function OverviewPage({ course, expandedModules, toggleModule, navigateTo, compl
                                 <motion.div
                                     animate={{ rotate: isExpanded ? 180 : 0 }}
                                     transition={{ duration: 0.3 }}
-                                    className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-line bg-white dark:bg-white/5 text-content-secondary shadow-sm"
+                                    className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-line bg-surface dark:bg-white/5 text-content-secondary shadow-sm"
                                 >
                                     <ChevronDown className="size-5" />
                                 </motion.div>
@@ -664,7 +664,7 @@ function CertificateEligibilitySection({ certificate_criteria, certificate_eligi
                 </div>
             ) : eligible ? (
                 /* Request Certificate � eligible but no certificate yet */
-                <div className="border-t border-neutral-100 px-4 pb-4 pt-3 md:px-5 md:pb-5">
+                <div className="border-t border-line px-4 pb-4 pt-3 md:px-5 md:pb-5">
                     <form onSubmit={handleRequestCertificate}>
                         <Button
                             type="submit"
@@ -837,7 +837,7 @@ function MaterialPage({ currentView, course, completed, attemptsByQuizId, submis
 
     if (!currentItem) {
         return (
-            <div className="rounded-3xl bg-white/90 dark:bg-[#111a15] backdrop-blur-xl p-8 shadow-2xl border border-neutral-200/60 dark:border-white/[0.07] text-center">
+            <div className="rounded-3xl bg-white/90 dark:bg-[#111a15] backdrop-blur-xl p-8 shadow-2xl border border-line/60 dark:border-white/[0.07] text-center">
                 <p className="text-content-secondary">Item tidak ditemukan</p>
                 <button
                     onClick={() => navigateTo('overview')}
@@ -1004,7 +1004,7 @@ function MaterialView({ material, completed, navigateTo, attemptsByQuizId, submi
                                     className={`relative flex size-11 shrink-0 items-center justify-center rounded-[13px] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 sm:size-12 ${
                                         isActive
                                             ? 'bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 text-white shadow-[0_4px_14px_rgba(5,150,105,0.38)]'
-                                            : 'bg-neutral-100 text-neutral-500 hover:bg-emerald-50 hover:text-emerald-600'
+                                            : 'bg-surface-muted text-content-secondary hover:bg-emerald-50 hover:text-emerald-600'
                                     }`}
                                 >
                                     <Icon className="size-5" strokeWidth={1.75} aria-hidden="true" />
@@ -1088,7 +1088,7 @@ function ContentView({ content, completed }) {
                     <div className="mx-auto w-full max-w-5xl">
                         {content.type === 'artikel' && (
                             <div
-                                className="prose prose-neutral prose-base max-w-none overflow-x-auto leading-relaxed dark:prose-invert prose-headings:font-bold prose-headings:text-neutral-900 dark:prose-headings:text-white/90 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:text-neutral-700 dark:prose-p:text-white/60 prose-a:text-emerald-600 dark:prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:text-emerald-700 hover:prose-a:underline prose-strong:text-neutral-900 dark:prose-strong:text-white/90 prose-code:rounded prose-code:bg-neutral-100 dark:prose-code:bg-white/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:text-emerald-700 dark:prose-code:text-emerald-400 prose-pre:rounded-xl prose-pre:bg-neutral-900 dark:prose-pre:bg-black/60 prose-img:rounded-xl prose-img:shadow-lg md:prose-lg [&_img]:h-auto [&_img]:max-w-full [&_table]:min-w-full"
+                                className="prose prose-neutral prose-base max-w-none overflow-x-auto leading-relaxed dark:prose-invert prose-headings:font-bold prose-headings:text-content-primary dark:prose-headings:text-white/90 prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:text-content-secondary dark:prose-p:text-white/60 prose-a:text-emerald-600 dark:prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:text-emerald-700 hover:prose-a:underline prose-strong:text-content-primary dark:prose-strong:text-white/90 prose-code:rounded prose-code:bg-surface-muted dark:prose-code:bg-white/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-code:text-emerald-700 dark:prose-code:text-emerald-400 prose-pre:rounded-xl prose-pre:bg-neutral-900 dark:prose-pre:bg-black/60 prose-img:rounded-xl prose-img:shadow-lg md:prose-lg [&_img]:h-auto [&_img]:max-w-full [&_table]:min-w-full"
                                 dangerouslySetInnerHTML={{ __html: content.body }}
                             />
                         )}
@@ -1116,7 +1116,7 @@ function ContentView({ content, completed }) {
                         )}
                         {content.type === 'pdf' && (
                             <div className="space-y-4">
-                                <div className="overflow-hidden rounded-2xl border-2 border-neutral-200 bg-neutral-50 shadow-inner">
+                                <div className="overflow-hidden rounded-2xl border-2 border-line bg-surface-muted shadow-inner">
                                     <iframe
                                         title={content.title}
                                         src={storageUrl(content.file_path)}
@@ -1129,11 +1129,11 @@ function ContentView({ content, completed }) {
                             </div>
                         )}
                         {content.type === 'file' && (
-                            <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-300 bg-neutral-50 py-16 text-center">
+                            <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-line bg-surface-muted py-16 text-center">
                                 <div className="mb-4 flex size-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg">
                                     <Download className="size-10" />
                                 </div>
-                                <p className="mb-6 text-lg font-semibold text-neutral-700">File siap diunduh</p>
+                                <p className="mb-6 text-lg font-semibold text-content-secondary">File siap diunduh</p>
                                 <DownloadLink path={content.file_path} label="Unduh File" />
                             </div>
                         )}
@@ -1801,7 +1801,7 @@ function QuizFullscreen({
                                         {currentQuestionIndex + 1} / {totalQuestions}
                                     </div>
 
-                                    <h2 className="mt-4 break-words text-center text-xl font-bold leading-snug text-neutral-900 sm:text-2xl md:text-3xl">
+                                    <h2 className="mt-4 break-words text-center text-xl font-bold leading-snug text-content-primary sm:text-2xl md:text-3xl">
                                         {activeQuestion.question}
                                     </h2>
                                 </motion.div>
@@ -1904,7 +1904,7 @@ function QuizFullscreen({
                                             rows="8"
                                             placeholder="Tulis jawaban Anda di sini..."
                                             disabled={processing || timeExpired}
-                                            className="min-h-[200px] w-full rounded-2xl border-2 border-white/15 bg-white/95 px-5 py-4 text-base leading-relaxed text-neutral-900 outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-400/20"
+                                            className="min-h-[200px] w-full rounded-2xl border-2 border-white/15 bg-white/95 px-5 py-4 text-base leading-relaxed text-content-primary outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-400/20"
                                         />
                                     </motion.div>
                                 )}
@@ -2068,7 +2068,7 @@ function AssignmentView({ assignment, submission }) {
                     <ClipboardList className="size-5" />
                 </div>
                 <div className="min-w-0 flex-1">
-                    <h2 className="break-words text-lg font-bold leading-snug text-neutral-900">{assignment.title}</h2>
+                    <h2 className="break-words text-lg font-bold leading-snug text-content-primary">{assignment.title}</h2>
                     <div className="mt-1.5 flex flex-wrap gap-1.5">
                         <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                             isLate ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'
@@ -2100,9 +2100,9 @@ function AssignmentView({ assignment, submission }) {
 
             {/* Description */}
             {assignment.description && (
-                <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-neutral-500">Deskripsi Tugas</p>
-                    <p className="whitespace-pre-line text-sm leading-relaxed text-neutral-700">{assignment.description}</p>
+                <div className="rounded-xl border border-line bg-surface-muted p-4">
+                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-content-secondary">Deskripsi Tugas</p>
+                    <p className="whitespace-pre-line text-sm leading-relaxed text-content-secondary">{assignment.description}</p>
                 </div>
             )}
 
@@ -2126,17 +2126,17 @@ function AssignmentView({ assignment, submission }) {
                     }`}>
                         {submission.grade}
                     </p>
-                    <p className="mt-0.5 text-xs font-semibold text-neutral-500">Nilai Kamu</p>
+                    <p className="mt-0.5 text-xs font-semibold text-content-secondary">Nilai Kamu</p>
                 </div>
             )}
 
             {/* Submit form */}
             {!isGraded && (
                 <form onSubmit={submitAssignment} className="space-y-3">
-                    <div className="rounded-xl border border-neutral-200 bg-white p-4 space-y-4">
+                    <div className="rounded-xl border border-line bg-surface p-4 space-y-4">
                         {assignment.allow_file && (
                             <div>
-                                <label htmlFor={`file-${assignment.id}`} className="mb-2 flex items-center gap-1.5 text-sm font-bold text-neutral-800">
+                                <label htmlFor={`file-${assignment.id}`} className="mb-2 flex items-center gap-1.5 text-sm font-bold text-content-primary">
                                     <Upload className="size-4 text-emerald-600" />
                                     Upload File
                                 </label>
@@ -2144,7 +2144,7 @@ function AssignmentView({ assignment, submission }) {
                                     id={`file-${assignment.id}`}
                                     type="file"
                                     onChange={(e) => form.setData('file', e.target.files?.[0] ?? null)}
-                                    className="w-full cursor-pointer text-sm text-neutral-600 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-100 file:px-4 file:py-2 file:text-sm file:font-bold file:text-emerald-700 hover:file:bg-emerald-200 transition-colors"
+                                    className="w-full cursor-pointer text-sm text-content-secondary file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-100 file:px-4 file:py-2 file:text-sm file:font-bold file:text-emerald-700 hover:file:bg-emerald-200 transition-colors"
                                 />
                                 {form.errors.file && (
                                     <p role="alert" className="mt-1.5 text-xs font-semibold text-rose-600">{form.errors.file}</p>
@@ -2153,7 +2153,7 @@ function AssignmentView({ assignment, submission }) {
                         )}
                         {assignment.allow_link && (
                             <div>
-                                <label htmlFor={`link-${assignment.id}`} className="mb-2 flex items-center gap-1.5 text-sm font-bold text-neutral-800">
+                                <label htmlFor={`link-${assignment.id}`} className="mb-2 flex items-center gap-1.5 text-sm font-bold text-content-primary">
                                     <Download className="size-4 text-emerald-600" />
                                     Link URL
                                 </label>
@@ -2163,7 +2163,7 @@ function AssignmentView({ assignment, submission }) {
                                     value={form.data.link_url}
                                     onChange={(e) => form.setData('link_url', e.target.value)}
                                     placeholder="https://..."
-                                    className="h-10 w-full rounded-lg border-2 border-neutral-200 px-3 text-sm outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                                    className="h-10 w-full rounded-lg border-2 border-line px-3 text-sm outline-none transition-all focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                                 />
                                 {form.errors.link_url && (
                                     <p role="alert" className="mt-1.5 text-xs font-semibold text-rose-600">{form.errors.link_url}</p>
@@ -2243,8 +2243,8 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
                     <MessageSquare className="size-5" />
                 </div>
                 <div>
-                    <h2 className="text-xl font-bold text-neutral-900">Diskusi Materi</h2>
-                    <p className="mt-1 text-sm text-neutral-600">{discussions.length} diskusi aktif</p>
+                    <h2 className="text-xl font-bold text-content-primary">Diskusi Materi</h2>
+                    <p className="mt-1 text-sm text-content-secondary">{discussions.length} diskusi aktif</p>
                 </div>
             </div>
 
@@ -2262,7 +2262,7 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
                     onChange={(e) => form.setData('body', e.target.value)}
                     rows="3"
                     placeholder={replyingTo ? 'Tulis balasan Anda...' : 'Tulis pertanyaan atau komentar Anda...'}
-                    className="w-full rounded-lg border-2 border-neutral-200 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                    className="w-full rounded-lg border-2 border-line px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                 />
                 {form.errors.body && <p role="alert" className="text-sm text-rose-600 font-semibold">{form.errors.body}</p>}
                 <Button
@@ -2280,21 +2280,21 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
 
             <div className="space-y-3">
                 {discussions.length === 0 && (
-                    <div className="text-center py-8 rounded-xl border-2 border-dashed border-neutral-200 bg-neutral-50/50">
-                        <MessageSquare className="size-12 mx-auto text-neutral-400 mb-3" />
-                        <p className="text-sm text-neutral-500 font-medium">Belum ada diskusi. Jadilah yang pertama bertanya!</p>
+                    <div className="text-center py-8 rounded-xl border-2 border-dashed border-line bg-surface-muted/50">
+                        <MessageSquare className="size-12 mx-auto text-content-muted mb-3" />
+                        <p className="text-sm text-content-secondary font-medium">Belum ada diskusi. Jadilah yang pertama bertanya!</p>
                     </div>
                 )}
                 {discussions.map((discussion) => (
-                    <div key={discussion.id} className="rounded-xl border-2 border-neutral-200 bg-white p-4">
+                    <div key={discussion.id} className="rounded-xl border-2 border-line bg-surface p-4">
                         <div className="flex items-start gap-3">
                             <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-xs font-bold shadow-lg">
                                 {discussion.user?.name?.slice(0, 2).toUpperCase() ?? 'U'}
                             </div>
                             <div className="flex-1">
-                                <p className="text-sm font-bold text-neutral-900">{discussion.user?.name ?? 'User'}</p>
-                                <p className="mt-1.5 whitespace-pre-line text-sm leading-6 text-neutral-700">{discussion.body}</p>
-                                <div className="mt-2 flex items-center gap-3 text-xs text-neutral-500">
+                                <p className="text-sm font-bold text-content-primary">{discussion.user?.name ?? 'User'}</p>
+                                <p className="mt-1.5 whitespace-pre-line text-sm leading-6 text-content-secondary">{discussion.body}</p>
+                                <div className="mt-2 flex items-center gap-3 text-xs text-content-secondary">
                                     <span>{new Date(discussion.created_at).toLocaleString('id-ID')}</span>
                                     <button type="button" onClick={() => startReply(discussion.id)} className="font-bold text-emerald-600 hover:text-emerald-700">
                                         Balas
@@ -2321,9 +2321,9 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
                                                 {reply.user?.name?.slice(0, 2).toUpperCase() ?? 'U'}
                                             </div>
                                             <div className="flex-1">
-                                                <p className="text-xs font-bold text-neutral-900">{reply.user?.name ?? 'User'}</p>
-                                                <p className="mt-1 whitespace-pre-line text-xs leading-5 text-neutral-700">{reply.body}</p>
-                                                <div className="mt-1.5 flex items-center gap-2 text-[10px] text-neutral-500">
+                                                <p className="text-xs font-bold text-content-primary">{reply.user?.name ?? 'User'}</p>
+                                                <p className="mt-1 whitespace-pre-line text-xs leading-5 text-content-secondary">{reply.body}</p>
+                                                <div className="mt-1.5 flex items-center gap-2 text-[10px] text-content-secondary">
                                                     <span>{new Date(reply.created_at).toLocaleString('id-ID')}</span>
                                                     {reply.user_id === auth?.user?.id && (
                                                         <button

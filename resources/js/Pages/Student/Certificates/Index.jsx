@@ -67,10 +67,10 @@ export default function Index({ certificates }) {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
                         className="rounded-2xl border-2 border-dashed p-16 text-center backdrop-blur-sm
-                            border-neutral-200 bg-white/60
+                            border-line bg-white/60
                             dark:border-white/10 dark:bg-white/5"
                     >
-                        <GraduationCap className="size-12 mx-auto mb-4 text-neutral-300 dark:text-white/20" />
+                        <GraduationCap className="size-12 mx-auto mb-4 text-content-muted dark:text-white/20" />
                         <p className="text-sm font-medium text-content-secondary">
                             Belum ada sertifikat yang diperoleh.
                         </p>

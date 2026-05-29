@@ -78,7 +78,7 @@ export default function Show({ assignment, submissions }) {
             </div>
             <section className="space-y-4" aria-label="Daftar pengumpulan tugas">
                 {submissions.length === 0 ? (
-                    <div className="rounded-xl border border-dashed p-8 text-center text-sm border-neutral-300 bg-white text-neutral-500 dark:bg-transparent dark:border-white/15 dark:text-white/35">
+                    <div className="rounded-xl border border-dashed p-8 text-center text-sm border-line bg-surface text-content-secondary dark:bg-transparent dark:border-white/15 dark:text-white/35">
                         Belum ada pengumpulan tugas.
                     </div>
                 ) : (
@@ -145,7 +145,7 @@ function SubmissionCard({ submission }) {
                         href={`/storage/${submission.file_path}`} 
                         target="_blank" 
                         rel="noreferrer" 
-                        className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium border bg-neutral-50 text-emerald-700 hover:bg-neutral-100 border-neutral-200 dark:bg-white/8 dark:text-emerald-400 dark:border-white/10 dark:hover:bg-white/12"
+                        className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium border bg-surface-muted text-emerald-700 hover:bg-surface-muted border-line dark:bg-white/8 dark:text-emerald-400 dark:border-white/10 dark:hover:bg-white/12"
                     >
                         <FileText className="size-4" aria-hidden="true" />
                         Unduh File
@@ -156,7 +156,7 @@ function SubmissionCard({ submission }) {
                         href={submission.link_url} 
                         target="_blank" 
                         rel="noreferrer" 
-                        className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium border bg-neutral-50 text-emerald-700 hover:bg-neutral-100 border-neutral-200 dark:bg-white/8 dark:text-emerald-400 dark:border-white/10 dark:hover:bg-white/12"
+                        className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium border bg-surface-muted text-emerald-700 hover:bg-surface-muted border-line dark:bg-white/8 dark:text-emerald-400 dark:border-white/10 dark:hover:bg-white/12"
                     >
                         <ExternalLink className="size-4" aria-hidden="true" />
                         Buka Link
@@ -176,7 +176,7 @@ function SubmissionCard({ submission }) {
             )}
 
             {showGrade && (
-                <form onSubmit={submitGrade} className="mt-4 space-y-4 rounded-xl border p-4 border-neutral-100 bg-surface-muted dark:border-white/[0.07]">
+                <form onSubmit={submitGrade} className="mt-4 space-y-4 rounded-xl border p-4 border-line bg-surface-muted dark:border-white/[0.07]">
                     <div>
                         <label htmlFor={`grade-${submission.id}`} className="block text-sm font-semibold text-content-primary">
                             Nilai (0-100)
@@ -189,7 +189,7 @@ function SubmissionCard({ submission }) {
                             step="0.01"
                             value={form.data.grade}
                             onChange={(e) => form.setData('grade', e.target.value)}
-                            className="mt-2 h-10 w-32 rounded-lg border px-3 text-sm outline-none border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:bg-white/8 dark:text-white/90"
+                            className="mt-2 h-10 w-32 rounded-lg border px-3 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:bg-white/8 dark:text-white/90"
                         />
                         {form.errors.grade && <p role="alert" className="mt-1 text-sm text-red-600">{form.errors.grade}</p>}
                     </div>
@@ -202,7 +202,7 @@ function SubmissionCard({ submission }) {
                             rows="3"
                             value={form.data.feedback}
                             onChange={(e) => form.setData('feedback', e.target.value)}
-                            className="mt-2 w-full rounded-lg border px-3 py-2 text-sm outline-none border-neutral-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25"
+                            className="mt-2 w-full rounded-lg border px-3 py-2 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/15 dark:bg-white/8 dark:text-white/90 dark:placeholder:text-white/25"
                             placeholder="Catatan untuk mahasiswa..."
                         />
                         {form.errors.feedback && <p role="alert" className="mt-1 text-sm text-red-600">{form.errors.feedback}</p>}

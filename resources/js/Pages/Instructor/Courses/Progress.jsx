@@ -59,7 +59,7 @@ export default function Progress({ course, studentProgress, moduleProgress, stat
                     </div>
 
                     {/* Tabs */}
-                    <div className="rounded-xl shadow-sm border overflow-hidden bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]">
+                    <div className="rounded-xl shadow-sm border overflow-hidden bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]">
                         <div className="border-b border-line-subtle">
                             <nav className="flex gap-1 p-1.5">
                                 {tabs.map((t) => {
@@ -71,7 +71,7 @@ export default function Progress({ course, studentProgress, moduleProgress, stat
                                             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
                                                 activeTab === t.id
                                                     ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/25'
-                                                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80'
+                                                    : 'text-content-secondary hover:bg-surface-muted hover:text-content-primary dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/80'
                                             }`}
                                         >
                                             <Icon className="size-4" />
@@ -105,7 +105,7 @@ function StudentProgressTab({ data }) {
     if (!data || data.length === 0) {
         return (
             <div className="text-center py-12">
-                <Users className="size-12 text-neutral-300 mx-auto mb-4" />
+                <Users className="size-12 text-content-muted mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2 text-content-primary">Belum Ada Data</h3>
                 <p className="text-content-secondary">Data progres akan muncul setelah mahasiswa mulai belajar.</p>
             </div>
@@ -131,7 +131,7 @@ function StudentProgressTab({ data }) {
         <div className="overflow-x-auto">
             <table className="w-full min-w-[800px]">
                 <thead>
-                    <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                    <tr className="border-b border-line bg-surface-muted/50 dark:border-white/[0.07] dark:bg-white/5">
                         <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Mahasiswa</th>
                         <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Progres</th>
                         <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Modul</th>
@@ -143,7 +143,7 @@ function StudentProgressTab({ data }) {
                 </thead>
                 <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                     {data.map((item, index) => (
-                        <tr key={index} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
+                        <tr key={index} className="transition-colors hover:bg-surface-muted/50 dark:hover:bg-white/5">
                             <td className="py-3 px-4">
                                 <div className="flex items-center gap-3">
                                     <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-medium text-sm">
@@ -194,7 +194,7 @@ function ModuleProgressTab({ data }) {
     if (!data || data.length === 0) {
         return (
             <div className="text-center py-12">
-                <Layers3 className="size-12 text-neutral-300 mx-auto mb-4" />
+                <Layers3 className="size-12 text-content-muted mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2 text-content-primary">Belum Ada Modul</h3>
                 <p className="text-content-secondary">Buat modul di Struktur Kurikulum untuk melihat progres per modul.</p>
             </div>
@@ -205,7 +205,7 @@ function ModuleProgressTab({ data }) {
         <div className="overflow-x-auto">
             <table className="w-full min-w-[600px]">
                 <thead>
-                    <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                    <tr className="border-b border-line bg-surface-muted/50 dark:border-white/[0.07] dark:bg-white/5">
                         <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Modul</th>
                         <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Materi Selesai</th>
                         <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Tugas Submit</th>
@@ -215,7 +215,7 @@ function ModuleProgressTab({ data }) {
                 </thead>
                 <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                     {data.map((module) => (
-                        <tr key={module.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
+                        <tr key={module.id} className="transition-colors hover:bg-surface-muted/50 dark:hover:bg-white/5">
                             <td className="py-3 px-4">
                                 <div className="flex items-center gap-3">
                                     <div className="flex size-8 items-center justify-center rounded-lg font-bold text-sm bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
@@ -281,7 +281,7 @@ function AtRiskTab({ data }) {
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {data.map((item, index) => (
-                    <div key={index} className="rounded-xl border p-4 bg-white border-neutral-200 dark:bg-[#111a15] dark:border-white/[0.07]">
+                    <div key={index} className="rounded-xl border p-4 bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]">
                         <div className="flex items-center gap-3 mb-3">
                             <div className="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-red-400 to-rose-500 text-white font-medium">
                                 {item.user?.name?.charAt(0)?.toUpperCase() ?? '?'}
@@ -302,7 +302,7 @@ function AtRiskTab({ data }) {
                                     style={{ width: `${item.progress}%` }}
                                 />
                             </div>
-                            <div className="flex justify-between text-xs text-neutral-500 pt-1">
+                            <div className="flex justify-between text-xs text-content-secondary pt-1">
                                 <span>Modul: {item.modules_completed}/{item.total_modules}</span>
                                 <span>Tugas: {item.assignments_submitted}/{item.total_assignments}</span>
                             </div>
@@ -350,7 +350,7 @@ function StatCard({ label, value, icon: Icon, color, suffix = '', isText = false
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-4 bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
+            className="rounded-xl shadow-sm border p-4 bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex items-center gap-3">
                 <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
@@ -358,7 +358,7 @@ function StatCard({ label, value, icon: Icon, color, suffix = '', isText = false
                 </div>
                 <div className="min-w-0 flex-1">
                     {isText ? (
-                        <p className="text-sm font-bold text-neutral-900 truncate">{value}</p>
+                        <p className="text-sm font-bold text-content-primary truncate">{value}</p>
                     ) : (
                         <p className="text-2xl font-bold text-content-primary">{value}{suffix}</p>
                     )}

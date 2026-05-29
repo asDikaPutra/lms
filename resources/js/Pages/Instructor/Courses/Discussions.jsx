@@ -54,13 +54,13 @@ export default function Discussions({ course, discussions, stats, filters }) {
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
                                 placeholder="Cari materi..."
-                                className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
+                                className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
                             />
                         </div>
                         <select
                             value={filterData.module_id}
                             onChange={(e) => setFilterData(prev => ({ ...prev, module_id: e.target.value }))}
-                            className="h-10 rounded-lg border px-3 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
+                            className="h-10 rounded-lg border px-3 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Modul</option>
                             {course.modules?.map((module) => (
@@ -76,12 +76,12 @@ export default function Discussions({ course, discussions, stats, filters }) {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="rounded-xl shadow-sm border overflow-hidden bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
+                            className="rounded-xl shadow-sm border overflow-hidden bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]"
                         >
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[700px]">
                                     <thead>
-                                        <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                                        <tr className="border-b border-line bg-surface-muted/50 dark:border-white/[0.07] dark:bg-white/5">
                                             <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Materi</th>
                                             <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Modul</th>
                                             <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Post</th>
@@ -92,7 +92,7 @@ export default function Discussions({ course, discussions, stats, filters }) {
                                     </thead>
                                     <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                                         {discussions.map((material) => (
-                                            <tr key={material.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
+                                            <tr key={material.id} className="transition-colors hover:bg-surface-muted/50 dark:hover:bg-white/5">
                                                 <td className="py-3 px-4">
                                                     <div className="flex items-center gap-3">
                                                         <div className="flex size-9 items-center justify-center rounded-lg bg-blue-100">
@@ -118,14 +118,14 @@ export default function Discussions({ course, discussions, stats, filters }) {
                                                             {material.new_comments}
                                                         </span>
                                                     ) : (
-                                                        <span className="text-sm text-neutral-400">-</span>
+                                                        <span className="text-sm text-content-muted">-</span>
                                                     )}
                                                 </td>
                                                 <td className="py-3 px-4">
                                                     <div className="flex items-center justify-end">
                                                         <Link
                                                             href={`/instructor/courses/${course.id}/curriculum`}
-                                                            className="inline-flex h-8 items-center justify-center rounded-lg border border-neutral-200 bg-white px-3 text-xs font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
+                                                            className="inline-flex h-8 items-center justify-center rounded-lg border border-line bg-surface px-3 text-xs font-medium text-content-secondary hover:bg-surface-muted transition-colors"
                                                         >
                                                             <Eye className="mr-1.5 size-3.5" /> Lihat
                                                         </Link>
@@ -176,7 +176,7 @@ function StatCard({ label, value, icon: Icon, color }) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-4 bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
+            className="rounded-xl shadow-sm border p-4 bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex items-center gap-3">
                 <div className={`flex size-10 items-center justify-center rounded-xl bg-gradient-to-br ${colors[color]} shadow-lg`}>
@@ -196,7 +196,7 @@ function EmptyState() {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl shadow-sm border p-12 text-center bg-white border-neutral-100 dark:bg-[#111a15] dark:border-white/[0.07]"
+            className="rounded-xl shadow-sm border p-12 text-center bg-surface border-line dark:bg-[#111a15] dark:border-white/[0.07]"
         >
             <div className="flex justify-center mb-6">
                 <div className="flex size-20 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 border border-blue-200">

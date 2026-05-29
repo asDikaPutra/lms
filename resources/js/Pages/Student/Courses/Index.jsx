@@ -101,7 +101,7 @@ export default function CoursesIndex({ courses }) {
                             onChange={(event) => searchForm.setData('search', event.target.value)}
                             placeholder="Cari kursus..."
                             className="h-11 w-full rounded-xl border-2 pl-10 pr-4 text-sm outline-none transition-all shadow-sm
-                                border-neutral-200 bg-white/90 backdrop-blur-sm text-neutral-900 placeholder:text-neutral-400
+                                border-line bg-surface/90 backdrop-blur-sm text-content-primary placeholder:text-content-muted
                                 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10
                                 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25
                                 dark:focus:border-emerald-500/60 dark:focus:ring-emerald-500/15"
@@ -116,7 +116,7 @@ export default function CoursesIndex({ courses }) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             className="col-span-full rounded-2xl border-2 border-dashed p-12 text-center backdrop-blur-sm
-                                border-neutral-200 bg-white/60
+                                border-line bg-surface/60
                                 dark:border-white/10 dark:bg-white/5"
                         >
                             <span className="text-5xl mb-4 block">📚</span>
@@ -276,7 +276,7 @@ function CourseCard({ course, delay }) {
                         </h3>
                         
                         {/* Instructor with glass avatar */}
-                        <div className="flex items-center gap-2 text-xs text-neutral-700 dark:text-white/45">
+                        <div className="flex items-center gap-2 text-xs text-content-secondary dark:text-white/45">
                             <div className="flex items-center gap-1.5">
                                 <div className="size-6 rounded-full backdrop-blur-sm flex items-center justify-center shadow-sm border
                                     bg-gradient-to-br from-emerald-200/80 to-teal-200/80 border-emerald-300/60
@@ -298,7 +298,7 @@ function CourseCard({ course, delay }) {
                             bg-white/40 border-white/60
                             dark:bg-white/5 dark:border-white/[0.07]">
                             <div className="flex justify-between items-center">
-                                <span className="text-xs font-semibold flex items-center gap-1.5 text-neutral-800 dark:text-white/70">
+                                <span className="text-xs font-semibold flex items-center gap-1.5 text-content-primary dark:text-white/70">
                                     <TrendingUp className="size-3.5 text-emerald-600" />
                                     Progress Pembelajaran
                                 </span>
@@ -356,7 +356,7 @@ function CourseCard({ course, delay }) {
                                     onChange={(event) => enrollForm.setData('enroll_code', event.target.value)}
                                     placeholder="Masukkan kode enroll"
                                     className="h-10 w-full rounded-xl border-2 px-3 text-xs font-semibold uppercase tracking-wider outline-none transition-all
-                                        border-neutral-200 bg-white/80 text-neutral-900 placeholder:text-neutral-400
+                                        border-line bg-surface/80 text-content-primary placeholder:text-content-muted
                                         focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
                                         dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25
                                         dark:focus:border-emerald-500/60 dark:focus:ring-emerald-500/15"

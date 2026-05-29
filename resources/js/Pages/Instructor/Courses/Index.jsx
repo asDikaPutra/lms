@@ -160,7 +160,7 @@ export default function Index({ courses, filters }) {
                             onChange={(event) => filterForm.setData('search', event.target.value)}
                             placeholder="Cari kursus..."
                             className="h-11 w-full rounded-xl border-2 pl-10 pr-4 text-sm outline-none transition-all shadow-sm
-                                border-neutral-200 bg-white/90 backdrop-blur-sm text-neutral-900 placeholder:text-neutral-400
+                                border-line bg-surface/90 backdrop-blur-sm text-content-primary placeholder:text-content-muted
                                 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10
                                 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25
                                 dark:focus:border-emerald-500/60 dark:focus:ring-emerald-500/15"
@@ -175,7 +175,7 @@ export default function Index({ courses, filters }) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             className="col-span-full rounded-2xl border-2 border-dashed p-12 text-center backdrop-blur-sm
-                                border-neutral-200 bg-white/60
+                                border-line bg-surface/60
                                 dark:border-white/10 dark:bg-white/5"
                         >
                             <span className="text-5xl mb-4 block">📚</span>
@@ -206,7 +206,7 @@ export default function Index({ courses, filters }) {
                                     link.active
                                         ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg'
                                         : link.url
-                                        ? 'bg-white dark:bg-white/8 text-neutral-600 dark:text-white/60 border border-line hover:border-emerald-300 dark:hover:border-emerald-500/40'
+                                        ? 'bg-white dark:bg-white/8 text-content-secondary dark:text-white/60 border border-line hover:border-emerald-300 dark:hover:border-emerald-500/40'
                                         : 'bg-surface-muted text-content-muted cursor-not-allowed'
                                 }`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
@@ -220,7 +220,7 @@ export default function Index({ courses, filters }) {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-[2px] tracking-[-0.01em]">
                     <div className="w-full max-w-lg rounded-[12px] shadow-xl ring-1 animate-in fade-in zoom-in-95 duration-200
-                        bg-white ring-black/5
+                        bg-surface ring-line
                         dark:bg-[#111a15] dark:ring-white/10"
                         role="dialog" aria-modal="true">
                         <div className="flex items-center justify-between border-b px-5 py-4
@@ -334,7 +334,7 @@ function CourseCard({ course, delay }) {
         }
         return {
             label: 'Arsip',
-            className: 'bg-neutral-100/80 text-neutral-600 border-neutral-300/70',
+            className: 'bg-surface-muted/80 text-content-secondary border-line/70',
         };
     };
 
@@ -351,7 +351,7 @@ function CourseCard({ course, delay }) {
             
             {/* Card container */}
             <div className="relative rounded-2xl overflow-hidden border
-                bg-white border-neutral-100
+                bg-surface border-line
                 dark:bg-[#111a15] dark:border-white/[0.07]">
                 {/* Header with gradient */}
                 <div className="relative h-28 bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-600 overflow-hidden">
@@ -368,7 +368,7 @@ function CourseCard({ course, delay }) {
                         <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border shadow-sm backdrop-blur-sm ${
                             course.is_active
                                 ? 'bg-emerald-100/80 text-emerald-800 border-emerald-300/70 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40'
-                                : 'bg-neutral-100/80 text-neutral-600 border-neutral-300/70 dark:bg-white/10 dark:text-white/50 dark:border-white/20'
+                                : 'bg-surface-muted/80 text-content-secondary border-line/70 dark:bg-white/10 dark:text-white/50 dark:border-white/20'
                         }`}>
                             {status.label}
                         </div>

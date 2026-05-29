@@ -101,13 +101,13 @@ export default function Students({ course, enrollments, stats, filters }) {
                                 value={filterData.search}
                                 onChange={(e) => setFilterData(prev => ({ ...prev, search: e.target.value }))}
                                 placeholder="Cari nama, NIM, atau email..."
-                                className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
+                                className="h-10 w-full rounded-lg border pl-10 pr-4 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white dark:placeholder:text-white/25 dark:focus:border-emerald-500/60"
                             />
                         </div>
                         <select
                             value={filterData.status}
                             onChange={(e) => setFilterData(prev => ({ ...prev, status: e.target.value }))}
-                            className="h-10 rounded-lg border px-3 text-sm outline-none border-neutral-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
+                            className="h-10 rounded-lg border px-3 text-sm outline-none border-line focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-white/10 dark:bg-white/8 dark:text-white/80 dark:focus:border-emerald-500/60"
                         >
                             <option value="">Semua Status</option>
                             <option value="active">Aktif</option>
@@ -127,7 +127,7 @@ export default function Students({ course, enrollments, stats, filters }) {
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[1000px]">
                                     <thead>
-                                        <tr className="border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5">
+                                        <tr className="border-b border-line bg-surface-muted/50 dark:border-white/[0.07] dark:bg-white/5">
                                             <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Mahasiswa</th>
                                             <th className="text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">NIM</th>
                                             <th className="text-center py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-secondary">Progres</th>
@@ -140,7 +140,7 @@ export default function Students({ course, enrollments, stats, filters }) {
                                     </thead>
                                     <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
                                         {enrollments.map((enrollment) => (
-                                            <tr key={enrollment.id} className="transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5">
+                                            <tr key={enrollment.id} className="transition-colors hover:bg-surface-muted/50 dark:hover:bg-white/5">
                                                 <td className="py-3 px-4">
                                                     <div className="flex items-center gap-3">
                                                         <div className="flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-medium text-sm">
@@ -153,7 +153,7 @@ export default function Students({ course, enrollments, stats, filters }) {
                                                     </div>
                                                 </td>
                                                 <td className="py-3 px-4">
-                                                    <span className="text-sm font-mono text-neutral-600">{enrollment.user?.nim ?? '-'}</span>
+                                                    <span className="text-sm font-mono text-content-secondary">{enrollment.user?.nim ?? '-'}</span>
                                                 </td>
                                                 <td className="py-3 px-4">
                                                     <div className="flex flex-col items-center gap-1">
