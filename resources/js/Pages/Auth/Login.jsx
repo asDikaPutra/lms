@@ -44,14 +44,14 @@ export default function Login() {
                         style={{ background: 'radial-gradient(circle, rgba(35,66,68,0.18) 0%, rgba(8,22,22,0.10) 55%, transparent 75%)' }} />
                 </div>
 
-                {/* Theme toggle â€” top right */}
+                {/* Theme toggle — top right */}
                 <div className="absolute top-4 right-4 z-10">
                     <ThemeToggle />
                 </div>
 
                 <section className="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col justify-center gap-8 px-4 py-8 sm:px-6 lg:grid lg:grid-cols-[1fr_minmax(380px,420px)] lg:items-center lg:gap-12 lg:px-8">
 
-                    {/* Left â€” Hero */}
+                    {/* Left — Hero */}
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -115,7 +115,7 @@ export default function Login() {
                         </motion.div>
                     </motion.div>
 
-                    {/* Right â€” Form */}
+                    {/* Right — Form */}
                     <motion.div
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -170,7 +170,7 @@ export default function Login() {
                                     {errors.email && (
                                         <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
                                             className="mt-1.5 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
-                                            <span className="text-sm">âš ï¸</span>{errors.email}
+                                            <span className="text-sm">⚠️</span>{errors.email}
                                         </motion.p>
                                     )}
                                 </motion.div>
@@ -198,13 +198,13 @@ export default function Login() {
                                                     ? 'border-emerald-500 bg-white shadow-lg shadow-emerald-500/10 dark:border-emerald-500/70 dark:bg-white/12'
                                                     : 'border-neutral-200 bg-neutral-50/50 hover:border-line-strong dark:hover:border-white/25'
                                             }`}
-                                            placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                                            placeholder="••••••••"
                                         />
                                     </div>
                                     {errors.password && (
                                         <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
                                             className="mt-1.5 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
-                                            <span className="text-sm">âš ï¸</span>{errors.password}
+                                            <span className="text-sm">⚠️</span>{errors.password}
                                         </motion.p>
                                     )}
                                 </motion.div>
