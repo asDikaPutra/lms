@@ -68,10 +68,62 @@
     /* Neutral Utility */
     --color-canvas: #f2f0eb;
     --color-ceramic: #edebe9;
-    --color-fg-primary: rgba(0, 0, 0, 0.87);
-    --color-fg-secondary: rgba(0, 0, 0, 0.58);
     --color-fg-white-soft: rgba(255, 255, 255, 0.70);
-    
+
+    /* ──────────────────────────────────────────────────────────────
+       SEMANTIC DESIGN TOKENS — single source of truth (light + dark)
+       Defined as vars in :root / .dark below; exposed here as Tailwind
+       color utilities (bg-surface, text-content-secondary, border-line…).
+       ────────────────────────────────────────────────────────────── */
+
+    /* Surfaces (visual hierarchy: base → surface → raised → overlay) */
+    --color-surface-base: var(--surface-base);
+    --color-surface: var(--surface);
+    --color-surface-raised: var(--surface-raised);
+    --color-surface-muted: var(--surface-muted);
+    --color-surface-overlay: var(--surface-overlay);
+
+    /* Content / text */
+    --color-content-primary: var(--content-primary);
+    --color-content-secondary: var(--content-secondary);
+    --color-content-muted: var(--content-muted);
+    --color-content-inverted: var(--content-inverted);
+
+    /* Borders */
+    --color-line: var(--line);
+    --color-line-subtle: var(--line-subtle);
+    --color-line-strong: var(--line-strong);
+
+    /* Brand (also remapped to fg-primary/secondary for back-compat) */
+    --color-brand: var(--brand);
+    --color-brand-hover: var(--brand-hover);
+    --color-brand-subtle: var(--brand-subtle);
+    --color-brand-foreground: var(--brand-foreground);
+    --color-fg-primary: var(--content-primary);
+    --color-fg-secondary: var(--content-secondary);
+
+    /* Status — solid + subtle (tinted) variants */
+    --color-success: var(--success);
+    --color-success-subtle: var(--success-subtle);
+    --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-subtle: var(--warning-subtle);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-danger: var(--danger);
+    --color-danger-subtle: var(--danger-subtle);
+    --color-danger-foreground: var(--danger-foreground);
+    --color-info: var(--info);
+    --color-info-subtle: var(--info-subtle);
+    --color-info-foreground: var(--info-foreground);
+
+    /* Elevation / shadow scale */
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+    --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.10), 0 2px 6px -2px rgb(0 0 0 / 0.06);
+    --shadow-lg: 0 12px 28px -6px rgb(0 0 0 / 0.14), 0 4px 10px -4px rgb(0 0 0 / 0.08);
+    --shadow-xl: 0 24px 48px -12px rgb(0 0 0 / 0.20);
+
+
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -116,6 +168,45 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+
+    /* ── Semantic tokens — LIGHT ── */
+    /* Surfaces */
+    --surface-base: #f7f6f3;      /* app background (warm off-white) */
+    --surface: #ffffff;           /* cards, panels */
+    --surface-raised: #ffffff;    /* elevated cards / modals */
+    --surface-muted: #f1efea;     /* subtle fills, table headers */
+    --surface-overlay: #ffffff;   /* popovers, dropdowns, tooltips */
+
+    /* Content */
+    --content-primary: rgba(0, 0, 0, 0.87);
+    --content-secondary: rgba(0, 0, 0, 0.58);
+    --content-muted: rgba(0, 0, 0, 0.40);
+    --content-inverted: #ffffff;
+
+    /* Borders */
+    --line: rgba(0, 0, 0, 0.10);
+    --line-subtle: rgba(0, 0, 0, 0.06);
+    --line-strong: rgba(0, 0, 0, 0.18);
+
+    /* Brand — Forest/Mint */
+    --brand: #0F6E56;             /* mint-dark: AA contrast on white */
+    --brand-hover: #0B3D2E;       /* forest */
+    --brand-subtle: #E1F5EE;      /* mint-light */
+    --brand-foreground: #ffffff;
+
+    /* Status */
+    --success: #0F6E56;
+    --success-subtle: #E1F5EE;
+    --success-foreground: #ffffff;
+    --warning: #B26C0A;
+    --warning-subtle: #FCEFD9;
+    --warning-foreground: #ffffff;
+    --danger: #DC2626;
+    --danger-subtle: #FEE2E2;
+    --danger-foreground: #ffffff;
+    --info: #185FA5;
+    --info-subtle: #DCEAFB;
+    --info-foreground: #ffffff;
 }
 
 .dark {
@@ -150,6 +241,45 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+
+    /* ── Semantic tokens — DARK ── */
+    /* Surfaces (green-tinted near-black, matching existing #111a15 cards) */
+    --surface-base: #0a0f0d;      /* app background */
+    --surface: #111a15;           /* cards, panels */
+    --surface-raised: #16211b;    /* elevated cards / modals */
+    --surface-muted: #1a2620;     /* subtle fills, table headers */
+    --surface-overlay: #16211b;   /* popovers, dropdowns, tooltips */
+
+    /* Content */
+    --content-primary: rgba(255, 255, 255, 0.90);
+    --content-secondary: rgba(255, 255, 255, 0.60);
+    --content-muted: rgba(255, 255, 255, 0.40);
+    --content-inverted: #0a0f0d;
+
+    /* Borders */
+    --line: rgba(255, 255, 255, 0.10);
+    --line-subtle: rgba(255, 255, 255, 0.06);
+    --line-strong: rgba(255, 255, 255, 0.18);
+
+    /* Brand — brightened mint for dark surfaces */
+    --brand: #5DCAA5;             /* mint */
+    --brand-hover: #7DD9BB;
+    --brand-subtle: rgba(93, 202, 165, 0.15);
+    --brand-foreground: #0a0f0d;
+
+    /* Status — brightened for dark */
+    --success: #5DCAA5;
+    --success-subtle: rgba(93, 202, 165, 0.15);
+    --success-foreground: #0a0f0d;
+    --warning: #F0A93C;
+    --warning-subtle: rgba(240, 169, 60, 0.15);
+    --warning-foreground: #0a0f0d;
+    --danger: #F87171;
+    --danger-subtle: rgba(248, 113, 113, 0.15);
+    --danger-foreground: #0a0f0d;
+    --info: #5DA0E8;
+    --info-subtle: rgba(93, 160, 232, 0.15);
+    --info-foreground: #0a0f0d;
 }
 
 @layer base {

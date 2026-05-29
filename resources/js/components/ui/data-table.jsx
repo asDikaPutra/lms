@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils"
 function DataTableHeader({ className, children, ...props }) {
   return (
     <thead {...props}>
-      <tr className={cn("border-b border-neutral-100 bg-neutral-50/50 dark:border-white/[0.07] dark:bg-white/5", className)}>
+      <tr className={cn("border-b border-line-subtle bg-surface-muted", className)}>
         {children}
       </tr>
     </thead>
@@ -31,7 +31,7 @@ function DataTableHeaderCell({ className, children, ...props }) {
   return (
     <th
       className={cn(
-        "text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-white/40",
+        "text-left py-3 px-4 text-xs font-semibold uppercase tracking-wider text-content-muted",
         className
       )}
       {...props}
@@ -43,7 +43,7 @@ function DataTableHeaderCell({ className, children, ...props }) {
 
 function DataTableBody({ className, children, ...props }) {
   return (
-    <tbody className={cn("divide-y divide-neutral-100 dark:divide-white/[0.06]", className)} {...props}>
+    <tbody className={cn("divide-y divide-line-subtle", className)} {...props}>
       {children}
     </tbody>
   )
@@ -53,7 +53,7 @@ function DataTableRow({ className, children, ...props }) {
   return (
     <tr
       className={cn(
-        "transition-colors hover:bg-neutral-50/50 dark:hover:bg-white/5",
+        "transition-colors hover:bg-surface-muted",
         className
       )}
       {...props}

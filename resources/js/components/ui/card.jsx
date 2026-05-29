@@ -24,15 +24,23 @@ import { cn } from "@/lib/utils"
 
 const cardVariants = {
   default:
-    "bg-white border border-neutral-100 shadow-sm dark:bg-[#111a15] dark:border-white/[0.07]",
+    "bg-surface border border-line-subtle shadow-sm",
   flat:
-    "bg-white border border-neutral-200 dark:bg-[#111a15] dark:border-white/[0.07]",
+    "bg-surface border border-line",
+  outlined:
+    "bg-surface border border-line",
   elevated:
-    "bg-white/90 border border-neutral-200/60 shadow-xl backdrop-blur-xl dark:bg-[#111a15] dark:border-white/[0.07] dark:shadow-[0_2px_20px_rgba(0,0,0,0.4)]",
+    "bg-surface-raised border border-line-subtle shadow-lg backdrop-blur-xl",
+  interactive:
+    "bg-surface border border-line-subtle shadow-sm transition-all hover:shadow-md hover:border-line cursor-pointer",
+  compact:
+    "bg-surface border border-line-subtle",
+  gradient:
+    "bg-gradient-to-br from-surface to-surface-muted border border-line-subtle shadow-sm",
   ghost:
-    "bg-white/60 border-2 border-dashed border-neutral-200 backdrop-blur-sm dark:bg-white/5 dark:border-white/10",
+    "bg-surface/60 border-2 border-dashed border-line backdrop-blur-sm",
   tinted:
-    "bg-neutral-50 border border-neutral-200 dark:bg-white/5 dark:border-white/[0.07]",
+    "bg-surface-muted border border-line-subtle",
 }
 
 const Card = React.forwardRef(({
@@ -44,7 +52,7 @@ const Card = React.forwardRef(({
     ref={ref}
     data-slot="card"
     className={cn(
-      "rounded-xl text-card-foreground",
+      "rounded-xl text-content-primary",
       cardVariants[variant],
       className
     )}
@@ -68,7 +76,7 @@ const CardTitle = React.forwardRef(({ className, ...props }, ref) => (
     ref={ref}
     data-slot="card-title"
     className={cn(
-      "text-base font-semibold leading-snug tracking-tight text-neutral-900 dark:text-white/90",
+      "text-base font-semibold leading-snug tracking-tight text-content-primary",
       className
     )}
     {...props}
@@ -80,7 +88,7 @@ const CardDescription = React.forwardRef(({ className, ...props }, ref) => (
   <p
     ref={ref}
     data-slot="card-description"
-    className={cn("text-sm text-neutral-500 dark:text-white/40", className)}
+    className={cn("text-sm text-content-secondary", className)}
     {...props}
   />
 ))
@@ -96,4 +104,14 @@ const CardContent = React.forwardRef(({ className, ...props }, ref) => (
 ))
 CardContent.displayName = "CardContent"
 
-export { Card, CardHeader, CardTitle, CardDescription, CardContent }
+const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    data-slot="card-footer"
+    className={cn("flex items-center gap-3 p-5 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }

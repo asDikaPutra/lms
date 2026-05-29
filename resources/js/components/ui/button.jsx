@@ -39,7 +39,7 @@ const buttonVariants = cva(
     "font-semibold whitespace-nowrap",
     "transition-all duration-150 outline-none select-none",
     "active:scale-95",
-    "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-mint",
+    "focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand",
     "disabled:pointer-events-none disabled:opacity-50",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0",
   ],
@@ -48,39 +48,39 @@ const buttonVariants = cva(
       variant: {
         // ── Primary / Default ──────────────────────────────────────────
         default:
-          "bg-mint text-white hover:bg-forest shadow-none",
+          "bg-brand text-brand-foreground hover:bg-brand-hover shadow-none",
         primary:
-          "bg-mint text-white hover:bg-forest shadow-none",
+          "bg-brand text-brand-foreground hover:bg-brand-hover shadow-none",
 
         // ── Secondary ─────────────────────────────────────────────────
         secondary:
-          "bg-mint-light text-forest hover:bg-[#d9ede2] dark:bg-emerald-500/15 dark:text-emerald-400 dark:hover:bg-emerald-500/25",
+          "bg-brand-subtle text-brand hover:bg-brand-subtle/70",
 
         // ── Outline ───────────────────────────────────────────────────
         outline:
-          "border-fg-secondary bg-transparent text-fg-primary hover:border-forest hover:text-forest dark:border-white/25 dark:text-white/70 dark:hover:border-emerald-400 dark:hover:text-emerald-400",
+          "border-line-strong bg-transparent text-content-primary hover:border-brand hover:text-brand",
 
         // ── Ghost ─────────────────────────────────────────────────────
         ghost:
-          "hover:bg-slate-100 hover:text-forest text-fg-primary dark:text-white/60 dark:hover:bg-white/8 dark:hover:text-emerald-400",
+          "text-content-primary hover:bg-surface-muted hover:text-brand",
 
         // ── Danger / Destructive ──────────────────────────────────────
         danger:
-          "bg-red-500 text-white hover:bg-red-600 focus-visible:ring-red-500",
+          "bg-danger text-danger-foreground hover:opacity-90 focus-visible:ring-danger",
         destructive:
-          "bg-red-500 text-white hover:bg-red-600 focus-visible:ring-red-500",
+          "bg-danger text-danger-foreground hover:opacity-90 focus-visible:ring-danger",
 
         // ── Success ───────────────────────────────────────────────────
         success:
-          "bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus-visible:ring-emerald-500",
+          "bg-success text-success-foreground hover:opacity-90 focus-visible:ring-success",
 
         // ── Warning ───────────────────────────────────────────────────
         warning:
-          "bg-amber-500 text-white hover:bg-amber-600 focus-visible:ring-amber-500",
+          "bg-warning text-warning-foreground hover:opacity-90 focus-visible:ring-warning",
 
         // ── Link ──────────────────────────────────────────────────────
         link:
-          "text-mint underline-offset-4 hover:underline border-transparent",
+          "text-brand underline-offset-4 hover:underline border-transparent",
       },
 
       size: {

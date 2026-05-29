@@ -39,8 +39,7 @@ export function EmptyState({
       animate={{ opacity: 1, y: 0 }}
       className={cn(
         "rounded-xl border p-12 text-center shadow-sm",
-        "bg-white border-neutral-100",
-        "dark:bg-[#111a15] dark:border-white/[0.07]",
+        "bg-surface border-line-subtle",
         className
       )}
     >
@@ -55,12 +54,12 @@ export function EmptyState({
         </div>
       )}
       {title && (
-        <h3 className="text-xl font-bold mb-2 text-neutral-900 dark:text-white/90">
+        <h3 className="text-xl font-bold mb-2 text-content-primary">
           {title}
         </h3>
       )}
       {description && (
-        <p className="mb-6 max-w-md mx-auto text-sm text-neutral-600 dark:text-white/45">
+        <p className="mb-6 max-w-md mx-auto text-sm text-content-secondary">
           {description}
         </p>
       )}

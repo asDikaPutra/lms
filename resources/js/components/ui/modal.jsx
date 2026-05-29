@@ -34,7 +34,7 @@ export function Modal({ open, onClose, title, children, className, maxWidth = "m
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-[2px]"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-[2px]"
           onClick={onClose}
         >
           <motion.div
@@ -43,7 +43,7 @@ export function Modal({ open, onClose, title, children, className, maxWidth = "m
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.15 }}
             className={cn(
-              "w-full rounded-xl shadow-xl ring-1 bg-white ring-black/5 dark:bg-[#111a15] dark:ring-white/10",
+              "w-full rounded-xl shadow-xl ring-1 bg-surface-raised ring-line",
               maxWidth,
               className
             )}
@@ -52,13 +52,13 @@ export function Modal({ open, onClose, title, children, className, maxWidth = "m
             onClick={(e) => e.stopPropagation()}
           >
             {title && (
-              <div className="flex items-center justify-between border-b px-5 py-4 border-neutral-200 dark:border-white/[0.07]">
-                <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">
+              <div className="flex items-center justify-between border-b px-5 py-4 border-line-subtle">
+                <h3 className="text-lg font-semibold text-content-primary">
                   {title}
                 </h3>
                 <button
                   onClick={onClose}
-                  className="rounded-full p-1 transition-colors text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 dark:text-white/40 dark:hover:bg-white/8 dark:hover:text-white/70"
+                  className="rounded-full p-1 transition-colors text-content-muted hover:bg-surface-muted hover:text-content-primary"
                   aria-label="Tutup"
                 >
                   <X className="size-5" />
@@ -137,17 +137,17 @@ export function ConfirmDialog({
             </div>
           )}
           <div>
-            <h3 className="text-lg font-semibold text-neutral-900 dark:text-white/90">{title}</h3>
+            <h3 className="text-lg font-semibold text-content-primary">{title}</h3>
             {description && (
-              <p className="text-sm text-neutral-500 dark:text-white/45">{description}</p>
+              <p className="text-sm text-content-secondary">{description}</p>
             )}
           </div>
         </div>
-        <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-white/[0.07]">
+        <div className="flex justify-end gap-3 pt-4 border-t border-line-subtle">
           <button
             onClick={onClose}
             disabled={loading}
-            className="inline-flex items-center justify-center gap-2 rounded-pill border border-transparent bg-clip-padding px-6 py-3 text-[16px] font-semibold whitespace-nowrap transition-all duration-150 outline-none select-none border-neutral-200 bg-transparent text-neutral-700 hover:bg-neutral-50 dark:border-white/25 dark:text-white/70 dark:hover:bg-white/8 disabled:pointer-events-none disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-2 rounded-pill border bg-clip-padding px-6 py-3 text-[16px] font-semibold whitespace-nowrap transition-all duration-150 outline-none select-none border-line-strong bg-transparent text-content-primary hover:bg-surface-muted disabled:pointer-events-none disabled:opacity-50"
           >
             {cancelLabel}
           </button>
@@ -155,11 +155,11 @@ export function ConfirmDialog({
             onClick={onConfirm}
             disabled={loading}
             className={cn(
-              "inline-flex items-center justify-center gap-2 rounded-pill border border-transparent bg-clip-padding px-6 py-3 text-[16px] font-semibold whitespace-nowrap transition-all duration-150 outline-none select-none text-white disabled:pointer-events-none disabled:opacity-50",
-              variant === "danger" && "bg-red-500 hover:bg-red-600",
-              variant === "warning" && "bg-amber-500 hover:bg-amber-600",
-              variant === "info" && "bg-emerald-600 hover:bg-emerald-700",
-              variant === "success" && "bg-emerald-600 hover:bg-emerald-700"
+              "inline-flex items-center justify-center gap-2 rounded-pill border border-transparent bg-clip-padding px-6 py-3 text-[16px] font-semibold whitespace-nowrap transition-all duration-150 outline-none select-none disabled:pointer-events-none disabled:opacity-50",
+              variant === "danger" && "bg-danger text-danger-foreground hover:opacity-90",
+              variant === "warning" && "bg-warning text-warning-foreground hover:opacity-90",
+              variant === "info" && "bg-brand text-brand-foreground hover:bg-brand-hover",
+              variant === "success" && "bg-success text-success-foreground hover:opacity-90"
             )}
           >
             {confirmLabel}

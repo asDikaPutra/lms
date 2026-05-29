@@ -21,18 +21,18 @@ export function SectionHeader({
   return (
     <div className={cn("flex items-center justify-between mb-6", className)}>
       <div>
-        <h2 className="text-xl font-bold flex items-center gap-2.5 text-neutral-900 dark:text-white/90">
+        <h2 className="text-xl font-bold flex items-center gap-2.5 text-content-primary">
           {Icon && <Icon className="size-5" />}
           {title}
         </h2>
         {description && (
-          <p className="mt-1 text-xs text-neutral-500 dark:text-white/40">{description}</p>
+          <p className="mt-1 text-xs text-content-secondary">{description}</p>
         )}
       </div>
       {link && (
         <Link
           href={link.href}
-          className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors"
+          className="text-sm font-semibold text-brand hover:text-brand-hover transition-colors"
         >
           {link.label ?? "Lihat semua"}
         </Link>
