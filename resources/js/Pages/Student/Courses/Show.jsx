@@ -1284,14 +1284,6 @@ function QuizView({ quiz, attempt }) {
     if (!quizStarted && canAttempt) {
         return (
             <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 shadow-2xl">
-                {/* Geometric pattern */}
-                <div
-                    className="pointer-events-none absolute inset-0 opacity-[0.04]"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
-                />
-
                 {/* Header */}
                 <div className="relative px-6 pb-5 pt-6 sm:px-8 sm:pt-8">
                     <div className="flex items-start gap-4">
@@ -1420,12 +1412,6 @@ function QuizView({ quiz, attempt }) {
         const passed = canShowScore && Number(attempt.score) >= Number(quiz.passing_score);
         return (
             <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 shadow-2xl">
-                <div
-                    className="pointer-events-none absolute inset-0 opacity-[0.04]"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
-                />
                 <div className="relative px-6 py-6 sm:px-8 sm:py-8">
                     {/* Title */}
                     <div className="mb-5 flex items-start gap-4">
@@ -1479,12 +1465,6 @@ function QuizView({ quiz, attempt }) {
         const passed = canShowScore && Number(attempt.score) >= Number(quiz.passing_score);
         return (
             <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-950 shadow-2xl">
-                <div
-                    className="pointer-events-none absolute inset-0 opacity-[0.04]"
-                    style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M30 0l15 15-15 15-15-15L30 0zm0 30l15 15-15 15-15-15 15-15zm15-15l15 15-15 15-15-15 15-15zM0 15l15 15-15 15L0 30V15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                    }}
-                />
                 <div className="relative px-6 py-6 sm:px-8 sm:py-8">
                     {/* Title row */}
                     <div className="mb-5 flex items-start justify-between gap-3">
