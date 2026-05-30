@@ -1433,13 +1433,13 @@ function DangerZoneSection({
                                 <div className="mt-3 p-3 bg-red-100 rounded-lg">
                                     <p className="text-xs font-medium text-red-800 mb-2">Data yang akan dihapus:</p>
                                     <div className="grid grid-cols-2 gap-2 text-xs text-red-700">
-                                        <span>â€¢ {stats.modules_count} Modul</span>
-                                        <span>â€¢ {stats.materials_count} Materi</span>
-                                        <span>â€¢ {stats.assignments_count} Tugas</span>
-                                        <span>â€¢ {stats.quizzes_count} Kuis</span>
-                                        <span>â€¢ {stats.submissions_count} Submission</span>
-                                        <span>â€¢ {stats.quiz_attempts_count} Percobaan Kuis</span>
-                                        <span>â€¢ {course.active_enrollments_count} Peserta Aktif</span>
+                                        <span>• {stats.modules_count} Modul</span>
+                                        <span>• {stats.materials_count} Materi</span>
+                                        <span>• {stats.assignments_count} Tugas</span>
+                                        <span>• {stats.quizzes_count} Kuis</span>
+                                        <span>• {stats.submissions_count} Submission</span>
+                                        <span>• {stats.quiz_attempts_count} Percobaan Kuis</span>
+                                        <span>• {course.active_enrollments_count} Peserta Aktif</span>
                                     </div>
                                 </div>
                             )}

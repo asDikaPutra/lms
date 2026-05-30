@@ -9,8 +9,8 @@ import { FilterButton } from '@/components/ui/filter-button';
 import { AnimatedPage, StaggerContainer } from '@/components/animated/AnimatedPage';
 import { fadeUp } from '@/lib/animations';
 
-export default function CoursesIndex({ courses }) {
-    const searchForm = useForm({ search: '' });
+export default function CoursesIndex({ courses, filters }) {
+    const searchForm = useForm({ search: filters?.search ?? '' });
     const [filter, setFilter] = useState('all'); // 'all' or 'enrolled'
 
     const handleSearch = (event) => {
@@ -125,7 +125,7 @@ export default function CoursesIndex({ courses }) {
                                 border-line bg-surface/60
                                 dark:border-white/10 dark:bg-white/5"
                         >
-                            <span className="text-5xl mb-4 block">ðŸ“š</span>
+                            <BookOpen className="mx-auto mb-4 size-12 text-content-muted" strokeWidth={1.5} aria-hidden="true" />
                             <p className="text-sm text-content-secondary font-medium">
                                 {filter === 'enrolled' ? 'Belum ada kursus yang diikuti.' : 'Tidak ada kursus yang tersedia.'}
                             </p>

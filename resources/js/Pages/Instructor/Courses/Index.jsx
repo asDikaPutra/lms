@@ -178,7 +178,7 @@ export default function Index({ courses, filters }) {
                                 border-line bg-surface/60
                                 dark:border-white/10 dark:bg-white/5"
                         >
-                            <span className="text-5xl mb-4 block">ðŸ“š</span>
+                            <BookOpen className="mx-auto mb-4 size-12 text-content-muted" strokeWidth={1.5} aria-hidden="true" />
                             <p className="text-sm text-content-secondary font-medium">
                                 Belum ada kursus yang dibuat.
                             </p>
@@ -381,7 +381,7 @@ function CourseCard({ course, delay }) {
                         </div>
                     </div>
 
-                    {/* Course icon â€” static */}
+                    {/* Course icon — static */}
                     <div className="absolute bottom-3 right-3 flex size-12 items-center justify-center rounded-xl bg-white/25 backdrop-blur-sm border border-white/40">
                         <BookOpen className="size-6 text-white" />
                     </div>

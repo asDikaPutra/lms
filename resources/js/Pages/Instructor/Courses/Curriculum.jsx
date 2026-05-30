@@ -226,7 +226,7 @@ export default function Curriculum({ course }) {
                                     <p className="text-[12px] text-fg-secondary dark:text-white/40">Kelola modul, materi, dan konten pembelajaran.</p>
                                 </div>
                             </div>
-                            <Button onClick={() => openModal('module')} size="sm" className="h-[36px]">
+                            <Button onClick={() => openModal('module')} size="sm">
                                 <Plus className="mr-1.5 size-4" /> Modul Baru
                             </Button>
                         </div>
@@ -288,7 +288,7 @@ function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, 
         <article className="rounded-[8px] border overflow-hidden transition-all border-ceramic bg-white hover:border-gray-300 dark:border-white/[0.07] dark:bg-[#081616] dark:hover:border-white/15">
             <div className="flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between bg-slate-50 dark:bg-white/5">
                 <div className="flex items-start gap-3 flex-1 min-w-0">
-                    <Button type="button" variant="outline" size="sm" className="mt-0.5 size-[28px] shrink-0 p-0 border-ceramic text-fg-secondary hover:text-fg-primary dark:border-white/10 dark:text-white/40 dark:hover:bg-white/5" onClick={() => toggleModule(module.id)}>
+                    <Button type="button" variant="outline" size="sm" className="mt-0.5 size-7 shrink-0 p-0 border-ceramic text-fg-secondary hover:text-fg-primary dark:border-white/10 dark:text-white/40 dark:hover:bg-white/5" onClick={() => toggleModule(module.id)}>
                         {expandedModules.has(module.id) ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
                     </Button>
                     <div className="min-w-0 flex-1">
@@ -298,19 +298,19 @@ function ModuleItem({ module, expandedModules, expandedMaterials, toggleModule, 
                     </div>
                 </div>
                 <div className="flex flex-wrap items-center justify-end gap-2 w-full md:w-auto md:shrink-0">
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('module', null, module)}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('module', null, module)}>
                         <Edit2 className="mr-1.5 size-3.5" />Edit
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-quiz/30 text-quiz-text hover:bg-quiz/10 dark:border-quiz/40 dark:text-quiz dark:hover:bg-quiz/10" onClick={() => openModal('quiz', module.id, null, 'module')}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-quiz/30 text-quiz-text hover:bg-quiz/10 dark:border-quiz/40 dark:text-quiz dark:hover:bg-quiz/10" onClick={() => openModal('quiz', module.id, null, 'module')}>
                         <HelpCircle className="mr-1.5 size-3.5" />Quiz
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-tugas/30 text-tugas-text hover:bg-tugas/10 dark:border-tugas/40 dark:text-tugas dark:hover:bg-tugas/10" onClick={() => openModal('assignment', module.id, null, 'module')}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-tugas/30 text-tugas-text hover:bg-tugas/10 dark:border-tugas/40 dark:text-tugas dark:hover:bg-tugas/10" onClick={() => openModal('assignment', module.id, null, 'module')}>
                         <ClipboardList className="mr-1.5 size-3.5" />Tugas
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] ${module.is_published ? 'border-orange-300/50 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-500/10' : 'border-mint/30 text-mint-dark hover:bg-mint-light/50 dark:border-mint/30 dark:text-mint dark:hover:bg-mint/10'}`} onClick={() => router.patch(`/instructor/modules/${module.id}/toggle`, {}, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className={`h-7 px-2.5 text-[11px] ${module.is_published ? 'border-orange-300/50 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-500/10' : 'border-mint/30 text-mint-dark hover:bg-mint-light/50 dark:border-mint/30 dark:text-mint dark:hover:bg-mint/10'}`} onClick={() => router.patch(`/instructor/modules/${module.id}/toggle`, {}, { preserveScroll: true })}>
                         {module.is_published ? 'Unpublish' : 'Publish'}
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/modules/${module.id}`, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/modules/${module.id}`, { preserveScroll: true })}>
                         <Trash2 className="mr-1.5 size-3.5" />Hapus
                     </Button>
                 </div>
@@ -371,16 +371,16 @@ function QuizItem({ quiz, parentId, parentKind, expanded, openModal }) {
                     <p className="text-[14px] font-medium text-fg-primary dark:text-white/80">{quiz.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">(Quiz Tingkat {parentKind === 'module' ? 'Modul' : 'Materi'})</span></p>
                 </div>
                 <div className="flex flex-wrap items-center justify-end gap-2 relative z-10 w-full md:w-auto md:shrink-0">
-                    <Link href={`/instructor/quizzes/${quiz.id}/edit`} className="inline-flex h-[28px] items-center justify-center rounded-[6px] border border-quiz bg-quiz/10 px-2.5 text-[11px] font-semibold text-quiz-text hover:bg-quiz/20 transition-colors dark:border-quiz dark:bg-quiz/20 dark:text-quiz dark:hover:bg-quiz/30">
+                    <Link href={`/instructor/quizzes/${quiz.id}/edit`} className="inline-flex h-7 items-center justify-center rounded-[6px] border border-quiz bg-quiz/10 px-2.5 text-[11px] font-semibold text-quiz-text hover:bg-quiz/20 transition-colors dark:border-quiz dark:bg-quiz/20 dark:text-quiz dark:hover:bg-quiz/30">
                         <Layers3 className="mr-1.5 size-3.5" /> Builder Soal
                     </Link>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('quiz', parentId, quiz, parentKind)}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('quiz', parentId, quiz, parentKind)}>
                         <Edit2 className="mr-1.5 size-3.5" />Edit
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] ${quiz.is_published ? 'border-orange-300/50 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-500/10' : 'border-mint/30 text-mint-dark hover:bg-mint-light/50 dark:border-mint/30 dark:text-mint dark:hover:bg-mint/10'}`} onClick={() => router.patch(`/instructor/quizzes/${quiz.id}/toggle`, {}, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className={`h-7 px-2.5 text-[11px] ${quiz.is_published ? 'border-orange-300/50 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-500/10' : 'border-mint/30 text-mint-dark hover:bg-mint-light/50 dark:border-mint/30 dark:text-mint dark:hover:bg-mint/10'}`} onClick={() => router.patch(`/instructor/quizzes/${quiz.id}/toggle`, {}, { preserveScroll: true })}>
                         {quiz.is_published ? 'Unpublish' : 'Publish'}
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/quizzes/${quiz.id}`, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/quizzes/${quiz.id}`, { preserveScroll: true })}>
                         <Trash2 className="mr-1.5 size-3.5" />Hapus
                     </Button>
                 </div>
@@ -400,13 +400,13 @@ function AssignmentItem({ assignment, parentId, parentKind, expanded, openModal 
                     <p className="text-[14px] font-medium text-fg-primary dark:text-white/80">{assignment.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">(Tugas Tingkat {parentKind === 'module' ? 'Modul' : 'Materi'})</span></p>
                 </div>
                 <div className="flex flex-wrap items-center justify-end gap-2 relative z-10 w-full md:w-auto md:shrink-0">
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('assignment', parentId, assignment, parentKind)}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('assignment', parentId, assignment, parentKind)}>
                         <Edit2 className="mr-1.5 size-3.5" />Edit
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] ${assignment.is_published ? 'border-orange-300/50 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-500/10' : 'border-mint/30 text-mint-dark hover:bg-mint-light/50 dark:border-mint/30 dark:text-mint dark:hover:bg-mint/10'}`} onClick={() => router.patch(`/instructor/assignments/${assignment.id}/toggle`, {}, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className={`h-7 px-2.5 text-[11px] ${assignment.is_published ? 'border-orange-300/50 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-500/10' : 'border-mint/30 text-mint-dark hover:bg-mint-light/50 dark:border-mint/30 dark:text-mint dark:hover:bg-mint/10'}`} onClick={() => router.patch(`/instructor/assignments/${assignment.id}/toggle`, {}, { preserveScroll: true })}>
                         {assignment.is_published ? 'Unpublish' : 'Publish'}
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/assignments/${assignment.id}`, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/assignments/${assignment.id}`, { preserveScroll: true })}>
                         <Trash2 className="mr-1.5 size-3.5" />Hapus
                     </Button>
                 </div>
@@ -423,7 +423,7 @@ function MaterialItem({ material, moduleId, expandedModules, expandedMaterials, 
             <div className="relative flex flex-col gap-2 py-3 pl-[48px] pr-4 md:flex-row md:items-center md:justify-between">
                 <div className="absolute left-[24px] top-[24px] w-[16px] h-[2px] bg-ceramic dark:bg-white/10"></div>
                 <div className="flex items-start gap-3 flex-1 min-w-0">
-                    <Button type="button" variant="outline" size="sm" className="mt-0.5 size-[28px] shrink-0 p-0 border-ceramic text-fg-secondary hover:text-fg-primary dark:border-white/10 dark:text-white/40 dark:hover:bg-white/5" onClick={() => toggleMaterial(material.id)}>
+                    <Button type="button" variant="outline" size="sm" className="mt-0.5 size-7 shrink-0 p-0 border-ceramic text-fg-secondary hover:text-fg-primary dark:border-white/10 dark:text-white/40 dark:hover:bg-white/5" onClick={() => toggleMaterial(material.id)}>
                         {expandedMaterials.has(material.id) ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
                     </Button>
                     <div className="min-w-0 flex-1">
@@ -432,19 +432,19 @@ function MaterialItem({ material, moduleId, expandedModules, expandedMaterials, 
                     </div>
                 </div>
                 <div className="flex flex-wrap items-center justify-end gap-2 relative z-10 w-full md:w-auto md:shrink-0">
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('material', moduleId, material)}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('material', moduleId, material)}>
                         <Edit2 className="mr-1.5 size-3.5" />Edit
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] bg-mint-light text-mint-dark border-mint-dark/30 hover:bg-mint-light/80 dark:bg-mint/10 dark:text-mint dark:border-mint/30 dark:hover:bg-mint/20" onClick={() => openModal('content', material.id)}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] bg-mint-light text-mint-dark border-mint-dark/30 hover:bg-mint-light/80 dark:bg-mint/10 dark:text-mint dark:border-mint/30 dark:hover:bg-mint/20" onClick={() => openModal('content', material.id)}>
                         <Plus className="mr-1.5 size-3.5" /> Konten
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-quiz/30 text-quiz-text hover:bg-quiz/10 dark:border-quiz/40 dark:text-quiz dark:hover:bg-quiz/10" onClick={() => openModal('quiz', material.id, null, 'material')}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-quiz/30 text-quiz-text hover:bg-quiz/10 dark:border-quiz/40 dark:text-quiz dark:hover:bg-quiz/10" onClick={() => openModal('quiz', material.id, null, 'material')}>
                         <HelpCircle className="mr-1.5 size-3.5" /> Quiz
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-tugas/30 text-tugas-text hover:bg-tugas/10 dark:border-tugas/40 dark:text-tugas dark:hover:bg-tugas/10" onClick={() => openModal('assignment', material.id, null, 'material')}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-tugas/30 text-tugas-text hover:bg-tugas/10 dark:border-tugas/40 dark:text-tugas dark:hover:bg-tugas/10" onClick={() => openModal('assignment', material.id, null, 'material')}>
                         <ClipboardList className="mr-1.5 size-3.5" /> Tugas
                     </Button>
-                    <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/materials/${material.id}`, { preserveScroll: true })}>
+                    <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/materials/${material.id}`, { preserveScroll: true })}>
                         <Trash2 className="mr-1.5 size-3.5" />Hapus
                     </Button>
                 </div>
@@ -507,10 +507,10 @@ function ContentItem({ content, materialId, isLast, openModal, getContentTypeIco
                 <span className="text-[13px] font-medium text-fg-primary dark:text-white/80">{content.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">({content.type})</span></span>
             </div>
             <div className="flex items-center gap-2 relative z-10">
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('content', materialId, content)}>
+                <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('content', materialId, content)}>
                     <Edit2 className="mr-1.5 size-3.5" />Edit
                 </Button>
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/contents/${content.id}`, { preserveScroll: true })}>
+                <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/contents/${content.id}`, { preserveScroll: true })}>
                     <Trash2 className="mr-1.5 size-3.5" />Hapus
                 </Button>
             </div>
@@ -528,16 +528,16 @@ function MaterialQuizItem({ quiz, materialId, isLast, openModal }) {
                 <span className="text-[13px] font-medium text-fg-primary dark:text-white/80">{quiz.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">(Quiz)</span></span>
             </div>
             <div className="flex items-center gap-2 relative z-10">
-                <Link href={`/instructor/quizzes/${quiz.id}/edit`} className="inline-flex h-[28px] items-center justify-center rounded-[6px] border border-quiz bg-quiz/10 px-2.5 text-[11px] font-semibold text-quiz-text hover:bg-quiz/20 transition-colors dark:border-quiz dark:bg-quiz/20 dark:text-quiz dark:hover:bg-quiz/30">
+                <Link href={`/instructor/quizzes/${quiz.id}/edit`} className="inline-flex h-7 items-center justify-center rounded-[6px] border border-quiz bg-quiz/10 px-2.5 text-[11px] font-semibold text-quiz-text hover:bg-quiz/20 transition-colors dark:border-quiz dark:bg-quiz/20 dark:text-quiz dark:hover:bg-quiz/30">
                     <Layers3 className="mr-1.5 size-3.5" /> Builder Soal
                 </Link>
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('quiz', materialId, quiz, 'material')}>
+                <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('quiz', materialId, quiz, 'material')}>
                     <Edit2 className="mr-1.5 size-3.5" />Edit
                 </Button>
-                <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] ${quiz.is_published ? 'border-orange-300/50 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-500/10' : 'border-mint/30 text-mint-dark hover:bg-mint-light/50 dark:border-mint/30 dark:text-mint dark:hover:bg-mint/10'}`} onClick={() => router.patch(`/instructor/quizzes/${quiz.id}/toggle`, {}, { preserveScroll: true })}>
+                <Button type="button" variant="outline" size="sm" className={`h-7 px-2.5 text-[11px] ${quiz.is_published ? 'border-orange-300/50 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-500/10' : 'border-mint/30 text-mint-dark hover:bg-mint-light/50 dark:border-mint/30 dark:text-mint dark:hover:bg-mint/10'}`} onClick={() => router.patch(`/instructor/quizzes/${quiz.id}/toggle`, {}, { preserveScroll: true })}>
                     {quiz.is_published ? 'Unpublish' : 'Publish'}
                 </Button>
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/quizzes/${quiz.id}`, { preserveScroll: true })}>
+                <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/quizzes/${quiz.id}`, { preserveScroll: true })}>
                     <Trash2 className="mr-1.5 size-3.5" />Hapus
                 </Button>
             </div>
@@ -555,13 +555,13 @@ function MaterialAssignmentItem({ assignment, materialId, isLast, openModal }) {
                 <span className="text-[13px] font-medium text-fg-primary dark:text-white/80">{assignment.title} <span className="text-[11px] font-normal uppercase tracking-wider ml-1 text-fg-secondary dark:text-white/35">(Tugas)</span></span>
             </div>
             <div className="flex items-center gap-2 relative z-10">
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('assignment', materialId, assignment, 'material')}>
+                <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-fg-primary hover:bg-slate-100 dark:border-white/10 dark:text-white/80 dark:hover:bg-white/5" onClick={() => openModal('assignment', materialId, assignment, 'material')}>
                     <Edit2 className="mr-1.5 size-3.5" />Edit
                 </Button>
-                <Button type="button" variant="outline" size="sm" className={`h-[28px] px-2.5 text-[11px] ${assignment.is_published ? 'border-orange-300/50 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-500/10' : 'border-mint/30 text-mint-dark hover:bg-mint-light/50 dark:border-mint/30 dark:text-mint dark:hover:bg-mint/10'}`} onClick={() => router.patch(`/instructor/assignments/${assignment.id}/toggle`, {}, { preserveScroll: true })}>
+                <Button type="button" variant="outline" size="sm" className={`h-7 px-2.5 text-[11px] ${assignment.is_published ? 'border-orange-300/50 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-500/10' : 'border-mint/30 text-mint-dark hover:bg-mint-light/50 dark:border-mint/30 dark:text-mint dark:hover:bg-mint/10'}`} onClick={() => router.patch(`/instructor/assignments/${assignment.id}/toggle`, {}, { preserveScroll: true })}>
                     {assignment.is_published ? 'Unpublish' : 'Publish'}
                 </Button>
-                <Button type="button" variant="outline" size="sm" className="h-[28px] px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/assignments/${assignment.id}`, { preserveScroll: true })}>
+                <Button type="button" variant="outline" size="sm" className="h-7 px-2.5 text-[11px] border-ceramic text-red-600 hover:text-red-700 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10" onClick={() => router.delete(`/instructor/assignments/${assignment.id}`, { preserveScroll: true })}>
                     <Trash2 className="mr-1.5 size-3.5" />Hapus
                 </Button>
             </div>
@@ -791,7 +791,7 @@ function InstructorDiscussionSection({ materialId, discussions }) {
             <form onSubmit={submitDiscussion} className="mt-4 space-y-3">
                 {replyingTo && (
                     <div className="flex items-center justify-between rounded-[6px] px-3 py-2 text-[12px] bg-mint-light text-forest dark:bg-emerald-500/15 dark:text-emerald-400">
-                        <span>Membalas diskusiâ€¦</span>
+                        <span>Membalas diskusi…</span>
                         <button type="button" onClick={cancelReply} className="text-fg-primary hover:text-fg-secondary">Batal</button>
                     </div>
                 )}

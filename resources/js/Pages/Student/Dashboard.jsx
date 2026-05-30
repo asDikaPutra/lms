@@ -54,7 +54,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
             <Head title="Dashboard Mahasiswa" />
             <AnimatedPage>
 
-                {/* â”€â”€ Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+                {/* ── Hero ─────────────────────────────────────────────── */}
                 <section className="mb-6">
                     <div className="grid gap-5 lg:grid-cols-[1fr_22rem]">
 
@@ -158,7 +158,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                     </div>
                 </section>
 
-                {/* â”€â”€ Stats Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+                {/* ── Stats Cards ───────────────────────────────────────── */}
                 <StaggerContainer delay={0.35} className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     {statsConfig.map((item, index) => {
                         const Icon = item.icon;
@@ -194,7 +194,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
                     })}
                 </StaggerContainer>
 
-                {/* â”€â”€ Main Grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+                {/* ── Main Grid ─────────────────────────────────────────── */}
                 <div className="grid gap-5 xl:grid-cols-[1.4fr_1fr]">
 
                     {/* Courses Section */}
@@ -308,7 +308,7 @@ export default function DashboardAnimated({ filters, stats, enrollments, upcomin
     );
 }
 
-// â”€â”€â”€ CourseCard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── CourseCard ───────────────────────────────────────────────────────────────
 function CourseCard({ enrollment, delay }) {
     return (
         <motion.article
@@ -320,7 +320,7 @@ function CourseCard({ enrollment, delay }) {
                 border-line bg-surface hover:border-emerald-300 hover:shadow-[0_8px_24px_rgba(16,185,129,0.15)]
                 dark:border-white/[0.07] dark:bg-[#081616] dark:hover:border-emerald-500/25 dark:hover:shadow-[0_6px_24px_rgba(16,185,129,0.12)]"
         >
-            {/* Banner â€” sama dengan Courses Index */}
+            {/* Banner — sama dengan Courses Index */}
             <div className="relative h-36 overflow-hidden bg-gradient-to-br from-emerald-500/90 via-teal-500/90 to-emerald-600/90 backdrop-blur-sm">
                 <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
                 <div className="absolute -right-6 -top-6 size-24 rounded-full bg-emerald-400/20 blur-2xl" />
@@ -406,7 +406,7 @@ function CourseCard({ enrollment, delay }) {
     );
 }
 
-// â”€â”€â”€ AssignmentCard â€” redesigned as deadline timeline item â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── AssignmentCard — redesigned as deadline timeline item ───────────────────
 function getUrgency(deadlineStr) {
     if (!deadlineStr) return { label: 'Tidak ada', color: 'neutral', daysLeft: null };
     const now = new Date();
@@ -490,7 +490,7 @@ function AssignmentCard({ assignment, delay }) {
     );
 }
 
-// â”€â”€â”€ StatusBadge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── StatusBadge ─────────────────────────────────────────────────────────────
 function StatusBadge({ status }) {
     const config = {
         active:   { label: 'Aktif',   cls: 'bg-emerald-100/90 border-emerald-300/80 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300', dot: 'bg-emerald-500 dark:bg-emerald-400' },

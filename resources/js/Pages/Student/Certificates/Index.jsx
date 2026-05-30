@@ -16,47 +16,53 @@ export default function Index({ certificates }) {
             <Head title="Sertifikat Saya" />
 
             <AnimatedPage>
-                {/* Header â€” sama dengan halaman lain */}
+                {/* Header — sama dengan halaman lain */}
                 <section className="mb-6">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 24 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="space-y-3"
+                        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                        className="relative overflow-hidden rounded-2xl border p-7 shadow-md
+                            border-emerald-200 bg-gradient-to-br from-emerald-50 via-teal-50/80 to-white
+                            dark:border-white/[0.07] dark:bg-gradient-to-br dark:from-[#081616] dark:via-[#0E2B29] dark:to-[#000100] dark:shadow-[0_2px_24px_rgba(0,0,0,0.5)]"
                     >
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.1 }}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-sm border
-                                bg-emerald-100/80 border-emerald-200/60
-                                dark:bg-emerald-500/15 dark:border-emerald-500/30"
-                        >
-                            <Award className="size-3.5 text-emerald-700 dark:text-emerald-400" />
-                            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
-                                Pencapaian Saya
-                            </span>
-                        </motion.div>
+                        <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/10" />
 
-                        <motion.h1
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="text-3xl md:text-4xl font-bold tracking-tight leading-[1.1]"
-                        >
-                            <span className="bg-gradient-to-r from-emerald-700 via-teal-600 to-emerald-600 bg-clip-text text-transparent dark:from-emerald-300 dark:via-teal-300 dark:to-emerald-400">
-                                Sertifikat Saya
-                            </span>
-                        </motion.h1>
+                        <div className="relative space-y-4">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.1 }}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border
+                                    border-emerald-200 bg-emerald-100/80
+                                    dark:border-emerald-500/25 dark:bg-emerald-500/10"
+                            >
+                                <Award className="size-3.5 text-emerald-700 dark:text-emerald-400" />
+                                <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                                    Pencapaian Saya
+                                </span>
+                            </motion.div>
 
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                            className="max-w-2xl text-sm leading-relaxed text-content-secondary"
-                        >
-                            Kumpulan sertifikat yang telah Anda peroleh dari kursus yang diselesaikan.
-                        </motion.p>
+                            <motion.h1
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.18 }}
+                                className="text-3xl md:text-4xl font-bold tracking-tight leading-[1.1]"
+                            >
+                                <span className="bg-gradient-to-r from-emerald-700 via-teal-600 to-emerald-600 bg-clip-text text-transparent dark:from-emerald-300 dark:via-teal-300 dark:to-emerald-400">
+                                    Sertifikat Saya
+                                </span>
+                            </motion.h1>
+
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.28 }}
+                                className="max-w-2xl text-sm leading-relaxed text-content-secondary"
+                            >
+                                Kumpulan sertifikat yang telah Anda peroleh dari kursus yang diselesaikan.
+                            </motion.p>
+                        </div>
                     </motion.div>
                 </section>
 
@@ -115,7 +121,7 @@ function CertificateCard({ certificate }) {
                     bg-white/90 border-white/40
                     dark:bg-[#081616] dark:border-white/[0.07]"
             >
-                {/* Header banner â€” sama dengan Courses Index */}
+                {/* Header banner — sama dengan Courses Index */}
                 <div className="relative h-36 bg-gradient-to-br from-emerald-500/90 via-teal-500/90 to-emerald-600/90 backdrop-blur-sm overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
 

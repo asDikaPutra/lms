@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils"
 
 /**
- * StatCard â€” Reusable statistics card for dashboards.
+ * StatCard — Reusable statistics card for dashboards.
  *
  * Usage:
  *   <StatCard label="Total Kuis" value={42} icon={HelpCircle} color="emerald" />

@@ -40,13 +40,17 @@ export default function CourseWorkspaceLayout({ course, children, activeTab = ''
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-600 p-6 text-white shadow-xl shadow-emerald-500/20 relative overflow-hidden"
+                className="rounded-2xl border p-6 shadow-md relative overflow-hidden
+                    border-emerald-200 bg-gradient-to-br from-emerald-50 via-teal-50/80 to-white
+                    dark:border-white/[0.07] dark:bg-gradient-to-br dark:from-[#081616] dark:via-[#0E2B29] dark:to-[#000100] dark:shadow-[0_2px_24px_rgba(0,0,0,0.5)]"
             >
+                <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/10" />
+
                 <div className="relative">
                     {/* Back link */}
-                    <Link 
-                        href="/instructor/courses" 
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-white/80 hover:text-white transition-colors mb-4"
+                    <Link
+                        href="/instructor/courses"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300 transition-colors mb-4"
                     >
                         <ChevronLeft className="size-4" />
                         Kembali ke Daftar Kursus
@@ -56,14 +60,14 @@ export default function CourseWorkspaceLayout({ course, children, activeTab = ''
                         <div className="space-y-2">
                             {/* Course code and status */}
                             <div className="flex items-center gap-3">
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-                                    <span className="size-1.5 rounded-full bg-white" />
-                                    <span className="text-xs font-bold uppercase tracking-wider font-mono">
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-200 bg-emerald-100/80 dark:border-emerald-500/25 dark:bg-emerald-500/10">
+                                    <span className="size-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+                                    <span className="text-xs font-bold uppercase tracking-wider font-mono text-emerald-700 dark:text-emerald-400">
                                         {course.code}
                                     </span>
                                 </span>
                                 {course.semester && (
-                                    <span className="text-sm font-medium text-white/80">
+                                    <span className="text-sm font-medium text-content-secondary">
                                         {course.semester}
                                     </span>
                                 )}
@@ -73,21 +77,21 @@ export default function CourseWorkspaceLayout({ course, children, activeTab = ''
                             </div>
 
                             {/* Course name */}
-                            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+                            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-content-primary">
                                 {course.name}
                             </h1>
 
                             {/* Course info */}
-                            <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-content-secondary">
                                 <span className="flex items-center gap-1.5">
-                                    <Users className="size-4" />
+                                    <Users className="size-4 text-emerald-600 dark:text-emerald-400" />
                                     {course.active_enrollments_count} Mahasiswa
                                 </span>
                                 <span className="flex items-center gap-1.5">
-                                    <Layers3 className="size-4" />
+                                    <Layers3 className="size-4 text-emerald-600 dark:text-emerald-400" />
                                     {course.modules?.length ?? course.modules_count ?? 0} Modul
                                 </span>
-                                <span className="text-xs bg-white/20 px-2 py-0.5 rounded">
+                                <span className="text-xs rounded border border-emerald-200 bg-emerald-100/50 px-2 py-0.5 text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-500/5 dark:text-emerald-400">
                                     Kode Enroll: <strong className="font-mono">{course.enroll_code}</strong>
                                 </span>
                             </div>

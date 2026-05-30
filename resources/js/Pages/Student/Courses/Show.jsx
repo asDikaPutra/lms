@@ -1239,7 +1239,7 @@ function QuizView({ quiz, attempt }) {
         });
     };
 
-    // Timer effect â€” runs whenever a quiz is actively being taken
+    // Timer effect — runs whenever a quiz is actively being taken
     // (including a re-take, where a prior attempt still exists).
     useEffect(() => {
         if (!quizStarted || !startTime || timeExpired) return;
@@ -1568,7 +1568,7 @@ function QuizView({ quiz, attempt }) {
         );
     }
 
-    // Quiz already attempted (show result summary, NOT fullscreen) â€”
+    // Quiz already attempted (show result summary, NOT fullscreen) —
     // but only when the student is NOT currently re-taking the quiz.
     if (attempt && !quizStarted) {
         const passed = canShowScore && Number(attempt.score) >= Number(quiz.passing_score);
@@ -1639,7 +1639,7 @@ function QuizView({ quiz, attempt }) {
         );
     }
 
-    // Quiz Active â€” FULLSCREEN Quizizz/Wayground style (rendered via portal to escape layout)
+    // Quiz Active — FULLSCREEN Quizizz/Wayground style (rendered via portal to escape layout)
     return createPortal(
         <QuizFullscreen
             quiz={quiz}
@@ -1784,7 +1784,7 @@ function QuizFullscreen({
             </div>
 
             <div className="relative flex h-full flex-col">
-                {/* â”€â”€ TOP BAR â”€â”€ */}
+                {/* ── TOP BAR ── */}
                 <header className="flex flex-shrink-0 items-center gap-3 px-4 py-4 sm:gap-5 sm:px-8 sm:py-5">
                     {/* Exit */}
                     <button
@@ -1814,7 +1814,7 @@ function QuizFullscreen({
                             />
                         </div>
                         <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-white/40 sm:hidden">
-                            Soal {currentQuestionIndex + 1}/{totalQuestions} â€¢ {answeredCount} terjawab
+                            Soal {currentQuestionIndex + 1}/{totalQuestions} • {answeredCount} terjawab
                         </p>
                     </div>
 
@@ -2140,7 +2140,7 @@ function QuizFullscreen({
                                 <Clock className="size-8 text-rose-400" />
                             </div>
                             <h3 className="text-xl font-bold text-white">Waktu Habis</h3>
-                            <p className="mt-2 text-sm text-white/60">Mengirim jawabanmu otomatisâ€¦</p>
+                            <p className="mt-2 text-sm text-white/60">Mengirim jawabanmu otomatis…</p>
                         </motion.div>
                     </motion.div>
                 )}
@@ -2242,7 +2242,7 @@ function AssignmentView({ assignment, submission }) {
                             ? 'bg-rose-100 text-rose-700'
                             : 'bg-teal-100 text-teal-700'
                     }`}>
-                        {isGraded ? `Nilai: ${submission.grade ?? 'â€”'}` : submission.status === 'late' ? 'Terlambat' : 'Dikumpulkan'}
+                        {isGraded ? `Nilai: ${submission.grade ?? '—'}` : submission.status === 'late' ? 'Terlambat' : 'Dikumpulkan'}
                     </span>
                 )}
             </div>
@@ -2402,7 +2402,7 @@ function DiscussionView({ materialId, discussions: initialDiscussions }) {
             <form onSubmit={submitDiscussion} className="space-y-3">
                 {replyingTo && (
                     <div className="flex items-center justify-between rounded-lg bg-emerald-100 px-4 py-2 text-sm text-emerald-700 font-semibold">
-                        <span>Membalas diskusiâ€¦</span>
+                        <span>Membalas diskusi…</span>
                         <button type="button" onClick={cancelReply} className="text-emerald-900 hover:text-emerald-950 font-bold text-xs">
                             Batal
                         </button>

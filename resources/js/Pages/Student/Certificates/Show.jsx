@@ -75,7 +75,7 @@ export default function Show({ certificate }) {
     );
 }
 
-/* â”€â”€ CertificateDocument â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── CertificateDocument ─────────────────────────────────────────────────── */
 
 function CertificateDocument({ certificate }) {
     const formattedDate = formatIndonesianDate(certificate.issued_at);
@@ -86,28 +86,21 @@ function CertificateDocument({ certificate }) {
                 border-white/40 dark:border-white/[0.07] dark:shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
             aria-label="Dokumen Sertifikat"
         >
-            {/* Forest Green header */}
-            <div className="relative bg-[#0B3D2E] overflow-hidden px-8 pt-10 pb-12">
-                <div
-                    className="absolute inset-0 opacity-20"
-                    style={{ background: 'radial-gradient(ellipse at 60% 50%, #5DCAA5 0%, transparent 70%)' }}
-                    aria-hidden="true"
-                />
-
-                {/* Seal */}
-                <div className="absolute top-6 right-8" aria-hidden="true">
-                    <AchievementSeal />
-                </div>
+            {/* Header — match Student Dashboard greeting banner */}
+            <div className="relative overflow-hidden px-8 pt-10 pb-12
+                bg-gradient-to-br from-emerald-50 via-teal-50/80 to-white
+                dark:bg-gradient-to-br dark:from-[#081616] dark:via-[#0E2B29] dark:to-[#000100]">
+                <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/10" aria-hidden="true" />
 
                 <div className="relative space-y-3">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#5DCAA5]">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-400">
                         Sertifikat Penyelesaian
                     </p>
-                    <p className="text-sm text-white/60 font-medium">Diberikan kepada</p>
-                    <h1 className="font-heading text-[28px] leading-tight text-white">
+                    <p className="text-sm font-medium text-content-secondary">Diberikan kepada</p>
+                    <h1 className="text-[28px] font-bold leading-tight text-content-primary">
                         {certificate.user.name}
                     </h1>
-                    <p className="text-sm text-white/70 font-medium tracking-wide">
+                    <p className="text-sm font-medium tracking-wide text-content-secondary">
                         NIM: {certificate.user.nim}
                     </p>
                 </div>
@@ -169,21 +162,7 @@ function CertificateDocument({ certificate }) {
     );
 }
 
-/* â”€â”€ AchievementSeal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-function AchievementSeal() {
-    return (
-        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Achievement seal">
-            <circle cx="36" cy="36" r="32" stroke="#5DCAA5" strokeWidth="2" strokeDasharray="4 3" opacity="0.6" />
-            <circle cx="36" cy="36" r="26" fill="#5DCAA5" fillOpacity="0.15" stroke="#5DCAA5" strokeWidth="1.5" />
-            <path d="M36 14 L39.5 26 L51 22 L43 32 L55 36 L43 40 L51 50 L39.5 46 L36 58 L32.5 46 L21 50 L29 40 L17 36 L29 32 L21 22 L32.5 26 Z" fill="#5DCAA5" opacity="0.9" />
-            <circle cx="36" cy="36" r="6" fill="white" fillOpacity="0.9" />
-            <path d="M32.5 36 L35 38.5 L39.5 33.5" stroke="#0B3D2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-    );
-}
-
-/* â”€â”€ CriteriaMetList â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── CriteriaMetList ─────────────────────────────────────────────────────── */
 
 const CRITERIA_CONFIG = [
     { key: 'min_progress', label: 'Progress Materi', unit: '%', description: 'Persentase materi yang telah diselesaikan' },
@@ -233,7 +212,7 @@ function CriteriaMetList({ criteria }) {
                         </div>
                         <div className="shrink-0 flex items-center gap-2">
                             <span className="text-sm font-bold text-content-secondary">
-                                â‰¥ {criteria[config.key]}{config.unit}
+                                ≥ {criteria[config.key]}{config.unit}
                             </span>
                             <div className="flex size-6 items-center justify-center rounded-full bg-[#5DCAA5]/15 border border-[#5DCAA5]/40">
                                 <CheckCircle2 className="size-3.5 text-[#5DCAA5]" />
@@ -246,7 +225,7 @@ function CriteriaMetList({ criteria }) {
     );
 }
 
-/* â”€â”€ VerifyCodeCopyWidget â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── VerifyCodeCopyWidget ────────────────────────────────────────────────── */
 
 function VerifyCodeCopyWidget({ verifyCode, certificateId }) {
     const [copyStatus, setCopyStatus] = useState(null);

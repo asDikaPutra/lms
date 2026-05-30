@@ -23,11 +23,19 @@ class CourseController extends Controller
     public function index(Request $request): Response
     {
         $user = $request->user();
-        
-        // Get all active courses
+
+        $search = trim((string) $request->query('search', ''));
+
+        // Get all active courses (optionally filtered by search term)
         $courses = Course::query()
             ->with('instructor:id,name')
             ->where('is_active', true)
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('code', 'like', "%{$search}%");
+                });
+            })
             ->latest()
             ->get();
 
@@ -78,6 +86,7 @@ class CourseController extends Controller
 
         return Inertia::render('Student/Courses/Index', [
             'courses' => $coursesWithStatus,
+            'filters' => ['search' => $search],
         ]);
     }
 

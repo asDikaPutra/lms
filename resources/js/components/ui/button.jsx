@@ -19,12 +19,12 @@ import { buttonVariants } from "@/components/ui/button-variants"
  *   link      — underline text
  *
  * Sizes:
- *   default   — h-[48px] px-6 text-[16px]
- *   sm        — h-[36px] px-4 text-[14px]
- *   lg        — h-[56px] px-8 text-[18px]
- *   icon      — size-[48px] square
- *   icon-sm   — size-[36px] square
- *   icon-lg   — size-[56px] square
+ *   default   — h-12 px-6 text-base
+ *   sm        — h-9 px-4 text-sm
+ *   lg        — h-14 px-8 text-lg
+ *   icon      — size-12 square
+ *   icon-sm   — size-9 square
+ *   icon-lg   — size-14 square
  *
  * Extra props:
  *   loading   — shows spinner, disables button

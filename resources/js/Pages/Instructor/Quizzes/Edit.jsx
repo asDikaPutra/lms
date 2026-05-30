@@ -172,7 +172,7 @@ export default function EditQuiz({ quiz, course_id }) {
                                         type="button"
                                         variant="ghost"
                                         size="sm"
-                                        className="h-[28px] px-2 text-[12px] text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-500/10"
+                                        className="h-7 px-2 text-[12px] text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-500/10"
                                         onClick={deleteQuestion}
                                     >
                                         <Trash2 className="mr-1.5 size-3.5" /> Hapus Soal

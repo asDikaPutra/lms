@@ -86,17 +86,18 @@ export default function Overview({ course }) {
                 <div className="space-y-6">
                     {/* Quick Actions */}
                     <div className="flex flex-wrap gap-3">
-                        <Button onClick={openEditModal} variant="outline" className="gap-2">
+                        <Button onClick={openEditModal} variant="outline" size="sm" className="gap-2">
                             <Edit2 className="size-4" />
                             Edit Informasi Kursus
                         </Button>
-                        <Button onClick={regenerateCode} variant="outline" className="gap-2">
+                        <Button onClick={regenerateCode} variant="outline" size="sm" className="gap-2">
                             <RefreshCw className="size-4" />
                             Generate Ulang Kode Enroll
                         </Button>
-                        <Button 
-                            onClick={toggleStatus} 
-                            variant="outline" 
+                        <Button
+                            onClick={toggleStatus}
+                            variant="outline"
+                            size="sm"
                             className={`gap-2 ${course.is_active ? 'text-amber-600 hover:text-amber-700' : 'text-emerald-600 hover:text-emerald-700'}`}
                         >
                             {course.is_active ? <ToggleRight className="size-4" /> : <ToggleLeft className="size-4" />}
@@ -156,7 +157,7 @@ export default function Overview({ course }) {
                                     <ClipboardCheck className="size-5 text-amber-600 dark:text-amber-400" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-amber-900 dark:text-amber-300">Pendaftaran Menunggu Persetujuan</h3>
+                                    <h3 className="text-base font-semibold text-amber-900 dark:text-amber-300">Pendaftaran Menunggu Persetujuan</h3>
                                     <p className="text-sm text-amber-700 dark:text-amber-400/80">{course.pending_enrollments_count} mahasiswa menunggu persetujuan</p>
                                 </div>
                             </div>
@@ -178,12 +179,12 @@ export default function Overview({ course }) {
                                     <Layers3 className="size-6 text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-content-primary">Struktur Kurikulum</h3>
+                                    <h3 className="text-base font-semibold text-content-primary">Struktur Kurikulum</h3>
                                     <p className="text-sm text-content-secondary">Kelola modul, materi, konten, kuis, dan tugas</p>
                                 </div>
                             </div>
                             <Link href={`/instructor/courses/${course.id}/curriculum`}>
-                                <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/25">
+                                <Button size="sm" className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/25">
                                     <Layers3 className="mr-2 size-4" />
                                     Kelola Struktur Kurikulum
                                 </Button>

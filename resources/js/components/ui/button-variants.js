@@ -53,17 +53,17 @@ export const buttonVariants = cva(
 
       size: {
         default:
-          "h-[48px] px-6 text-[16px] [&_svg:not([class*='size-'])]:size-5",
+          "h-12 px-6 text-base [&_svg:not([class*='size-'])]:size-5",
         sm:
-          "h-[36px] px-4 text-[14px] [&_svg:not([class*='size-'])]:size-4",
+          "h-9 px-4 text-sm [&_svg:not([class*='size-'])]:size-4",
         lg:
-          "h-[56px] px-8 text-[18px] [&_svg:not([class*='size-'])]:size-6",
+          "h-14 px-8 text-lg [&_svg:not([class*='size-'])]:size-6",
         icon:
-          "size-[48px] [&_svg:not([class*='size-'])]:size-5",
+          "size-12 [&_svg:not([class*='size-'])]:size-5",
         "icon-sm":
-          "size-[36px] [&_svg:not([class*='size-'])]:size-4",
+          "size-9 [&_svg:not([class*='size-'])]:size-4",
         "icon-lg":
-          "size-[56px] [&_svg:not([class*='size-'])]:size-6",
+          "size-14 [&_svg:not([class*='size-'])]:size-6",
       },
     },
     defaultVariants: {

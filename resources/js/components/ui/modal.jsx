@@ -2,6 +2,7 @@ import { useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
 /**
  * Modal — Reusable dialog/modal overlay.
@@ -145,28 +146,22 @@ export function ConfirmDialog({
           </div>
         </div>
         <div className="flex justify-end gap-3 pt-4 border-t border-line-subtle">
-          <button
+          <Button
             type="button"
+            variant="outline"
             onClick={onClose}
             disabled={loading}
-            className="inline-flex items-center justify-center gap-2 rounded-pill border bg-clip-padding px-6 py-3 text-[16px] font-semibold whitespace-nowrap transition-all duration-150 outline-none select-none border-line-strong bg-transparent text-content-primary hover:bg-surface-muted disabled:pointer-events-none disabled:opacity-50"
           >
             {cancelLabel}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant={colors.confirmBtn}
             onClick={onConfirm}
-            disabled={loading}
-            className={cn(
-              "inline-flex items-center justify-center gap-2 rounded-pill border border-transparent bg-clip-padding px-6 py-3 text-[16px] font-semibold whitespace-nowrap transition-all duration-150 outline-none select-none disabled:pointer-events-none disabled:opacity-50",
-              variant === "danger" && "bg-danger text-danger-foreground hover:opacity-90",
-              variant === "warning" && "bg-warning text-warning-foreground hover:opacity-90",
-              variant === "info" && "bg-brand text-brand-foreground hover:bg-brand-hover",
-              variant === "success" && "bg-success text-success-foreground hover:opacity-90"
-            )}
+            loading={loading}
           >
             {confirmLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </Modal>
